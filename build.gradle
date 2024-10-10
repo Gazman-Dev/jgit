@@ -3,26 +3,17 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
 }
 
-group = 'com.gazman' // Replace with your group ID
-version = '1.0.0'     // Replace with your module's version
+group = 'com.gazman'
+version = '1.0.0'
 
 dependencies {
-    implementation 'org.eclipse.jgit:org.eclipse.jgit:6.7.0.202309050840-r' // Use the latest stable version
     implementation 'org.slf4j:slf4j-simple:1.7.36'
-    implementation 'commons-codec:commons-codec:1.16.0'
+    implementation 'commons-codec:commons-codec:1.17.1'
     implementation 'com.googlecode.javaewah:JavaEWAH:1.2.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-
-    // Add other dependencies your module requires here
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_18
-    targetCompatibility = JavaVersion.VERSION_18
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        jvmTarget = '18'
-    }
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
