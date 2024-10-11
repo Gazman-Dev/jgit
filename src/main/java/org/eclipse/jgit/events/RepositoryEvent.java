@@ -27,7 +27,7 @@ public abstract class RepositoryEvent<T extends RepositoryListener> {
 	 * <p>
 	 * This method should only be invoked once on each event object, and is
 	 * automatically set by
-	 * {@link org.eclipse.jgit.lib.Repository#fireEvent(RepositoryEvent)}.
+	 * {@link Repository#fireEvent(RepositoryEvent)}.
 	 *
 	 * @param r
 	 *            the repository.

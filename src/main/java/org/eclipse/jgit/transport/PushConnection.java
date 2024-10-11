@@ -27,7 +27,7 @@ import org.eclipse.jgit.lib.ProgressMonitor;
  * remote repository.
  * <p>
  * Instances of a PushConnection must be created by a
- * {@link org.eclipse.jgit.transport.Transport} that implements a specific
+ * {@link Transport} that implements a specific
  * object transfer protocol that both sides of the connection understand.
  * <p>
  * PushConnection instances are not thread safe and may be accessed by only one
@@ -44,11 +44,11 @@ public interface PushConnection extends Connection {
 	 * objects graph from new refs.
 	 * <p>
 	 * Only one call per connection is allowed. Subsequent calls will result in
-	 * {@link org.eclipse.jgit.errors.TransportException}.
+	 * {@link TransportException}.
 	 * <p>
 	 * Implementation may use local repository to send a minimum set of objects
 	 * needed by remote repository in efficient way.
-	 * {@link org.eclipse.jgit.transport.Transport#isPushThin()} should be
+	 * {@link Transport#isPushThin()} should be
 	 * honored if applicable. refUpdates should be filled with information about
 	 * status of each update.
 	 *
@@ -62,15 +62,15 @@ public interface PushConnection extends Connection {
 	 *            specifications/statuses. Can't be empty. This indicate what
 	 *            refs caller want to update on remote side. Only refs updates
 	 *            with
-	 *            {@link org.eclipse.jgit.transport.RemoteRefUpdate.Status#NOT_ATTEMPTED}
+	 *            {@link RemoteRefUpdate.Status#NOT_ATTEMPTED}
 	 *            should passed. Implementation must ensure that and appropriate
 	 *            status with optional message should be set during call. No
 	 *            refUpdate with
-	 *            {@link org.eclipse.jgit.transport.RemoteRefUpdate.Status#AWAITING_REPORT}
+	 *            {@link RemoteRefUpdate.Status#AWAITING_REPORT}
 	 *            or
-	 *            {@link org.eclipse.jgit.transport.RemoteRefUpdate.Status#NOT_ATTEMPTED}
+	 *            {@link RemoteRefUpdate.Status#NOT_ATTEMPTED}
 	 *            can be leaved by implementation after return from this call.
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             objects could not be copied due to a network failure,
 	 *             critical protocol error, or error on remote side, or
 	 *             connection was already used for push - new connection must be
@@ -88,11 +88,11 @@ public interface PushConnection extends Connection {
 	 * objects graph from new refs.
 	 * <p>
 	 * Only one call per connection is allowed. Subsequent calls will result in
-	 * {@link org.eclipse.jgit.errors.TransportException}.
+	 * {@link TransportException}.
 	 * <p>
 	 * Implementation may use local repository to send a minimum set of objects
 	 * needed by remote repository in efficient way.
-	 * {@link org.eclipse.jgit.transport.Transport#isPushThin()} should be
+	 * {@link Transport#isPushThin()} should be
 	 * honored if applicable. refUpdates should be filled with information about
 	 * status of each update.
 	 *
@@ -106,17 +106,17 @@ public interface PushConnection extends Connection {
 	 *            specifications/statuses. Can't be empty. This indicate what
 	 *            refs caller want to update on remote side. Only refs updates
 	 *            with
-	 *            {@link org.eclipse.jgit.transport.RemoteRefUpdate.Status#NOT_ATTEMPTED}
+	 *            {@link RemoteRefUpdate.Status#NOT_ATTEMPTED}
 	 *            should passed. Implementation must ensure that and appropriate
 	 *            status with optional message should be set during call. No
 	 *            refUpdate with
-	 *            {@link org.eclipse.jgit.transport.RemoteRefUpdate.Status#AWAITING_REPORT}
+	 *            {@link RemoteRefUpdate.Status#AWAITING_REPORT}
 	 *            or
-	 *            {@link org.eclipse.jgit.transport.RemoteRefUpdate.Status#NOT_ATTEMPTED}
+	 *            {@link RemoteRefUpdate.Status#NOT_ATTEMPTED}
 	 *            can be leaved by implementation after return from this call.
 	 * @param out
 	 *            output stream to write sideband messages to
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             objects could not be copied due to a network failure,
 	 *             critical protocol error, or error on remote side, or
 	 *             connection was already used for push - new connection must be

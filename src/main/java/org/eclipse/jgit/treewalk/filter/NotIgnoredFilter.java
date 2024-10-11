@@ -17,7 +17,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.WorkingTreeIterator;
 
 /**
- * Skip {@link org.eclipse.jgit.treewalk.WorkingTreeIterator} entries that
+ * Skip {@link WorkingTreeIterator} entries that
  * appear in gitignore files.
  */
 public class NotIgnoredFilter extends TreeFilter {

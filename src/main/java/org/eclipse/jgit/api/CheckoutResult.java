@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Encapsulates the result of a {@link org.eclipse.jgit.api.CheckoutCommand}
+ * Encapsulates the result of a {@link CheckoutCommand}
  */
 public class CheckoutResult {
 
@@ -147,7 +147,7 @@ public class CheckoutResult {
 	 *
 	 * @return the list of files that created a checkout conflict, or an empty
 	 *         list if {@link #getStatus()} is not
-	 *         {@link org.eclipse.jgit.api.CheckoutResult.Status#CONFLICTS};
+	 *         {@link Status#CONFLICTS};
 	 */
 	public List<String> getConflictList() {
 		return conflictList;
@@ -158,7 +158,7 @@ public class CheckoutResult {
 	 *
 	 * @return the list of files that could not be deleted during checkout, or
 	 *         an empty list if {@link #getStatus()} is not
-	 *         {@link org.eclipse.jgit.api.CheckoutResult.Status#NONDELETED};
+	 *         {@link Status#NONDELETED};
 	 */
 	public List<String> getUndeletedList() {
 		return undeletedList;
@@ -169,7 +169,7 @@ public class CheckoutResult {
 	 *
 	 * @return the list of files that where modified during checkout, or an
 	 *         empty list if {@link #getStatus()} is not
-	 *         {@link org.eclipse.jgit.api.CheckoutResult.Status#OK}
+	 *         {@link Status#OK}
 	 */
 	public List<String> getModifiedList() {
 		return modifiedList;
@@ -180,7 +180,7 @@ public class CheckoutResult {
 	 *
 	 * @return the list of files that where removed during checkout, or an empty
 	 *         list if {@link #getStatus()} is not
-	 *         {@link org.eclipse.jgit.api.CheckoutResult.Status#OK}
+	 *         {@link Status#OK}
 	 */
 	public List<String> getRemovedList() {
 		return removedList;

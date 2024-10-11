@@ -13,7 +13,7 @@ public class StashApplyFailureException extends GitAPIException {
 	 * @param message
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable}
+	 *            a {@link Throwable}
 	 * @since 4.1
 	 */
 	public StashApplyFailureException(String message, Throwable cause) {

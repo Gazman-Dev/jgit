@@ -52,7 +52,7 @@ public interface BlobObjectChecker {
 	 *
 	 * @param id
 	 *            identity of the object being checked.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if any error was detected.
 	 */
 	void endBlob(AnyObjectId id) throws CorruptObjectException;

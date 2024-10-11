@@ -116,7 +116,7 @@ public class PacketLineOut {
 	 *
 	 * @param s
 	 *            string to write.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the packet could not be written, the stream is corrupted as
 	 *             the packet may have been only partially written.
 	 */
@@ -130,7 +130,7 @@ public class PacketLineOut {
 	 * @param packet
 	 *            the packet to write; the length of the packet is equal to the
 	 *            size of the byte array.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the packet could not be written, the stream is corrupted as
 	 *             the packet may have been only partially written.
 	 */
@@ -147,7 +147,7 @@ public class PacketLineOut {
 	 *            first index within {@code buf}.
 	 * @param len
 	 *            number of bytes to write.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the packet could not be written, the stream is corrupted as
 	 *             the packet may have been only partially written.
 	 * @since 4.5
@@ -177,7 +177,7 @@ public class PacketLineOut {
 	/**
 	 * Write a packet delim marker (0001).
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the marker could not be written, the stream is corrupted
 	 *             as the marker may have been only partially written.
 	 * @since 5.0
@@ -199,7 +199,7 @@ public class PacketLineOut {
 	 * Implicitly performs a flush on the underlying OutputStream to ensure the
 	 * peer will receive all data written thus far.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the end marker could not be written, the stream is corrupted
 	 *             as the end marker may have been only partially written.
 	 */
@@ -220,7 +220,7 @@ public class PacketLineOut {
 	 * Performs a flush on the underlying OutputStream to ensure the peer will
 	 * receive all data written thus far.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the underlying stream failed to flush.
 	 */
 	public void flush() throws IOException {

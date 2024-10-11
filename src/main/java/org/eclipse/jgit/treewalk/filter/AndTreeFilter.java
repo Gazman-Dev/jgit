@@ -23,7 +23,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  * Includes a tree entry only if all subfilters include the same tree entry.
  * <p>
  * Classic shortcut behavior is used, so evaluation of the
- * {@link org.eclipse.jgit.treewalk.filter.TreeFilter#include(TreeWalk)} method
+ * {@link TreeFilter#include(TreeWalk)} method
  * stops as soon as a false result is obtained. Applications can improve
  * filtering performance by placing faster filters that are more likely to
  * reject a result earlier in the list.

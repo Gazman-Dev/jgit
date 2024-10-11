@@ -16,14 +16,14 @@ import org.eclipse.jgit.lib.Ref;
 
 /**
  * Iterator over references inside a
- * {@link org.eclipse.jgit.internal.storage.reftable.Reftable}.
+ * {@link Reftable}.
  */
 public abstract class RefCursor implements AutoCloseable {
 	/**
 	 * Check if another reference is available.
 	 *
 	 * @return {@code true} if there is another result.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             references cannot be read.
 	 */
 	public abstract boolean next() throws IOException;
@@ -37,7 +37,7 @@ public abstract class RefCursor implements AutoCloseable {
 	 *
 	 * @param prefixName prefix that should be skipped. All previous refs before it
 	 *                   will be skipped.
-	 * @throws java.io.IOException references cannot be read.
+	 * @throws IOException references cannot be read.
 	 */
 	public abstract void seekPastPrefix(String prefixName) throws IOException;
 

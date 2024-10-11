@@ -28,7 +28,7 @@ import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 /**
  * Supplies the content of a file for
- * {@link org.eclipse.jgit.diff.DiffFormatter}.
+ * {@link DiffFormatter}.
  * <p>
  * A content source is not thread-safe. Sources may contain state, including
  * information about the last ObjectLoader they returned. Callers must be
@@ -70,7 +70,7 @@ public abstract class ContentSource {
 	 * @param id
 	 *            blob id of the file, if known.
 	 * @return the size in bytes.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the file cannot be accessed.
 	 */
 	public abstract long size(String path, ObjectId id) throws IOException;
@@ -85,7 +85,7 @@ public abstract class ContentSource {
 	 * @return a loader that can supply the content of the file. The loader must
 	 *         be used before another loader can be obtained from this same
 	 *         source.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the file cannot be accessed.
 	 */
 	public abstract ObjectLoader open(String path, ObjectId id)

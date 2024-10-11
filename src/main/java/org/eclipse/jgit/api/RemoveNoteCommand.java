@@ -41,7 +41,7 @@ public class RemoveNoteCommand extends GitCommand<Note> {
 	 * </p>
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected RemoveNoteCommand(Repository repo) {
 		super(repo);
@@ -74,7 +74,7 @@ public class RemoveNoteCommand extends GitCommand<Note> {
 	 * Sets the object id of object you want to remove a note
 	 *
 	 * @param id
-	 *            the {@link org.eclipse.jgit.revwalk.RevObject} to remove a
+	 *            the {@link RevObject} to remove a
 	 *            note from.
 	 * @return {@code this}
 	 */
@@ -89,7 +89,7 @@ public class RemoveNoteCommand extends GitCommand<Note> {
 	 *
 	 * @param notesRef
 	 *            the {@code Ref} to read notes from. Note, the default value of
-	 *            {@link org.eclipse.jgit.lib.Constants#R_NOTES_COMMITS} will be
+	 *            {@link Constants#R_NOTES_COMMITS} will be
 	 *            used if nothing is set
 	 * @return {@code this}
 	 * @see Constants#R_NOTES_COMMITS

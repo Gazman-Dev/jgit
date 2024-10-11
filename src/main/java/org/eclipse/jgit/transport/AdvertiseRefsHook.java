@@ -74,9 +74,9 @@ public interface AdvertiseRefsHook {
 	 *
 	 * @param uploadPack
 	 *            instance on which to call
-	 *            {@link org.eclipse.jgit.transport.UploadPack#setAdvertisedRefs(java.util.Map)}
+	 *            {@link UploadPack#setAdvertisedRefs(java.util.Map)}
 	 *            if necessary.
-	 * @throws org.eclipse.jgit.transport.ServiceMayNotContinueException
+	 * @throws ServiceMayNotContinueException
 	 *             abort; the message will be sent to the user.
 	 */
 	void advertiseRefs(UploadPack uploadPack)
@@ -87,9 +87,9 @@ public interface AdvertiseRefsHook {
 	 *
 	 * @param receivePack
 	 *            instance on which to call
-	 *            {@link org.eclipse.jgit.transport.ReceivePack#setAdvertisedRefs(java.util.Map,java.util.Set)}
+	 *            {@link ReceivePack#setAdvertisedRefs(java.util.Map,java.util.Set)}
 	 *            if necessary.
-	 * @throws org.eclipse.jgit.transport.ServiceMayNotContinueException
+	 * @throws ServiceMayNotContinueException
 	 *             abort; the message will be sent to the user.
 	 * @throws IOException
 	 *             if an IO error occurred

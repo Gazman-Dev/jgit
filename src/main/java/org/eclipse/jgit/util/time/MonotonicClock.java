@@ -20,7 +20,7 @@ import java.time.Duration;
  * <p>
  * MonotonicClocks provide the following behavior, with the assertion always
  * being true if
- * {@link org.eclipse.jgit.util.time.ProposedTimestamp#blockUntil(Duration)} is
+ * {@link ProposedTimestamp#blockUntil(Duration)} is
  * used:
  *
  * <pre>
@@ -51,11 +51,11 @@ public interface MonotonicClock {
 	 * by NTP) and return that proposal, concurrently sending network messages
 	 * to closely collaborating peers in the same cluster to also ensure their
 	 * system clocks are ahead of this time. In such an implementation the
-	 * {@link org.eclipse.jgit.util.time.ProposedTimestamp#blockUntil(Duration)}
+	 * {@link ProposedTimestamp#blockUntil(Duration)}
 	 * method would wait for replies from the peers indicating their own system
 	 * clocks have moved past the proposed time.
 	 *
-	 * @return a {@link org.eclipse.jgit.util.time.ProposedTimestamp} object.
+	 * @return a {@link ProposedTimestamp} object.
 	 */
 	ProposedTimestamp propose();
 }

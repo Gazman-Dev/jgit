@@ -16,13 +16,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Manages a thread-safe list of {@link org.eclipse.jgit.events.RepositoryListener}s.
+ * Manages a thread-safe list of {@link RepositoryListener}s.
  */
 public class ListenerList {
 	private final Map<Class<? extends RepositoryListener>, CopyOnWriteArrayList<ListenerHandle>> lists = new ConcurrentHashMap<>();
 
 	/**
-	 * Register a {@link org.eclipse.jgit.events.WorkingTreeModifiedListener}.
+	 * Register a {@link WorkingTreeModifiedListener}.
 	 *
 	 * @param listener
 	 *            the listener implementation.

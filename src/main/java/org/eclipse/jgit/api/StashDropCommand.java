@@ -54,7 +54,7 @@ public class StashDropCommand extends GitCommand<ObjectId> {
 	 * Constructor for StashDropCommand.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	public StashDropCommand(Repository repo) {
 		super(repo);

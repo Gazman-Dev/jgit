@@ -11,9 +11,9 @@
 package org.eclipse.jgit.internal.storage.file;
 
 import java.text.MessageFormat;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jgit.internal.JGitText;
@@ -30,7 +30,7 @@ import com.googlecode.javaewah.EWAHCompressedBitmap;
 
 /**
  * Helper for constructing
- * {@link org.eclipse.jgit.internal.storage.file.PackBitmapIndex}es.
+ * {@link PackBitmapIndex}es.
  */
 public class PackBitmapIndexBuilder extends BasePackBitmapIndex {
 	private static final int MAX_XOR_OFFSET_SEARCH = 10;
@@ -41,7 +41,8 @@ public class PackBitmapIndexBuilder extends BasePackBitmapIndex {
 	private final EWAHCompressedBitmap tags;
 	private final BlockList<PositionEntry> byOffset;
 
-	private final ArrayDeque<StoredBitmap> bitmapsToWriteXorBuffer = new ArrayDeque<>();
+	private final LinkedList<StoredBitmap>
+			bitmapsToWriteXorBuffer = new LinkedList<>();
 
 	private List<StoredEntry> bitmapsToWrite = new ArrayList<>();
 
@@ -105,7 +106,7 @@ public class PackBitmapIndexBuilder extends BasePackBitmapIndex {
 				.signum(a.getOffset() - b.getOffset()));
 		for (int i = 0; i < entries.size(); i++) {
 			PositionEntry e = positionEntries.get(entries.get(i));
-			e.ridxPosition = i;
+			e.offsetPosition = i;
 			byOffset.add(e);
 		}
 	}
@@ -190,8 +191,8 @@ public class PackBitmapIndexBuilder extends BasePackBitmapIndex {
 			throw new IllegalStateException();
 		}
 		bestBitmap.trim();
-		StoredEntry result = new StoredEntry(entry, entry.idxPosition,
-				bestBitmap, bestXorOffset, bitmapToWrite.getFlags());
+		StoredEntry result = new StoredEntry(entry.namePosition, bestBitmap,
+				bestXorOffset, bitmapToWrite.getFlags());
 
 		return result;
 	}
@@ -234,7 +235,7 @@ public class PackBitmapIndexBuilder extends BasePackBitmapIndex {
 		PositionEntry entry = positionEntries.get(objectId);
 		if (entry == null)
 			return -1;
-		return entry.ridxPosition;
+		return entry.offsetPosition;
 	}
 
 	@Override
@@ -322,44 +323,20 @@ public class PackBitmapIndexBuilder extends BasePackBitmapIndex {
 					generateStoredEntry(bitmapsToWriteXorBuffer.pollFirst()));
 		}
 
-		List<StoredEntry> bitmapsToReturn = new ArrayList<>(bitmapsToWrite);
-		Collections.reverse(bitmapsToReturn);
-		return bitmapsToReturn;
+		Collections.reverse(bitmapsToWrite);
+		return bitmapsToWrite;
 	}
 
 	/** Data object for the on disk representation of a bitmap entry. */
 	public static final class StoredEntry {
-		private final ObjectId objectId;
-
-		private final long idxPosition;
-
+		private final long objectId;
 		private final EWAHCompressedBitmap bitmap;
-
 		private final int xorOffset;
-
 		private final int flags;
 
-		/**
-		 * Create a StoredEntry
-		 *
-		 * @param objectId
-		 *            objectId of the object associated with the bitmap
-		 * @param idxPosition
-		 *            position of this object into the pack index (i.e. sorted
-		 *            by sha1)
-		 * @param bitmap
-		 *            bitmap associated with this object
-		 * @param xorOffset
-		 *            offset of the bitmap against which this bitmap is
-		 *            xor-compressed. If 0, then this bitmap is not
-		 *            xor-compressed against any other bitmap
-		 * @param flags
-		 *            flags for this bitmap
-		 */
-		public StoredEntry(ObjectId objectId, long idxPosition,
-				EWAHCompressedBitmap bitmap, int xorOffset, int flags) {
+		StoredEntry(long objectId, EWAHCompressedBitmap bitmap,
+				int xorOffset, int flags) {
 			this.objectId = objectId;
-			this.idxPosition = idxPosition;
 			this.bitmap = bitmap;
 			this.xorOffset = xorOffset;
 			this.flags = flags;
@@ -393,29 +370,23 @@ public class PackBitmapIndexBuilder extends BasePackBitmapIndex {
 		}
 
 		/**
-		 * @return the position of the object with this bitmap in the primary
-		 *         index (i.e. ordered by sha1)
+		 * Get the ObjectId
+		 *
+		 * @return the ObjectId
 		 */
-		public long getIdxPosition() {
-			return idxPosition;
-		}
-
-		/**
-		 * @return the objectId of the object associated with this bitmap
-		 */
-		public ObjectId getObjectId() {
+		public long getObjectId() {
 			return objectId;
 		}
 	}
 
 	private static final class PositionEntry extends ObjectIdOwnerMap.Entry {
-		final int idxPosition;
+		final int namePosition;
 
-		int ridxPosition;
+		int offsetPosition;
 
-		PositionEntry(AnyObjectId objectId, int idxPosition) {
+		PositionEntry(AnyObjectId objectId, int namePosition) {
 			super(objectId);
-			this.idxPosition = idxPosition;
+			this.namePosition = namePosition;
 		}
 	}
 }

@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -63,7 +64,7 @@ import org.eclipse.jgit.util.BlockList;
 /**
  * Reader to access repository content through.
  * <p>
- * See the base {@link org.eclipse.jgit.lib.ObjectReader} documentation for
+ * See the base {@link ObjectReader} documentation for
  * details. Notably, a reader is not thread safe.
  */
 public class DfsReader extends ObjectReader implements ObjectReuseAsIs {
@@ -307,7 +308,7 @@ public class DfsReader extends ObjectReader implements ObjectReuseAsIs {
 
 	private <T extends ObjectId> Iterable<FoundObject<T>> findAll(
 			Iterable<T> objectIds) throws IOException {
-		HashSet<T> pending = new HashSet<>();
+		Collection<T> pending = new LinkedList<>();
 		for (T id : objectIds) {
 			pending.add(id);
 		}
@@ -327,21 +328,22 @@ public class DfsReader extends ObjectReader implements ObjectReuseAsIs {
 	}
 
 	private <T extends ObjectId> void findAllImpl(PackList packList,
-			HashSet<T> pending, List<FoundObject<T>> r) {
+			Collection<T> pending, List<FoundObject<T>> r) {
 		DfsPackFile[] packs = packList.packs;
 		if (packs.length == 0) {
 			return;
 		}
 		int lastIdx = 0;
 		DfsPackFile lastPack = packs[lastIdx];
-		HashSet<T> toRemove = new HashSet<>();
-		OBJECT_SCAN: for (T t : pending) {
+
+		OBJECT_SCAN: for (Iterator<T> it = pending.iterator(); it.hasNext();) {
+			T t = it.next();
 			if (!skipGarbagePack(lastPack)) {
 				try {
 					long p = lastPack.findOffset(this, t);
 					if (0 < p) {
 						r.add(new FoundObject<>(t, lastIdx, lastPack, p));
-						toRemove.add(t);
+						it.remove();
 						continue;
 					}
 				} catch (IOException e) {
@@ -359,7 +361,7 @@ public class DfsReader extends ObjectReader implements ObjectReuseAsIs {
 					long p = pack.findOffset(this, t);
 					if (0 < p) {
 						r.add(new FoundObject<>(t, i, pack, p));
-						toRemove.add(t);
+						it.remove();
 						lastIdx = i;
 						lastPack = pack;
 						continue OBJECT_SCAN;
@@ -369,7 +371,6 @@ public class DfsReader extends ObjectReader implements ObjectReuseAsIs {
 				}
 			}
 		}
-		pending.removeAll(toRemove);
 
 		last = lastPack;
 	}
@@ -511,15 +512,18 @@ public class DfsReader extends ObjectReader implements ObjectReuseAsIs {
 			throw new MissingObjectException(objectId.copy(), typeHint);
 		}
 
-		if (typeHint != Constants.OBJ_BLOB || !safeHasObjectSizeIndex(pack)) {
+		if (typeHint != Constants.OBJ_BLOB || !pack.hasObjectSizeIndex(this)) {
 			return pack.getObjectSize(this, objectId);
 		}
 
-		Optional<Long> maybeSz = safeGetIndexedObjectSize(pack, objectId);
-		long sz = maybeSz.orElse(-1L);
+		long sz = pack.getIndexedObjectSize(this, objectId);
 		if (sz >= 0) {
+			stats.objectSizeIndexHit += 1;
 			return sz;
 		}
+
+		// Object wasn't in the index
+		stats.objectSizeIndexMiss += 1;
 		return pack.getObjectSize(this, objectId);
 	}
 
@@ -538,61 +542,23 @@ public class DfsReader extends ObjectReader implements ObjectReuseAsIs {
 		}
 
 		stats.isNotLargerThanCallCount += 1;
-		if (typeHint != Constants.OBJ_BLOB || !safeHasObjectSizeIndex(pack)) {
+		if (typeHint != Constants.OBJ_BLOB || !pack.hasObjectSizeIndex(this)) {
 			return pack.getObjectSize(this, objectId) <= limit;
 		}
 
-		Optional<Long> maybeSz = safeGetIndexedObjectSize(pack, objectId);
-		if (maybeSz.isEmpty()) {
-			// Exception in object size index
-			return pack.getObjectSize(this, objectId) <= limit;
-		}
-
-		long sz = maybeSz.get();
-		if (sz >= 0) {
-			return sz <= limit;
-		}
-
-		if (isLimitInsideIndexThreshold(pack, limit)) {
-			// With threshold T, not-found means object < T
-			// If limit L > T, then object < T < L
-			return true;
-		}
-
-		return pack.getObjectSize(this, objectId) <= limit;
-	}
-
-	private boolean safeHasObjectSizeIndex(DfsPackFile pack) {
-		try {
-			return pack.hasObjectSizeIndex(this);
-		} catch (IOException e) {
-			return false;
-		}
-	}
-
-	private Optional<Long> safeGetIndexedObjectSize(DfsPackFile pack,
-			AnyObjectId objectId) {
-		long sz;
-		try {
-			sz = pack.getIndexedObjectSize(this, objectId);
-		} catch (IOException e) {
-			// Do not count the exception as an index miss
-			return Optional.empty();
-		}
+		long sz = pack.getIndexedObjectSize(this, objectId);
 		if (sz < 0) {
 			stats.objectSizeIndexMiss += 1;
 		} else {
 			stats.objectSizeIndexHit += 1;
 		}
-		return Optional.of(sz);
-	}
 
-	private boolean isLimitInsideIndexThreshold(DfsPackFile pack, long limit) {
-		try {
-			return pack.getObjectSizeIndexThreshold(this) <= limit;
-		} catch (IOException e) {
-			return false;
+		// Got size from index or we didn't but we are sure it should be there.
+		if (sz >= 0 || pack.getObjectSizeIndexThreshold(this) <= limit) {
+			return sz <= limit;
 		}
+
+		return pack.getObjectSize(this, objectId) <= limit;
 	}
 
 	private DfsPackFile findPackWithObject(AnyObjectId objectId)

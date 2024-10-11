@@ -15,7 +15,7 @@ import java.util.Arrays;
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 
 /**
- * Simple {@link org.eclipse.jgit.transport.CredentialsProvider} that always
+ * Simple {@link CredentialsProvider} that always
  * uses the same information.
  */
 public class UsernamePasswordCredentialsProvider extends CredentialsProvider {

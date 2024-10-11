@@ -17,6 +17,7 @@ import static org.eclipse.jgit.internal.storage.dfs.DfsObjDatabase.PackSource.IN
 import static org.eclipse.jgit.internal.storage.dfs.DfsObjDatabase.PackSource.RECEIVE;
 import static org.eclipse.jgit.internal.storage.dfs.DfsObjDatabase.PackSource.UNREACHABLE_GARBAGE;
 import static org.eclipse.jgit.internal.storage.dfs.DfsPackCompactor.configureReftable;
+import static org.eclipse.jgit.internal.storage.pack.PackExt.BITMAP_INDEX;
 import static org.eclipse.jgit.internal.storage.pack.PackExt.COMMIT_GRAPH;
 import static org.eclipse.jgit.internal.storage.pack.PackExt.INDEX;
 import static org.eclipse.jgit.internal.storage.pack.PackExt.OBJECT_SIZE_INDEX;
@@ -189,7 +190,7 @@ public class DfsGarbageCollector {
 	 *
 	 * @param u
 	 *            minUpdateIndex for the initial reftable created by scanning
-	 *            {@link org.eclipse.jgit.internal.storage.dfs.DfsRefDatabase#getRefs(String)}.
+	 *            {@link DfsRefDatabase#getRefs(String)}.
 	 *            Ignored unless caller has also set
 	 *            {@link #setReftableConfig(ReftableConfig)}. Defaults to
 	 *            {@code 1}. Must be {@code u >= 0}.
@@ -205,7 +206,7 @@ public class DfsGarbageCollector {
 	 *
 	 * @param u
 	 *            maxUpdateIndex for the initial reftable created by scanning
-	 *            {@link org.eclipse.jgit.internal.storage.dfs.DfsRefDatabase#getRefs(String)}.
+	 *            {@link DfsRefDatabase#getRefs(String)}.
 	 *            Ignored unless caller has also set
 	 *            {@link #setReftableConfig(ReftableConfig)}. Defaults to
 	 *            {@code 1}. Must be {@code u >= 0}.
@@ -238,7 +239,7 @@ public class DfsGarbageCollector {
 	 * reading and copying the objects.
 	 * <p>
 	 * If limit is set to 0 the UNREACHABLE_GARBAGE coalesce is disabled.<br>
-	 * If limit is set to {@link java.lang.Long#MAX_VALUE}, everything is
+	 * If limit is set to {@link Long#MAX_VALUE}, everything is
 	 * coalesced.
 	 * <p>
 	 * Keeping unreachable garbage prevents race conditions with repository
@@ -325,7 +326,7 @@ public class DfsGarbageCollector {
 	 * @return true if the repack was successful without race conditions. False
 	 *         if a race condition was detected and the repack should be run
 	 *         again later.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a new pack cannot be created.
 	 */
 	public boolean pack(ProgressMonitor pm) throws IOException {
@@ -708,7 +709,13 @@ public class DfsGarbageCollector {
 		}
 
 		if (pw.prepareBitmapIndex(pm)) {
-			pw.writeBitmapIndex(objdb.getPackBitmapIndexWriter(pack));
+			try (DfsOutputStream out = objdb.writeFile(pack, BITMAP_INDEX)) {
+				CountingOutputStream cnt = new CountingOutputStream(out);
+				pw.writeBitmapIndex(cnt);
+				pack.addFileExt(BITMAP_INDEX);
+				pack.setFileSize(BITMAP_INDEX, cnt.getCount());
+				pack.setBlockSize(BITMAP_INDEX, out.blockSize());
+			}
 		}
 
 		PackStatistics stats = pw.getStatistics();

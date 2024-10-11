@@ -29,7 +29,7 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
  * file name as the RevWalk traverses history.
  *
  * The renames found will be reported to a
- * {@link org.eclipse.jgit.revwalk.RenameCallback} if one is set.
+ * {@link RenameCallback} if one is set.
  * <p>
  * Results with this filter are unpredictable if the path being followed is a
  * subdirectory.
@@ -51,7 +51,7 @@ public class FollowFilter extends TreeFilter {
 	 * @param cfg
 	 *            diff config specifying rename detection options.
 	 * @return a new filter for the requested path.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             the path supplied was the empty string.
 	 * @since 3.0
 	 */

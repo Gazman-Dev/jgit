@@ -49,13 +49,13 @@ import org.eclipse.jgit.lib.Repository;
  * Common superclass of all commands in the package {@code org.eclipse.jgit.api}
  * <p>
  * This class ensures that all commands fulfill the
- * {@link java.util.concurrent.Callable} interface. It also has a property
+ * {@link Callable} interface. It also has a property
  * {@link #repo} holding a reference to the git
- * {@link org.eclipse.jgit.lib.Repository} this command should work with.
+ * {@link Repository} this command should work with.
  * <p>
  * Finally this class stores a state telling whether it is allowed to call
  * {@link #call()} on this instance. Instances of
- * {@link org.eclipse.jgit.api.GitCommand} can only be used for one single
+ * {@link GitCommand} can only be used for one single
  * successful call to {@link #call()}. Afterwards this instance may not be used
  * anymore to set/modify any properties or to call {@link #call()} again. This
  * is achieved by setting the {@link #callable} property to false after the
@@ -80,7 +80,7 @@ public abstract class GitCommand<T> implements Callable<T> {
 	 * Creates a new command which interacts with a single repository
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository} this command
+	 *            the {@link Repository} this command
 	 *            should interact with
 	 */
 	protected GitCommand(Repository repo) {
@@ -90,7 +90,7 @@ public abstract class GitCommand<T> implements Callable<T> {
 	/**
 	 * Get repository this command is working on
 	 *
-	 * @return the {@link org.eclipse.jgit.lib.Repository} this command is
+	 * @return the {@link Repository} this command is
 	 *         interacting with
 	 */
 	public Repository getRepository() {
@@ -112,9 +112,9 @@ public abstract class GitCommand<T> implements Callable<T> {
 
 	/**
 	 * Checks that the property {@link #callable} is {@code true}. If not then
-	 * an {@link java.lang.IllegalStateException} is thrown
+	 * an {@link IllegalStateException} is thrown
 	 *
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             when this method is called and the property {@link #callable}
 	 *             is {@code false}
 	 */

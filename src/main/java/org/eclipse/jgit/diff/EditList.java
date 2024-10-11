@@ -13,7 +13,7 @@ package org.eclipse.jgit.diff;
 import java.util.ArrayList;
 
 /**
- * Specialized list of {@link org.eclipse.jgit.diff.Edit}s in a document.
+ * Specialized list of {@link Edit}s in a document.
  */
 public class EditList extends ArrayList<Edit> {
 	private static final long serialVersionUID = 1L;

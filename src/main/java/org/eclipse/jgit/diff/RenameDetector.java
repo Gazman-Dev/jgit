@@ -160,7 +160,7 @@ public class RenameDetector {
 	 *
 	 * @param score
 	 *            new rename score, must be within [0, 100].
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             the score was not within [0, 100].
 	 */
 	public void setRenameScore(int score) {
@@ -285,7 +285,7 @@ public class RenameDetector {
 	 *
 	 * @param entriesToAdd
 	 *            one or more entries to add.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             if {@code getEntries} was already invoked.
 	 */
 	public void addAll(Collection<DiffEntry> entriesToAdd) {
@@ -325,7 +325,7 @@ public class RenameDetector {
 	 *
 	 * @param entry
 	 *            to add.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             if {@code getEntries} was already invoked.
 	 */
 	public void add(DiffEntry entry) {
@@ -338,9 +338,9 @@ public class RenameDetector {
 	 * This convenience function runs without a progress monitor.
 	 * </p>
 	 *
-	 * @return an unmodifiable list of {@link org.eclipse.jgit.diff.DiffEntry}s
+	 * @return an unmodifiable list of {@link DiffEntry}s
 	 *         representing all files that have been changed.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             file contents cannot be read from the repository.
 	 */
 	public List<DiffEntry> compute() throws IOException {
@@ -357,9 +357,9 @@ public class RenameDetector {
 	 *
 	 * @param pm
 	 *            report progress during the detection phases.
-	 * @return an unmodifiable list of {@link org.eclipse.jgit.diff.DiffEntry}s
+	 * @return an unmodifiable list of {@link DiffEntry}s
 	 *         representing all files that have been changed.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             file contents cannot be read from the repository.
 	 * @throws CanceledException
 	 *             if rename detection was cancelled
@@ -383,9 +383,9 @@ public class RenameDetector {
 	 *            reader to obtain objects from the repository with.
 	 * @param pm
 	 *            report progress during the detection phases.
-	 * @return an unmodifiable list of {@link org.eclipse.jgit.diff.DiffEntry}s
+	 * @return an unmodifiable list of {@link DiffEntry}s
 	 *         representing all files that have been changed.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             file contents cannot be read from the repository.
 	 * @throws CanceledException
 	 *             if rename detection was cancelled
@@ -403,9 +403,9 @@ public class RenameDetector {
 	 *            reader to obtain objects from the repository with.
 	 * @param pm
 	 *            report progress during the detection phases.
-	 * @return an unmodifiable list of {@link org.eclipse.jgit.diff.DiffEntry}s
+	 * @return an unmodifiable list of {@link DiffEntry}s
 	 *         representing all files that have been changed.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             file contents cannot be read from the repository.
 	 * @throws CanceledException
 	 *             if rename detection was cancelled

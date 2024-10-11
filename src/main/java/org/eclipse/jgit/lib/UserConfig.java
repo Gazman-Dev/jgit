@@ -20,7 +20,7 @@ import org.eclipse.jgit.util.SystemReader;
  */
 public class UserConfig {
 	/** Key for {@link Config#get(SectionParser)}. */
-	public static final Config.SectionParser<UserConfig> KEY = UserConfig::new;
+	public static final SectionParser<UserConfig> KEY = UserConfig::new;
 
 	private String authorName;
 

@@ -29,7 +29,7 @@ import org.eclipse.jgit.annotations.NonNull;
 
 /**
  * The interface of connections used during HTTP communication. This interface
- * is that subset of the interface exposed by {@link java.net.HttpURLConnection}
+ * is that subset of the interface exposed by {@link HttpURLConnection}
  * which is used by JGit
  *
  * @since 3.3
@@ -38,31 +38,31 @@ public interface HttpConnection {
 	/**
 	 * @see HttpURLConnection#HTTP_OK
 	 */
-	int HTTP_OK = java.net.HttpURLConnection.HTTP_OK;
+	int HTTP_OK = HttpURLConnection.HTTP_OK;
 
 	/**
 	 * @see HttpURLConnection#HTTP_NOT_AUTHORITATIVE
 	 * @since 5.8
 	 */
-	int HTTP_NOT_AUTHORITATIVE = java.net.HttpURLConnection.HTTP_NOT_AUTHORITATIVE;
+	int HTTP_NOT_AUTHORITATIVE = HttpURLConnection.HTTP_NOT_AUTHORITATIVE;
 
 	/**
 	 * @see HttpURLConnection#HTTP_MOVED_PERM
 	 * @since 4.7
 	 */
-	int HTTP_MOVED_PERM = java.net.HttpURLConnection.HTTP_MOVED_PERM;
+	int HTTP_MOVED_PERM = HttpURLConnection.HTTP_MOVED_PERM;
 
 	/**
 	 * @see HttpURLConnection#HTTP_MOVED_TEMP
 	 * @since 4.9
 	 */
-	int HTTP_MOVED_TEMP = java.net.HttpURLConnection.HTTP_MOVED_TEMP;
+	int HTTP_MOVED_TEMP = HttpURLConnection.HTTP_MOVED_TEMP;
 
 	/**
 	 * @see HttpURLConnection#HTTP_SEE_OTHER
 	 * @since 4.9
 	 */
-	int HTTP_SEE_OTHER = java.net.HttpURLConnection.HTTP_SEE_OTHER;
+	int HTTP_SEE_OTHER = HttpURLConnection.HTTP_SEE_OTHER;
 
 	/**
 	 * HTTP 1.1 additional "temporary redirect" status code; value = 307.
@@ -87,24 +87,24 @@ public interface HttpConnection {
 	/**
 	 * @see HttpURLConnection#HTTP_NOT_FOUND
 	 */
-	int HTTP_NOT_FOUND = java.net.HttpURLConnection.HTTP_NOT_FOUND;
+	int HTTP_NOT_FOUND = HttpURLConnection.HTTP_NOT_FOUND;
 
 	/**
 	 * @see HttpURLConnection#HTTP_UNAUTHORIZED
 	 */
-	int HTTP_UNAUTHORIZED = java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+	int HTTP_UNAUTHORIZED = HttpURLConnection.HTTP_UNAUTHORIZED;
 
 	/**
 	 * @see HttpURLConnection#HTTP_FORBIDDEN
 	 */
-	int HTTP_FORBIDDEN = java.net.HttpURLConnection.HTTP_FORBIDDEN;
+	int HTTP_FORBIDDEN = HttpURLConnection.HTTP_FORBIDDEN;
 
 	/**
 	 * Get response code
 	 *
 	 * @see HttpURLConnection#getResponseCode()
 	 * @return the HTTP Status-Code, or -1
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	int getResponseCode() throws IOException;
@@ -122,7 +122,7 @@ public interface HttpConnection {
 	 *
 	 * @see HttpURLConnection#getResponseMessage()
 	 * @return the HTTP response message, or <code>null</code>
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	String getResponseMessage() throws IOException;
@@ -156,7 +156,7 @@ public interface HttpConnection {
 	 * @exception ProtocolException
 	 *                if the method cannot be reset or if the requested method
 	 *                isn't valid for HTTP.
-	 * @throws java.net.ProtocolException
+	 * @throws ProtocolException
 	 *             if any.
 	 */
 	void setRequestMethod(String method)
@@ -208,7 +208,7 @@ public interface HttpConnection {
 	 * @return an input stream that reads from this open connection.
 	 * @exception IOException
 	 *                if an I/O error occurs while creating the input stream.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	InputStream getInputStream() throws IOException;
@@ -288,7 +288,7 @@ public interface HttpConnection {
 	 *
 	 * @see HttpURLConnection#getOutputStream()
 	 * @return an output stream that writes to this connection.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	OutputStream getOutputStream() throws IOException;
@@ -323,7 +323,7 @@ public interface HttpConnection {
 	 * Connect
 	 *
 	 * @see HttpURLConnection#connect()
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	void connect() throws IOException;
@@ -341,9 +341,9 @@ public interface HttpConnection {
 	 * @param random
 	 *            the source of randomness for this generator or null. See
 	 *            {@link javax.net.ssl.SSLContext#init(KeyManager[], TrustManager[], SecureRandom)}
-	 * @throws java.security.NoSuchAlgorithmException
+	 * @throws NoSuchAlgorithmException
 	 *             if algorithm isn't available
-	 * @throws java.security.KeyManagementException
+	 * @throws KeyManagementException
 	 *             if key management failed
 	 */
 	void configure(KeyManager[] km, TrustManager[] tm,
@@ -351,14 +351,14 @@ public interface HttpConnection {
 			KeyManagementException;
 
 	/**
-	 * Set the {@link javax.net.ssl.HostnameVerifier} used during https
+	 * Set the {@link HostnameVerifier} used during https
 	 * communication
 	 *
 	 * @param hostnameverifier
-	 *            a {@link javax.net.ssl.HostnameVerifier} object.
-	 * @throws java.security.NoSuchAlgorithmException
+	 *            a {@link HostnameVerifier} object.
+	 * @throws NoSuchAlgorithmException
 	 *             if algorithm isn't available
-	 * @throws java.security.KeyManagementException
+	 * @throws KeyManagementException
 	 *             if key management failed
 	 */
 	void setHostnameVerifier(HostnameVerifier hostnameverifier)

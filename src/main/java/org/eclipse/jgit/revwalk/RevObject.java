@@ -38,7 +38,7 @@ public abstract class RevObject extends ObjectIdOwnerMap.Entry {
 			IncorrectObjectTypeException, IOException;
 
 	/**
-	 * Get Git object type. See {@link org.eclipse.jgit.lib.Constants}.
+	 * Get Git object type. See {@link Constants}.
 	 *
 	 * @return object type
 	 */

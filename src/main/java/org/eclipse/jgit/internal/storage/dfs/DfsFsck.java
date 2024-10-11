@@ -66,7 +66,7 @@ public class DfsFsck {
 	 * @param pm
 	 *            callback to provide progress feedback during the check.
 	 * @return all errors about the repository.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if encounters IO errors during the process.
 	 */
 	public FsckError check(ProgressMonitor pm) throws IOException {
@@ -131,7 +131,7 @@ public class DfsFsck {
 				SubmoduleValidator.assertValidGitModulesFile(
 						new String(blob.getBytes(), UTF_8));
 			} catch (SubmoduleValidationException e) {
-				CorruptObject co = new FsckError.CorruptObject(
+				CorruptObject co = new CorruptObject(
 						blobId.toObjectId(), Constants.OBJ_BLOB,
 						e.getFsckMessageId());
 				errors.getCorruptObjects().add(co);

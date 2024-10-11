@@ -22,7 +22,7 @@ public abstract class TranslationBundleException extends RuntimeException {
 
 	/**
 	 * Construct an instance of
-	 * {@link org.eclipse.jgit.errors.TranslationBundleException}
+	 * {@link TranslationBundleException}
 	 *
 	 * @param message
 	 *            exception message

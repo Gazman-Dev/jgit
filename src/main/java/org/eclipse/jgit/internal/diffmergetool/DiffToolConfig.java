@@ -33,7 +33,7 @@ import org.eclipse.jgit.lib.internal.BooleanTriState;
 public class DiffToolConfig {
 
 	/** Key for {@link Config#get(SectionParser)}. */
-	public static final Config.SectionParser<DiffToolConfig> KEY = DiffToolConfig::new;
+	public static final SectionParser<DiffToolConfig> KEY = DiffToolConfig::new;
 
 	private final String toolName;
 

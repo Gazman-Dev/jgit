@@ -49,6 +49,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -108,7 +109,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A garbage collector for git
- * {@link org.eclipse.jgit.internal.storage.file.FileRepository}. Instances of
+ * {@link FileRepository}. Instances of
  * this class are not thread-safe. Don't use the same instance from multiple
  * threads.
  *
@@ -208,7 +209,7 @@ public class GC {
 
 	/**
 	 * Runs a garbage collector on a
-	 * {@link org.eclipse.jgit.internal.storage.file.FileRepository}. It will
+	 * {@link FileRepository}. It will
 	 * <ul>
 	 * <li>pack loose references into packed-refs</li>
 	 * <li>repack all reachable objects into new pack files and delete the old
@@ -226,11 +227,11 @@ public class GC {
 	 * gc.log.
 	 *
 	 * @return the collection of
-	 *         {@link org.eclipse.jgit.internal.storage.file.Pack}'s which are
+	 *         {@link Pack}'s which are
 	 *         newly created
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
-	 * @throws java.text.ParseException
+	 * @throws ParseException
 	 *             If the configuration parameter "gc.pruneexpire" couldn't be
 	 *             parsed
 	 */
@@ -468,7 +469,7 @@ public class GC {
 	 * which can be found in packs. If certain objects can't be pruned (e.g.
 	 * because the filesystem delete operation fails) this is silently ignored.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void prunePacked() throws IOException {
@@ -527,9 +528,9 @@ public class GC {
 	 *
 	 * @param objectsToKeep
 	 *            a set of objects which should explicitly not be pruned
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
-	 * @throws java.text.ParseException
+	 * @throws ParseException
 	 *             If the configuration parameter "gc.pruneexpire" couldn't be
 	 *             parsed
 	 */
@@ -784,7 +785,7 @@ public class GC {
 	 * non-symbolic, loose refs into packed-refs. For Reftable, all of the data
 	 * is compacted into a single table.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void packRefs() throws IOException {
@@ -825,10 +826,10 @@ public class GC {
 	 * repacked. All old pack files which existed before are deleted.
 	 *
 	 * @return a collection of the newly created pack files
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             when during reading of refs, index, packfiles, objects,
 	 *             reflog-entries or during writing to the packfiles
-	 *             {@link java.io.IOException} occurs
+	 *             {@link IOException} occurs
 	 */
 	public Collection<Pack> repack() throws IOException {
 		Collection<Pack> toBeDeleted = repo.getObjectDatabase().getPacks();
@@ -865,7 +866,7 @@ public class GC {
 			}
 		}
 
-		List<ObjectIdSet> excluded = new ArrayList<>();
+		List<ObjectIdSet> excluded = new LinkedList<>();
 		for (Pack p : repo.getObjectDatabase().getPacks()) {
 			checkCancelled();
 			if (!shouldPackKeptObjects() && p.shouldBeKept()) {
@@ -1047,7 +1048,7 @@ public class GC {
 	}
 
 	private void deleteEmptyRefsFolders() throws IOException {
-		Path refs = repo.getCommonDirectory().toPath().resolve(Constants.R_REFS);
+		Path refs = repo.getDirectory().toPath().resolve(Constants.R_REFS);
 		// Avoid deleting a folder that was created after the threshold so that concurrent
 		// operations trying to create a reference are not impacted
 		Instant threshold = Instant.now().minus(30, ChronoUnit.SECONDS);
@@ -1398,7 +1399,7 @@ public class GC {
 						FileChannel idxChannel = fos.getChannel();
 						OutputStream idxStream = Channels
 								.newOutputStream(idxChannel)) {
-					pw.writeBitmapIndex(new PackBitmapIndexWriterV1(idxStream));
+					pw.writeBitmapIndex(idxStream);
 					idxChannel.force(true);
 				}
 			}
@@ -1557,7 +1558,7 @@ public class GC {
 	 * Returns information about objects and pack files for a FileRepository.
 	 *
 	 * @return information about objects and pack files for a FileRepository
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public RepoStatistics getStatistics() throws IOException {
@@ -1603,7 +1604,7 @@ public class GC {
 	/**
 	 * Set the progress monitor used for garbage collection methods.
 	 *
-	 * @param pm a {@link org.eclipse.jgit.lib.ProgressMonitor} object.
+	 * @param pm a {@link ProgressMonitor} object.
 	 * @return this
 	 */
 	public GC setProgressMonitor(ProgressMonitor pm) {
@@ -1645,7 +1646,7 @@ public class GC {
 	 * "git gc --aggressive"
 	 *
 	 * @param pconfig
-	 *            the {@link org.eclipse.jgit.storage.pack.PackConfig} used when
+	 *            the {@link PackConfig} used when
 	 *            writing packs
 	 */
 	public void setPackConfig(@NonNull PackConfig pconfig) {
@@ -1896,7 +1897,7 @@ public class GC {
 		}
 
 		private String getProcDesc() {
-			StringBuilder s = new StringBuilder(Long.toString(getPID()));
+			StringBuffer s = new StringBuffer(Long.toString(getPID()));
 			s.append(' ');
 			s.append(getHostName());
 			return s.toString();

@@ -23,6 +23,18 @@ public class PackInvalidException extends IOException {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Construct a pack invalid error.
+	 *
+	 * @param path
+	 *            path of the invalid pack file.
+	 * @deprecated Use {@link #PackInvalidException(File, Throwable)}.
+	 */
+	@Deprecated
+	public PackInvalidException(File path) {
+		this(path, null);
+	}
+
+	/**
 	 * Construct a pack invalid error with cause.
 	 *
 	 * @param path
@@ -33,6 +45,18 @@ public class PackInvalidException extends IOException {
 	 */
 	public PackInvalidException(File path, Throwable cause) {
 		this(path.getAbsolutePath(), cause);
+	}
+
+	/**
+	 * Construct a pack invalid error.
+	 *
+	 * @param path
+	 *            path of the invalid pack file.
+	 * @deprecated Use {@link #PackInvalidException(String, Throwable)}.
+	 */
+	@Deprecated
+	public PackInvalidException(String path) {
+		this(path, null);
 	}
 
 	/**

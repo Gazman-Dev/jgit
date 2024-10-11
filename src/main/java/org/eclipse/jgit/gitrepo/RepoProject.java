@@ -38,8 +38,6 @@ public class RepoProject implements Comparable<RepoProject> {
 	private final Set<String> groups;
 	private final List<CopyFile> copyfiles;
 	private final List<LinkFile> linkfiles;
-	private String upstream;
-	private String destBranch;
 	private String recommendShallow;
 	private String url;
 	private String defaultRevision;
@@ -335,7 +333,7 @@ public class RepoProject implements Comparable<RepoProject> {
 	/**
 	 * Add a copy file configuration.
 	 *
-	 * @param copyfile a {@link org.eclipse.jgit.gitrepo.RepoProject.CopyFile} object.
+	 * @param copyfile a {@link CopyFile} object.
 	 */
 	public void addCopyFile(CopyFile copyfile) {
 		copyfiles.add(copyfile);
@@ -346,7 +344,7 @@ public class RepoProject implements Comparable<RepoProject> {
 	 *
 	 * @param copyFiles
 	 *            a collection of
-	 *            {@link org.eclipse.jgit.gitrepo.RepoProject.CopyFile} objects
+	 *            {@link CopyFile} objects
 	 */
 	public void addCopyFiles(Collection<CopyFile> copyFiles) {
 		this.copyfiles.addAll(copyFiles);
@@ -364,7 +362,7 @@ public class RepoProject implements Comparable<RepoProject> {
 	/**
 	 * Add a link file configuration.
 	 *
-	 * @param linkfile a {@link org.eclipse.jgit.gitrepo.RepoProject.LinkFile} object.
+	 * @param linkfile a {@link LinkFile} object.
 	 * @since 4.8
 	 */
 	public void addLinkFile(LinkFile linkfile) {
@@ -389,57 +387,6 @@ public class RepoProject implements Comparable<RepoProject> {
 	 */
 	public void clearLinkFiles() {
 		this.linkfiles.clear();
-	}
-
-	/**
-	 * Return the upstream attribute of the project
-	 *
-	 * @return the upstream value if present, null otherwise.
-	 *
-	 * @since 6.10
-	 */
-	public String getUpstream() {
-		return this.upstream;
-	}
-
-	/**
-	 * Return the dest-branch attribute of the project
-	 *
-	 * @return the dest-branch value if present, null otherwise.
-	 *
-	 * @since 6.10
-	 */
-	public String getDestBranch() {
-		return this.destBranch;
-	}
-
-	/**
-	 * Set the upstream attribute of the project
-	 *
-	 * Name of the git ref in which a sha1 can be found, when the revision is a
-	 * sha1.
-	 *
-	 * @param upstream
-	 *            value of the attribute in the manifest
-	 *
-	 * @since 6.10
-	 */
-	public void setUpstream(String upstream) {
-		this.upstream = upstream;
-	}
-
-	/**
-	 * Set the dest-branch attribute of the project
-	 *
-	 * Name of a Git branch.
-	 *
-	 * @param destBranch
-	 *            value of the attribute in the manifest
-	 *
-	 * @since 6.10
-	 */
-	public void setDestBranch(String destBranch) {
-		this.destBranch = destBranch;
 	}
 
 	private String getPathWithSlash() {

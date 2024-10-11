@@ -26,11 +26,11 @@ public interface AsyncRevObjectQueue extends AsyncOperation {
 	 * Obtain the next object.
 	 *
 	 * @return the object; null if there are no more objects remaining.
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             the object does not exist. There may be more objects
 	 *             remaining in the iteration, the application should call
 	 *             {@link #next()} again.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object store cannot be accessed.
 	 */
 	RevObject next() throws MissingObjectException, IOException;

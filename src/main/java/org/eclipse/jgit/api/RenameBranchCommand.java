@@ -49,7 +49,7 @@ public class RenameBranchCommand extends GitCommand<Ref> {
 	 * </p>
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected RenameBranchCommand(Repository repo) {
 		super(repo);

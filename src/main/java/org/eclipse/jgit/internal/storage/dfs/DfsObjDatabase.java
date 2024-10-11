@@ -11,7 +11,6 @@
 package org.eclipse.jgit.internal.storage.dfs;
 
 import static java.util.stream.Collectors.joining;
-import static org.eclipse.jgit.internal.storage.pack.PackExt.BITMAP_INDEX;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,18 +26,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.jgit.internal.storage.file.PackBitmapIndexWriterV1;
-import org.eclipse.jgit.internal.storage.pack.PackBitmapIndexWriter;
 import org.eclipse.jgit.internal.storage.pack.PackExt;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectDatabase;
 import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.ObjectReader;
-import org.eclipse.jgit.util.io.CountingOutputStream;
 
 /**
  * Manages objects stored in
- * {@link org.eclipse.jgit.internal.storage.dfs.DfsPackFile} on a storage
+ * {@link DfsPackFile} on a storage
  * system.
  */
 public abstract class DfsObjDatabase extends ObjectDatabase {
@@ -260,7 +256,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 *
 	 * @return list of available packs. The returned array is shared with the
 	 *         implementation and must not be modified by the caller.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the pack list cannot be initialized.
 	 */
 	public DfsPackFile[] getPacks() throws IOException {
@@ -272,7 +268,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 *
 	 * @return list of available reftables. The returned array is shared with
 	 *         the implementation and must not be modified by the caller.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the pack list cannot be initialized.
 	 */
 	public DfsReftable[] getReftables() throws IOException {
@@ -285,7 +281,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 * @return list of available packs, with some additional metadata. The
 	 *         returned array is shared with the implementation and must not be
 	 *         modified by the caller.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the pack list cannot be initialized.
 	 */
 	public PackList getPackList() throws IOException {
@@ -343,7 +339,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 * @param avoidUnreachableObjects
 	 *            if true, ignore objects that are unreachable.
 	 * @return true if the specified object is stored in this database.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object store cannot be accessed.
 	 */
 	public boolean has(AnyObjectId objectId, boolean avoidUnreachableObjects)
@@ -361,7 +357,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 *            where the pack stream is created.
 	 * @return a unique name for the pack file. Must not collide with any other
 	 *         pack file name in the same DFS.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a new unique pack description cannot be generated.
 	 */
 	protected abstract DfsPackDescription newPack(PackSource source)
@@ -376,7 +372,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 * clients can override this method to use the given
 	 * {@code estimatedPackSize} value more efficiently in the process of
 	 * creating a new
-	 * {@link org.eclipse.jgit.internal.storage.dfs.DfsPackDescription} object.
+	 * {@link DfsPackDescription} object.
 	 *
 	 * @param source
 	 *            where the pack stream is created.
@@ -384,7 +380,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 *            the estimated size of the pack.
 	 * @return a unique name for the pack file. Must not collide with any other
 	 *         pack file name in the same DFS.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a new unique pack description cannot be generated.
 	 */
 	protected DfsPackDescription newPack(PackSource source,
@@ -415,7 +411,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 *            description of the new packs.
 	 * @param replaces
 	 *            if not null, list of packs to remove.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the packs cannot be committed. On failure a rollback must
 	 *             also be attempted by the caller.
 	 */
@@ -433,7 +429,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 *            description of the new packs.
 	 * @param replaces
 	 *            if not null, list of packs to remove.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the packs cannot be committed.
 	 */
 	protected abstract void commitPackImpl(Collection<DfsPackDescription> desc,
@@ -464,7 +460,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 * DfsPackDescription objects.
 	 *
 	 * @return available packs. May be empty if there are no packs.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the packs cannot be listed and the object database is not
 	 *             functional to the caller.
 	 */
@@ -481,9 +477,9 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 * @param ext
 	 *            file extension that will be read i.e "pack" or "idx".
 	 * @return channel to read the file.
-	 * @throws java.io.FileNotFoundException
+	 * @throws FileNotFoundException
 	 *             the file does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the file cannot be opened.
 	 */
 	protected abstract ReadableChannel openFile(
@@ -500,7 +496,7 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 	 * @param ext
 	 *            file extension that will be written i.e "pack" or "idx".
 	 * @return channel to write the file.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the file cannot be opened.
 	 */
 	protected abstract DfsOutputStream writeFile(
@@ -746,29 +742,5 @@ public abstract class DfsObjDatabase extends ObjectDatabase {
 		public void markDirty() {
 			dirty = true;
 		}
-	}
-
-	/**
-	 * Returns a writer to store the bitmap index in this object database.
-	 *
-	 * @param pack
-	 *            Pack file to which the bitmaps are associated.
-	 * @return a writer to store bitmaps associated with the pack
-	 * @throws IOException
-	 *             when some I/O problem occurs while creating or writing to
-	 *             output stream
-	 */
-	public PackBitmapIndexWriter getPackBitmapIndexWriter(
-			DfsPackDescription pack) throws IOException {
-		return (bitmaps, packDataChecksum) -> {
-			try (DfsOutputStream out = writeFile(pack, BITMAP_INDEX)) {
-				CountingOutputStream cnt = new CountingOutputStream(out);
-				PackBitmapIndexWriterV1 iw = new PackBitmapIndexWriterV1(cnt);
-				iw.write(bitmaps, packDataChecksum);
-				pack.addFileExt(BITMAP_INDEX);
-				pack.setFileSize(BITMAP_INDEX, cnt.getCount());
-				pack.setBlockSize(BITMAP_INDEX, out.blockSize());
-			}
-		};
 	}
 }

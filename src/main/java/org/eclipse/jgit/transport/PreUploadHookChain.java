@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import org.eclipse.jgit.lib.ObjectId;
 
 /**
- * {@link org.eclipse.jgit.transport.PreUploadHook} that delegates to a list of
+ * {@link PreUploadHook} that delegates to a list of
  * other hooks.
  * <p>
  * Hooks are run in the order passed to the constructor. If running a method on

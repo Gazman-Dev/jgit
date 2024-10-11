@@ -30,11 +30,11 @@ import org.eclipse.jgit.util.MutableInteger;
 import org.eclipse.jgit.util.RawParseUtils;
 
 /**
- * Single tree record from the 'TREE' {@link org.eclipse.jgit.dircache.DirCache}
+ * Single tree record from the 'TREE' {@link DirCache}
  * extension.
  * <p>
  * A valid cache tree record contains the object id of a tree object and the
- * total number of {@link org.eclipse.jgit.dircache.DirCacheEntry} instances
+ * total number of {@link DirCacheEntry} instances
  * (counted recursively) from the DirCache contained within the tree. This
  * information facilitates faster traversal of the index and quicker generation
  * of tree objects prior to creating a new commit.
@@ -176,8 +176,8 @@ public class DirCacheTree {
 	 * Determine if this cache is currently valid.
 	 * <p>
 	 * A valid cache tree knows how many
-	 * {@link org.eclipse.jgit.dircache.DirCacheEntry} instances from the parent
-	 * {@link org.eclipse.jgit.dircache.DirCache} reside within this tree
+	 * {@link DirCacheEntry} instances from the parent
+	 * {@link DirCache} reside within this tree
 	 * (recursively enumerated). It also knows the object id of the tree, as the
 	 * tree should be readily available from the repository's object database.
 	 *

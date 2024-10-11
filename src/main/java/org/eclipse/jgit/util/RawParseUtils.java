@@ -44,6 +44,14 @@ import org.eclipse.jgit.lib.PersonIdent;
  * Handy utility functions to parse raw object contents.
  */
 public final class RawParseUtils {
+	/**
+	 * UTF-8 charset constant.
+	 *
+	 * @since 2.2
+	 * @deprecated use {@link java.nio.charset.StandardCharsets#UTF_8} instead
+	 */
+	@Deprecated
+	public static final Charset UTF8_CHARSET = UTF_8;
 
 	private static final byte[] digits10;
 
@@ -276,7 +284,7 @@ public final class RawParseUtils {
 	 * @param p
 	 *            first position within the buffer to parse.
 	 * @return the integer value.
-	 * @throws java.lang.ArrayIndexOutOfBoundsException
+	 * @throws ArrayIndexOutOfBoundsException
 	 *             if the string is not hex formatted.
 	 */
 	public static final int parseHexInt16(final byte[] bs, final int p) {
@@ -306,7 +314,7 @@ public final class RawParseUtils {
 	 * @param p
 	 *            first position within the buffer to parse.
 	 * @return the integer value.
-	 * @throws java.lang.ArrayIndexOutOfBoundsException
+	 * @throws ArrayIndexOutOfBoundsException
 	 *             if the string is not hex formatted.
 	 */
 	public static final int parseHexInt32(final byte[] bs, final int p) {
@@ -347,7 +355,7 @@ public final class RawParseUtils {
 	 * @param p
 	 *            first position within the buffer to parse.
 	 * @return the integer value.
-	 * @throws java.lang.ArrayIndexOutOfBoundsException
+	 * @throws ArrayIndexOutOfBoundsException
 	 *             if the string is not hex formatted.
 	 * @since 4.3
 	 */
@@ -408,7 +416,7 @@ public final class RawParseUtils {
 	 * @param digit
 	 *            hex character to parse.
 	 * @return numeric value, in the range 0-15.
-	 * @throws java.lang.ArrayIndexOutOfBoundsException
+	 * @throws ArrayIndexOutOfBoundsException
 	 *             if the input digit is not a valid hex digit.
 	 */
 	public static final int parseHexInt4(final byte digit) {
@@ -715,7 +723,7 @@ public final class RawParseUtils {
 	 * Index the region between <code>[ptr, end)</code> to find line starts.
 	 * <p>
 	 * The returned list is 1 indexed. Index 0 contains
-	 * {@link java.lang.Integer#MIN_VALUE} to pad the list out.
+	 * {@link Integer#MIN_VALUE} to pad the list out.
 	 * <p>
 	 * Using a 1 indexed list means that line numbers can be directly accessed
 	 * from the list, so <code>list.get(1)</code> (aka get line 1) returns
@@ -1221,7 +1229,7 @@ public final class RawParseUtils {
 	 *            data from.
 	 * @return a string representation of the range <code>[start,end)</code>,
 	 *         after decoding the region through the specified character set.
-	 * @throws java.nio.charset.CharacterCodingException
+	 * @throws CharacterCodingException
 	 *             the input is not in any of the tested character sets.
 	 */
 	public static String decodeNoFallback(final Charset cs,

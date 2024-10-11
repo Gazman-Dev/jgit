@@ -38,9 +38,9 @@ public class IO {
 	 * @param path
 	 *            location of the file to read.
 	 * @return complete contents of the requested local file.
-	 * @throws java.io.FileNotFoundException
+	 * @throws FileNotFoundException
 	 *             the file does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the file exists, but its contents cannot be read.
 	 */
 	public static final byte[] readFully(File path)
@@ -58,9 +58,9 @@ public class IO {
 	 *            only the first limit number of bytes are returned
 	 * @return complete contents of the requested local file. If the contents
 	 *         exceeds the limit, then only the limit is returned.
-	 * @throws java.io.FileNotFoundException
+	 * @throws FileNotFoundException
 	 *             the file does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the file exists, but its contents cannot be read.
 	 */
 	public static final byte[] readSome(File path, int limit)
@@ -79,9 +79,9 @@ public class IO {
 	 *            maximum number of bytes to read, if the file is larger than
 	 *            this limit an IOException is thrown.
 	 * @return complete contents of the requested local file.
-	 * @throws java.io.FileNotFoundException
+	 * @throws FileNotFoundException
 	 *             the file does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the file exists, but its contents cannot be read.
 	 */
 	public static final byte[] readFully(File path, int max)
@@ -113,7 +113,7 @@ public class IO {
 	 *         on obtaining the underlying array for efficient data access. If
 	 *         {@code sizeHint} was too large, the array may be over-allocated,
 	 *         resulting in {@code limit() < array().length}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             there was an error reading from the stream.
 	 */
 	public static ByteBuffer readWholeStream(InputStream in, int sizeHint)
@@ -134,7 +134,7 @@ public class IO {
 	 *            number of bytes that must be read.
 	 * @throws EOFException
 	 *             the stream ended before dst was fully populated.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             there was an error reading from the stream.
 	 */
 	public static void readFully(final InputStream fd, final byte[] dst,
@@ -154,7 +154,7 @@ public class IO {
 	 *            buffer that must be fully populated
 	 * @throws EOFException
 	 *             the stream ended before dst was fully populated.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             there was an error reading from the stream.
 	 * @since 6.5
 	 */
@@ -175,7 +175,7 @@ public class IO {
 	 * @param len
 	 *            number of bytes that should be read.
 	 * @return number of bytes actually read.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             there was an error reading from the channel.
 	 */
 	public static int read(ReadableByteChannel channel, byte[] dst, int off,
@@ -204,7 +204,7 @@ public class IO {
 	 * @param off
 	 *            position within the buffer to start writing to.
 	 * @return number of bytes read
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             there was an error reading from the stream.
 	 */
 	public static int readFully(InputStream fd, byte[] dst, int off)
@@ -226,7 +226,7 @@ public class IO {
 	 * @throws EOFException
 	 *             the stream ended before the requested number of bytes were
 	 *             skipped.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             there was an error reading from the stream.
 	 */
 	public static void skipFully(InputStream fd, long toSkip)
@@ -290,7 +290,7 @@ public class IO {
 	 *            hint for buffer sizing; 0 or negative for default.
 	 * @return the next line from the input, always ending in {@code \n} unless
 	 *         EOF was reached.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             there was an error reading from the stream.
 	 * @since 4.1
 	 */

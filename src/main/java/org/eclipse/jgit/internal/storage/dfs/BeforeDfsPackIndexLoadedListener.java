@@ -14,7 +14,7 @@ import org.eclipse.jgit.events.RepositoryListener;
 
 /**
  * Receives
- * {@link org.eclipse.jgit.internal.storage.dfs.BeforeDfsPackIndexLoadedEvent}s.
+ * {@link BeforeDfsPackIndexLoadedEvent}s.
  */
 public interface BeforeDfsPackIndexLoadedListener extends RepositoryListener {
 	/**

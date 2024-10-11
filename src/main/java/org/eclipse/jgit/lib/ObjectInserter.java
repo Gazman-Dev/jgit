@@ -247,7 +247,7 @@ public abstract class ObjectInserter implements AutoCloseable {
 	 *            stream providing the object content. The caller is responsible
 	 *            for closing the stream.
 	 * @return the name of the object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the source stream could not be read.
 	 */
 	public ObjectId idFor(int objectType, long length, InputStream in)
@@ -272,7 +272,7 @@ public abstract class ObjectInserter implements AutoCloseable {
 	 * Compute the ObjectId for the given tree without inserting it.
 	 *
 	 * @param formatter
-	 *            a {@link org.eclipse.jgit.lib.TreeFormatter} object.
+	 *            a {@link TreeFormatter} object.
 	 * @return the computed ObjectId
 	 */
 	public ObjectId idFor(TreeFormatter formatter) {
@@ -285,7 +285,7 @@ public abstract class ObjectInserter implements AutoCloseable {
 	 * @param formatter
 	 *            the formatter containing the proposed tree's data.
 	 * @return the name of the tree object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object could not be stored.
 	 */
 	public final ObjectId insert(TreeFormatter formatter) throws IOException {
@@ -301,7 +301,7 @@ public abstract class ObjectInserter implements AutoCloseable {
 	 * @param builder
 	 *            the builder containing the proposed commit's data.
 	 * @return the name of the commit object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object could not be stored.
 	 */
 	public final ObjectId insert(CommitBuilder builder) throws IOException {
@@ -314,7 +314,7 @@ public abstract class ObjectInserter implements AutoCloseable {
 	 * @param builder
 	 *            the builder containing the proposed tag's data.
 	 * @return the name of the tag object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object could not be stored.
 	 */
 	public final ObjectId insert(TagBuilder builder) throws IOException {
@@ -329,7 +329,7 @@ public abstract class ObjectInserter implements AutoCloseable {
 	 * @param data
 	 *            complete content of the object.
 	 * @return the name of the object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object could not be stored.
 	 */
 	public ObjectId insert(int type, byte[] data)
@@ -349,7 +349,7 @@ public abstract class ObjectInserter implements AutoCloseable {
 	 * @param len
 	 *            number of bytes to copy from {@code data}.
 	 * @return the name of the object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object could not be stored.
 	 */
 	public ObjectId insert(int type, byte[] data, int off, int len)
@@ -368,7 +368,7 @@ public abstract class ObjectInserter implements AutoCloseable {
 	 *            stream providing the object content. The caller is responsible
 	 *            for closing the stream.
 	 * @return the name of the object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object could not be stored, or the source stream could
 	 *             not be read.
 	 */
@@ -382,7 +382,7 @@ public abstract class ObjectInserter implements AutoCloseable {
 	 *            the input stream. The stream is not closed by the parser, and
 	 *            must instead be closed by the caller once parsing is complete.
 	 * @return the pack parser.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the parser instance, which can be configured and then used to
 	 *             parse objects into the ObjectDatabase.
 	 */
@@ -419,7 +419,7 @@ public abstract class ObjectInserter implements AutoCloseable {
 	 * The flush may take some period of time to make the objects available to
 	 * other threads.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the flush could not be completed; objects inserted thus far
 	 *             are in an indeterminate state.
 	 */

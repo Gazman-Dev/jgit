@@ -38,17 +38,8 @@ import org.eclipse.jgit.util.StringUtils;
  */
 public class RevTag extends RevObject {
 
-	private static final byte[] SIGNATURE_START = Constants
-			.encodeASCII("-----BEGIN"); //$NON-NLS-1$
-
-	private static final byte[] GPG_SIGNATURE_START = Constants
-			.encodeASCII(Constants.GPG_SIGNATURE_PREFIX);
-
-	private static final byte[] CMS_SIGNATURE_START = Constants
-			.encodeASCII(Constants.CMS_SIGNATURE_PREFIX);
-
-	private static final byte[] SSH_SIGNATURE_START = Constants
-			.encodeASCII(Constants.SSH_SIGNATURE_PREFIX);
+	private static final byte[] hSignature = Constants
+			.encodeASCII("-----BEGIN PGP SIGNATURE-----"); //$NON-NLS-1$
 
 	/**
 	 * Parse an annotated tag from its canonical format.
@@ -60,14 +51,14 @@ public class RevTag extends RevObject {
 	 *
 	 * Applications are discouraged from using this API. Callers usually need
 	 * more than one object. Use
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#parseTag(AnyObjectId)} to obtain
+	 * {@link RevWalk#parseTag(AnyObjectId)} to obtain
 	 * a RevTag from an existing repository.
 	 *
 	 * @param raw
 	 *            the canonical formatted tag to be parsed.
 	 * @return the parsed tag, in an isolated revision pool that is not
 	 *         available to the caller.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the tag contains a malformed header that cannot be handled.
 	 */
 	public static RevTag parse(byte[] raw) throws CorruptObjectException {
@@ -94,7 +85,7 @@ public class RevTag extends RevObject {
 	 *            modified by the caller.
 	 * @return the parsed tag, in an isolated revision pool that is not
 	 *         available to the caller.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the tag contains a malformed header that cannot be handled.
 	 */
 	public static RevTag parse(RevWalk rw, byte[] raw)
@@ -217,27 +208,20 @@ public class RevTag extends RevObject {
 			return msgB;
 		}
 		// Find the last signature start and return the rest
-		int start = nextStart(SIGNATURE_START, raw, msgB);
+		int start = nextStart(hSignature, raw, msgB);
 		if (start < 0) {
 			return start;
 		}
 		int next = RawParseUtils.nextLF(raw, start);
 		while (next < raw.length) {
-			int newStart = nextStart(SIGNATURE_START, raw, next);
+			int newStart = nextStart(hSignature, raw, next);
 			if (newStart < 0) {
 				break;
 			}
 			start = newStart;
 			next = RawParseUtils.nextLF(raw, start);
 		}
-		// SIGNATURE_START is just a prefix. Check that it is one of the known
-		// full signature start tags.
-		if (RawParseUtils.match(raw, start, GPG_SIGNATURE_START) > 0
-				|| RawParseUtils.match(raw, start, CMS_SIGNATURE_START) > 0
-				|| RawParseUtils.match(raw, start, SSH_SIGNATURE_START) > 0) {
-			return start;
-		}
-		return -1;
+		return start;
 	}
 
 	/**
@@ -333,14 +317,14 @@ public class RevTag extends RevObject {
 	 * Get a reference to the object this tag was placed on.
 	 * <p>
 	 * Note that the returned object has only been looked up (see
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#lookupAny(AnyObjectId, int)}. To
+	 * {@link RevWalk#lookupAny(AnyObjectId, int)}. To
 	 * access the contents it needs to be parsed, see
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#parseHeaders(RevObject)} and
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#parseBody(RevObject)}.
+	 * {@link RevWalk#parseHeaders(RevObject)} and
+	 * {@link RevWalk#parseBody(RevObject)}.
 	 * <p>
 	 * As an alternative, use
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#peel(RevObject)} and pass this
-	 * {@link org.eclipse.jgit.revwalk.RevTag} to peel it until the first
+	 * {@link RevWalk#peel(RevObject)} and pass this
+	 * {@link RevTag} to peel it until the first
 	 * non-tag object.
 	 *
 	 * @return object this tag refers to (only looked up, not parsed)
@@ -381,7 +365,7 @@ public class RevTag extends RevObject {
 	 * only the {@link #getObject()} pointer and {@link #getTagName()}.
 	 * Accessing other properties such as {@link #getTaggerIdent()} or either
 	 * message function requires reloading the buffer by invoking
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#parseBody(RevObject)}.
+	 * {@link RevWalk#parseBody(RevObject)}.
 	 *
 	 * @since 4.0
 	 */

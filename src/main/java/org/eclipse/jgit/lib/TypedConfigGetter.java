@@ -217,7 +217,7 @@ public interface TypedConfigGetter {
 	 * @param name
 	 *            the key name.
 	 * @return a possibly empty list of
-	 *         {@link org.eclipse.jgit.transport.RefSpec}s
+	 *         {@link RefSpec}s
 	 */
 	@NonNull
 	List<RefSpec> getRefSpecs(Config config, String section, String subsection,

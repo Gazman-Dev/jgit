@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 import org.eclipse.jgit.storage.pack.PackStatistics;
 
 /**
- * {@link org.eclipse.jgit.transport.PostUploadHook} that delegates to a list of
+ * {@link PostUploadHook} that delegates to a list of
  * other hooks.
  * <p>
  * Hooks are run in the order passed to the constructor.

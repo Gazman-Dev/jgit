@@ -28,15 +28,15 @@ class InternalFetchConnection<C> extends BasePackFetchConnection {
 	 * Constructor for InternalFetchConnection.
 	 *
 	 * @param transport
-	 *            a {@link org.eclipse.jgit.transport.PackTransport}
+	 *            a {@link PackTransport}
 	 * @param uploadPackFactory
 	 *            a
-	 *            {@link org.eclipse.jgit.transport.resolver.UploadPackFactory}
+	 *            {@link UploadPackFactory}
 	 * @param req
 	 *            request
 	 * @param remote
-	 *            the remote {@link org.eclipse.jgit.lib.Repository}
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 *            the remote {@link Repository}
+	 * @throws TransportException
 	 *             if any.
 	 */
 	public InternalFetchConnection(PackTransport transport,

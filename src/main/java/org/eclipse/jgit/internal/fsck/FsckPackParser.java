@@ -240,7 +240,7 @@ public class FsckPackParser extends PackParser {
 	 *
 	 * @param idx
 	 *            index file associate with the pack
-	 * @throws org.eclipse.jgit.errors.CorruptPackIndexException
+	 * @throws CorruptPackIndexException
 	 *             when the index file is corrupt.
 	 */
 	public void verifyIndex(PackIndex idx)

@@ -32,7 +32,7 @@ public interface RemoteSession {
 	 * @param timeout
 	 *            timeout value, in seconds, for creating the remote process
 	 * @return a new remote process, already started
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             may be thrown in several cases. For example, on problems
 	 *             opening input or output streams or on problems connecting or
 	 *             communicating with the remote host. For the latter two cases,

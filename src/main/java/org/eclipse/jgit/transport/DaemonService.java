@@ -22,7 +22,7 @@ import org.eclipse.jgit.transport.resolver.ServiceNotAuthorizedException;
 import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
 
 /**
- * A service exposed by {@link org.eclipse.jgit.transport.Daemon} over anonymous
+ * A service exposed by {@link Daemon} over anonymous
  * <code>git://</code>.
  */
 public abstract class DaemonService {

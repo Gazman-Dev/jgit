@@ -34,7 +34,7 @@ public interface ObjectCountCallback {
 	 *
 	 * @param objectCount
 	 *            the count of the objects.
-	 * @throws org.eclipse.jgit.transport.WriteAbortedException
+	 * @throws WriteAbortedException
 	 *             to indicate that the write operation should be aborted.
 	 */
 	void setObjectCount(long objectCount) throws WriteAbortedException;

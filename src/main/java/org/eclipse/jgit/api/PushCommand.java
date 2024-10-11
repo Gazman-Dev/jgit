@@ -94,7 +94,7 @@ public class PushCommand extends
 	 * </p>
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected PushCommand(Repository repo) {
 		super(repo);
@@ -403,7 +403,7 @@ public class PushCommand extends
 	 *
 	 * @see NullProgressMonitor
 	 * @param monitor
-	 *            a {@link org.eclipse.jgit.lib.ProgressMonitor}
+	 *            a {@link ProgressMonitor}
 	 * @return {@code this}
 	 */
 	public PushCommand setProgressMonitor(ProgressMonitor monitor) {
@@ -430,7 +430,7 @@ public class PushCommand extends
 	 * force-with-lease push operation.
 	 *
 	 * @param specs
-	 *            a {@link org.eclipse.jgit.transport.RefLeaseSpec} object.
+	 *            a {@link RefLeaseSpec} object.
 	 * @return {@code this}
 	 * @since 4.7
 	 */
@@ -468,7 +468,7 @@ public class PushCommand extends
 	/**
 	 * The ref specs to be used in the push operation
 	 *
-	 * @param specs a {@link org.eclipse.jgit.transport.RefSpec} object.
+	 * @param specs a {@link RefSpec} object.
 	 * @return {@code this}
 	 */
 	public PushCommand setRefSpecs(RefSpec... specs) {
@@ -482,7 +482,7 @@ public class PushCommand extends
 	 * The ref specs to be used in the push operation
 	 *
 	 * @param specs
-	 *            list of {@link org.eclipse.jgit.transport.RefSpec}s
+	 *            list of {@link RefSpec}s
 	 * @return {@code this}
 	 */
 	public PushCommand setRefSpecs(List<RefSpec> specs) {
@@ -703,7 +703,7 @@ public class PushCommand extends
 	 * Sets the output stream to write sideband messages to
 	 *
 	 * @param out
-	 *            an {@link java.io.OutputStream}
+	 *            an {@link OutputStream}
 	 * @return {@code this}
 	 * @since 3.0
 	 */
@@ -726,7 +726,7 @@ public class PushCommand extends
 	 * Set the option strings associated with the push operation.
 	 *
 	 * @param pushOptions
-	 *            a {@link java.util.List} of push option strings
+	 *            a {@link List} of push option strings
 	 * @return {@code this}
 	 * @since 4.5
 	 */

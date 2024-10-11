@@ -22,7 +22,7 @@ import java.util.Map;
 import org.eclipse.jgit.internal.JGitText;
 
 /**
- * Parses strings with time and date specifications into {@link java.util.Date}.
+ * Parses strings with time and date specifications into {@link Date}.
  *
  * When git needs to parse strings specified by the user this parser can be
  * used. One example is the parsing of the config parameter gc.pruneexpire. The
@@ -101,7 +101,7 @@ public class GitDateParser {
 	}
 
 	/**
-	 * Parses a string into a {@link java.util.Date} using the default locale.
+	 * Parses a string into a {@link Date} using the default locale.
 	 * Since this parser also supports relative formats (e.g. "yesterday") the
 	 * caller can specify the reference date. These types of strings can be
 	 * parsed:
@@ -133,8 +133,8 @@ public class GitDateParser {
 	 *            calls.<br>
 	 *            If set to <code>null</code> then the current time will be used
 	 *            instead.
-	 * @return the parsed {@link java.util.Date}
-	 * @throws java.text.ParseException
+	 * @return the parsed {@link Date}
+	 * @throws ParseException
 	 *             if the given dateStr was not recognized
 	 */
 	public static Date parse(String dateStr, Calendar now)
@@ -143,7 +143,7 @@ public class GitDateParser {
 	}
 
 	/**
-	 * Parses a string into a {@link java.util.Date} using the given locale.
+	 * Parses a string into a {@link Date} using the given locale.
 	 * Since this parser also supports relative formats (e.g. "yesterday") the
 	 * caller can specify the reference date. These types of strings can be
 	 * parsed:
@@ -177,8 +177,8 @@ public class GitDateParser {
 	 *            instead.
 	 * @param locale
 	 *            locale to be used to parse the date string
-	 * @return the parsed {@link java.util.Date}
-	 * @throws java.text.ParseException
+	 * @return the parsed {@link Date}
+	 * @throws ParseException
 	 *             if the given dateStr was not recognized
 	 * @since 3.2
 	 */

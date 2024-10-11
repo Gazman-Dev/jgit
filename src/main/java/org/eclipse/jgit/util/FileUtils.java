@@ -95,14 +95,14 @@ public class FileUtils {
 	public static final int EMPTY_DIRECTORIES_ONLY = 16;
 
 	/**
-	 * Safe conversion from {@link java.io.File} to {@link java.nio.file.Path}.
+	 * Safe conversion from {@link File} to {@link Path}.
 	 *
 	 * @param f
 	 *            {@code File} to be converted to {@code Path}
 	 * @return the path represented by the file
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             in case the path represented by the file is not valid (
-	 *             {@link java.nio.file.InvalidPathException})
+	 *             {@link InvalidPathException})
 	 * @since 4.10
 	 */
 	public static Path toPath(File f) throws IOException {
@@ -118,7 +118,7 @@ public class FileUtils {
 	 *
 	 * @param f
 	 *            {@code File} to be deleted
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if deletion of {@code f} fails. This may occur if {@code f}
 	 *             didn't exist when the method was called. This can therefore
 	 *             cause java.io.IOExceptions during race conditions when
@@ -138,7 +138,7 @@ public class FileUtils {
 	 *            a subtree, {@code RETRY} to retry when deletion failed.
 	 *            Retrying may help if the underlying file system doesn't allow
 	 *            deletion of files being read by another thread.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if deletion of {@code f} fails. This may occur if {@code f}
 	 *             didn't exist when the method was called. This can therefore
 	 *             cause java.io.IOExceptions during race conditions when
@@ -253,7 +253,7 @@ public class FileUtils {
 	 *            the old {@code File}
 	 * @param dst
 	 *            the new {@code File}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if the rename has failed
 	 * @since 3.0
 	 */
@@ -264,7 +264,7 @@ public class FileUtils {
 
 	/**
 	 * Rename a file or folder using the passed
-	 * {@link java.nio.file.CopyOption}s. If the rename fails and if we are
+	 * {@link CopyOption}s. If the rename fails and if we are
 	 * running on a filesystem where it makes sense to repeat a failing rename
 	 * then repeat the rename operation up to 9 times with 100ms sleep time
 	 * between two calls. Furthermore if the destination exists and is a
@@ -273,10 +273,10 @@ public class FileUtils {
 	 * structure, empty subdirectories within that structure may or may not be
 	 * deleted even if the method fails. Furthermore if the destination exists
 	 * and is a file then the file will be replaced if
-	 * {@link java.nio.file.StandardCopyOption#REPLACE_EXISTING} has been set.
-	 * If {@link java.nio.file.StandardCopyOption#ATOMIC_MOVE} has been set the
+	 * {@link StandardCopyOption#REPLACE_EXISTING} has been set.
+	 * If {@link StandardCopyOption#ATOMIC_MOVE} has been set the
 	 * rename will be done atomically or fail with an
-	 * {@link java.nio.file.AtomicMoveNotSupportedException}
+	 * {@link AtomicMoveNotSupportedException}
 	 *
 	 * @param src
 	 *            the old file
@@ -284,10 +284,10 @@ public class FileUtils {
 	 *            the new file
 	 * @param options
 	 *            options to pass to
-	 *            {@link java.nio.file.Files#move(java.nio.file.Path, java.nio.file.Path, CopyOption...)}
-	 * @throws java.nio.file.AtomicMoveNotSupportedException
+	 *            {@link Files#move(Path, Path, CopyOption...)}
+	 * @throws AtomicMoveNotSupportedException
 	 *             if file cannot be moved as an atomic file system operation
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 4.1
 	 */
@@ -339,7 +339,7 @@ public class FileUtils {
 	 *
 	 * @param d
 	 *            directory to be created
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if creation of {@code d} fails. This may occur if {@code d}
 	 *             did exist when the method was called. This can therefore
 	 *             cause java.io.IOExceptions during race conditions when
@@ -359,7 +359,7 @@ public class FileUtils {
 	 * @param skipExisting
 	 *            if {@code true} skip creation of the given directory if it
 	 *            already exists in the file system
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if creation of {@code d} fails. This may occur if {@code d}
 	 *             did exist when the method was called. This can therefore
 	 *             cause java.io.IOExceptions during race conditions when
@@ -384,7 +384,7 @@ public class FileUtils {
 	 *
 	 * @param d
 	 *            directory to be created
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if creation of {@code d} fails. This may occur if {@code d}
 	 *             did exist when the method was called. This can therefore
 	 *             cause java.io.IOExceptions during race conditions when
@@ -406,7 +406,7 @@ public class FileUtils {
 	 * @param skipExisting
 	 *            if {@code true} skip creation of the given directory if it
 	 *            already exists in the file system
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if creation of {@code d} fails. This may occur if {@code d}
 	 *             did exist when the method was called. This can therefore
 	 *             cause java.io.IOExceptions during race conditions when
@@ -436,7 +436,7 @@ public class FileUtils {
 	 *
 	 * @param f
 	 *            the file to be created
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if the named file already exists or if an I/O error occurred
 	 */
 	public static void createNewFile(File f) throws IOException {
@@ -453,7 +453,7 @@ public class FileUtils {
 	 * @param target
 	 *            the target of the symbolic link
 	 * @return the path to the symbolic link
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 4.2
 	 */
@@ -480,9 +480,9 @@ public class FileUtils {
 	 * Read target path of the symlink.
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return target path of the symlink, or null if it is not a symbolic link
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.0
 	 */
@@ -508,7 +508,7 @@ public class FileUtils {
 	 * @param dir
 	 *            The parent dir, can be null to use system default temp dir.
 	 * @return the temp dir created.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.4
 	 */
@@ -532,7 +532,7 @@ public class FileUtils {
 	 * current file system.
 	 *
 	 * See also
-	 * {@link org.eclipse.jgit.util.FileUtils#relativizePath(String, String, String, boolean)}.
+	 * {@link FileUtils#relativizePath(String, String, String, boolean)}.
 	 *
 	 * @param base
 	 *            Base path
@@ -551,7 +551,7 @@ public class FileUtils {
 	 * internal representation of files (which matches Unix).
 	 *
 	 * See also
-	 * {@link org.eclipse.jgit.util.FileUtils#relativizePath(String, String, String, boolean)}.
+	 * {@link FileUtils#relativizePath(String, String, String, boolean)}.
 	 *
 	 * @param base
 	 *            Base path
@@ -634,7 +634,7 @@ public class FileUtils {
 	 * Determine if an IOException is a stale NFS file handle
 	 *
 	 * @param ioe
-	 *            an {@link java.io.IOException} object.
+	 *            an {@link IOException} object.
 	 * @return a boolean true if the IOException is a stale NFS file handle
 	 * @since 4.1
 	 */
@@ -650,7 +650,7 @@ public class FileUtils {
 	 * file handle
 	 *
 	 * @param throwable
-	 *            a {@link java.lang.Throwable} object.
+	 *            a {@link Throwable} object.
 	 * @return a boolean true if the throwable or a cause in its causal chain is
 	 *         a stale NFS file handle
 	 * @since 4.7
@@ -771,6 +771,24 @@ public class FileUtils {
 	}
 
 	/**
+	 * Get the lastModified attribute for a given file
+	 *
+	 * @param file
+	 *            the file
+	 * @return lastModified attribute for given file, not following symbolic
+	 *         links
+	 * @throws IOException
+	 *             if an IO error occurred
+	 * @deprecated use {@link #lastModifiedInstant(Path)} instead which returns
+	 *             FileTime
+	 */
+	@Deprecated
+	static long lastModified(File file) throws IOException {
+		return Files.getLastModifiedTime(toPath(file), LinkOption.NOFOLLOW_LINKS)
+				.toMillis();
+	}
+
+	/**
 	 * Get last modified timestamp of a file
 	 *
 	 * @param path
@@ -807,6 +825,21 @@ public class FileUtils {
 	 */
 	static BasicFileAttributes fileAttributes(File file) throws IOException {
 		return Files.readAttributes(file.toPath(), BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+	}
+
+	/**
+	 * Set the last modified time of a file system object.
+	 *
+	 * @param file
+	 *            the file
+	 * @param time
+	 *            last modified timestamp
+	 * @throws IOException
+	 *             if an IO error occurred
+	 */
+	@Deprecated
+	static void setLastModified(File file, long time) throws IOException {
+		Files.setLastModifiedTime(toPath(file), FileTime.fromMillis(time));
 	}
 
 	/**
@@ -853,10 +886,10 @@ public class FileUtils {
 	 * Set a file hidden (on Windows)
 	 *
 	 * @param file
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @param hidden
 	 *            a boolean.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 4.1
 	 */
@@ -869,9 +902,9 @@ public class FileUtils {
 	 * Get file length
 	 *
 	 * @param file
-	 *            a {@link java.io.File}.
+	 *            a {@link File}.
 	 * @return length of the given file
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 4.1
 	 */
@@ -928,7 +961,7 @@ public class FileUtils {
 	 * Whether the given file can be executed.
 	 *
 	 * @param file
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return {@code true} if the given file can be executed.
 	 * @since 4.1
 	 */
@@ -943,7 +976,7 @@ public class FileUtils {
 	 * Get basic file attributes
 	 *
 	 * @param fs
-	 *            a {@link org.eclipse.jgit.util.FS} object.
+	 *            a {@link FS} object.
 	 * @param file
 	 *            the file
 	 * @return non null attributes object
@@ -978,9 +1011,9 @@ public class FileUtils {
 	 * Get file system attributes for the given file.
 	 *
 	 * @param fs
-	 *            a {@link org.eclipse.jgit.util.FS} object.
+	 *            a {@link FS} object.
 	 * @param file
-	 *            a {@link java.io.File}.
+	 *            a {@link File}.
 	 * @return file system attributes for the given file.
 	 * @since 4.1
 	 */
@@ -1015,8 +1048,8 @@ public class FileUtils {
 	 * NFC normalize a file (on Mac), otherwise do nothing
 	 *
 	 * @param file
-	 *            a {@link java.io.File}.
-	 * @return on Mac: NFC normalized {@link java.io.File}, otherwise the passed
+	 *            a {@link File}.
+	 * @return on Mac: NFC normalized {@link File}, otherwise the passed
 	 *         file
 	 * @since 4.1
 	 */
@@ -1025,7 +1058,7 @@ public class FileUtils {
 			// TODO: Would it be faster to check with isNormalized first
 			// assuming normalized paths are much more common
 			String normalized = Normalizer.normalize(file.getPath(),
-					Normalizer.Form.NFC);
+					Form.NFC);
 			return new File(normalized);
 		}
 		return file;
@@ -1035,7 +1068,7 @@ public class FileUtils {
 	 * On Mac: get NFC normalized form of given name, otherwise the given name.
 	 *
 	 * @param name
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @return on Mac: NFC normalized form of given name
 	 * @since 4.1
 	 */
@@ -1043,22 +1076,22 @@ public class FileUtils {
 		if (SystemReader.getInstance().isMacOS()) {
 			if (name == null)
 				return null;
-			return Normalizer.normalize(name, Normalizer.Form.NFC);
+			return Normalizer.normalize(name, Form.NFC);
 		}
 		return name;
 	}
 
 	/**
-	 * Best-effort variation of {@link java.io.File#getCanonicalFile()}
+	 * Best-effort variation of {@link File#getCanonicalFile()}
 	 * returning the input file if the file cannot be canonicalized instead of
-	 * throwing {@link java.io.IOException}.
+	 * throwing {@link IOException}.
 	 *
 	 * @param file
 	 *            to be canonicalized; may be {@code null}
 	 * @return canonicalized file, or the unchanged input file if
 	 *         canonicalization failed or if {@code file == null}
-	 * @throws java.lang.SecurityException
-	 *             if {@link java.io.File#getCanonicalFile()} throws one
+	 * @throws SecurityException
+	 *             if {@link File#getCanonicalFile()} throws one
 	 * @since 4.2
 	 */
 	public static File canonicalize(File file) {
@@ -1076,7 +1109,7 @@ public class FileUtils {
 	 * Convert a path to String, replacing separators as necessary.
 	 *
 	 * @param file
-	 *            a {@link java.io.File}.
+	 *            a {@link File}.
 	 * @return file's path as a String
 	 * @since 4.10
 	 */

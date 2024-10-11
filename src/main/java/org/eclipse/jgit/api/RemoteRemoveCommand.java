@@ -40,10 +40,22 @@ public class RemoteRemoveCommand extends GitCommand<RemoteConfig> {
 	 * </p>
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected RemoteRemoveCommand(Repository repo) {
 		super(repo);
+	}
+
+	/**
+	 * The name of the remote to remove.
+	 *
+	 * @param name
+	 *            a remote name
+	 * @deprecated use {@link #setRemoteName} instead
+	 */
+	@Deprecated
+	public void setName(String name) {
+		this.remoteName = name;
 	}
 
 	/**

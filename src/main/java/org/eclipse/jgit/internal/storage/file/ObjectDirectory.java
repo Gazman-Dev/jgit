@@ -52,12 +52,12 @@ import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.FileUtils;
 
 /**
- * Traditional file system based {@link org.eclipse.jgit.lib.ObjectDatabase}.
+ * Traditional file system based {@link ObjectDatabase}.
  * <p>
  * This is the classical object database representation for a Git repository,
  * where objects are stored loose by hashing them into directories by their
- * {@link org.eclipse.jgit.lib.ObjectId}, or are stored in compressed containers
- * known as {@link org.eclipse.jgit.internal.storage.file.Pack}s.
+ * {@link ObjectId}, or are stored in compressed containers
+ * known as {@link Pack}s.
  * <p>
  * Optionally an object database can reference one or more alternates; other
  * ObjectDatabase instances that are searched in addition to the current
@@ -116,7 +116,7 @@ public class ObjectDirectory extends FileObjectDatabase {
 	 * @param shallowFile
 	 *            file which contains IDs of shallow commits, null if shallow
 	 *            commits handling should be turned off
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an alternate object cannot be opened.
 	 */
 	public ObjectDirectory(final Config cfg, final File dir,
@@ -768,7 +768,7 @@ public class ObjectDirectory extends FileObjectDatabase {
 
 		final ObjectDirectory db;
 
-		private AlternateHandle.Id id;
+		private Id id;
 
 		AlternateHandle(ObjectDirectory db) {
 			this.db = db;
@@ -780,7 +780,7 @@ public class ObjectDirectory extends FileObjectDatabase {
 
 		public synchronized Id getId() {
 			if (id == null) {
-				id = new AlternateHandle.Id(db.objects);
+				id = new Id(db.objects);
 			}
 			return id;
 		}

@@ -182,7 +182,7 @@ public class FileResolver<C> implements RepositoryResolver<C> {
 	 * @param db
 	 *            the opened repository instance.
 	 * @return true if the repository is accessible; false if not.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository could not be accessed, the caller will claim
 	 *             the repository does not exist.
 	 */

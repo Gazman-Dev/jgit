@@ -18,7 +18,7 @@ import org.eclipse.jgit.merge.MergeChunk.ConflictState;
 import org.eclipse.jgit.util.IntList;
 
 /**
- * The result of merging a number of {@link org.eclipse.jgit.diff.Sequence}
+ * The result of merging a number of {@link Sequence}
  * objects. These sequences have one common predecessor sequence. The result of
  * a merge is a list of MergeChunks. Each MergeChunk contains either a range (a
  * subsequence) from one of the merged sequences, a range from the common
@@ -48,7 +48,7 @@ public class MergeResult<S extends Sequence> implements Iterable<MergeChunk> {
 	 *            contains the common predecessor sequence at position 0
 	 *            followed by the merged sequences. This list should not be
 	 *            modified anymore during the lifetime of this
-	 *            {@link org.eclipse.jgit.merge.MergeResult}.
+	 *            {@link MergeResult}.
 	 */
 	public MergeResult(List<S> sequences) {
 		this.sequences = sequences;

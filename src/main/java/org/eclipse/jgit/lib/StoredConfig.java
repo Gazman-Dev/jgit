@@ -42,9 +42,9 @@ public abstract class StoredConfig extends Config {
 	 * If the configuration does not exist, this configuration is cleared, and
 	 * thus behaves the same as though the backing store exists, but is empty.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the configuration could not be read (but does exist).
-	 * @throws org.eclipse.jgit.errors.ConfigInvalidException
+	 * @throws ConfigInvalidException
 	 *             the configuration is not properly formatted.
 	 */
 	public abstract void load() throws IOException, ConfigInvalidException;
@@ -52,7 +52,7 @@ public abstract class StoredConfig extends Config {
 	/**
 	 * Save the configuration to the persistent store.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the configuration could not be written.
 	 */
 	public abstract void save() throws IOException;

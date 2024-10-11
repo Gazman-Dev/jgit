@@ -42,7 +42,7 @@ public class RemoteAddCommand extends GitCommand<RemoteConfig> {
 	 * Constructor for RemoteAddCommand.
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected RemoteAddCommand(Repository repo) {
 		super(repo);

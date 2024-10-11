@@ -16,6 +16,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jgit.annotations.NonNull;
@@ -51,6 +52,9 @@ import org.eclipse.jgit.lib.CommitConfig.CleanupMode;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.GpgConfig;
+import org.eclipse.jgit.lib.GpgConfig.GpgFormat;
+import org.eclipse.jgit.lib.GpgObjectSigner;
+import org.eclipse.jgit.lib.GpgSigner;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -59,8 +63,6 @@ import org.eclipse.jgit.lib.RefUpdate;
 import org.eclipse.jgit.lib.RefUpdate.Result;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryState;
-import org.eclipse.jgit.lib.Signer;
-import org.eclipse.jgit.lib.Signers;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevTag;
@@ -107,7 +109,7 @@ public class CommitCommand extends GitCommand<RevCommit> {
 	 * parents this commit should have. The current HEAD will be in this list
 	 * and also all commits mentioned in .git/MERGE_HEAD
 	 */
-	private List<ObjectId> parents = new ArrayList<>();
+	private List<ObjectId> parents = new LinkedList<>();
 
 	private String reflogComment;
 
@@ -128,7 +130,7 @@ public class CommitCommand extends GitCommand<RevCommit> {
 
 	private String signingKey;
 
-	private Signer signer;
+	private GpgSigner gpgSigner;
 
 	private GpgConfig gpgConfig;
 
@@ -144,7 +146,7 @@ public class CommitCommand extends GitCommand<RevCommit> {
 	 * Constructor for CommitCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected CommitCommand(Repository repo) {
 		super(repo);
@@ -318,22 +320,30 @@ public class CommitCommand extends GitCommand<RevCommit> {
 		}
 	}
 
-	private void sign(CommitBuilder commit)
-			throws CanceledException, IOException,
-			UnsupportedSigningFormatException {
-		if (signer == null) {
-			signer = Signers.get(gpgConfig.getKeyFormat());
-			if (signer == null) {
-				throw new UnsupportedSigningFormatException(MessageFormat
-						.format(JGitText.get().signatureTypeUnknown,
-								gpgConfig.getKeyFormat().toConfigValue()));
+	private void sign(CommitBuilder commit) throws ServiceUnavailableException,
+			CanceledException, UnsupportedSigningFormatException {
+		if (gpgSigner == null) {
+			gpgSigner = GpgSigner.getDefault();
+			if (gpgSigner == null) {
+				throw new ServiceUnavailableException(
+						JGitText.get().signingServiceUnavailable);
 			}
 		}
 		if (signingKey == null) {
 			signingKey = gpgConfig.getSigningKey();
 		}
-		signer.signObject(repo, gpgConfig, commit, committer, signingKey,
-				credentialsProvider);
+		if (gpgSigner instanceof GpgObjectSigner) {
+			((GpgObjectSigner) gpgSigner).signObject(commit,
+					signingKey, committer, credentialsProvider,
+					gpgConfig);
+		} else {
+			if (gpgConfig.getKeyFormat() != GpgFormat.OPENPGP) {
+				throw new UnsupportedSigningFormatException(JGitText
+						.get().onlyOpenPgpSupportedForSigning);
+			}
+			gpgSigner.sign(commit, signingKey, committer,
+					credentialsProvider);
+		}
 	}
 
 	private void updateRef(RepositoryState state, ObjectId headId,
@@ -747,7 +757,7 @@ public class CommitCommand extends GitCommand<RevCommit> {
 	 *            <p>
 	 *            By default when creating a commit containing only specified
 	 *            paths an attempt to create an empty commit leads to a
-	 *            {@link org.eclipse.jgit.api.errors.JGitInternalException}. By
+	 *            {@link JGitInternalException}. By
 	 *            setting this flag to <code>true</code> this exception will not
 	 *            be thrown.
 	 * @return {@code this}
@@ -804,7 +814,7 @@ public class CommitCommand extends GitCommand<RevCommit> {
 	 *
 	 * @return the committer used for the {@code commit}. If no committer was
 	 *         specified {@code null} is returned and the default
-	 *         {@link org.eclipse.jgit.lib.PersonIdent} of this repo is used
+	 *         {@link PersonIdent} of this repo is used
 	 *         during execution of the command
 	 */
 	public PersonIdent getCommitter() {
@@ -848,7 +858,7 @@ public class CommitCommand extends GitCommand<RevCommit> {
 	 *
 	 * @return the author used for the {@code commit}. If no author was
 	 *         specified {@code null} is returned and the default
-	 *         {@link org.eclipse.jgit.lib.PersonIdent} of this repo is used
+	 *         {@link PersonIdent} of this repo is used
 	 *         during execution of the command
 	 */
 	public PersonIdent getAuthor() {
@@ -1088,22 +1098,22 @@ public class CommitCommand extends GitCommand<RevCommit> {
 	}
 
 	/**
-	 * Sets the {@link Signer} to use if the commit is to be signed.
+	 * Sets the {@link GpgSigner} to use if the commit is to be signed.
 	 *
 	 * @param signer
 	 *            to use; if {@code null}, the default signer will be used
 	 * @return {@code this}
-	 * @since 7.0
+	 * @since 5.11
 	 */
-	public CommitCommand setSigner(Signer signer) {
+	public CommitCommand setGpgSigner(GpgSigner signer) {
 		checkCallable();
-		this.signer = signer;
+		this.gpgSigner = signer;
 		return this;
 	}
 
 	/**
 	 * Sets an external {@link GpgConfig} to use. Whether it will be used is at
-	 * the discretion of the {@link #setSigner(Signer)}.
+	 * the discretion of the {@link #setGpgSigner(GpgSigner)}.
 	 *
 	 * @param config
 	 *            to set; if {@code null}, the config will be loaded from the

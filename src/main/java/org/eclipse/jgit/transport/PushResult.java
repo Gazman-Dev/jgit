@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * Result of push operation to the remote repository. Holding information of
- * {@link org.eclipse.jgit.transport.OperationResult} and remote refs updates
+ * {@link OperationResult} and remote refs updates
  * status.
  *
  * @see Transport#push(org.eclipse.jgit.lib.ProgressMonitor, Collection)

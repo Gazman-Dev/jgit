@@ -52,7 +52,7 @@ public class NoMessageException extends GitAPIException {
 	 * @param message
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable}
+	 *            a {@link Throwable}
 	 */
 	public NoMessageException(String message, Throwable cause) {
 		super(message, cause);

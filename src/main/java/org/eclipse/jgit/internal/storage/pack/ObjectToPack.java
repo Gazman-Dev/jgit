@@ -18,7 +18,7 @@ import org.eclipse.jgit.transport.PackedObjectInfo;
 
 /**
  * Per-object state used by
- * {@link org.eclipse.jgit.internal.storage.pack.PackWriter}.
+ * {@link PackWriter}.
  * <p>
  * {@code PackWriter} uses this class to track the things it needs to include in
  * the newly generated pack file, and how to efficiently obtain the raw data for
@@ -345,7 +345,7 @@ public class ObjectToPack extends PackedObjectInfo {
 	 * <p>
 	 * Implementers should remember the representation chosen, so it can be
 	 * reused at a later time.
-	 * {@link org.eclipse.jgit.internal.storage.pack.PackWriter} may invoke this
+	 * {@link PackWriter} may invoke this
 	 * method multiple times for the same object, each time saving the current
 	 * best representation found.
 	 *

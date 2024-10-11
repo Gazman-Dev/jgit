@@ -121,7 +121,7 @@ public abstract class RefRename {
 	 * Rename
 	 *
 	 * @return the result of the new ref update
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public Result rename() throws IOException {
@@ -138,7 +138,7 @@ public abstract class RefRename {
 	 * Do the actual rename
 	 *
 	 * @return the result of the rename operation.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected abstract Result doRename() throws IOException;
@@ -149,7 +149,7 @@ public abstract class RefRename {
 	 *
 	 * @return true if the {@code Constants#HEAD} reference needs to be linked
 	 *         to the new destination name.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the current value of {@code HEAD} cannot be read.
 	 */
 	protected boolean needToUpdateHEAD() throws IOException {

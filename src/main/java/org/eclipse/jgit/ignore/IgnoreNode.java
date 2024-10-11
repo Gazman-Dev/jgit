@@ -81,7 +81,7 @@ public class IgnoreNode {
 	 * @param in
 	 *            input stream holding the standard ignore format. The caller is
 	 *            responsible for closing the stream.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             Error thrown when reading an ignore file.
 	 */
 	public void parse(InputStream in) throws IOException {
@@ -96,7 +96,7 @@ public class IgnoreNode {
 	 * @param in
 	 *            input stream holding the standard ignore format. The caller is
 	 *            responsible for closing the stream.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             Error thrown when reading an ignore file.
 	 * @since 5.11
 	 */

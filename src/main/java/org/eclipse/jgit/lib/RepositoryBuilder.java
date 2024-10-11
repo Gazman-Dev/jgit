@@ -13,7 +13,7 @@ package org.eclipse.jgit.lib;
 import java.io.File;
 
 /**
- * Base class to support constructing a {@link org.eclipse.jgit.lib.Repository}.
+ * Base class to support constructing a {@link Repository}.
  * <p>
  * Applications must set one of {@link #setGitDir(File)} or
  * {@link #setWorkTree(File)}, or use {@link #readEnvironment()} or

@@ -34,13 +34,13 @@ import org.eclipse.jgit.util.RefList;
 import org.eclipse.jgit.util.RefMap;
 
 /**
- * A {@link org.eclipse.jgit.internal.storage.dfs.DfsRefDatabase} that uses
+ * A {@link DfsRefDatabase} that uses
  * reftable for storage.
  * <p>
  * A {@code DfsRefDatabase} instance is thread-safe.
  * <p>
  * Implementors may wish to use
- * {@link org.eclipse.jgit.internal.storage.dfs.DfsPackDescription#getMaxUpdateIndex()}
+ * {@link DfsPackDescription#getMaxUpdateIndex()}
  * as the primary key identifier for a
  * {@link org.eclipse.jgit.internal.storage.pack.PackExt#REFTABLE} only pack
  * description, ensuring that when there are competing transactions one wins,
@@ -125,7 +125,7 @@ public class DfsReftableDatabase extends DfsRefDatabase {
 	 * Obtain a handle to the stack of reftables. Must hold lock.
 	 *
 	 * @return (possibly cached) handle to the stack.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if tables cannot be opened.
 	 */
 	protected DfsReftableStack stack() throws IOException {

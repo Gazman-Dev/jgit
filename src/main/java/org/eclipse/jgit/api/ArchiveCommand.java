@@ -41,7 +41,7 @@ import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
 /**
  * Create an archive of files from a named tree.
  * <p>
- * Examples (<code>git</code> is a {@link org.eclipse.jgit.api.Git} instance):
+ * Examples (<code>git</code> is a {@link Git} instance):
  * <p>
  * Create a tarball from HEAD:
  *
@@ -331,7 +331,7 @@ public class ArchiveCommand extends GitCommand<OutputStream> {
 	 * Constructor for ArchiveCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	public ArchiveCommand(Repository repo) {
 		super(repo);

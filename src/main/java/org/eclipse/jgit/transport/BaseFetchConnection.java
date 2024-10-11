@@ -67,7 +67,7 @@ abstract class BaseFetchConnection extends BaseConnection implements
 	 *            as in {@link #fetch(ProgressMonitor, Collection, Set)}
 	 * @param have
 	 *            as in {@link #fetch(ProgressMonitor, Collection, Set)}
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             as in {@link #fetch(ProgressMonitor, Collection, Set)}, but
 	 *             implementation doesn't have to care about multiple
 	 *             {@link #fetch(ProgressMonitor, Collection, Set)} calls, as it

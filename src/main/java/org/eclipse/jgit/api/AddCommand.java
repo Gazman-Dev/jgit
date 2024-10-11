@@ -69,7 +69,7 @@ public class AddCommand extends GitCommand<DirCache> {
 	 * Constructor for AddCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	public AddCommand(Repository repo) {
 		super(repo);
@@ -98,7 +98,7 @@ public class AddCommand extends GitCommand<DirCache> {
 	 * Allow clients to provide their own implementation of a FileTreeIterator
 	 *
 	 * @param f
-	 *            a {@link org.eclipse.jgit.treewalk.WorkingTreeIterator}
+	 *            a {@link WorkingTreeIterator}
 	 *            object.
 	 * @return {@code this}
 	 */

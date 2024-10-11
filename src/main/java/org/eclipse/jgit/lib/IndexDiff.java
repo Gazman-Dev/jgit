@@ -264,13 +264,13 @@ public class IndexDiff {
 	 * Construct an IndexDiff
 	 *
 	 * @param repository
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 * @param revstr
 	 *            symbolic name e.g. HEAD An EmptyTreeIterator is used if
 	 *            <code>revstr</code> cannot be resolved.
 	 * @param workingTreeIterator
 	 *            iterator for working directory
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public IndexDiff(Repository repository, String revstr,
@@ -282,12 +282,12 @@ public class IndexDiff {
 	 * Construct an Indexdiff
 	 *
 	 * @param repository
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 * @param objectId
 	 *            tree id. If null, an EmptyTreeIterator is used.
 	 * @param workingTreeIterator
 	 *            iterator for working directory
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public IndexDiff(Repository repository, ObjectId objectId,
@@ -347,7 +347,7 @@ public class IndexDiff {
 	 * files.
 	 *
 	 * @param filter
-	 *            a {@link org.eclipse.jgit.treewalk.filter.TreeFilter} object.
+	 *            a {@link TreeFilter} object.
 	 */
 	public void setFilter(TreeFilter filter) {
 		this.filter = filter;
@@ -359,7 +359,7 @@ public class IndexDiff {
 	 * monitor is required.
 	 *
 	 * @return if anything is different between index, tree, and workdir
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public boolean diff() throws IOException {
@@ -383,7 +383,7 @@ public class IndexDiff {
 	 *            submodule repositories will be built using a plain
 	 *            {@link RepositoryBuilder}.
 	 * @return if anything is different between index, tree, and workdir
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 5.6
 	 */
@@ -409,9 +409,9 @@ public class IndexDiff {
 	 * @param estIndexSize
 	 *            number of estimated entries in the cache
 	 * @param title
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @return if anything is different between index, tree, and workdir
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public boolean diff(final ProgressMonitor monitor, int estWorkTreeSize,
@@ -443,14 +443,14 @@ public class IndexDiff {
 	 * @param estIndexSize
 	 *            number of estimated entries in the cache
 	 * @param title
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param factory
 	 *            the {@link RepositoryBuilderFactory} to use to create builders
 	 *            to create submodule repositories, if needed; if {@code null},
 	 *            submodule repositories will be built using a plain
 	 *            {@link RepositoryBuilder}.
 	 * @return if anything is different between index, tree, and workdir
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 5.6
 	 */
@@ -639,7 +639,7 @@ public class IndexDiff {
 							// submodule repository in .git/modules doesn't
 							// exist yet it isn't "missing".
 							File gitDir = new File(
-									new File(repository.getCommonDirectory(),
+									new File(repository.getDirectory(),
 											Constants.MODULES),
 									subRepoPath);
 							if (!gitDir.isDirectory()) {
@@ -775,10 +775,10 @@ public class IndexDiff {
 
 	/**
 	 * Get the map from each path of {@link #getConflicting()} to its
-	 * corresponding {@link org.eclipse.jgit.lib.IndexDiff.StageState}
+	 * corresponding {@link StageState}
 	 *
 	 * @return the map from each path of {@link #getConflicting()} to its
-	 *         corresponding {@link org.eclipse.jgit.lib.IndexDiff.StageState}
+	 *         corresponding {@link StageState}
 	 * @since 3.0
 	 */
 	public Map<String, StageState> getConflictingStageStates() {
@@ -827,7 +827,7 @@ public class IndexDiff {
 	/**
 	 * Get the file mode of the given path in the index
 	 *
-	 * @param path a {@link java.lang.String} object.
+	 * @param path a {@link String} object.
 	 * @return file mode
 	 */
 	public FileMode getIndexMode(String path) {
@@ -839,7 +839,7 @@ public class IndexDiff {
 	 * Get the list of paths that IndexDiff has detected to differ and have the
 	 * given file mode
 	 *
-	 * @param mode a {@link org.eclipse.jgit.lib.FileMode} object.
+	 * @param mode a {@link FileMode} object.
 	 * @return the list of paths that IndexDiff has detected to differ and have
 	 *         the given file mode
 	 * @since 3.6

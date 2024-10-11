@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * {@link org.eclipse.jgit.transport.ProtocolV2Hook} that delegates to a list of
+ * {@link ProtocolV2Hook} that delegates to a list of
  * other hooks.
  * <p>
  * Hooks are run in the order passed to the constructor. If running a method on

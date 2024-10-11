@@ -194,6 +194,19 @@ public class CommitBuilder extends ObjectBuilder {
 		}
 	}
 
+	/**
+	 * Set the encoding for the commit information.
+	 *
+	 * @param encodingName
+	 *            the encoding name. See
+	 *            {@link Charset#forName(String)}.
+	 * @deprecated use {@link #setEncoding(Charset)} instead.
+	 */
+	@Deprecated
+	public void setEncoding(String encodingName) {
+		setEncoding(Charset.forName(encodingName));
+	}
+
 	@Override
 	public byte[] build() throws UnsupportedEncodingException {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -254,7 +267,7 @@ public class CommitBuilder extends ObjectBuilder {
 	 *
 	 * @return this object in the canonical commit format, suitable for storage
 	 *         in a repository.
-	 * @throws java.io.UnsupportedEncodingException
+	 * @throws UnsupportedEncodingException
 	 *             the encoding specified by {@link #getEncoding()} is not
 	 *             supported by this Java runtime.
 	 */

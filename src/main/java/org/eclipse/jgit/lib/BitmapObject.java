@@ -17,7 +17,7 @@ package org.eclipse.jgit.lib;
  */
 public abstract class BitmapObject {
 	/**
-	 * Get Git object type. See {@link org.eclipse.jgit.lib.Constants}.
+	 * Get Git object type. See {@link Constants}.
 	 *
 	 * @return object type
 	 */

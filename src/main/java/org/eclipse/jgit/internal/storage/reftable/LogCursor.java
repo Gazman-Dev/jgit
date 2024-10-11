@@ -17,14 +17,14 @@ import org.eclipse.jgit.lib.ReflogEntry;
 
 /**
  * Iterator over logs inside a
- * {@link org.eclipse.jgit.internal.storage.reftable.Reftable}.
+ * {@link Reftable}.
  */
 public abstract class LogCursor implements AutoCloseable {
 	/**
 	 * Check if another log record is available.
 	 *
 	 * @return {@code true} if there is another result.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             logs cannot be read.
 	 */
 	public abstract boolean next() throws IOException;

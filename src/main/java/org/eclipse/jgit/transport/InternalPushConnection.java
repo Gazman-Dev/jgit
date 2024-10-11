@@ -29,15 +29,15 @@ class InternalPushConnection<C> extends BasePackPushConnection {
 	 * Constructor for InternalPushConnection.
 	 *
 	 * @param transport
-	 *            a {@link org.eclipse.jgit.transport.PackTransport}
+	 *            a {@link PackTransport}
 	 * @param receivePackFactory
 	 *            a
-	 *            {@link org.eclipse.jgit.transport.resolver.ReceivePackFactory}
+	 *            {@link ReceivePackFactory}
 	 * @param req
 	 *            a request
 	 * @param remote
-	 *            the {@link org.eclipse.jgit.lib.Repository}
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 *            the {@link Repository}
+	 * @throws TransportException
 	 *             if any.
 	 */
 	public InternalPushConnection(PackTransport transport,

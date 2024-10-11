@@ -12,8 +12,8 @@
 package org.eclipse.jgit.revwalk;
 
 /**
- * Sorting strategies supported by {@link org.eclipse.jgit.revwalk.RevWalk} and
- * {@link org.eclipse.jgit.revwalk.ObjectWalk}.
+ * Sorting strategies supported by {@link RevWalk} and
+ * {@link ObjectWalk}.
  */
 public enum RevSort {
 	/**

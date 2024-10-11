@@ -65,7 +65,7 @@ public abstract class PatternMatchRevFilter extends RevFilter {
 	 *            should {@link #forceToRaw(String)} be applied to the pattern
 	 *            before compiling it?
 	 * @param flags
-	 *            flags from {@link java.util.regex.Pattern} to control how
+	 *            flags from {@link Pattern} to control how
 	 *            matching performs.
 	 */
 	protected PatternMatchRevFilter(String pattern, final boolean innerString,

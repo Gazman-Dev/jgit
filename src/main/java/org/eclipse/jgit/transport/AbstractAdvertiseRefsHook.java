@@ -52,7 +52,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
- * Implementation of {@link org.eclipse.jgit.transport.AdvertiseRefsHook} that advertises the same refs for
+ * Implementation of {@link AdvertiseRefsHook} that advertises the same refs for
  * upload-pack and receive-pack.
  *
  * @since 2.0
@@ -85,7 +85,7 @@ public abstract class AbstractAdvertiseRefsHook implements AdvertiseRefsHook {
 	 * @param revWalk
 	 *            open rev walk on the repository.
 	 * @return set of refs to advertise.
-	 * @throws org.eclipse.jgit.transport.ServiceMayNotContinueException
+	 * @throws ServiceMayNotContinueException
 	 *             abort; the message will be sent to the user.
 	 */
 	protected abstract Map<String, Ref> getAdvertisedRefs(
@@ -100,8 +100,8 @@ public abstract class AbstractAdvertiseRefsHook implements AdvertiseRefsHook {
 	 * @param revWalk
 	 *            open rev walk on the repository.
 	 * @return set of additional haves; see
-	 *         {@link org.eclipse.jgit.transport.ReceivePack#getAdvertisedObjects()}.
-	 * @throws org.eclipse.jgit.transport.ServiceMayNotContinueException
+	 *         {@link ReceivePack#getAdvertisedObjects()}.
+	 * @throws ServiceMayNotContinueException
 	 *             abort; the message will be sent to the user.
 	 */
 	protected Set<ObjectId> getAdvertisedHaves(

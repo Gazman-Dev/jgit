@@ -124,7 +124,7 @@ public class PlotCommit<L extends PlotLane> extends RevCommit {
 	 *            child index to obtain. Must be in the range 0 through
 	 *            {@link #getChildCount()}-1.
 	 * @return the specified child.
-	 * @throws java.lang.ArrayIndexOutOfBoundsException
+	 * @throws ArrayIndexOutOfBoundsException
 	 *             an invalid child index was specified.
 	 */
 	public final PlotCommit getChild(int nth) {
@@ -162,7 +162,7 @@ public class PlotCommit<L extends PlotLane> extends RevCommit {
 	 *            ref index to obtain. Must be in the range 0 through
 	 *            {@link #getRefCount()}-1.
 	 * @return the specified ref.
-	 * @throws java.lang.ArrayIndexOutOfBoundsException
+	 * @throws ArrayIndexOutOfBoundsException
 	 *             an invalid ref index was specified.
 	 */
 	public final Ref getRef(int nth) {

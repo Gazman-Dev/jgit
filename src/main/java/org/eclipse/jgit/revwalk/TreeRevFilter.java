@@ -30,12 +30,12 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
 /**
- * Filter applying a {@link org.eclipse.jgit.treewalk.filter.TreeFilter} against
+ * Filter applying a {@link TreeFilter} against
  * changed paths in each commit.
  * <p>
  * Each commit is differenced concurrently against all of its parents to look
  * for tree entries that are interesting to the
- * {@link org.eclipse.jgit.treewalk.filter.TreeFilter}.
+ * {@link TreeFilter}.
  *
  * @since 3.5
  */
@@ -57,14 +57,14 @@ public class TreeRevFilter extends RevFilter {
 	private long changedPathFilterNegative = 0;
 
 	/**
-	 * Create a {@link org.eclipse.jgit.revwalk.filter.RevFilter} from a
-	 * {@link org.eclipse.jgit.treewalk.filter.TreeFilter}.
+	 * Create a {@link RevFilter} from a
+	 * {@link TreeFilter}.
 	 *
 	 * @param walker
 	 *            walker used for reading trees.
 	 * @param t
 	 *            filter to compare against any changed paths in each commit. If
-	 *            a {@link org.eclipse.jgit.revwalk.FollowFilter}, will be
+	 *            a {@link FollowFilter}, will be
 	 *            replaced with a new filter following new paths after a rename.
 	 * @since 3.5
 	 */
@@ -139,8 +139,11 @@ public class TreeRevFilter extends RevFilter {
 						.getPathsBestEffort();
 				if (paths.isPresent()) {
 					changedPathFilterUsed = true;
-					if (paths.get().stream().noneMatch(cpf::maybeContains)) {
-						mustCalculateChgs = false;
+					for (byte[] path : paths.get()) {
+						if (!cpf.maybeContains(path)) {
+							mustCalculateChgs = false;
+							break;
+						}
 					}
 				}
 			}

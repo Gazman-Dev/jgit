@@ -11,10 +11,10 @@
 package org.eclipse.jgit.internal.storage.pack;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -232,15 +232,14 @@ final class DeltaTask implements Callable<Object> {
 	}
 
 	private final Block block;
-
-	final ArrayDeque<Slice> slices;
+	final LinkedList<Slice> slices;
 
 	private ObjectReader or;
 	private DeltaWindow dw;
 
 	DeltaTask(Block b) {
 		this.block = b;
-		this.slices = new ArrayDeque<>();
+		this.slices = new LinkedList<>();
 	}
 
 	void add(Slice s) {

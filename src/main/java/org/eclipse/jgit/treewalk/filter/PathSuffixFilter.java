@@ -26,7 +26,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  * paths ending in <code>.txt</code>.
  * <p>
  * Using this filter is recommended instead of filtering the entries using
- * {@link org.eclipse.jgit.treewalk.TreeWalk#getPathString()} and
+ * {@link TreeWalk#getPathString()} and
  * <code>endsWith</code> or some other type of string match function.
  */
 public class PathSuffixFilter extends TreeFilter {
@@ -39,7 +39,7 @@ public class PathSuffixFilter extends TreeFilter {
 	 * @param path
 	 *            the path suffix to filter on. Must not be the empty string.
 	 * @return a new filter for the requested path.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             the path supplied was the empty string.
 	 */
 	public static PathSuffixFilter create(String path) {

@@ -42,7 +42,7 @@ public class SubmoduleStatusCommand extends
 	 * Constructor for SubmoduleStatusCommand.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	public SubmoduleStatusCommand(Repository repo) {
 		super(repo);

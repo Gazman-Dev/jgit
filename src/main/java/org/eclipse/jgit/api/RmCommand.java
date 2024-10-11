@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -38,7 +39,7 @@ import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
  * class should only be used for one invocation of the command (means: one call
  * to {@link #call()}).
  * <p>
- * Examples (<code>git</code> is a {@link org.eclipse.jgit.api.Git} instance):
+ * Examples (<code>git</code> is a {@link Git} instance):
  * <p>
  * Remove file "test.txt" from both index and working directory:
  *
@@ -66,11 +67,11 @@ public class RmCommand extends GitCommand<DirCache> {
 	 * Constructor for RmCommand.
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	public RmCommand(Repository repo) {
 		super(repo);
-		filepatterns = new ArrayList<>();
+		filepatterns = new LinkedList<>();
 	}
 
 	/**

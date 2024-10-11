@@ -67,7 +67,7 @@ public class DiffCommand extends GitCommand<List<DiffEntry>> {
 	 * Constructor for DiffCommand
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	protected DiffCommand(Repository repo) {
 		super(repo);

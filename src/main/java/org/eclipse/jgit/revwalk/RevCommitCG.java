@@ -22,7 +22,7 @@ import org.eclipse.jgit.lib.ObjectId;
 
 /**
  * RevCommit parsed from
- * {@link org.eclipse.jgit.internal.storage.commitgraph.CommitGraph}.
+ * {@link CommitGraph}.
  *
  * @since 6.5
  */

@@ -17,6 +17,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -60,7 +61,7 @@ import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
 /**
  * Checkout a branch to the working tree.
  * <p>
- * Examples (<code>git</code> is a {@link org.eclipse.jgit.api.Git} instance):
+ * Examples (<code>git</code> is a {@link Git} instance):
  * <p>
  * Check out an existing branch:
  *
@@ -159,11 +160,11 @@ public class CheckoutCommand extends GitCommand<Ref> {
 	 * Constructor for CheckoutCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected CheckoutCommand(Repository repo) {
 		super(repo);
-		this.paths = new ArrayList<>();
+		this.paths = new LinkedList<>();
 	}
 
 	@Override
@@ -402,13 +403,13 @@ public class CheckoutCommand extends GitCommand<Ref> {
 
 	/**
 	 * Checkout paths into index and working directory, firing a
-	 * {@link org.eclipse.jgit.events.WorkingTreeModifiedEvent} if the working
+	 * {@link WorkingTreeModifiedEvent} if the working
 	 * tree was modified.
 	 *
 	 * @return this instance
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
-	 * @throws org.eclipse.jgit.api.errors.RefNotFoundException
+	 * @throws RefNotFoundException
 	 *             if {@code Ref} couldn't be resolved
 	 */
 	protected CheckoutCommand checkoutPaths() throws IOException,
@@ -639,6 +640,24 @@ public class CheckoutCommand extends GitCommand<Ref> {
 		checkCallable();
 		this.orphan = orphan;
 		return this;
+	}
+
+	/**
+	 * Specify to force the ref update in case of a branch switch.
+	 *
+	 * @param force
+	 *            if <code>true</code> and the branch with the given name
+	 *            already exists, the start-point of an existing branch will be
+	 *            set to a new start-point; if false, the existing branch will
+	 *            not be changed
+	 * @return this instance
+	 * @deprecated this method was badly named comparing its semantics to native
+	 *             git's checkout --force option, use
+	 *             {@link #setForceRefUpdate(boolean)} instead
+	 */
+	@Deprecated
+	public CheckoutCommand setForce(boolean force) {
+		return setForceRefUpdate(force);
 	}
 
 	/**

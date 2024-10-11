@@ -98,7 +98,7 @@ public class RawText extends Sequence {
 	 *
 	 * @param file
 	 *            the text file.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if Exceptions occur while reading the file
 	 */
 	public RawText(File file) throws IOException {
@@ -140,7 +140,7 @@ public class RawText extends Sequence {
 	 * @param i
 	 *            index of the line to extract. Note this is 0-based, so line
 	 *            number 1 is actually index 0.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream write operation failed.
 	 */
 	public void writeLine(OutputStream out, int i)
@@ -285,7 +285,7 @@ public class RawText extends Sequence {
 	 * @param raw
 	 *            input stream containing the raw file content.
 	 * @return true if raw is likely to be a binary file, false otherwise
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if input stream could not be read
 	 */
 	public static boolean isBinary(InputStream raw) throws IOException {
@@ -418,7 +418,7 @@ public class RawText extends Sequence {
 	 *            input stream containing the raw file content.
 	 * @return {@code true} if raw is likely to be CR-LF delimited text,
 	 *         {@code false} otherwise
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if input stream could not be read
 	 * @since 5.3
 	 */
@@ -521,9 +521,9 @@ public class RawText extends Sequence {
 	 *            be binary.
 	 * @since 4.10
 	 * @return the RawText representing the blob.
-	 * @throws org.eclipse.jgit.errors.BinaryBlobException
+	 * @throws BinaryBlobException
 	 *             if the blob contains binary data.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if the input could not be read.
 	 */
 	public static RawText load(ObjectLoader ldr, int threshold)

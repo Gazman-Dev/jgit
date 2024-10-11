@@ -27,16 +27,16 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.util.Paths;
 
 /**
- * Updates a {@link org.eclipse.jgit.dircache.DirCache} by supplying discrete
+ * Updates a {@link DirCache} by supplying discrete
  * edit commands.
  * <p>
  * An editor updates a DirCache by taking a list of
- * {@link org.eclipse.jgit.dircache.DirCacheEditor.PathEdit} commands and
+ * {@link PathEdit} commands and
  * executing them against the entries of the destination cache to produce a new
  * cache. This edit style allows applications to insert a few commands and then
  * have the editor compute the proper entry indexes necessary to perform an
  * efficient in-order update of the index records. This can be easier to use
- * than {@link org.eclipse.jgit.dircache.DirCacheBuilder}.
+ * than {@link DirCacheBuilder}.
  *
  * @see DirCacheBuilder
  */

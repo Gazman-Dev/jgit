@@ -18,7 +18,7 @@ import java.util.AbstractList;
 import org.eclipse.jgit.internal.JGitText;
 
 /**
- * An ordered list of {@link org.eclipse.jgit.revwalk.RevObject} subclasses.
+ * An ordered list of {@link RevObject} subclasses.
  *
  * @param <E>
  *            type of subclass of RevObject the list is storing.

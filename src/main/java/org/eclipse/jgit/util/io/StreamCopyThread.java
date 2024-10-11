@@ -53,7 +53,7 @@ public class StreamCopyThread extends Thread {
 	 * This method signals to the copy thread that it should stop as soon as
 	 * there is no more IO occurring.
 	 *
-	 * @throws java.lang.InterruptedException
+	 * @throws InterruptedException
 	 *             the calling thread was interrupted.
 	 */
 	public void halt() throws InterruptedException {

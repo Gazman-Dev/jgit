@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -105,9 +106,9 @@ public class ResolveMerger extends ThreeWayMerger {
 		 */
 		public static class Result {
 
-			private final List<String> modifiedFiles = new ArrayList<>();
+			private final List<String> modifiedFiles = new LinkedList<>();
 
-			private final List<String> failedToDelete = new ArrayList<>();
+			private final List<String> failedToDelete = new LinkedList<>();
 
 			private ObjectId treeId = null;
 
@@ -854,7 +855,7 @@ public class ResolveMerger extends ThreeWayMerger {
 	 * Constructor for ResolveMerger.
 	 *
 	 * @param local
-	 *            the {@link org.eclipse.jgit.lib.Repository}.
+	 *            the {@link Repository}.
 	 * @param inCore
 	 *            a boolean.
 	 */
@@ -870,7 +871,7 @@ public class ResolveMerger extends ThreeWayMerger {
 	 * Constructor for ResolveMerger.
 	 *
 	 * @param local
-	 *            the {@link org.eclipse.jgit.lib.Repository}.
+	 *            the {@link Repository}.
 	 */
 	protected ResolveMerger(Repository local) {
 		this(local, false);
@@ -880,7 +881,7 @@ public class ResolveMerger extends ThreeWayMerger {
 	 * Constructor for ResolveMerger.
 	 *
 	 * @param inserter
-	 *            an {@link org.eclipse.jgit.lib.ObjectInserter} object.
+	 *            an {@link ObjectInserter} object.
 	 * @param config
 	 *            the repository configuration
 	 * @since 4.8
@@ -1064,13 +1065,13 @@ public class ResolveMerger extends ThreeWayMerger {
 	 *            the file in the working tree
 	 * @param ignoreConflicts
 	 *            see
-	 *            {@link org.eclipse.jgit.merge.ResolveMerger#mergeTrees(AbstractTreeIterator, RevTree, RevTree, boolean)}
+	 *            {@link ResolveMerger#mergeTrees(AbstractTreeIterator, RevTree, RevTree, boolean)}
 	 * @param attributes
 	 *            the {@link Attributes} for the three trees
 	 * @return <code>false</code> if the merge will fail because the index entry
 	 *         didn't match ours or the working-dir file was dirty and a
 	 *         conflict occurred
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 6.1
 	 */
@@ -1273,22 +1274,10 @@ public class ResolveMerger extends ThreeWayMerger {
 					default:
 						break;
 				}
-				if (ignoreConflicts) {
-					// If the path is selected to be treated as binary via attributes, we do not perform
-					// content merge. When ignoreConflicts = true, we simply keep OURS to allow virtual commit
-					// to be built.
-					keep(ourDce);
-					return true;
-				}
-				// add the conflicting path to merge result
-				String currentPath = tw.getPathString();
-				MergeResult<RawText> result = new MergeResult<>(
-						Collections.emptyList());
-				result.setContainsConflicts(true);
-				mergeResults.put(currentPath, result);
 				addConflict(base, ours, theirs);
+
 				// attribute merge issues are conflicts but not failures
-				unmergedPaths.add(currentPath);
+				unmergedPaths.add(tw.getPathString());
 				return true;
 			}
 
@@ -1300,52 +1289,38 @@ public class ResolveMerger extends ThreeWayMerger {
 			MergeResult<RawText> result = null;
 			boolean hasSymlink = FileMode.SYMLINK.equals(modeO)
 					|| FileMode.SYMLINK.equals(modeT);
-
-			String currentPath = tw.getPathString();
-			// if the path is not a symlink in ours and theirs
 			if (!hasSymlink) {
 				try {
 					result = contentMerge(base, ours, theirs, attributes,
 							getContentMergeStrategy());
-					if (result.containsConflicts() && !ignoreConflicts) {
-						result.setContainsConflicts(true);
-						unmergedPaths.add(currentPath);
-					} else if (ignoreConflicts) {
-						result.setContainsConflicts(false);
-					}
-					updateIndex(base, ours, theirs, result, attributes[T_OURS]);
-					workTreeUpdater.markAsModified(currentPath);
-					// Entry is null - only add the metadata
-					addToCheckout(currentPath, null, attributes);
-					return true;
 				} catch (BinaryBlobException e) {
-					// The file is binary in either OURS, THEIRS or BASE
-					if (ignoreConflicts) {
-						// When ignoreConflicts = true, we simply keep OURS to allow virtual commit to be built.
-						keep(ourDce);
-						return true;
+					// result == null
+				}
+			}
+			if (result == null) {
+				switch (getContentMergeStrategy()) {
+				case OURS:
+					keep(ourDce);
+					return true;
+				case THEIRS:
+					DirCacheEntry e = add(tw.getRawPath(), theirs,
+							DirCacheEntry.STAGE_0, EPOCH, 0);
+					if (e != null) {
+						addToCheckout(tw.getPathString(), e, attributes);
 					}
+					return true;
+				default:
+					result = new MergeResult<>(Collections.emptyList());
+					result.setContainsConflicts(true);
+					break;
 				}
 			}
-			switch (getContentMergeStrategy()) {
-			case OURS:
-				keep(ourDce);
-				return true;
-			case THEIRS:
-				DirCacheEntry e = add(tw.getRawPath(), theirs,
-						DirCacheEntry.STAGE_0, EPOCH, 0);
-				if (e != null) {
-					addToCheckout(currentPath, e, attributes);
-				}
-				return true;
-			default:
-				result = new MergeResult<>(Collections.emptyList());
-				result.setContainsConflicts(true);
-				break;
+			if (ignoreConflicts) {
+				result.setContainsConflicts(false);
 			}
+			String currentPath = tw.getPathString();
 			if (hasSymlink) {
 				if (ignoreConflicts) {
-					result.setContainsConflicts(false);
 					if (((modeT & FileMode.TYPE_MASK) == FileMode.TYPE_FILE)) {
 						DirCacheEntry e = add(tw.getRawPath(), theirs,
 								DirCacheEntry.STAGE_0, EPOCH, 0);
@@ -1354,9 +1329,9 @@ public class ResolveMerger extends ThreeWayMerger {
 						keep(ourDce);
 					}
 				} else {
+					// Record the conflict
 					DirCacheEntry e = addConflict(base, ours, theirs);
 					mergeResults.put(currentPath, result);
-					unmergedPaths.add(currentPath);
 					// If theirs is a file, check it out. In link/file
 					// conflicts, C git prefers the file.
 					if (((modeT & FileMode.TYPE_MASK) == FileMode.TYPE_FILE)
@@ -1365,14 +1340,14 @@ public class ResolveMerger extends ThreeWayMerger {
 					}
 				}
 			} else {
-				// This is reachable if contentMerge() call above threw BinaryBlobException, so we don't
-				// need to check ignoreConflicts here, since it's already handled above.
-				result.setContainsConflicts(true);
-				addConflict(base, ours, theirs);
-				unmergedPaths.add(currentPath);
-				mergeResults.put(currentPath, result);
+				updateIndex(base, ours, theirs, result, attributes[T_OURS]);
 			}
-			return true;
+			if (result.containsConflicts() && !ignoreConflicts) {
+				unmergedPaths.add(currentPath);
+			}
+			workTreeUpdater.markAsModified(currentPath);
+			// Entry is null - only adds the metadata.
+			addToCheckout(currentPath, null, attributes);
 		} else if (modeO != modeT) {
 			// OURS or THEIRS has been deleted
 			if (((modeO != 0 && !tw.idEqual(T_BASE, T_OURS)) || (modeT != 0 && !tw
@@ -1810,7 +1785,7 @@ public class ResolveMerger extends ThreeWayMerger {
 	 * not set explicitly and if this merger doesn't work in-core, this merger
 	 * will implicitly get and lock a default DirCache. If the DirCache is
 	 * explicitly set the caller is responsible to lock it in advance. Finally
-	 * the merger will call {@link org.eclipse.jgit.dircache.DirCache#commit()}
+	 * the merger will call {@link DirCache#commit()}
 	 * which requires that the DirCache is locked. If the {@link #mergeImpl()}
 	 * returns without throwing an exception the lock will be released. In case
 	 * of exceptions the caller is responsible to release the lock.
@@ -1842,12 +1817,12 @@ public class ResolveMerger extends ThreeWayMerger {
 	 * The resolve conflict way of three way merging
 	 *
 	 * @param baseTree
-	 *            a {@link org.eclipse.jgit.treewalk.AbstractTreeIterator}
+	 *            a {@link AbstractTreeIterator}
 	 *            object.
 	 * @param headTree
-	 *            a {@link org.eclipse.jgit.revwalk.RevTree} object.
+	 *            a {@link RevTree} object.
 	 * @param mergeTree
-	 *            a {@link org.eclipse.jgit.revwalk.RevTree} object.
+	 *            a {@link RevTree} object.
 	 * @param ignoreConflicts
 	 *            Controls what to do in case a content-merge is done and a
 	 *            conflict is detected. The default setting for this should be
@@ -1864,11 +1839,11 @@ public class ResolveMerger extends ThreeWayMerger {
 	 *            other stages are filled. Means: there is no conflict on that
 	 *            path but the new content (including conflict markers) is
 	 *            stored as successful merge result. This is needed in the
-	 *            context of {@link org.eclipse.jgit.merge.RecursiveMerger}
+	 *            context of {@link RecursiveMerger}
 	 *            where when determining merge bases we don't want to deal with
 	 *            content-merge conflicts.
 	 * @return whether the trees merged cleanly
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.5
 	 */
@@ -1926,9 +1901,9 @@ public class ResolveMerger extends ThreeWayMerger {
 	 *            The walk to iterate over.
 	 * @param ignoreConflicts
 	 *            see
-	 *            {@link org.eclipse.jgit.merge.ResolveMerger#mergeTrees(AbstractTreeIterator, RevTree, RevTree, boolean)}
+	 *            {@link ResolveMerger#mergeTrees(AbstractTreeIterator, RevTree, RevTree, boolean)}
 	 * @return Whether the trees merged cleanly.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.5
 	 */

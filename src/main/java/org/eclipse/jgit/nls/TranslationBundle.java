@@ -30,14 +30,14 @@ import org.eclipse.jgit.errors.TranslationStringMissingException;
  * public class TransportText extends TranslationBundle {
  * 	public static TransportText get() {
  * 		return NLS.getBundleFor(TransportText.class);
- * 	}
+ *    }
  *
  * 	public String repositoryNotFound;
  *
  * 	public String transportError;
  * }
  * </pre>
- *
+ * <p>
  * Second, define one or more resource bundle property files.
  *
  * <pre>
@@ -49,7 +49,7 @@ import org.eclipse.jgit.errors.TranslationStringMissingException;
  * 		transportError=unbekannter Fehler während der Kommunikation mit {0}
  * ...
  * </pre>
- *
+ * <p>
  * Then make use of it:
  *
  * <pre>
@@ -57,14 +57,14 @@ import org.eclipse.jgit.errors.TranslationStringMissingException;
  * ...
  * throw new TransportException(uri, TransportText.get().transportError);
  * </pre>
- *
+ * <p>
  * The translated text is automatically injected into the public String fields
  * according to the locale set with
- * {@link org.eclipse.jgit.nls.NLS#setLocale(Locale)}. However, the
- * {@link org.eclipse.jgit.nls.NLS#setLocale(Locale)} method defines only
+ * {@link NLS#setLocale(Locale)}. However, the
+ * {@link NLS#setLocale(Locale)} method defines only
  * prefered locale which will be honored only if it is supported by the provided
  * resource bundle property files. Basically, this class will use
- * {@link java.util.ResourceBundle#getBundle(String, Locale)} method to load a
+ * {@link ResourceBundle#getBundle(String, Locale)} method to load a
  * resource bundle. See the documentation of this method for a detailed
  * explanation of resource bundle loading strategy. After a bundle is created
  * the {@link #effectiveLocale()} method can be used to determine whether the
@@ -72,8 +72,8 @@ import org.eclipse.jgit.errors.TranslationStringMissingException;
  *
  * <p>
  * To load a String from a resource bundle property file this class uses the
- * {@link java.util.ResourceBundle#getString(String)}. This method can throw the
- * {@link java.util.MissingResourceException} and this class is not making any
+ * {@link ResourceBundle#getString(String)}. This method can throw the
+ * {@link MissingResourceException} and this class is not making any
  * effort to catch and/or translate this exception.
  *
  * <p>
@@ -89,70 +89,71 @@ import org.eclipse.jgit.errors.TranslationStringMissingException;
  */
 public abstract class TranslationBundle {
 
-	private Locale effectiveLocale;
-	private ResourceBundle resourceBundle;
+    private Locale effectiveLocale;
+    private ResourceBundle resourceBundle;
 
-	/**
-	 * Get the locale used for loading the resource bundle from which the field
-	 * values were taken.
-	 *
-	 * @return the locale used for loading the resource bundle from which the
-	 *         field values were taken.
-	 */
-	public Locale effectiveLocale() {
-		return effectiveLocale;
-	}
+    /**
+     * Get the locale used for loading the resource bundle from which the field
+     * values were taken.
+     *
+     * @return the locale used for loading the resource bundle from which the
+     * field values were taken.
+     */
+    public Locale effectiveLocale() {
+        return effectiveLocale;
+    }
 
-	/**
-	 * Get the resource bundle on which this translation bundle is based.
-	 *
-	 * @return the resource bundle on which this translation bundle is based.
-	 */
-	public ResourceBundle resourceBundle() {
-		return resourceBundle;
-	}
+    /**
+     * Get the resource bundle on which this translation bundle is based.
+     *
+     * @return the resource bundle on which this translation bundle is based.
+     */
+    public ResourceBundle resourceBundle() {
+        return resourceBundle;
+    }
 
-	/**
-	 * Injects locale specific text in all instance fields of this instance.
-	 * Only public instance fields of type <code>String</code> are considered.
-	 * <p>
-	 * The name of this (sub)class plus the given <code>locale</code> parameter
-	 * define the resource bundle to be loaded. In other words the
-	 * <code>this.getClass().getName()</code> is used as the
-	 * <code>baseName</code> parameter in the
-	 * {@link ResourceBundle#getBundle(String, Locale)} parameter to load the
-	 * resource bundle.
-	 * <p>
-	 *
-	 * @param locale
-	 *            defines the locale to be used when loading the resource bundle
-	 * @exception TranslationBundleLoadingException
-	 *                see {@link TranslationBundleLoadingException}
-	 * @exception TranslationStringMissingException
-	 *                see {@link TranslationStringMissingException}
-	 */
-	void load(Locale locale)
-			throws TranslationBundleLoadingException {
-		Class bundleClass = getClass();
-		try {
-			resourceBundle = ResourceBundle.getBundle(bundleClass.getName(),
-					locale, bundleClass.getClassLoader());
-		} catch (MissingResourceException e) {
-			throw new TranslationBundleLoadingException(bundleClass, locale, e);
-		}
-		this.effectiveLocale = resourceBundle.getLocale();
+    /**
+     * Injects locale specific text in all instance fields of this instance.
+     * Only public instance fields of type <code>String</code> are considered.
+     * <p>
+     * The name of this (sub)class plus the given <code>locale</code> parameter
+     * define the resource bundle to be loaded. In other words the
+     * <code>this.getClass().getName()</code> is used as the
+     * <code>baseName</code> parameter in the
+     * {@link ResourceBundle#getBundle(String, Locale)} parameter to load the
+     * resource bundle.
+     * <p>
+     *
+     * @param locale defines the locale to be used when loading the resource bundle
+     * @throws TranslationBundleLoadingException see {@link TranslationBundleLoadingException}
+     * @throws TranslationStringMissingException see {@link TranslationStringMissingException}
+     */
+    void load(Locale locale)
+            throws TranslationBundleLoadingException {
+        Class bundleClass = getClass();
+        try {
+            resourceBundle = ResourceBundle.getBundle(bundleClass.getName(),
+                    locale, bundleClass.getClassLoader());
+        } catch (MissingResourceException e) {
+            throw new TranslationBundleLoadingException(bundleClass, locale, e);
+        }
+        this.effectiveLocale = resourceBundle.getLocale();
 
-		for (Field field : bundleClass.getFields()) {
-			if (field.getType().equals(String.class)) {
-				try {
-					String translatedText = resourceBundle.getString(field.getName());
-					field.set(this, translatedText);
-				} catch (MissingResourceException e) {
-					throw new TranslationStringMissingException(bundleClass, locale, field.getName(), e);
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					throw new Error(e);
-				}
-			}
-		}
-	}
+        for (Field field : bundleClass.getFields()) {
+            if (field.getType().equals(String.class)) {
+                try {
+                    String translatedText = resourceBundle.getString(field.getName());
+                    field.set(this, translatedText);
+                } catch (MissingResourceException e) {
+                    try {
+                        field.set(this, field.getName());
+                    } catch (IllegalArgumentException | IllegalAccessException ex) {
+                        throw new Error(ex);
+                    }
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    throw new Error(e);
+                }
+            }
+        }
+    }
 }

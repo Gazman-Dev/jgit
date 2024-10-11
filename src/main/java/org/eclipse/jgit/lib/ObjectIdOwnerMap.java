@@ -15,11 +15,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Fast, efficient map for {@link org.eclipse.jgit.lib.ObjectId} subclasses in
+ * Fast, efficient map for {@link ObjectId} subclasses in
  * only one map.
  * <p>
  * To use this map type, applications must have their entry value type extend
- * from {@link org.eclipse.jgit.lib.ObjectIdOwnerMap.Entry}, which itself
+ * from {@link Entry}, which itself
  * extends from ObjectId.
  * <p>
  * Object instances may only be stored in <b>ONE</b> ObjectIdOwnerMap. This
@@ -29,7 +29,7 @@ import java.util.NoSuchElementException;
  * <p>
  * If an object instance must be in more than one map, applications may use
  * ObjectIdOwnerMap for one of the maps, and
- * {@link org.eclipse.jgit.lib.ObjectIdSubclassMap} for the other map(s). It is
+ * {@link ObjectIdSubclassMap} for the other map(s). It is
  * encouraged to use ObjectIdOwnerMap for the map that is accessed most often,
  * as this implementation runs faster than the more general ObjectIdSubclassMap
  * implementation.

@@ -61,7 +61,7 @@ public class ChainingCredentialsProvider extends CredentialsProvider {
 	 * Populates the credential items with the credentials provided by the first
 	 * credential provider in the list which populates them with non-null values
 	 *
-	 * @see org.eclipse.jgit.transport.CredentialsProvider#supports(org.eclipse.jgit.transport.CredentialItem[])
+	 * @see CredentialsProvider#supports(CredentialItem[])
 	 */
 	@Override
 	public boolean get(URIish uri, CredentialItem... items)

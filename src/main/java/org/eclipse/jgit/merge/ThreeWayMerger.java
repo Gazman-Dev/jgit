@@ -72,11 +72,11 @@ public abstract class ThreeWayMerger extends Merger {
 	 *            common base treeish; null to automatically compute the common
 	 *            base from the input commits during
 	 *            {@link #merge(AnyObjectId...)}.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             the object is not a treeish.
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             the object does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object could not be read.
 	 */
 	public void setBase(AnyObjectId id) throws MissingObjectException,
@@ -105,7 +105,7 @@ public abstract class ThreeWayMerger extends Merger {
 	 *
 	 * @return an iterator over the caller-specified merge base, or the natural
 	 *         merge base of the two input commits.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected AbstractTreeIterator mergeBase() throws IOException {

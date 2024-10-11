@@ -45,12 +45,12 @@ package org.eclipse.jgit.transport;
 import org.eclipse.jgit.storage.pack.PackStatistics;
 
 /**
- * Hook invoked by {@link org.eclipse.jgit.transport.UploadPack} after the pack
+ * Hook invoked by {@link UploadPack} after the pack
  * has been uploaded.
  * <p>
  * Implementors of the interface are responsible for associating the current
  * thread to a particular connection, if they need to also include connection
- * information. One method is to use a {@link java.lang.ThreadLocal} to remember
+ * information. One method is to use a {@link ThreadLocal} to remember
  * the connection information before invoking UploadPack.
  *
  * @since 4.1

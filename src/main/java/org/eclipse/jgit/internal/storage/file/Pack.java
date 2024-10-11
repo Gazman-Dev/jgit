@@ -187,18 +187,18 @@ public class Pack implements Iterable<PackIndex.MutableEntry> {
 				}
 
 				if (packChecksum == null) {
-					packChecksum = idx.getChecksum();
+					packChecksum = idx.packChecksum;
 					fileSnapshot.setChecksum(
 							ObjectId.fromRaw(packChecksum));
 				} else if (!Arrays.equals(packChecksum,
-						idx.getChecksum())) {
+						idx.packChecksum)) {
 					throw new PackMismatchException(MessageFormat
 							.format(JGitText.get().packChecksumMismatch,
 									packFile.getPath(),
 									PackExt.PACK.getExtension(),
 									Hex.toHexString(packChecksum),
 									PackExt.INDEX.getExtension(),
-									Hex.toHexString(idx.getChecksum())));
+									Hex.toHexString(idx.packChecksum)));
 				}
 				loadedIdx = optionally(idx);
 				return idx;
@@ -226,7 +226,7 @@ public class Pack implements Iterable<PackIndex.MutableEntry> {
 	 * Get the index for this pack file.
 	 *
 	 * @return the index for this pack file.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public PackIndex getIndex() throws IOException {
@@ -252,7 +252,7 @@ public class Pack implements Iterable<PackIndex.MutableEntry> {
 	 * @param id
 	 *            the object to look for. Must not be null.
 	 * @return true if the object is in this pack; false otherwise.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the index file cannot be loaded into memory.
 	 */
 	public boolean hasObject(AnyObjectId id) throws IOException {
@@ -791,7 +791,7 @@ public class Pack implements Iterable<PackIndex.MutableEntry> {
 					MessageFormat.format(JGitText.get().packChecksumMismatch,
 							getPackFile(), PackExt.PACK.getExtension(),
 							Hex.toHexString(buf), PackExt.INDEX.getExtension(),
-							Hex.toHexString(idx.getChecksum())));
+							Hex.toHexString(idx.packChecksum)));
 		}
 	}
 
@@ -1154,7 +1154,7 @@ public class Pack implements Iterable<PackIndex.MutableEntry> {
 			PackBitmapIndex idx = PackBitmapIndex.open(bitmapIdxFile, idx(),
 					getReverseIdx());
 			// At this point, idx() will have set packChecksum.
-			if (Arrays.equals(packChecksum, idx.getPackChecksum())) {
+			if (Arrays.equals(packChecksum, idx.packChecksum)) {
 				bitmapIdx = optionally(idx);
 				return idx;
 			}

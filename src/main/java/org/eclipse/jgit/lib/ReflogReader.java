@@ -24,7 +24,7 @@ public interface ReflogReader {
 	 * Get the last entry in the reflog
 	 *
 	 * @return the latest reflog entry, or null if no log
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	ReflogEntry getLastEntry() throws IOException;
@@ -33,7 +33,7 @@ public interface ReflogReader {
 	 * Get all reflog entries in reverse order
 	 *
 	 * @return all reflog entries in reverse order
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	List<ReflogEntry> getReverseEntries() throws IOException;
@@ -45,7 +45,7 @@ public interface ReflogReader {
 	 * @param number
 	 *            a int.
 	 * @return reflog entry or null if not found
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	ReflogEntry getReverseEntry(int number) throws IOException;
@@ -56,7 +56,7 @@ public interface ReflogReader {
 	 * @param max
 	 *            max number of entries to read
 	 * @return all reflog entries in reverse order
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	List<ReflogEntry> getReverseEntries(int max) throws IOException;

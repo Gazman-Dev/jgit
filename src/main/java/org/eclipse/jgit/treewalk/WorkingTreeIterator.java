@@ -77,10 +77,10 @@ import org.eclipse.jgit.util.sha1.SHA1;
 
 /**
  * Walks a working directory tree as part of a
- * {@link org.eclipse.jgit.treewalk.TreeWalk}.
+ * {@link TreeWalk}.
  * <p>
  * Most applications will want to use the standard implementation of this
- * iterator, {@link org.eclipse.jgit.treewalk.FileTreeIterator}, as that does
+ * iterator, {@link FileTreeIterator}, as that does
  * all IO through the standard <code>java.io</code> package. Plugins for a Java
  * based IDE may however wish to create their own implementations of this class
  * to allow traversal of the IDE's project space, as well as benefit from any
@@ -214,7 +214,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	}
 
 	/**
-	 * Define the matching {@link org.eclipse.jgit.dircache.DirCacheIterator},
+	 * Define the matching {@link DirCacheIterator},
 	 * to optimize ObjectIds.
 	 *
 	 * Once the DirCacheIterator has been set this iterator must only be
@@ -226,7 +226,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 *            the walk that will be advancing this iterator.
 	 * @param treeId
 	 *            index of the matching
-	 *            {@link org.eclipse.jgit.dircache.DirCacheIterator}.
+	 *            {@link DirCacheIterator}.
 	 */
 	public void setDirCacheIterator(TreeWalk walk, int treeId) {
 		state.walk = walk;
@@ -325,7 +325,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 * Get submodule id for given entry.
 	 *
 	 * @param e
-	 *            a {@link org.eclipse.jgit.treewalk.WorkingTreeIterator.Entry}
+	 *            a {@link Entry}
 	 *            object.
 	 * @return non-null submodule id
 	 */
@@ -346,9 +346,9 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 * relative to the directory.
 	 *
 	 * @param directory
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @param e
-	 *            a {@link org.eclipse.jgit.treewalk.WorkingTreeIterator.Entry}
+	 *            a {@link Entry}
 	 *            object.
 	 * @return non-null submodule id
 	 */
@@ -483,7 +483,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 		String filterCommand = getCleanFilterCommand();
 		if (filterCommand != null) {
 			if (FilterCommandRegistry.isRegistered(filterCommand)) {
-				LocalFile buffer = new TemporaryBuffer.LocalFile(null);
+				LocalFile buffer = new LocalFile(null);
 				FilterCommand command = FilterCommandRegistry
 						.createFilterCommand(filterCommand, repository, in,
 								buffer);
@@ -498,8 +498,6 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 			filterProcessBuilder.directory(repository.getWorkTree());
 			filterProcessBuilder.environment().put(Constants.GIT_DIR_KEY,
 					repository.getDirectory().getAbsolutePath());
-			filterProcessBuilder.environment().put(Constants.GIT_COMMON_DIR_KEY,
-					repository.getCommonDirectory().getAbsolutePath());
 			ExecutionResult result;
 			try {
 				result = fs.execute(filterProcessBuilder, in);
@@ -603,7 +601,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 * Get the filtered input length of this entry
 	 *
 	 * @return size of the content, in bytes
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public long getEntryContentLength() throws IOException {
@@ -617,6 +615,18 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 			}
 		}
 		return canonLen;
+	}
+
+	/**
+	 * Get the last modified time of this entry.
+	 *
+	 * @return last modified time of this file, in milliseconds since the epoch
+	 *         (Jan 1, 1970 UTC).
+	 * @deprecated use {@link #getEntryLastModifiedInstant()} instead
+	 */
+	@Deprecated
+	public long getEntryLastModified() {
+		return current().getLastModified();
 	}
 
 	/**
@@ -642,7 +652,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 * The caller will close the stream once complete.
 	 *
 	 * @return a stream to read from the file.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the file could not be opened for reading.
 	 */
 	public InputStream openEntryStream() throws IOException {
@@ -659,7 +669,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 * Determine if the current entry path is ignored by an ignore rule.
 	 *
 	 * @return true if the entry was ignored by an ignore rule file.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a relevant ignore rule file exists but cannot be read.
 	 */
 	public boolean isEntryIgnored() throws IOException {
@@ -672,7 +682,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 * @param pLen
 	 *            the length of the path in the path buffer.
 	 * @return true if the entry is ignored by an ignore rule.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a relevant ignore rule file exists but cannot be read.
 	 */
 	protected boolean isEntryIgnored(int pLen) throws IOException {
@@ -739,10 +749,10 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	}
 
 	/**
-	 * Retrieves the {@link org.eclipse.jgit.attributes.AttributesNode} for the
+	 * Retrieves the {@link AttributesNode} for the
 	 * current entry.
 	 *
-	 * @return the {@link org.eclipse.jgit.attributes.AttributesNode} for the
+	 * @return the {@link AttributesNode} for the
 	 *         current entry.
 	 * @throws IOException
 	 *             if an IO error occurred
@@ -875,13 +885,13 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 
 	/**
 	 * Compare the metadata (mode, length, modification-timestamp) of the
-	 * current entry and a {@link org.eclipse.jgit.dircache.DirCacheEntry}
+	 * current entry and a {@link DirCacheEntry}
 	 *
 	 * @param entry
-	 *            the {@link org.eclipse.jgit.dircache.DirCacheEntry} to compare
+	 *            the {@link DirCacheEntry} to compare
 	 *            with
 	 * @return a
-	 *         {@link org.eclipse.jgit.treewalk.WorkingTreeIterator.MetadataDiff}
+	 *         {@link MetadataDiff}
 	 *         which tells whether and how the entries metadata differ
 	 */
 	public MetadataDiff compareMetadata(DirCacheEntry entry) {
@@ -937,7 +947,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 * @param reader
 	 *            access to repository objects if necessary. Should not be null.
 	 * @return true if content is most likely different.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.3
 	 */
@@ -992,9 +1002,9 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 * in the index.
 	 *
 	 * @param indexIter
-	 *            {@link org.eclipse.jgit.dircache.DirCacheIterator} positioned
+	 *            {@link DirCacheIterator} positioned
 	 *            at the same entry as this iterator or null if no
-	 *            {@link org.eclipse.jgit.dircache.DirCacheIterator} is
+	 *            {@link DirCacheIterator} is
 	 *            available at this iterator's current entry
 	 * @return index file mode
 	 */
@@ -1088,7 +1098,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 * @param entry
 	 *            to read
 	 * @return the entry's content as a normalized string
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if the entry cannot be read or does not denote a symlink
 	 * @since 4.6
 	 */
@@ -1219,6 +1229,21 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 		 * needs to compute the value they should cache the reference within an
 		 * instance member instead.
 		 *
+		 * @return time since the epoch (in ms) of the last change.
+		 * @deprecated use {@link #getLastModifiedInstant()} instead
+		 */
+		@Deprecated
+		public abstract long getLastModified();
+
+		/**
+		 * Get the last modified time of this entry.
+		 * <p>
+		 * <b>Note: Efficient implementation required.</b>
+		 * <p>
+		 * The implementation of this method must be efficient. If a subclass
+		 * needs to compute the value they should cache the reference within an
+		 * instance member instead.
+		 *
 		 * @return time of the last change.
 		 * @since 5.1.9
 		 */
@@ -1307,7 +1332,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 
 			IgnoreNode infoExclude = new IgnoreNodeWithParent(
 					coreExclude);
-			File exclude = fs.resolve(repository.getCommonDirectory(),
+			File exclude = fs.resolve(repository.getDirectory(),
 					Constants.INFO_EXCLUDE);
 			if (fs.exists(exclude)) {
 				loadRulesFromFile(infoExclude, exclude);
@@ -1426,7 +1451,7 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 *
 	 * @return the clean filter command for the current entry or
 	 *         <code>null</code> if no such command is defined
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 4.2
 	 */
@@ -1447,9 +1472,9 @@ public abstract class WorkingTreeIterator extends AbstractTreeIterator {
 	 *
 	 * @return the eol stream type for the current entry or <code>null</code> if
 	 *         it cannot be determined. When state or state.walk is null or the
-	 *         {@link org.eclipse.jgit.treewalk.TreeWalk} is not based on a
-	 *         {@link org.eclipse.jgit.lib.Repository} then null is returned.
-	 * @throws java.io.IOException
+	 *         {@link TreeWalk} is not based on a
+	 *         {@link Repository} then null is returned.
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 4.3
 	 */

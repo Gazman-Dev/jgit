@@ -70,10 +70,10 @@ import org.eclipse.jgit.util.IO;
  * <p>
  * Applications that want more incremental update behavior may use either the
  * raw {@link #next()} streaming approach supported by this class, or construct
- * a {@link org.eclipse.jgit.blame.BlameResult} using
- * {@link org.eclipse.jgit.blame.BlameResult#create(BlameGenerator)} and
+ * a {@link BlameResult} using
+ * {@link BlameResult#create(BlameGenerator)} and
  * incrementally construct the result with
- * {@link org.eclipse.jgit.blame.BlameResult#computeNext()}.
+ * {@link BlameResult#computeNext()}.
  * <p>
  * This class is not thread-safe.
  * <p>
@@ -192,7 +192,7 @@ public class BlameGenerator implements AutoCloseable {
 	 * Difference algorithm to use when comparing revisions.
 	 *
 	 * @param algorithm
-	 *            a {@link org.eclipse.jgit.diff.DiffAlgorithm}
+	 *            a {@link DiffAlgorithm}
 	 * @return {@code this}
 	 */
 	public BlameGenerator setDiffAlgorithm(DiffAlgorithm algorithm) {
@@ -204,7 +204,7 @@ public class BlameGenerator implements AutoCloseable {
 	 * Text comparator to use when comparing revisions.
 	 *
 	 * @param comparator
-	 *            a {@link org.eclipse.jgit.diff.RawTextComparator}
+	 *            a {@link RawTextComparator}
 	 * @return {@code this}
 	 */
 	public BlameGenerator setTextComparator(RawTextComparator comparator) {
@@ -257,7 +257,7 @@ public class BlameGenerator implements AutoCloseable {
 	 * @param contents
 	 *            contents of the file.
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be read.
 	 */
 	public BlameGenerator push(String description, byte[] contents)
@@ -278,7 +278,7 @@ public class BlameGenerator implements AutoCloseable {
 	 * @param contents
 	 *            contents of the file.
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be read.
 	 */
 	public BlameGenerator push(String description, RawText contents)
@@ -408,7 +408,7 @@ public class BlameGenerator implements AutoCloseable {
 	 * @param id
 	 *            may be a commit or a blob.
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be read.
 	 */
 	public BlameGenerator push(String description, AnyObjectId id)
@@ -454,7 +454,7 @@ public class BlameGenerator implements AutoCloseable {
 	 * each of these is a descendant commit that removed the line, typically
 	 * this occurs when the same deletion appears in multiple side branches such
 	 * as due to a cherry-pick. Applications relying on reverse should use
-	 * {@link org.eclipse.jgit.blame.BlameResult} as it filters these duplicate
+	 * {@link BlameResult} as it filters these duplicate
 	 * sources and only remembers the first (oldest) deletion.
 	 *
 	 * @param start
@@ -464,7 +464,7 @@ public class BlameGenerator implements AutoCloseable {
 	 *            most recent commit to stop traversal at. Usually an active
 	 *            branch tip, tag, or HEAD.
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be read.
 	 */
 	public BlameGenerator reverse(AnyObjectId start, AnyObjectId end)
@@ -486,7 +486,7 @@ public class BlameGenerator implements AutoCloseable {
 	 * each of these is a descendant commit that removed the line, typically
 	 * this occurs when the same deletion appears in multiple side branches such
 	 * as due to a cherry-pick. Applications relying on reverse should use
-	 * {@link org.eclipse.jgit.blame.BlameResult} as it filters these duplicate
+	 * {@link BlameResult} as it filters these duplicate
 	 * sources and only remembers the first (oldest) deletion.
 	 *
 	 * @param start
@@ -496,7 +496,7 @@ public class BlameGenerator implements AutoCloseable {
 	 *            most recent commits to stop traversal at. Usually an active
 	 *            branch tip, tag, or HEAD.
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be read.
 	 */
 	public BlameGenerator reverse(AnyObjectId start,
@@ -541,7 +541,7 @@ public class BlameGenerator implements AutoCloseable {
 	 * Execute the generator in a blocking fashion until all data is ready.
 	 *
 	 * @return the complete result. Null if no file exists for the given path.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be read.
 	 */
 	public BlameResult computeBlameResult() throws IOException {
@@ -562,7 +562,7 @@ public class BlameGenerator implements AutoCloseable {
 	 *         and {@link #getResultStart()}, {@link #getResultEnd()} methods
 	 *         can be used to inspect the region found. False if there are no
 	 *         more regions to describe.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             repository cannot be read.
 	 */
 	public boolean next() throws IOException {
@@ -1065,9 +1065,9 @@ public class BlameGenerator implements AutoCloseable {
 	 *         This value is accessible only after being configured and only
 	 *         immediately before the first call to {@link #next()}. Returns
 	 *         null if the path does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             repository cannot be read.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             {@link #next()} has already been invoked.
 	 */
 	public RawText getResultContents() throws IOException {

@@ -73,10 +73,10 @@ public class CanonicalTreeParser extends AbstractTreeIterator {
 	 *            messages if data corruption is found.
 	 * @throws MissingObjectException
 	 *             the object supplied is not available from the repository.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             the object supplied as an argument is not actually a tree and
 	 *             cannot be parsed as though it were a tree.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a loose object or pack file could not be read.
 	 */
 	public CanonicalTreeParser(final byte[] prefix, final ObjectReader reader,
@@ -129,10 +129,10 @@ public class CanonicalTreeParser extends AbstractTreeIterator {
 	 * @return the root level parser.
 	 * @throws MissingObjectException
 	 *             the object supplied is not available from the repository.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             the object supplied as an argument is not actually a tree and
 	 *             cannot be parsed as though it were a tree.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a loose object or pack file could not be read.
 	 */
 	public CanonicalTreeParser resetRoot(final ObjectReader reader,
@@ -180,10 +180,10 @@ public class CanonicalTreeParser extends AbstractTreeIterator {
 	 *            messages if data corruption is found.
 	 * @throws MissingObjectException
 	 *             the object supplied is not available from the repository.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             the object supplied as an argument is not actually a tree and
 	 *             cannot be parsed as though it were a tree.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a loose object or pack file could not be read.
 	 */
 	public void reset(ObjectReader reader, AnyObjectId id)
@@ -215,7 +215,7 @@ public class CanonicalTreeParser extends AbstractTreeIterator {
 	 * @param id
 	 *            ObjectId of the tree to open.
 	 * @return a new parser that walks over the current subtree.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a loose object or pack file could not be read.
 	 */
 	public final CanonicalTreeParser createSubtreeIterator0(
@@ -357,15 +357,15 @@ public class CanonicalTreeParser extends AbstractTreeIterator {
 	}
 
 	/**
-	 * Retrieve the {@link org.eclipse.jgit.attributes.AttributesNode} for the
+	 * Retrieve the {@link AttributesNode} for the
 	 * current entry.
 	 *
 	 * @param reader
-	 *            {@link org.eclipse.jgit.lib.ObjectReader} used to parse the
+	 *            {@link ObjectReader} used to parse the
 	 *            .gitattributes entry.
-	 * @return {@link org.eclipse.jgit.attributes.AttributesNode} for the
+	 * @return {@link AttributesNode} for the
 	 *         current entry.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 4.2
 	 */

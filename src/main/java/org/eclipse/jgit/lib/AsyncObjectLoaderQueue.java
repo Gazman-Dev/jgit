@@ -30,19 +30,19 @@ public interface AsyncObjectLoaderQueue<T extends ObjectId> extends
 	 * Position this queue onto the next available result.
 	 *
 	 * Even if this method returns true, {@link #open()} may still throw
-	 * {@link org.eclipse.jgit.errors.MissingObjectException} if the underlying
+	 * {@link MissingObjectException} if the underlying
 	 * object database was concurrently modified and the current object is no
 	 * longer available.
 	 *
 	 * @return true if there is a result available; false if the queue has
 	 *         finished its input iteration.
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             the object does not exist. If the implementation is retaining
 	 *             the application's objects {@link #getCurrent()} will be the
 	 *             current object that is missing. There may be more results
 	 *             still available, so the caller should continue invoking next
 	 *             to examine another result.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object store cannot be accessed.
 	 */
 	boolean next() throws MissingObjectException, IOException;
@@ -79,7 +79,7 @@ public interface AsyncObjectLoaderQueue<T extends ObjectId> extends
 	 *             current object that is missing. There may be more results
 	 *             still available, so the caller should continue invoking next
 	 *             to examine another result.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object store cannot be accessed.
 	 */
 	ObjectLoader open() throws IOException;

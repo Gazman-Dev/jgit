@@ -23,7 +23,7 @@ import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.merge.ResolveMerger.MergeFailureReason;
 
 /**
- * Encapsulates the result of a {@link org.eclipse.jgit.api.MergeCommand}.
+ * Encapsulates the result of a {@link MergeCommand}.
  */
 public class MergeResult {
 
@@ -250,7 +250,7 @@ public class MergeResult {
 	 * @param mergeStatus
 	 *            the status the merge resulted in
 	 * @param mergeStrategy
-	 *            the used {@link org.eclipse.jgit.merge.MergeStrategy}
+	 *            the used {@link MergeStrategy}
 	 * @param lowLevelResults
 	 *            merge results as returned by
 	 *            {@link org.eclipse.jgit.merge.ResolveMerger#getMergeResults()}
@@ -278,7 +278,7 @@ public class MergeResult {
 	 * @param mergeStatus
 	 *            the status the merge resulted in
 	 * @param mergeStrategy
-	 *            the used {@link org.eclipse.jgit.merge.MergeStrategy}
+	 *            the used {@link MergeStrategy}
 	 * @param lowLevelResults
 	 *            merge results as returned by
 	 *            {@link org.eclipse.jgit.merge.ResolveMerger#getMergeResults()}
@@ -308,7 +308,7 @@ public class MergeResult {
 	 * @param mergeStatus
 	 *            the status the merge resulted in
 	 * @param mergeStrategy
-	 *            the used {@link org.eclipse.jgit.merge.MergeStrategy}
+	 *            the used {@link MergeStrategy}
 	 * @param lowLevelResults
 	 *            merge results as returned by
 	 *            {@link org.eclipse.jgit.merge.ResolveMerger#getMergeResults()}
@@ -474,7 +474,7 @@ public class MergeResult {
 
 	/**
 	 * Returns information about the conflicts which occurred during a
-	 * {@link org.eclipse.jgit.api.MergeCommand}. The returned value maps the
+	 * {@link MergeCommand}. The returned value maps the
 	 * path of a conflicting file to a two-dimensional int-array of line-numbers
 	 * telling where in the file conflict markers for which merged commit can be
 	 * found.

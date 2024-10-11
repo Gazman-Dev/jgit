@@ -42,7 +42,7 @@ public class DeleteTagCommand extends GitCommand<List<String>> {
 	 * Constructor for DeleteTagCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected DeleteTagCommand(Repository repo) {
 		super(repo);

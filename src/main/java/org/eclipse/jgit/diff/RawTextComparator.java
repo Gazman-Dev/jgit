@@ -18,7 +18,7 @@ import static org.eclipse.jgit.util.RawCharUtil.trimTrailingWhitespace;
 import org.eclipse.jgit.util.IntList;
 
 /**
- * Equivalence function for {@link org.eclipse.jgit.diff.RawText}.
+ * Equivalence function for {@link RawText}.
  */
 public abstract class RawTextComparator extends SequenceComparator<RawText> {
 	/** No special treatment. */

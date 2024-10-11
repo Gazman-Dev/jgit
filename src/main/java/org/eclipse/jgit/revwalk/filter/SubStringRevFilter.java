@@ -29,7 +29,7 @@ public abstract class SubStringRevFilter extends RevFilter {
 	 * @param pattern
 	 *            the pattern text proposed by the user.
 	 * @return true if a substring filter can perform this pattern match; false
-	 *         if {@link org.eclipse.jgit.revwalk.filter.PatternMatchRevFilter}
+	 *         if {@link PatternMatchRevFilter}
 	 *         must be used instead.
 	 */
 	public static boolean safe(String pattern) {

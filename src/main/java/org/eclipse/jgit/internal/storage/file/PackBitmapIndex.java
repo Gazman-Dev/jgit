@@ -26,7 +26,7 @@ import com.googlecode.javaewah.EWAHCompressedBitmap;
 
 /**
  * Logical representation of the bitmap data stored in the pack index.
- * {@link org.eclipse.jgit.lib.ObjectId}s are encoded as a single integer in the
+ * {@link ObjectId}s are encoded as a single integer in the
  * range [0, {@link #getObjectCount()}). Compressed bitmaps are available at
  * certain {@code ObjectId}s, which represent all of the objects reachable from
  * that {@code ObjectId} (include the {@code ObjectId} itself). The meaning of
@@ -35,7 +35,7 @@ import com.googlecode.javaewah.EWAHCompressedBitmap;
  * {@link #findPosition(AnyObjectId)} can be used to build other bitmaps that a
  * compatible with the encoded bitmaps available from the index.
  */
-public interface PackBitmapIndex {
+public abstract class PackBitmapIndex {
 	/** Flag bit denoting the bitmap should be reused during index creation. */
 	public static final int FLAG_REUSE = 1;
 
@@ -53,7 +53,7 @@ public interface PackBitmapIndex {
 	 * @param reverseIndex
 	 *            the pack reverse index for the corresponding pack file.
 	 * @return a copy of the index in-memory.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be read.
 	 * @throws CorruptObjectException
 	 *             the stream does not contain a valid pack bitmap index.
@@ -89,7 +89,7 @@ public interface PackBitmapIndex {
 	 * @param reverseIndex
 	 *            the pack reverse index for the corresponding pack file.
 	 * @return a copy of the index in-memory.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be read.
 	 * @throws CorruptObjectException
 	 *             the stream does not contain a valid pack bitmap index.
@@ -118,7 +118,7 @@ public interface PackBitmapIndex {
 	 * @param loadParallelRevIndex
 	 *            whether reverse index should be loaded in parallel
 	 * @return a copy of the index in-memory.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be read.
 	 * @throws CorruptObjectException
 	 *             the stream does not contain a valid pack bitmap index.
@@ -132,14 +132,8 @@ public interface PackBitmapIndex {
 				reverseIndexSupplier, loadParallelRevIndex);
 	}
 
-	/**
-	 * Footer checksum applied on the bottom of the pack file.
-	 *
-	 * @return checksum as a byte array
-	 */
-	default byte[] getPackChecksum() {
-		return null;
-	}
+	/** Footer checksum applied on the bottom of the pack file. */
+	byte[] packChecksum;
 
 	/**
 	 * Finds the position in the bitmap of the object.
@@ -154,11 +148,9 @@ public interface PackBitmapIndex {
 	 * Get the object at the bitmap position.
 	 *
 	 * @param position
-	 *            the offset in the bitmap which corresponds to an object of
-	 *            interest. This position is the same as the order of the object
-	 *            in the {@link PackFile}.
+	 *            the id for which the object will be found.
 	 * @return the ObjectId.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             when the item is not found.
 	 */
 	public abstract ObjectId getObject(int position)

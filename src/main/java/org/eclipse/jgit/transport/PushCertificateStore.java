@@ -128,7 +128,7 @@ public class PushCertificateStore implements AutoCloseable {
 	 *            the ref name to get the certificate for.
 	 * @return last certificate affecting the ref, or null if no cert was recorded
 	 *         for the last update to this ref.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if a problem occurred reading the repository.
 	 */
 	public PushCertificate get(String refName) throws IOException {
@@ -320,7 +320,7 @@ public class PushCertificateStore implements AutoCloseable {
 	 * allows for easy retries in case of lock failure.
 	 *
 	 * @return the result of attempting to update the ref.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if there was an error reading from or writing to the
 	 *             repository.
 	 */
@@ -361,7 +361,7 @@ public class PushCertificateStore implements AutoCloseable {
 	 * @param batch
 	 *            update to save to.
 	 * @return whether a command was added to the batch.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if there was an error reading from or writing to the
 	 *             repository.
 	 */

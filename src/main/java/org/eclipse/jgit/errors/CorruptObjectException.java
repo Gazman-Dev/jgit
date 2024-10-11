@@ -53,7 +53,7 @@ public class CorruptObjectException extends IOException {
 	 * object id
 	 *
 	 * @param id
-	 *            a {@link org.eclipse.jgit.lib.AnyObjectId}
+	 *            a {@link AnyObjectId}
 	 * @param why
 	 *            error message
 	 */
@@ -66,7 +66,7 @@ public class CorruptObjectException extends IOException {
 	 * object id
 	 *
 	 * @param id
-	 *            a {@link org.eclipse.jgit.lib.ObjectId}
+	 *            a {@link ObjectId}
 	 * @param why
 	 *            error message
 	 */
@@ -102,7 +102,7 @@ public class CorruptObjectException extends IOException {
 
 	/**
 	 * Specific error condition identified by
-	 * {@link org.eclipse.jgit.lib.ObjectChecker}.
+	 * {@link ObjectChecker}.
 	 *
 	 * @return error condition or null.
 	 * @since 4.2

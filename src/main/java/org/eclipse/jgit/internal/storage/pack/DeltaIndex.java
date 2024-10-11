@@ -19,7 +19,7 @@ import java.io.OutputStream;
  * The index can be passed a result buffer, and output an instruction sequence
  * that transforms the source buffer used by the index into the result buffer.
  * The instruction sequence can be executed by
- * {@link org.eclipse.jgit.internal.storage.pack.BinaryDelta} to recreate the
+ * {@link BinaryDelta} to recreate the
  * result buffer.
  * <p>
  * An index stores the entire contents of the source buffer, but also a table of
@@ -216,7 +216,7 @@ public class DeltaIndex {
 	 *            the desired result buffer. The generated instructions will
 	 *            recreate this buffer when applied to the source buffer stored
 	 *            within this index.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the output stream refused to write the instructions.
 	 */
 	public void encode(OutputStream out, byte[] res) throws IOException {
@@ -246,7 +246,7 @@ public class DeltaIndex {
 	 * @return true if the delta is smaller than deltaSizeLimit; false if the
 	 *         encoder aborted because the encoded delta instructions would be
 	 *         longer than deltaSizeLimit bytes.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the output stream refused to write the instructions.
 	 */
 	public boolean encode(OutputStream out, byte[] res, int deltaSizeLimit)

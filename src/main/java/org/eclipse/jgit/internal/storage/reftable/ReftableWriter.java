@@ -60,7 +60,7 @@ import org.eclipse.jgit.util.NB;
  * <p>
  * A reftable can be written in a streaming fashion, provided the caller sorts
  * all references. A
- * {@link org.eclipse.jgit.internal.storage.reftable.ReftableWriter} is
+ * {@link ReftableWriter} is
  * single-use, and not thread-safe.
  */
 public class ReftableWriter {
@@ -79,8 +79,8 @@ public class ReftableWriter {
 	private ReftableOutputStream out;
 	private ObjectIdSubclassMap<RefList> obj2ref;
 
-	private BlockWriter.Entry lastRef;
-	private BlockWriter.Entry lastLog;
+	private Entry lastRef;
+	private Entry lastLog;
 	private BlockWriter cur;
 	private Section refs;
 	private Section objs;
@@ -202,7 +202,7 @@ public class ReftableWriter {
 	 * @param refsToPack
 	 *            references to sort and write.
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if reftable cannot be written.
 	 */
 	public ReftableWriter sortAndWriteRefs(Collection<Ref> refsToPack)
@@ -232,7 +232,7 @@ public class ReftableWriter {
 	 *
 	 * @param ref
 	 *            the reference to store.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if reftable cannot be written.
 	 */
 	public void writeRef(Ref ref) throws IOException {
@@ -249,7 +249,7 @@ public class ReftableWriter {
 	 * @param updateIndex
 	 *            the updateIndex that modified this reference. Must be
 	 *            {@code >= minUpdateIndex} for this file.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if reftable cannot be written.
 	 */
 	public void writeRef(Ref ref, long updateIndex) throws IOException {
@@ -307,14 +307,14 @@ public class ReftableWriter {
 	 * @param who
 	 *            committer of the reflog entry.
 	 * @param oldId
-	 *            prior id; pass {@link org.eclipse.jgit.lib.ObjectId#zeroId()}
+	 *            prior id; pass {@link ObjectId#zeroId()}
 	 *            for creations.
 	 * @param newId
-	 *            new id; pass {@link org.eclipse.jgit.lib.ObjectId#zeroId()}
+	 *            new id; pass {@link ObjectId#zeroId()}
 	 *            for deletions.
 	 * @param message
 	 *            optional message (may be null).
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if reftable cannot be written.
 	 */
 	public void writeLog(String ref, long updateIndex, PersonIdent who,
@@ -346,7 +346,7 @@ public class ReftableWriter {
 	 *            the ref to delete (hide) a reflog entry from.
 	 * @param updateIndex
 	 *            the update index that must be hidden.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if reftable cannot be written.
 	 */
 	public void deleteLog(String ref, long updateIndex) throws IOException {
@@ -368,9 +368,9 @@ public class ReftableWriter {
 	 *
 	 * @return an estimate of the current size in bytes of the reftable, if it
 	 *         was finished right now. Estimate is only accurate if
-	 *         {@link org.eclipse.jgit.internal.storage.reftable.ReftableConfig#setIndexObjects(boolean)}
+	 *         {@link ReftableConfig#setIndexObjects(boolean)}
 	 *         is {@code false} and
-	 *         {@link org.eclipse.jgit.internal.storage.reftable.ReftableConfig#setMaxIndexLevels(int)}
+	 *         {@link ReftableConfig#setMaxIndexLevels(int)}
 	 *         is {@code 1}.
 	 */
 	public long estimateTotalBytes() {
@@ -404,7 +404,7 @@ public class ReftableWriter {
 	 * Finish writing the reftable by writing its trailer.
 	 *
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if reftable cannot be written.
 	 */
 	public ReftableWriter finish() throws IOException {
@@ -786,7 +786,7 @@ public class ReftableWriter {
 			firstBlockPosition = out.size();
 		}
 
-		long write(BlockWriter.Entry entry) throws IOException {
+		long write(Entry entry) throws IOException {
 			if (cur == null) {
 				beginBlock(entry);
 			} else if (!cur.tryAdd(entry)) {
@@ -800,7 +800,7 @@ public class ReftableWriter {
 			return out.size();
 		}
 
-		private void beginBlock(BlockWriter.Entry entry)
+		private void beginBlock(Entry entry)
 				throws BlockSizeTooSmallException {
 			byte blockType = entry.blockType();
 			int bs = out.bytesAvailableInBlock();

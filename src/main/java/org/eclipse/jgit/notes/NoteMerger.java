@@ -39,10 +39,10 @@ public interface NoteMerger {
 	 * @param inserter
 	 *            the object inserter that must be used to insert Git objects
 	 * @return the merge result
-	 * @throws org.eclipse.jgit.notes.NotesMergeConflictException
+	 * @throws NotesMergeConflictException
 	 *             in case there was a merge conflict which this note merger
 	 *             couldn't resolve
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             in case the reader or the inserter would throw an
 	 *             java.io.IOException the implementor will most likely want to
 	 *             propagate it as it can't do much to recover from it

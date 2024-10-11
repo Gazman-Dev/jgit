@@ -64,7 +64,7 @@ public abstract class MergeStrategy {
 	 *
 	 * @param imp
 	 *            the strategy to register.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             a strategy by the same name has already been registered.
 	 */
 	public static void register(MergeStrategy imp) {
@@ -78,7 +78,7 @@ public abstract class MergeStrategy {
 	 *            name the strategy can be looked up under.
 	 * @param imp
 	 *            the strategy to register.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             a strategy by the same name has already been registered.
 	 */
 	public static synchronized void register(final String name,

@@ -141,7 +141,7 @@ public class DfsPackCompactor {
 	 * ones are omitted.
 	 *
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             existing packs cannot be read.
 	 */
 	public DfsPackCompactor autoAdd() throws IOException {
@@ -184,7 +184,7 @@ public class DfsPackCompactor {
 	 * @param pack
 	 *            objects to not include.
 	 * @return {@code this}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             pack index cannot be loaded.
 	 */
 	public DfsPackCompactor exclude(DfsPackFile pack) throws IOException {
@@ -201,7 +201,7 @@ public class DfsPackCompactor {
 	 * @param pm
 	 *            progress monitor to receive updates on as packing may take a
 	 *            while, depending on the size of the repository.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the packs cannot be compacted.
 	 */
 	public void compact(ProgressMonitor pm) throws IOException {

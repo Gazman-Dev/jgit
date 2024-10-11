@@ -31,7 +31,7 @@ public class ThrowingPrintWriter extends Writer {
 	 * Construct a JGitPrintWriter
 	 *
 	 * @param out
-	 *            the underlying {@link java.io.Writer}
+	 *            the underlying {@link Writer}
 	 */
 	public ThrowingPrintWriter(Writer out) {
 		this.out = out;
@@ -60,8 +60,8 @@ public class ThrowingPrintWriter extends Writer {
 	 * Print a string and terminate with a line feed.
 	 *
 	 * @param s
-	 *            a {@link java.lang.String} object.
-	 * @throws java.io.IOException
+	 *            a {@link String} object.
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void println(String s) throws IOException {
@@ -71,7 +71,7 @@ public class ThrowingPrintWriter extends Writer {
 	/**
 	 * Print a platform dependent new line
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void println() throws IOException {
@@ -83,7 +83,7 @@ public class ThrowingPrintWriter extends Writer {
 	 *
 	 * @param value
 	 *            a char.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void print(char value) throws IOException {
@@ -95,7 +95,7 @@ public class ThrowingPrintWriter extends Writer {
 	 *
 	 * @param value
 	 *            an int.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void print(int value) throws IOException {
@@ -107,7 +107,7 @@ public class ThrowingPrintWriter extends Writer {
 	 *
 	 * @param value
 	 *            a long.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void print(long value) throws IOException {
@@ -119,7 +119,7 @@ public class ThrowingPrintWriter extends Writer {
 	 *
 	 * @param value
 	 *            a short.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void print(short value) throws IOException {
@@ -128,13 +128,13 @@ public class ThrowingPrintWriter extends Writer {
 
 	/**
 	 * Print a formatted message according to
-	 * {@link java.lang.String#format(String, Object...)}.
+	 * {@link String#format(String, Object...)}.
 	 *
 	 * @param fmt
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param args
 	 *            objects.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void format(String fmt, Object... args) throws IOException {
@@ -146,7 +146,7 @@ public class ThrowingPrintWriter extends Writer {
 	 *
 	 * @param any
 	 *            an object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void print(Object any) throws IOException {

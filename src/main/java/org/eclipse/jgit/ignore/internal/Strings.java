@@ -23,7 +23,7 @@ import org.eclipse.jgit.ignore.FastIgnoreRule;
 import org.eclipse.jgit.internal.JGitText;
 
 /**
- * Various {@link java.lang.String} related utility methods, written mostly to
+ * Various {@link String} related utility methods, written mostly to
  * avoid generation of new String objects (e.g. via splitting Strings etc).
  */
 public class Strings {

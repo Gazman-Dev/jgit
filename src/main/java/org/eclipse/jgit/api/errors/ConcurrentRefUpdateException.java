@@ -47,7 +47,7 @@ import org.eclipse.jgit.lib.RefUpdate;
  * Exception thrown when a command wants to update a ref but failed because
  * another process is accessing (or even also updating) the ref.
  *
- * @see org.eclipse.jgit.lib.RefUpdate.Result#LOCK_FAILURE
+ * @see RefUpdate.Result#LOCK_FAILURE
  */
 public class ConcurrentRefUpdateException extends GitAPIException {
 	private static final long serialVersionUID = 1L;
@@ -60,11 +60,11 @@ public class ConcurrentRefUpdateException extends GitAPIException {
 	 * @param message
 	 *            error message
 	 * @param ref
-	 *            a {@link org.eclipse.jgit.lib.Ref}
+	 *            a {@link Ref}
 	 * @param rc
-	 *            a {@link org.eclipse.jgit.lib.RefUpdate.Result}
+	 *            a {@link RefUpdate.Result}
 	 * @param cause
-	 *            a {@link java.lang.Throwable}
+	 *            a {@link Throwable}
 	 */
 	public ConcurrentRefUpdateException(String message, Ref ref,
 			RefUpdate.Result rc, Throwable cause) {
@@ -80,9 +80,9 @@ public class ConcurrentRefUpdateException extends GitAPIException {
 	 * @param message
 	 *            error message
 	 * @param ref
-	 *            a {@link org.eclipse.jgit.lib.Ref}
+	 *            a {@link Ref}
 	 * @param rc
-	 *            a {@link org.eclipse.jgit.lib.RefUpdate.Result}
+	 *            a {@link RefUpdate.Result}
 	 */
 	public ConcurrentRefUpdateException(String message, Ref ref,
 			RefUpdate.Result rc) {
@@ -95,7 +95,7 @@ public class ConcurrentRefUpdateException extends GitAPIException {
 	/**
 	 * Get <code>Ref</code>
 	 *
-	 * @return the {@link org.eclipse.jgit.lib.Ref} which was tried to by
+	 * @return the {@link Ref} which was tried to by
 	 *         updated
 	 */
 	public Ref getRef() {
@@ -106,7 +106,7 @@ public class ConcurrentRefUpdateException extends GitAPIException {
 	 * Get result
 	 *
 	 * @return the result which was returned by
-	 *         {@link org.eclipse.jgit.lib.RefUpdate#update()} and which caused
+	 *         {@link RefUpdate#update()} and which caused
 	 *         this error
 	 */
 	public RefUpdate.Result getResult() {

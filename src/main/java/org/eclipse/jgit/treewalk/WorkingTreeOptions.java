@@ -20,11 +20,11 @@ import org.eclipse.jgit.lib.CoreConfig.HideDotFiles;
 import org.eclipse.jgit.lib.CoreConfig.SymLinks;
 
 /**
- * Options used by the {@link org.eclipse.jgit.treewalk.WorkingTreeIterator}.
+ * Options used by the {@link WorkingTreeIterator}.
  */
 public class WorkingTreeOptions {
 	/** Key for {@link Config#get(SectionParser)}. */
-	public static final Config.SectionParser<WorkingTreeOptions> KEY =
+	public static final SectionParser<WorkingTreeOptions> KEY =
 			WorkingTreeOptions::new;
 
 	private final boolean fileMode;

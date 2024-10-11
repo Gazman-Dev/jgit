@@ -138,7 +138,7 @@ public abstract class ObjectBuilder {
 	 *
 	 * @return this object in the canonical git format, suitable for storage in
 	 *         a repository.
-	 * @throws java.io.UnsupportedEncodingException
+	 * @throws UnsupportedEncodingException
 	 *             the encoding specified by {@link #getEncoding()} is not
 	 *             supported by this Java runtime.
 	 */

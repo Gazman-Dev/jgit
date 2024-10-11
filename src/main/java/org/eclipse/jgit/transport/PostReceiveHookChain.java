@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * {@link org.eclipse.jgit.transport.PostReceiveHook} that delegates to a list
+ * {@link PostReceiveHook} that delegates to a list
  * of other hooks.
  * <p>
  * Hooks are run in the order passed to the constructor.

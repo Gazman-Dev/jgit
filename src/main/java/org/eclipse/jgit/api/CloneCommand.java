@@ -504,7 +504,7 @@ public class CloneCommand extends TransportCommand<CloneCommand, Git> {
 	 *            the directory to clone to, or {@code null} if the directory
 	 *            name should be taken from the source uri
 	 * @return this instance
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             if the combination of directory, gitDir and bare is illegal.
 	 *             E.g. if for a non-bare repository directory and gitDir point
 	 *             to the same directory of if for a bare repository both
@@ -523,7 +523,7 @@ public class CloneCommand extends TransportCommand<CloneCommand, Git> {
 	 *            the repository meta directory, or {@code null} to choose one
 	 *            automatically at clone time
 	 * @return this instance
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             if the combination of directory, gitDir and bare is illegal.
 	 *             E.g. if for a non-bare repository directory and gitDir point
 	 *             to the same directory of if for a bare repository both
@@ -542,7 +542,7 @@ public class CloneCommand extends TransportCommand<CloneCommand, Git> {
 	 * @param bare
 	 *            whether the cloned repository is bare or not
 	 * @return this instance
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             if the combination of directory, gitDir and bare is illegal.
 	 *             E.g. if for a non-bare repository directory and gitDir point
 	 *             to the same directory of if for a bare repository both
@@ -613,7 +613,7 @@ public class CloneCommand extends TransportCommand<CloneCommand, Git> {
 	 *
 	 * @see NullProgressMonitor
 	 * @param monitor
-	 *            a {@link org.eclipse.jgit.lib.ProgressMonitor}
+	 *            a {@link ProgressMonitor}
 	 * @return {@code this}
 	 */
 	public CloneCommand setProgressMonitor(ProgressMonitor monitor) {

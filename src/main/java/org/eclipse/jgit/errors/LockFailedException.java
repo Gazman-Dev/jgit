@@ -32,7 +32,7 @@ public class LockFailedException extends IOException {
 	 *            exception message
 	 * @param cause
 	 *            cause, for later retrieval by
-	 *            {@link java.lang.Throwable#getCause()}
+	 *            {@link Throwable#getCause()}
 	 * @since 4.1
 	 */
 	public LockFailedException(File file, String message, Throwable cause) {

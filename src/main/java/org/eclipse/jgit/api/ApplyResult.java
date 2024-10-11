@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Encapsulates the result of a {@link org.eclipse.jgit.api.ApplyCommand}
+ * Encapsulates the result of a {@link ApplyCommand}
  *
  * @since 2.0
  */

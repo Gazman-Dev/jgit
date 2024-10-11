@@ -107,7 +107,7 @@ public class FetchCommand extends TransportCommand<FetchCommand, FetchResult> {
 	 * Constructor for FetchCommand.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	protected FetchCommand(Repository repo) {
 		super(repo);
@@ -396,7 +396,7 @@ public class FetchCommand extends TransportCommand<FetchCommand, FetchResult> {
 	 *
 	 * @see NullProgressMonitor
 	 * @param monitor
-	 *            a {@link org.eclipse.jgit.lib.ProgressMonitor}
+	 *            a {@link ProgressMonitor}
 	 * @return {@code this}
 	 */
 	public FetchCommand setProgressMonitor(ProgressMonitor monitor) {
@@ -434,7 +434,7 @@ public class FetchCommand extends TransportCommand<FetchCommand, FetchResult> {
 	 * The ref specs to be used in the fetch operation
 	 *
 	 * @param specs
-	 *            one or multiple {@link org.eclipse.jgit.transport.RefSpec}s
+	 *            one or multiple {@link RefSpec}s
 	 * @return {@code this}
 	 */
 	public FetchCommand setRefSpecs(RefSpec... specs) {
@@ -445,7 +445,7 @@ public class FetchCommand extends TransportCommand<FetchCommand, FetchResult> {
 	 * The ref specs to be used in the fetch operation
 	 *
 	 * @param specs
-	 *            list of {@link org.eclipse.jgit.transport.RefSpec}s
+	 *            list of {@link RefSpec}s
 	 * @return {@code this}
 	 */
 	public FetchCommand setRefSpecs(List<RefSpec> specs) {
@@ -505,7 +505,7 @@ public class FetchCommand extends TransportCommand<FetchCommand, FetchResult> {
 	 * Sets the specification of annotated tag behavior during fetch
 	 *
 	 * @param tagOpt
-	 *            the {@link org.eclipse.jgit.transport.TagOpt}
+	 *            the {@link TagOpt}
 	 * @return {@code this}
 	 */
 	public FetchCommand setTagOpt(TagOpt tagOpt) {

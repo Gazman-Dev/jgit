@@ -46,7 +46,7 @@ public class ReftableConfig {
 
 	/**
 	 * Create a configuration honoring settings in a
-	 * {@link org.eclipse.jgit.lib.Config}.
+	 * {@link Config}.
 	 *
 	 * @param cfg
 	 *            the source to read settings from. The source is not retained

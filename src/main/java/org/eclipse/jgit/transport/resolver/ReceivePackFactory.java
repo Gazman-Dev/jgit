@@ -14,7 +14,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.ReceivePack;
 
 /**
- * Create and configure {@link org.eclipse.jgit.transport.ReceivePack} service
+ * Create and configure {@link ReceivePack} service
  * instance.
  *
  * @param <C>

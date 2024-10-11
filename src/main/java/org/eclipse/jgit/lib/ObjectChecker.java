@@ -357,12 +357,12 @@ public class ObjectChecker {
 	 *
 	 * @param objType
 	 *            type of the object. Must be a valid object type code in
-	 *            {@link org.eclipse.jgit.lib.Constants}.
+	 *            {@link Constants}.
 	 * @param raw
 	 *            the raw data which comprises the object. This should be in the
 	 *            canonical format (that is the format used to generate the
 	 *            ObjectId of the object). The array is never modified.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if an error is identified.
 	 */
 	public void check(int objType, byte[] raw)
@@ -377,12 +377,12 @@ public class ObjectChecker {
 	 *            identify of the object being checked.
 	 * @param objType
 	 *            type of the object. Must be a valid object type code in
-	 *            {@link org.eclipse.jgit.lib.Constants}.
+	 *            {@link Constants}.
 	 * @param raw
 	 *            the raw data which comprises the object. This should be in the
 	 *            canonical format (that is the format used to generate the
 	 *            ObjectId of the object). The array is never modified.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if an error is identified.
 	 * @since 4.2
 	 */
@@ -489,7 +489,7 @@ public class ObjectChecker {
 	 *
 	 * @param raw
 	 *            the commit data. The array is never modified.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if any error was detected.
 	 */
 	public void checkCommit(byte[] raw) throws CorruptObjectException {
@@ -503,7 +503,7 @@ public class ObjectChecker {
 	 *            identity of the object being checked.
 	 * @param raw
 	 *            the commit data. The array is never modified.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if any error was detected.
 	 * @since 4.2
 	 */
@@ -543,7 +543,7 @@ public class ObjectChecker {
 	 *
 	 * @param raw
 	 *            the tag data. The array is never modified.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if any error was detected.
 	 */
 	public void checkTag(byte[] raw) throws CorruptObjectException {
@@ -557,7 +557,7 @@ public class ObjectChecker {
 	 *            identity of the object being checked.
 	 * @param raw
 	 *            the tag data. The array is never modified.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if any error was detected.
 	 * @since 4.2
 	 */
@@ -633,7 +633,7 @@ public class ObjectChecker {
 	 *
 	 * @param raw
 	 *            the raw tree data. The array is never modified.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if any error was detected.
 	 */
 	public void checkTree(byte[] raw) throws CorruptObjectException {
@@ -647,7 +647,7 @@ public class ObjectChecker {
 	 *            identity of the object being checked.
 	 * @param raw
 	 *            the raw tree data. The array is never modified.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if any error was detected.
 	 * @since 4.2
 	 */
@@ -790,7 +790,7 @@ public class ObjectChecker {
 	 *
 	 * @param path
 	 *            path string to scan.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             path is invalid.
 	 * @since 3.6
 	 */
@@ -811,7 +811,7 @@ public class ObjectChecker {
 	 *            offset to first byte of the name.
 	 * @param end
 	 *            offset to one past last byte of name.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             path is invalid.
 	 * @since 3.6
 	 */
@@ -836,7 +836,7 @@ public class ObjectChecker {
 	 *            offset to first byte of the name.
 	 * @param end
 	 *            offset to one past last byte of name.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             name is invalid.
 	 * @since 3.4
 	 */
@@ -1241,7 +1241,7 @@ public class ObjectChecker {
 	}
 
 	/**
-	 * Create a new {@link org.eclipse.jgit.lib.BlobObjectChecker}.
+	 * Create a new {@link BlobObjectChecker}.
 	 *
 	 * @return new BlobObjectChecker or null if it's not provided.
 	 * @since 4.9
@@ -1260,7 +1260,7 @@ public class ObjectChecker {
 	 *
 	 * @param raw
 	 *            the blob data. The array is never modified.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if any error was detected.
 	 */
 	public void checkBlob(byte[] raw) throws CorruptObjectException {

@@ -21,11 +21,28 @@ import org.eclipse.jgit.util.References;
 /**
  * A (possibly mutable) SHA-1 abstraction.
  * <p>
- * If this is an instance of {@link org.eclipse.jgit.lib.MutableObjectId} the
+ * If this is an instance of {@link MutableObjectId} the
  * concept of equality with this instance can alter at any time, if this
  * instance is modified to represent a different object name.
  */
 public abstract class AnyObjectId implements Comparable<AnyObjectId> {
+
+	/**
+	 * Compare two object identifier byte sequences for equality.
+	 *
+	 * @param firstObjectId
+	 *            the first identifier to compare. Must not be null.
+	 * @param secondObjectId
+	 *            the second identifier to compare. Must not be null.
+	 * @return true if the two identifiers are the same.
+	 * @deprecated use {@link #isEqual(AnyObjectId, AnyObjectId)} instead
+	 */
+	@Deprecated
+	@SuppressWarnings("AmbiguousMethodReference")
+	public static boolean equals(final AnyObjectId firstObjectId,
+			final AnyObjectId secondObjectId) {
+		return isEqual(firstObjectId, secondObjectId);
+	}
 
 	/**
 	 * Compare two object identifier byte sequences for equality.
@@ -88,15 +105,15 @@ public abstract class AnyObjectId implements Comparable<AnyObjectId> {
 	 * @param index
 	 *            index of the byte to obtain from the raw form of the ObjectId.
 	 *            Must be in range [0,
-	 *            {@link org.eclipse.jgit.lib.Constants#OBJECT_ID_LENGTH}).
+	 *            {@link Constants#OBJECT_ID_LENGTH}).
 	 * @return the value of the requested byte at {@code index}. Returned values
 	 *         are unsigned and thus are in the range [0,255] rather than the
 	 *         signed byte range of [-128, 127].
-	 * @throws java.lang.ArrayIndexOutOfBoundsException
+	 * @throws ArrayIndexOutOfBoundsException
 	 *             {@code index} is less than 0, equal to
-	 *             {@link org.eclipse.jgit.lib.Constants#OBJECT_ID_LENGTH}, or
+	 *             {@link Constants#OBJECT_ID_LENGTH}, or
 	 *             greater than
-	 *             {@link org.eclipse.jgit.lib.Constants#OBJECT_ID_LENGTH}.
+	 *             {@link Constants#OBJECT_ID_LENGTH}.
 	 */
 	public final int getByte(int index) {
 		int w;
@@ -307,7 +324,7 @@ public abstract class AnyObjectId implements Comparable<AnyObjectId> {
 	 *
 	 * @param w
 	 *            the stream to write to.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream writing failed.
 	 */
 	public void copyRawTo(OutputStream w) throws IOException {
@@ -331,7 +348,7 @@ public abstract class AnyObjectId implements Comparable<AnyObjectId> {
 	 *
 	 * @param w
 	 *            the stream to copy to.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream writing failed.
 	 */
 	public void copyTo(OutputStream w) throws IOException {
@@ -392,7 +409,7 @@ public abstract class AnyObjectId implements Comparable<AnyObjectId> {
 	 *
 	 * @param w
 	 *            the stream to copy to.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream writing failed.
 	 */
 	public void copyTo(Writer w) throws IOException {
@@ -408,7 +425,7 @@ public abstract class AnyObjectId implements Comparable<AnyObjectId> {
 	 *            of object id (40 characters or larger).
 	 * @param w
 	 *            the stream to copy to.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream writing failed.
 	 */
 	public void copyTo(char[] tmp, Writer w) throws IOException {
@@ -487,7 +504,7 @@ public abstract class AnyObjectId implements Comparable<AnyObjectId> {
 	 * <p>
 	 * This implementation does not guarantee uniqueness. Callers should instead
 	 * use
-	 * {@link org.eclipse.jgit.lib.ObjectReader#abbreviate(AnyObjectId, int)} to
+	 * {@link ObjectReader#abbreviate(AnyObjectId, int)} to
 	 * obtain a unique abbreviation within the scope of a particular object
 	 * database.
 	 *
@@ -508,7 +525,7 @@ public abstract class AnyObjectId implements Comparable<AnyObjectId> {
 	 * Obtain an immutable copy of this current object name value.
 	 * <p>
 	 * Only returns <code>this</code> if this instance is an unsubclassed
-	 * instance of {@link org.eclipse.jgit.lib.ObjectId}; otherwise a new
+	 * instance of {@link ObjectId}; otherwise a new
 	 * instance is returned holding the same value.
 	 * <p>
 	 * This method is useful to shed any additional memory that may be tied to

@@ -221,9 +221,9 @@ public class HttpSupport {
 	 * @param c
 	 *            connection the code should be obtained from.
 	 * @return r HTTP status code, usually 200 to indicate success. See
-	 *         {@link org.eclipse.jgit.transport.http.HttpConnection} for other
+	 *         {@link HttpConnection} for other
 	 *         defined constants.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             communications error prevented obtaining the response code.
 	 * @since 3.3
 	 */
@@ -250,9 +250,9 @@ public class HttpSupport {
 	 * @param c
 	 *            connection the code should be obtained from.
 	 * @return r HTTP status code, usually 200 to indicate success. See
-	 *         {@link org.eclipse.jgit.transport.http.HttpConnection} for other
+	 *         {@link HttpConnection} for other
 	 *         defined constants.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             communications error prevented obtaining the response code.
 	 */
 	public static int response(java.net.HttpURLConnection c)
@@ -279,7 +279,7 @@ public class HttpSupport {
 	 * @param headerName
 	 *            the header name
 	 * @return the header value
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             communications error prevented obtaining the header.
 	 * @since 4.7
 	 */
@@ -296,7 +296,7 @@ public class HttpSupport {
 	 * @param u
 	 *            location of the server caller wants to talk to.
 	 * @return proxy to communicate with the supplied URL.
-	 * @throws java.net.ConnectException
+	 * @throws ConnectException
 	 *             the proxy could not be computed as the supplied URL could not
 	 *             be read. This failure should never occur.
 	 */
@@ -318,9 +318,9 @@ public class HttpSupport {
 	 * Disable SSL and hostname verification for given HTTP connection
 	 *
 	 * @param conn
-	 *            a {@link org.eclipse.jgit.transport.http.HttpConnection}
+	 *            a {@link HttpConnection}
 	 *            object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 4.3
 	 */

@@ -268,7 +268,7 @@ public abstract class DfsRefDatabase extends RefDatabase {
 	 * Read all known references in the repository.
 	 *
 	 * @return all current references of the repository.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             references cannot be accessed.
 	 */
 	protected abstract RefCache scanAllRefs() throws IOException;
@@ -288,12 +288,12 @@ public abstract class DfsRefDatabase extends RefDatabase {
 	 * @param oldRef
 	 *            old value to compare to. If the reference is expected to not
 	 *            exist the old value has a storage of
-	 *            {@link org.eclipse.jgit.lib.Ref.Storage#NEW} and an ObjectId
+	 *            {@link Ref.Storage#NEW} and an ObjectId
 	 *            value of {@code null}.
 	 * @param newRef
 	 *            new reference to store.
 	 * @return true if the put was successful; false otherwise.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the reference cannot be put due to a system error.
 	 */
 	protected abstract boolean compareAndPut(Ref oldRef, Ref newRef)
@@ -305,7 +305,7 @@ public abstract class DfsRefDatabase extends RefDatabase {
 	 * @param oldRef
 	 *            the old reference information that was previously read.
 	 * @return true if the remove was successful; false otherwise.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the reference could not be removed due to a system error.
 	 */
 	protected abstract boolean compareAndRemove(Ref oldRef) throws IOException;

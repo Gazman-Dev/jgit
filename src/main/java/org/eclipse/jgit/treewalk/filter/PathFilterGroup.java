@@ -12,8 +12,6 @@
 package org.eclipse.jgit.treewalk.filter;
 
 import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
 
 import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.internal.JGitText;
@@ -24,7 +22,7 @@ import org.eclipse.jgit.util.RawParseUtils;
 /**
  * Includes tree entries only if they match one or more configured paths.
  * <p>
- * Operates like {@link org.eclipse.jgit.treewalk.filter.PathFilter} but causes
+ * Operates like {@link PathFilter} but causes
  * the walk to abort as soon as the tree can no longer match any of the paths
  * within the group. This may bypass the boolean logic of a higher level AND or
  * OR group, but does improve performance for the common case of examining one
@@ -231,15 +229,6 @@ public class PathFilterGroup {
 		@Override
 		public boolean shouldBeRecursive() {
 			return !prefixes.isEmpty();
-		}
-
-		@Override
-		public Optional<Set<byte[]>> getPathsBestEffort() {
-			Set<byte[]> result = fullpaths.toSet();
-			if (result.isEmpty()) {
-				return Optional.empty();
-			}
-			return Optional.of(result);
 		}
 
 		@Override

@@ -16,14 +16,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Fast, efficient map specifically for {@link org.eclipse.jgit.lib.ObjectId}
+ * Fast, efficient map specifically for {@link ObjectId}
  * subclasses.
  * <p>
  * This map provides an efficient translation from any ObjectId instance to a
  * cached subclass of ObjectId that has the same value.
  * <p>
  * If object instances are stored in only one map,
- * {@link org.eclipse.jgit.lib.ObjectIdOwnerMap} is a more efficient
+ * {@link ObjectIdOwnerMap} is a more efficient
  * implementation.
  *
  * @param <V>

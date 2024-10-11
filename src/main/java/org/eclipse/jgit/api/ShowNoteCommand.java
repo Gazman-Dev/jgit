@@ -38,7 +38,7 @@ public class ShowNoteCommand extends GitCommand<Note> {
 	 * Constructor for ShowNoteCommand.
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected ShowNoteCommand(Repository repo) {
 		super(repo);
@@ -66,7 +66,7 @@ public class ShowNoteCommand extends GitCommand<Note> {
 	 * Sets the object id of object you want a note on
 	 *
 	 * @param id
-	 *            the {@link org.eclipse.jgit.revwalk.RevObject} to show notes
+	 *            the {@link RevObject} to show notes
 	 *            for.
 	 * @return {@code this}
 	 */
@@ -81,7 +81,7 @@ public class ShowNoteCommand extends GitCommand<Note> {
 	 *
 	 * @param notesRef
 	 *            the ref to read notes from. Note, the default value of
-	 *            {@link org.eclipse.jgit.lib.Constants#R_NOTES_COMMITS} will be
+	 *            {@link Constants#R_NOTES_COMMITS} will be
 	 *            used if nothing is set
 	 * @return {@code this}
 	 * @see Constants#R_NOTES_COMMITS

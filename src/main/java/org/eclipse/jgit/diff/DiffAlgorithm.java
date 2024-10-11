@@ -11,8 +11,8 @@
 package org.eclipse.jgit.diff;
 
 /**
- * Compares two {@link org.eclipse.jgit.diff.Sequence}s to create an
- * {@link org.eclipse.jgit.diff.EditList} of changes.
+ * Compares two {@link Sequence}s to create an
+ * {@link EditList} of changes.
  * <p>
  * An algorithm's {@code diff} method must be callable from concurrent threads
  * without data collisions. This permits some algorithms to use a singleton
@@ -65,13 +65,13 @@ public abstract class DiffAlgorithm {
 	 * @param a
 	 *            the first (also known as old or pre-image) sequence. Edits
 	 *            returned by this algorithm will reference indexes using the
-	 *            'A' side: {@link org.eclipse.jgit.diff.Edit#getBeginA()},
-	 *            {@link org.eclipse.jgit.diff.Edit#getEndA()}.
+	 *            'A' side: {@link Edit#getBeginA()},
+	 *            {@link Edit#getEndA()}.
 	 * @param b
 	 *            the second (also known as new or post-image) sequence. Edits
 	 *            returned by this algorithm will reference indexes using the
-	 *            'B' side: {@link org.eclipse.jgit.diff.Edit#getBeginB()},
-	 *            {@link org.eclipse.jgit.diff.Edit#getEndB()}.
+	 *            'B' side: {@link Edit#getBeginB()},
+	 *            {@link Edit#getEndB()}.
 	 * @return a modifiable edit list comparing the two sequences. If empty, the
 	 *         sequences are identical according to {@code cmp}'s rules. The
 	 *         result list is never null.
@@ -217,7 +217,7 @@ public abstract class DiffAlgorithm {
 	 * elimination of common starting and ending elements is automatically
 	 * performed by the {@link #diff(SequenceComparator, Sequence, Sequence)}
 	 * method, which invokes this method using
-	 * {@link org.eclipse.jgit.diff.Subsequence}s.
+	 * {@link Subsequence}s.
 	 *
 	 * @param <S>
 	 *            type of sequence being compared.
@@ -226,13 +226,13 @@ public abstract class DiffAlgorithm {
 	 * @param a
 	 *            the first (also known as old or pre-image) sequence. Edits
 	 *            returned by this algorithm will reference indexes using the
-	 *            'A' side: {@link org.eclipse.jgit.diff.Edit#getBeginA()},
-	 *            {@link org.eclipse.jgit.diff.Edit#getEndA()}.
+	 *            'A' side: {@link Edit#getBeginA()},
+	 *            {@link Edit#getEndA()}.
 	 * @param b
 	 *            the second (also known as new or post-image) sequence. Edits
 	 *            returned by this algorithm will reference indexes using the
-	 *            'B' side: {@link org.eclipse.jgit.diff.Edit#getBeginB()},
-	 *            {@link org.eclipse.jgit.diff.Edit#getEndB()}.
+	 *            'B' side: {@link Edit#getBeginB()},
+	 *            {@link Edit#getEndB()}.
 	 * @return a modifiable edit list comparing the two sequences.
 	 */
 	public abstract <S extends Sequence> EditList diffNonCommon(

@@ -135,7 +135,7 @@ public class ReftableCompactor {
 	 *            tables to compact. Tables should be ordered oldest first/most
 	 *            recent last so that the more recent tables can shadow the
 	 *            older results. Caller is responsible for closing the readers.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             update indexes of a reader cannot be accessed.
 	 */
 	public void addAll(List<ReftableReader> readers) throws IOException {
@@ -147,7 +147,7 @@ public class ReftableCompactor {
 	/**
 	 * Write a compaction to {@code out}.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if tables cannot be read, or cannot be written.
 	 */
 	public void compact() throws IOException {

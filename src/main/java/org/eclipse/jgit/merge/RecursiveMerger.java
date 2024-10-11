@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.stream.Collectors;
 
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
@@ -66,7 +65,7 @@ public class RecursiveMerger extends ResolveMerger {
 	 * inCore
 	 *
 	 * @param local
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 * @param inCore
 	 *            a boolean.
 	 */
@@ -77,7 +76,7 @@ public class RecursiveMerger extends ResolveMerger {
 	/**
 	 * Normal recursive merge, implies not inCore
 	 *
-	 * @param local a {@link org.eclipse.jgit.lib.Repository} object.
+	 * @param local a {@link Repository} object.
 	 */
 	protected RecursiveMerger(Repository local) {
 		this(local, false);
@@ -87,7 +86,7 @@ public class RecursiveMerger extends ResolveMerger {
 	 * Normal recursive merge, implies inCore.
 	 *
 	 * @param inserter
-	 *            an {@link org.eclipse.jgit.lib.ObjectInserter} object.
+	 *            an {@link ObjectInserter} object.
 	 * @param config
 	 *            the repository configuration
 	 * @since 4.8
@@ -123,7 +122,7 @@ public class RecursiveMerger extends ResolveMerger {
 	 * @return the merge base of two commits. If a criss-cross merge required a
 	 *         synthetic merge base this commit is visible only the merger's
 	 *         RevWalk and will not be in the repository.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @throws IncorrectObjectTypeException
 	 *             one of the input objects is not a commit.
@@ -186,15 +185,12 @@ public class RecursiveMerger extends ResolveMerger {
 				if (mergeTrees(bcTree, currentBase.getTree(),
 						nextBase.getTree(), true))
 					currentBase = createCommitForTree(resultTree, parents);
-				else {
-					String failedPaths = failingPathsMessage();
+				else
 					throw new NoMergeBaseException(
 							NoMergeBaseException.MergeBaseFailureReason.CONFLICTS_DURING_MERGE_BASE_CALCULATION,
 							MessageFormat.format(
 									JGitText.get().mergeRecursiveConflictsWhenMergingCommonAncestors,
-									currentBase.getName(), nextBase.getName(),
-									failedPaths));
-				}
+									currentBase.getName(), nextBase.getName()));
 			}
 		} finally {
 			inCore = oldIncore;
@@ -239,18 +235,5 @@ public class RecursiveMerger extends ResolveMerger {
 				name, name + "@JGit", //$NON-NLS-1$
 				new Date((time + 1) * 1000L),
 				TimeZone.getTimeZone("GMT+0000")); //$NON-NLS-1$
-	}
-
-	private String failingPathsMessage() {
-		int max = 25;
-		String failedPaths = failingPaths.entrySet().stream().limit(max)
-				.map(entry -> entry.getKey() + ":" + entry.getValue())
-				.collect(Collectors.joining("\n"));
-
-		if (failingPaths.size() > max) {
-			failedPaths = String.format("%s\n... (%s failing paths omitted)",
-					failedPaths, failingPaths.size() - max);
-		}
-		return failedPaths;
 	}
 }

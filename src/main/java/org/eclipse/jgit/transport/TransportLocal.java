@@ -191,8 +191,8 @@ class TransportLocal extends Transport implements PackTransport {
 	 *
 	 * @param cmd
 	 *            command
-	 * @return a {@link java.lang.Process} object.
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @return a {@link Process} object.
+	 * @throws TransportException
 	 *             if any.
 	 */
 	protected Process spawn(String cmd)
@@ -207,8 +207,8 @@ class TransportLocal extends Transport implements PackTransport {
 	 *            command
 	 * @param protocolVersion
 	 *            to use
-	 * @return a {@link java.lang.Process} object.
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @return a {@link Process} object.
+	 * @throws TransportException
 	 *             if any.
 	 */
 	private Process spawn(String cmd,
@@ -225,7 +225,6 @@ class TransportLocal extends Transport implements PackTransport {
 			env.remove("GIT_CONFIG"); //$NON-NLS-1$
 			env.remove("GIT_CONFIG_PARAMETERS"); //$NON-NLS-1$
 			env.remove("GIT_DIR"); //$NON-NLS-1$
-			env.remove("GIT_COMMON_DIR"); //$NON-NLS-1$
 			env.remove("GIT_WORK_TREE"); //$NON-NLS-1$
 			env.remove("GIT_GRAFT_FILE"); //$NON-NLS-1$
 			env.remove("GIT_INDEX_FILE"); //$NON-NLS-1$

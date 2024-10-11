@@ -76,7 +76,7 @@ public class CreateBranchCommand extends GitCommand<Ref> {
 	 * Constructor for CreateBranchCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected CreateBranchCommand(Repository repo) {
 		super(repo);

@@ -45,7 +45,7 @@ public class AddNoteCommand extends GitCommand<Note> {
 	 * Constructor for AddNoteCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected AddNoteCommand(Repository repo) {
 		super(repo);
@@ -78,7 +78,7 @@ public class AddNoteCommand extends GitCommand<Note> {
 	 * has a note, the existing note will be replaced.
 	 *
 	 * @param id
-	 *            a {@link org.eclipse.jgit.revwalk.RevObject}
+	 *            a {@link RevObject}
 	 * @return {@code this}
 	 */
 	public AddNoteCommand setObjectId(RevObject id) {
@@ -130,7 +130,7 @@ public class AddNoteCommand extends GitCommand<Note> {
 	 *
 	 * @param notesRef
 	 *            the ref to read notes from. Note, the default value of
-	 *            {@link org.eclipse.jgit.lib.Constants#R_NOTES_COMMITS} will be
+	 *            {@link Constants#R_NOTES_COMMITS} will be
 	 *            used if nothing is set
 	 * @return {@code this}
 	 * @see Constants#R_NOTES_COMMITS

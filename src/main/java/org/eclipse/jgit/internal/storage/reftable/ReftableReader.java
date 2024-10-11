@@ -83,9 +83,9 @@ public class ReftableReader extends Reftable implements AutoCloseable {
 	 *
 	 * @return the block size in bytes chosen for this file by the writer. Most
 	 *         reads from the
-	 *         {@link org.eclipse.jgit.internal.storage.io.BlockSource} will be
+	 *         {@link BlockSource} will be
 	 *         aligned to the block size.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             file cannot be read.
 	 */
 	public int blockSize() throws IOException {
@@ -447,7 +447,7 @@ public class ReftableReader extends Reftable implements AutoCloseable {
 	 * Get size of the reftable, in bytes.
 	 *
 	 * @return size of the reftable, in bytes.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             size cannot be obtained.
 	 */
 	public long size() throws IOException {

@@ -24,13 +24,7 @@ public class GpgConfig {
 		/** Value for openpgp */
 		OPENPGP("openpgp"), //$NON-NLS-1$
 		/** Value for x509 */
-		X509("x509"), //$NON-NLS-1$
-		/**
-		 * Value for ssh.
-		 *
-		 * @since 7.0
-		 */
-		SSH("ssh"); //$NON-NLS-1$
+		X509("x509"); //$NON-NLS-1$
 
 		private final String configValue;
 
@@ -62,6 +56,27 @@ public class GpgConfig {
 	private final boolean forceAnnotated;
 
 	/**
+	 * Create a {@link GpgConfig} with the given parameters and default
+	 * {@code true} for signing commits and {@code false} for tags.
+	 *
+	 * @param keySpec
+	 *            to use
+	 * @param format
+	 *            to use
+	 * @param gpgProgram
+	 *            to use
+	 * @since 5.11
+	 */
+	public GpgConfig(String keySpec, GpgFormat format, String gpgProgram) {
+		keyFormat = format;
+		signingKey = keySpec;
+		program = gpgProgram;
+		signCommits = true;
+		signAllTags = false;
+		forceAnnotated = false;
+	}
+
+	/**
 	 * Create a new GPG config that reads the configuration from config.
 	 *
 	 * @param config
@@ -76,11 +91,10 @@ public class GpgConfig {
 
 		String exe = config.getString(ConfigConstants.CONFIG_GPG_SECTION,
 				keyFormat.toConfigValue(), ConfigConstants.CONFIG_KEY_PROGRAM);
-		if (exe == null && GpgFormat.OPENPGP.equals(keyFormat)) {
+		if (exe == null) {
 			exe = config.getString(ConfigConstants.CONFIG_GPG_SECTION, null,
 					ConfigConstants.CONFIG_KEY_PROGRAM);
 		}
-
 		program = exe;
 		signCommits = config.getBoolean(ConfigConstants.CONFIG_COMMIT_SECTION,
 				ConfigConstants.CONFIG_KEY_GPGSIGN, false);
@@ -93,7 +107,7 @@ public class GpgConfig {
 	/**
 	 * Retrieves the config value of gpg.format.
 	 *
-	 * @return the {@link org.eclipse.jgit.lib.GpgConfig.GpgFormat}
+	 * @return the {@link GpgFormat}
 	 */
 	public GpgFormat getKeyFormat() {
 		return keyFormat;

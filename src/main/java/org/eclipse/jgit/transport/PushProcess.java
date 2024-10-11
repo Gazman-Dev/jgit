@@ -390,7 +390,7 @@ class PushProcess {
 	private Map<String, RemoteRefUpdate> rejectAll() {
 		for (RemoteRefUpdate rru : toPush.values()) {
 			if (rru.getStatus() == Status.NOT_ATTEMPTED) {
-				rru.setStatus(RemoteRefUpdate.Status.REJECTED_OTHER_REASON);
+				rru.setStatus(Status.REJECTED_OTHER_REASON);
 				rru.setMessage(JGitText.get().transactionAborted);
 			}
 		}

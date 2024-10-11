@@ -32,7 +32,7 @@ import org.eclipse.jgit.lib.RefComparator;
  * <p>
  * This list type is copy-on-write. Mutation methods return a new copy of the
  * list, leaving {@code this} unmodified. As a result we cannot easily implement
- * the {@link java.util.List} interface contract.
+ * the {@link List} interface contract.
  *
  * @param <T>
  *            the type of reference being stored in the collection.
@@ -97,9 +97,9 @@ public class RefList<T extends Ref> implements Iterable<Ref> {
 	}
 
 	/**
-	 * Cast {@code this} as an immutable, standard {@link java.util.List}.
+	 * Cast {@code this} as an immutable, standard {@link List}.
 	 *
-	 * @return {@code this} as an immutable, standard {@link java.util.List}.
+	 * @return {@code this} as an immutable, standard {@link List}.
 	 */
 	public final List<Ref> asList() {
 		final List<Ref> r = Arrays.asList(list).subList(0, cnt);

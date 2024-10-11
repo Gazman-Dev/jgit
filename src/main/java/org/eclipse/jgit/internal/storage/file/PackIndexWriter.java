@@ -25,7 +25,7 @@ import org.eclipse.jgit.util.NB;
 
 /**
  * Creates a table of contents to support random access by
- * {@link org.eclipse.jgit.internal.storage.file.Pack}.
+ * {@link Pack}.
  * <p>
  * Pack index files (the <code>.idx</code> suffix in a pack file pair) provides
  * random access to any object in the pack by associating an ObjectId to the
@@ -57,7 +57,7 @@ public abstract class PackIndexWriter {
 	 *            will be examined until a format can be conclusively selected.
 	 * @return a new writer to output an index file of the requested format to
 	 *         the supplied stream.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             no recognized pack index version can support the supplied
 	 *             objects. This is likely a bug in the implementation.
 	 * @see #oldestPossibleFormat(List)
@@ -84,7 +84,7 @@ public abstract class PackIndexWriter {
 	 *            the objects the caller needs to store in the index. Entries
 	 *            will be examined until a format can be conclusively selected.
 	 * @return the index format.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             no recognized pack index version can support the supplied
 	 *             objects. This is likely a bug in the implementation.
 	 */
@@ -110,7 +110,7 @@ public abstract class PackIndexWriter {
 	 *            this formatted version will be written.
 	 * @return a new writer to output an index file of the requested format to
 	 *         the supplied stream.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             the version requested is not supported by this
 	 *             implementation.
 	 */
@@ -163,12 +163,12 @@ public abstract class PackIndexWriter {
 	 * @param toStore
 	 *            sorted list of objects to store in the index. The caller must
 	 *            have previously sorted the list using
-	 *            {@link org.eclipse.jgit.transport.PackedObjectInfo}'s native
-	 *            {@link java.lang.Comparable} implementation.
+	 *            {@link PackedObjectInfo}'s native
+	 *            {@link Comparable} implementation.
 	 * @param packDataChecksum
 	 *            checksum signature of the entire pack data content. This is
 	 *            traditionally the last 20 bytes of the pack file's own stream.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred while writing to the output stream, or this
 	 *             index format cannot store the object data supplied.
 	 */
@@ -198,7 +198,7 @@ public abstract class PackIndexWriter {
 	 * the {@link #entries} collection may be iterated over more than once if
 	 * necessary. Implementors therefore have complete control over the data.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred while writing to the output stream, or this
 	 *             index format cannot store the object data supplied.
 	 */
@@ -214,7 +214,7 @@ public abstract class PackIndexWriter {
 	 *
 	 * @param version
 	 *            version number of this index format being written.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred while writing to the output stream.
 	 */
 	protected void writeTOC(int version) throws IOException {
@@ -231,7 +231,7 @@ public abstract class PackIndexWriter {
 	 * whose {@link org.eclipse.jgit.lib.ObjectId#getFirstByte()} matches the
 	 * count's position in the fan-out table.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred while writing to the output stream.
 	 */
 	protected void writeFanOutTable() throws IOException {
@@ -256,7 +256,7 @@ public abstract class PackIndexWriter {
 	 * the pack data checksum above.</li>
 	 * </ol>
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred while writing to the output stream.
 	 */
 	protected void writeChecksumFooter() throws IOException {

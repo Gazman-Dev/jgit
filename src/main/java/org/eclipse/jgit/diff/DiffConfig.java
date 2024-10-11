@@ -23,7 +23,7 @@ import org.eclipse.jgit.util.StringUtils;
  */
 public class DiffConfig {
 	/** Key for {@link Config#get(SectionParser)}. */
-	public static final Config.SectionParser<DiffConfig> KEY = DiffConfig::new;
+	public static final SectionParser<DiffConfig> KEY = DiffConfig::new;
 
 	/** Permissible values for {@code diff.renames}. */
 	public enum RenameDetectionType {

@@ -17,7 +17,7 @@ import org.eclipse.jgit.merge.ResolveMerger.MergeFailureReason;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 /**
- * Encapsulates the result of a {@link org.eclipse.jgit.api.CherryPickCommand}.
+ * Encapsulates the result of a {@link CherryPickCommand}.
  */
 public class CherryPickResult {
 
@@ -114,7 +114,7 @@ public class CherryPickResult {
 	 *
 	 * @return the commit the head points at after this cherry-pick,
 	 *         <code>null</code> if {@link #getStatus} is not
-	 *         {@link org.eclipse.jgit.api.CherryPickResult.CherryPickStatus#OK}
+	 *         {@link CherryPickStatus#OK}
 	 */
 	public RevCommit getNewHead() {
 		return newHead;
@@ -125,7 +125,7 @@ public class CherryPickResult {
 	 *
 	 * @return the list of successfully cherry-picked <code>Ref</code>'s,
 	 *         <code>null</code> if {@link #getStatus} is not
-	 *         {@link org.eclipse.jgit.api.CherryPickResult.CherryPickStatus#OK}
+	 *         {@link CherryPickStatus#OK}
 	 */
 	public List<Ref> getCherryPickedRefs() {
 		return cherryPickedRefs;
@@ -137,7 +137,7 @@ public class CherryPickResult {
 	 * @return the list of paths causing this cherry-pick to fail (see
 	 *         {@link org.eclipse.jgit.merge.ResolveMerger#getFailingPaths()}
 	 *         for details), <code>null</code> if {@link #getStatus} is not
-	 *         {@link org.eclipse.jgit.api.CherryPickResult.CherryPickStatus#FAILED}
+	 *         {@link CherryPickStatus#FAILED}
 	 */
 	public Map<String, MergeFailureReason> getFailingPaths() {
 		return failingPaths;

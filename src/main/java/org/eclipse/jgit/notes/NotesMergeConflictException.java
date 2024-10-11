@@ -17,7 +17,7 @@ import org.eclipse.jgit.internal.JGitText;
 
 /**
  * This exception will be thrown from the
- * {@link org.eclipse.jgit.notes.NoteMerger} when a conflict on Notes content is
+ * {@link NoteMerger} when a conflict on Notes content is
  * found during merge.
  */
 public class NotesMergeConflictException extends IOException {

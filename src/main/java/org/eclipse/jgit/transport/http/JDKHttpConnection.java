@@ -20,7 +20,7 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +35,8 @@ import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.internal.transport.http.DelegatingSSLSocketFactory;
 import org.eclipse.jgit.util.HttpSupport;
 /**
- * A {@link org.eclipse.jgit.transport.http.HttpConnection} which simply
- * delegates every call to a {@link java.net.HttpURLConnection}. This is the
+ * A {@link HttpConnection} which simply
+ * delegates every call to a {@link HttpURLConnection}. This is the
  * default implementation used by JGit
  *
  * @since 3.3
@@ -53,10 +53,10 @@ public class JDKHttpConnection implements HttpConnection {
 	 * Constructor for JDKHttpConnection.
 	 *
 	 * @param url
-	 *            a {@link java.net.URL} object.
-	 * @throws java.net.MalformedURLException
+	 *            a {@link URL} object.
+	 * @throws MalformedURLException
 	 *             if URL is malformed
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected JDKHttpConnection(URL url)
@@ -69,12 +69,12 @@ public class JDKHttpConnection implements HttpConnection {
 	 * Constructor for JDKHttpConnection.
 	 *
 	 * @param url
-	 *            a {@link java.net.URL} object.
+	 *            a {@link URL} object.
 	 * @param proxy
-	 *            a {@link java.net.Proxy} object.
-	 * @throws java.net.MalformedURLException
+	 *            a {@link Proxy} object.
+	 * @throws MalformedURLException
 	 *             if URL is malformed
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected JDKHttpConnection(URL url, Proxy proxy)
@@ -152,7 +152,7 @@ public class JDKHttpConnection implements HttpConnection {
 
 	private static List<String> mapValuesToListIgnoreCase(String keyName,
 			Map<String, List<String>> m) {
-		List<String> fields = new ArrayList<>();
+		List<String> fields = new LinkedList<>();
 		m.entrySet().stream().filter(e -> keyName.equalsIgnoreCase(e.getKey()))
 				.filter(e -> e.getValue() != null)
 				.forEach(e -> fields.addAll(e.getValue()));

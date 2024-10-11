@@ -173,7 +173,7 @@ public class DirCacheCheckout {
 	 *         files should be deleted but the deletion in the filesystem failed
 	 *         (e.g. because a file was locked). To have a consistent state of
 	 *         the working tree these files have to be deleted by the callers of
-	 *         {@link org.eclipse.jgit.dircache.DirCacheCheckout}.
+	 *         {@link DirCacheCheckout}.
 	 */
 	public List<String> getToBeDeleted() {
 		return toBeDeleted;
@@ -202,7 +202,7 @@ public class DirCacheCheckout {
 	 *            the id of the tree we want to fast-forward to
 	 * @param workingTree
 	 *            an iterator over the repositories Working Tree
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public DirCacheCheckout(Repository repo, ObjectId headCommitTree, DirCache dc,
@@ -220,7 +220,7 @@ public class DirCacheCheckout {
 	 * Constructs a DirCacheCeckout for merging and checking out two trees (HEAD
 	 * and mergeCommitTree) and the index. As iterator over the working tree
 	 * this constructor creates a standard
-	 * {@link org.eclipse.jgit.treewalk.FileTreeIterator}
+	 * {@link FileTreeIterator}
 	 *
 	 * @param repo
 	 *            the repository in which we do the checkout
@@ -230,7 +230,7 @@ public class DirCacheCheckout {
 	 *            the (already locked) Dircache for this repo
 	 * @param mergeCommitTree
 	 *            the id of the tree we want to fast-forward to
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public DirCacheCheckout(Repository repo, ObjectId headCommitTree,
@@ -250,7 +250,7 @@ public class DirCacheCheckout {
 	 *            the id of the tree we want to fast-forward to
 	 * @param workingTree
 	 *            an iterator over the repositories Working Tree
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public DirCacheCheckout(Repository repo, DirCache dc,
@@ -262,7 +262,7 @@ public class DirCacheCheckout {
 	/**
 	 * Constructs a DirCacheCeckout for checking out one tree, merging with the
 	 * index. As iterator over the working tree this constructor creates a
-	 * standard {@link org.eclipse.jgit.treewalk.FileTreeIterator}
+	 * standard {@link FileTreeIterator}
 	 *
 	 * @param repo
 	 *            the repository in which we do the checkout
@@ -270,7 +270,7 @@ public class DirCacheCheckout {
 	 *            the (already locked) Dircache for this repo
 	 * @param mergeCommitTree
 	 *            the id of the tree of the
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public DirCacheCheckout(Repository repo, DirCache dc,
@@ -294,9 +294,9 @@ public class DirCacheCheckout {
 	 * Scan head, index and merge tree. Used during normal checkout or merge
 	 * operations.
 	 *
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if a corrupt object was found
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void preScanTwoTrees() throws CorruptObjectException, IOException {
@@ -326,13 +326,13 @@ public class DirCacheCheckout {
 	 * Scan index and merge tree (no HEAD). Used e.g. for initial checkout when
 	 * there is no head yet.
 	 *
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             if an object was found missing
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             if an object didn't have the expected type
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if an object is corrupt
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void prescanOneTree()
@@ -462,7 +462,7 @@ public class DirCacheCheckout {
 
 	/**
 	 * Execute this checkout. A
-	 * {@link org.eclipse.jgit.events.WorkingTreeModifiedEvent} is fired if the
+	 * {@link WorkingTreeModifiedEvent} is fired if the
 	 * working tree was modified; even if the checkout fails.
 	 *
 	 * @return <code>false</code> if this method could not delete all the files
@@ -472,7 +472,7 @@ public class DirCacheCheckout {
 	 *         Although <code>false</code> is returned the checkout was
 	 *         successful and the working tree was updated for all other files.
 	 *         <code>true</code> is returned when no such problem occurred
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public boolean checkout() throws IOException {
@@ -1271,7 +1271,7 @@ public class DirCacheCheckout {
 	/**
 	 * If <code>true</code>, will scan first to see if it's possible to check
 	 * out, otherwise throw
-	 * {@link org.eclipse.jgit.errors.CheckoutConflictException}. If
+	 * {@link CheckoutConflictException}. If
 	 * <code>false</code>, it will silently deal with the problem.
 	 *
 	 * @param failOnConflict
@@ -1401,6 +1401,127 @@ public class DirCacheCheckout {
 	}
 
 	/**
+	 * Updates the file in the working tree with content and mode from an entry
+	 * in the index. The new content is first written to a new temporary file in
+	 * the same directory as the real file. Then that new file is renamed to the
+	 * final filename.
+	 *
+	 * <p>
+	 * <b>Note:</b> if the entry path on local file system exists as a non-empty
+	 * directory, and the target entry type is a link or file, the checkout will
+	 * fail with {@link IOException} since existing non-empty directory
+	 * cannot be renamed to file or link without deleting it recursively.
+	 * </p>
+	 *
+	 * @param repo
+	 *            repository managing the destination work tree.
+	 * @param entry
+	 *            the entry containing new mode and content
+	 * @param or
+	 *            object reader to use for checkout
+	 * @throws IOException
+	 *             if an IO error occurred
+	 * @since 3.6
+	 * @deprecated since 5.1, use
+	 *             {@link #checkoutEntry(Repository, DirCacheEntry, ObjectReader, boolean, CheckoutMetadata, WorkingTreeOptions)}
+	 *             instead
+	 */
+	@Deprecated
+	public static void checkoutEntry(Repository repo, DirCacheEntry entry,
+			ObjectReader or) throws IOException {
+		checkoutEntry(repo, entry, or, false, null, null);
+	}
+
+
+	/**
+	 * Updates the file in the working tree with content and mode from an entry
+	 * in the index. The new content is first written to a new temporary file in
+	 * the same directory as the real file. Then that new file is renamed to the
+	 * final filename.
+	 *
+	 * <p>
+	 * <b>Note:</b> if the entry path on local file system exists as a file, it
+	 * will be deleted and if it exists as a directory, it will be deleted
+	 * recursively, independently if has any content.
+	 * </p>
+	 *
+	 * @param repo
+	 *            repository managing the destination work tree.
+	 * @param entry
+	 *            the entry containing new mode and content
+	 * @param or
+	 *            object reader to use for checkout
+	 * @param deleteRecursive
+	 *            true to recursively delete final path if it exists on the file
+	 *            system
+	 * @param checkoutMetadata
+	 *            containing
+	 *            <ul>
+	 *            <li>smudgeFilterCommand to be run for smudging the entry to be
+	 *            checked out</li>
+	 *            <li>eolStreamType used for stream conversion</li>
+	 *            </ul>
+	 * @throws IOException
+	 *             if an IO error occurred
+	 * @since 4.2
+	 * @deprecated since 6.3, use
+	 *             {@link #checkoutEntry(Repository, DirCacheEntry, ObjectReader, boolean, CheckoutMetadata, WorkingTreeOptions)}
+	 *             instead
+	 */
+	@Deprecated
+	public static void checkoutEntry(Repository repo, DirCacheEntry entry,
+			ObjectReader or, boolean deleteRecursive,
+			CheckoutMetadata checkoutMetadata) throws IOException {
+		checkoutEntry(repo, entry, or, deleteRecursive, checkoutMetadata, null);
+	}
+
+	/**
+	 * Updates the file in the working tree with content and mode from an entry
+	 * in the index. The new content is first written to a new temporary file in
+	 * the same directory as the real file. Then that new file is renamed to the
+	 * final filename.
+	 *
+	 * <p>
+	 * <b>Note:</b> if the entry path on local file system exists as a file, it
+	 * will be deleted and if it exists as a directory, it will be deleted
+	 * recursively, independently if has any content.
+	 * </p>
+	 *
+	 * @param repo
+	 *            repository managing the destination work tree.
+	 * @param entry
+	 *            the entry containing new mode and content
+	 * @param or
+	 *            object reader to use for checkout
+	 * @param deleteRecursive
+	 *            true to recursively delete final path if it exists on the file
+	 *            system
+	 * @param checkoutMetadata
+	 *            containing
+	 *            <ul>
+	 *            <li>smudgeFilterCommand to be run for smudging the entry to be
+	 *            checked out</li>
+	 *            <li>eolStreamType used for stream conversion</li>
+	 *            </ul>
+	 * @param options
+	 *            {@link WorkingTreeOptions} that are effective; if {@code null}
+	 *            they are loaded from the repository config
+	 * @throws IOException
+	 *             if an IO error occurred
+	 * @since 6.3
+	 * @deprecated since 6.6.1; use {@link Checkout} instead
+	 */
+	@Deprecated
+	public static void checkoutEntry(Repository repo, DirCacheEntry entry,
+			ObjectReader or, boolean deleteRecursive,
+			CheckoutMetadata checkoutMetadata, WorkingTreeOptions options)
+			throws IOException {
+		Checkout checkout = new Checkout(repo, options)
+				.setRecursiveDeletion(deleteRecursive);
+		checkout.checkout(entry, checkoutMetadata, or, null);
+	}
+
+	/**
 	 * Return filtered content for a specific object (blob). EOL handling and
 	 * smudge-filter handling are applied in the same way as it would be done
 	 * during a checkout.
@@ -1526,8 +1647,6 @@ public class DirCacheCheckout {
 		filterProcessBuilder.directory(repo.getWorkTree());
 		filterProcessBuilder.environment().put(Constants.GIT_DIR_KEY,
 				repo.getDirectory().getAbsolutePath());
-		filterProcessBuilder.environment().put(Constants.GIT_COMMON_DIR_KEY,
-				repo.getCommonDirectory().getAbsolutePath());
 		ExecutionResult result;
 		int rc;
 		try {

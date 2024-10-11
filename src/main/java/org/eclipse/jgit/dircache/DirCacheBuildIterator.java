@@ -21,14 +21,14 @@ import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 
 /**
- * Iterate and update a {@link org.eclipse.jgit.dircache.DirCache} as part of a
+ * Iterate and update a {@link DirCache} as part of a
  * <code>TreeWalk</code>.
  * <p>
- * Like {@link org.eclipse.jgit.dircache.DirCacheIterator} this iterator allows
+ * Like {@link DirCacheIterator} this iterator allows
  * a DirCache to be used in parallel with other sorts of iterators in a
  * TreeWalk. However any entry which appears in the source DirCache and which is
  * skipped by the TreeFilter is automatically copied into
- * {@link org.eclipse.jgit.dircache.DirCacheBuilder}, thus retaining it in the
+ * {@link DirCacheBuilder}, thus retaining it in the
  * newly updated index.
  * <p>
  * This iterator is suitable for update processes, or even a simple delete

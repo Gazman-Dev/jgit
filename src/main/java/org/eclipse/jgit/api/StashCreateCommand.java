@@ -84,7 +84,7 @@ public class StashCreateCommand extends GitCommand<RevCommit> {
 	 * Create a command to stash changes in the working directory and index
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	public StashCreateCommand(Repository repo) {
 		super(repo);
@@ -125,7 +125,7 @@ public class StashCreateCommand extends GitCommand<RevCommit> {
 	 * Set the person to use as the author and committer in the commits made
 	 *
 	 * @param person
-	 *            the {@link org.eclipse.jgit.lib.PersonIdent} of the person who
+	 *            the {@link PersonIdent} of the person who
 	 *            creates the stash.
 	 * @return {@code this}
 	 */
@@ -138,7 +138,7 @@ public class StashCreateCommand extends GitCommand<RevCommit> {
 	 * Set the reference to update with the stashed commit id If null, no
 	 * reference is updated
 	 * <p>
-	 * This value defaults to {@link org.eclipse.jgit.lib.Constants#R_STASH}
+	 * This value defaults to {@link Constants#R_STASH}
 	 *
 	 * @param ref
 	 *            the name of the {@code Ref} to update

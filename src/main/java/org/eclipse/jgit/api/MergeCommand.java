@@ -13,9 +13,9 @@ package org.eclipse.jgit.api;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -75,7 +75,7 @@ public class MergeCommand extends GitCommand<MergeResult> {
 
 	private ContentMergeStrategy contentStrategy;
 
-	private List<Ref> commits = new ArrayList<>();
+	private List<Ref> commits = new LinkedList<>();
 
 	private Boolean squash;
 
@@ -183,7 +183,7 @@ public class MergeCommand extends GitCommand<MergeResult> {
 		 *            the <code>FastForwardMode.Merge</code> value to be mapped
 		 * @return the mapped <code>FastForwardMode</code> value
 		 */
-		public static FastForwardMode valueOf(FastForwardMode.Merge ffMode) {
+		public static FastForwardMode valueOf(Merge ffMode) {
 			switch (ffMode) {
 			case FALSE:
 				return NO_FF;
@@ -201,7 +201,7 @@ public class MergeCommand extends GitCommand<MergeResult> {
 	 * Constructor for MergeCommand.
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected MergeCommand(Repository repo) {
 		super(repo);
@@ -485,7 +485,7 @@ public class MergeCommand extends GitCommand<MergeResult> {
 	 * Set merge strategy
 	 *
 	 * @param mergeStrategy
-	 *            the {@link org.eclipse.jgit.merge.MergeStrategy} to be used
+	 *            the {@link MergeStrategy} to be used
 	 * @return {@code this}
 	 */
 	public MergeCommand setStrategy(MergeStrategy mergeStrategy) {
@@ -554,9 +554,9 @@ public class MergeCommand extends GitCommand<MergeResult> {
 	 * HEAD. Otherwise, perform the merge and commit the result.
 	 * <p>
 	 * In case the merge was successful but this flag was set to
-	 * <code>true</code> a {@link org.eclipse.jgit.api.MergeResult} with status
-	 * {@link org.eclipse.jgit.api.MergeResult.MergeStatus#MERGED_SQUASHED} or
-	 * {@link org.eclipse.jgit.api.MergeResult.MergeStatus#FAST_FORWARD_SQUASHED}
+	 * <code>true</code> a {@link MergeResult} with status
+	 * {@link MergeStatus#MERGED_SQUASHED} or
+	 * {@link MergeStatus#FAST_FORWARD_SQUASHED}
 	 * is returned.
 	 *
 	 * @param squash
@@ -597,9 +597,9 @@ public class MergeCommand extends GitCommand<MergeResult> {
 	 *            default behavior). <code>false</code> if this command should
 	 *            not commit. In case the merge was successful but this flag was
 	 *            set to <code>false</code> a
-	 *            {@link org.eclipse.jgit.api.MergeResult} with type
-	 *            {@link org.eclipse.jgit.api.MergeResult} with status
-	 *            {@link org.eclipse.jgit.api.MergeResult.MergeStatus#MERGED_NOT_COMMITTED}
+	 *            {@link MergeResult} with type
+	 *            {@link MergeResult} with status
+	 *            {@link MergeStatus#MERGED_NOT_COMMITTED}
 	 *            is returned
 	 * @return {@code this}
 	 * @since 3.0

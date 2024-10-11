@@ -31,12 +31,12 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Stack;
 
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.annotations.Nullable;
@@ -52,7 +52,6 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
-import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.NB;
 
 /**
@@ -71,9 +70,6 @@ public class CommitGraphWriter {
 	private static final int GENERATION_NUMBER_MAX = 0x3FFFFFFF;
 
 	private static final int MAX_CHANGED_PATHS = 512;
-
-	private static final PathDiffCalculator PATH_DIFF_CALCULATOR
-			= new PathDiffCalculator();
 
 	private final int hashsz;
 
@@ -340,10 +336,10 @@ public class CommitGraphWriter {
 				continue;
 			}
 
-			ArrayDeque<RevCommit> commitStack = new ArrayDeque<>();
+			Stack<RevCommit> commitStack = new Stack<>();
 			commitStack.push(cmit);
 
-			while (!commitStack.isEmpty()) {
+			while (!commitStack.empty()) {
 				int maxGeneration = 0;
 				boolean allParentComputed = true;
 				RevCommit current = commitStack.peek();
@@ -378,6 +374,37 @@ public class CommitGraphWriter {
 		return generations;
 	}
 
+	private static Optional<HashSet<ByteBuffer>> computeBloomFilterPaths(
+			ObjectReader or, RevCommit cmit) throws MissingObjectException,
+			IncorrectObjectTypeException, CorruptObjectException, IOException {
+		HashSet<ByteBuffer> paths = new HashSet<>();
+		try (TreeWalk walk = new TreeWalk(null, or)) {
+			walk.setRecursive(true);
+			if (cmit.getParentCount() == 0) {
+				walk.addTree(new EmptyTreeIterator());
+			} else {
+				walk.addTree(cmit.getParent(0).getTree());
+			}
+			walk.addTree(cmit.getTree());
+			while (walk.next()) {
+				if (walk.idEqual(0, 1)) {
+					continue;
+				}
+				byte[] rawPath = walk.getRawPath();
+				paths.add(ByteBuffer.wrap(rawPath));
+				for (int i = 0; i < rawPath.length; i++) {
+					if (rawPath[i] == '/') {
+						paths.add(ByteBuffer.wrap(rawPath, 0, i));
+					}
+					if (paths.size() > MAX_CHANGED_PATHS) {
+						return Optional.empty();
+					}
+				}
+			}
+		}
+		return Optional.of(paths);
+	}
+
 	private BloomFilterChunks computeBloomFilterChunks(ProgressMonitor monitor)
 			throws MissingObjectException, IncorrectObjectTypeException,
 			CorruptObjectException, IOException {
@@ -408,8 +435,8 @@ public class CommitGraphWriter {
 					filtersReused++;
 				} else {
 					filtersComputed++;
-					Optional<HashSet<ByteBuffer>> paths = PATH_DIFF_CALCULATOR
-							.changedPaths(graphCommits.getObjectReader(), cmit);
+					Optional<HashSet<ByteBuffer>> paths = computeBloomFilterPaths(
+							graphCommits.getObjectReader(), cmit);
 					if (paths.isEmpty()) {
 						cpf = ChangedPathFilter.FULL;
 					} else {
@@ -443,44 +470,6 @@ public class CommitGraphWriter {
 					out.write(tmp);
 				}
 			}
-		}
-	}
-
-	// Visible for testing
-	static class PathDiffCalculator {
-
-		// Walk steps in the last invocation of changedPaths
-		int stepCounter;
-
-		Optional<HashSet<ByteBuffer>> changedPaths(
-				ObjectReader or, RevCommit cmit) throws MissingObjectException,
-				IncorrectObjectTypeException, CorruptObjectException, IOException {
-			stepCounter = 0;
-			HashSet<ByteBuffer> paths = new HashSet<>();
-			try (TreeWalk walk = new TreeWalk(null, or)) {
-				walk.setRecursive(true);
-				walk.setFilter(TreeFilter.ANY_DIFF);
-				if (cmit.getParentCount() == 0) {
-					walk.addTree(new EmptyTreeIterator());
-				} else {
-					walk.addTree(cmit.getParent(0).getTree());
-				}
-				walk.addTree(cmit.getTree());
-				while (walk.next()) {
-					stepCounter += 1;
-					byte[] rawPath = walk.getRawPath();
-					paths.add(ByteBuffer.wrap(rawPath));
-					for (int i = 0; i < rawPath.length; i++) {
-						if (rawPath[i] == '/') {
-							paths.add(ByteBuffer.wrap(rawPath, 0, i));
-						}
-						if (paths.size() > MAX_CHANGED_PATHS) {
-							return Optional.empty();
-						}
-					}
-				}
-			}
-			return Optional.of(paths);
 		}
 	}
 

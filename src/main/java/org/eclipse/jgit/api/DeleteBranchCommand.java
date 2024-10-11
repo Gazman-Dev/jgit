@@ -61,7 +61,7 @@ public class DeleteBranchCommand extends GitCommand<List<String>> {
 	 * Constructor for DeleteBranchCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected DeleteBranchCommand(Repository repo) {
 		super(repo);

@@ -41,7 +41,7 @@ public class CommitConfig {
 	/**
 	 * Key for {@link Config#get(SectionParser)}.
 	 */
-	public static final Config.SectionParser<CommitConfig> KEY = CommitConfig::new;
+	public static final SectionParser<CommitConfig> KEY = CommitConfig::new;
 
 	private static final String CUT = " ------------------------ >8 ------------------------\n"; //$NON-NLS-1$
 

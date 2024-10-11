@@ -14,7 +14,7 @@ import org.eclipse.jgit.events.RepositoryEvent;
 
 /**
  * Describes a change to the list of packs in a
- * {@link org.eclipse.jgit.internal.storage.dfs.DfsRepository}.
+ * {@link DfsRepository}.
  */
 public class DfsPacksChangedEvent
 		extends RepositoryEvent<DfsPacksChangedListener> {

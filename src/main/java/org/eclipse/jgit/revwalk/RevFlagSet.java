@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * Multiple application level mark bits for
- * {@link org.eclipse.jgit.revwalk.RevObject}s.
+ * {@link RevObject}s.
  *
  * @see RevFlag
  */

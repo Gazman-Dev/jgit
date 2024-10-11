@@ -51,10 +51,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Traditional file system packed objects directory handler.
  * <p>
- * This is the {@link org.eclipse.jgit.internal.storage.file.Pack}s object
+ * This is the {@link Pack}s object
  * representation for a Git object database, where objects are stored in
  * compressed containers known as
- * {@link org.eclipse.jgit.internal.storage.file.Pack}s.
+ * {@link Pack}s.
  */
 class PackDirectory {
 	private final static Logger LOG = LoggerFactory
@@ -146,12 +146,12 @@ class PackDirectory {
 	}
 
 	/**
-	 * Get the {@link org.eclipse.jgit.internal.storage.file.Pack} for the
+	 * Get the {@link Pack} for the
 	 * specified object if it is stored in this PackDirectory.
 	 *
 	 * @param objectId
 	 *            identity of the object to find the Pack for.
-	 * @return {@link org.eclipse.jgit.internal.storage.file.Pack} which
+	 * @return {@link Pack} which
 	 *         contains the specified object or {@code null} if it is not stored
 	 *         in this PackDirectory.
 	 */
@@ -525,14 +525,14 @@ class PackDirectory {
 
 	/**
 	 * Scans the pack directory for
-	 * {@link org.eclipse.jgit.internal.storage.file.PackFile}s and returns them
+	 * {@link PackFile}s and returns them
 	 * organized by their extensions and their pack ids
 	 *
 	 * Skips files in the directory that we cannot create a
-	 * {@link org.eclipse.jgit.internal.storage.file.PackFile} for.
+	 * {@link PackFile} for.
 	 *
-	 * @return a map of {@link org.eclipse.jgit.internal.storage.file.PackFile}s
-	 *         and {@link org.eclipse.jgit.internal.storage.pack.PackExt}s keyed
+	 * @return a map of {@link PackFile}s
+	 *         and {@link PackExt}s keyed
 	 *         by pack ids
 	 */
 	private Map<String, Map<PackExt, PackFile>> getPackFilesByExtById() {

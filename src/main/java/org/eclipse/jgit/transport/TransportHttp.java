@@ -66,6 +66,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -304,11 +305,11 @@ public class TransportHttp extends HttpTransport implements WalkTransport,
 	}
 
 	/**
-	 * Set uri a {@link org.eclipse.jgit.transport.URIish} object.
+	 * Set uri a {@link URIish} object.
 	 *
 	 * @param uri
-	 *            a {@link org.eclipse.jgit.transport.URIish} object.
-	 * @throws org.eclipse.jgit.errors.NotSupportedException
+	 *            a {@link URIish} object.
+	 * @throws NotSupportedException
 	 *             if URI is not supported by JGit
 	 * @since 4.9
 	 */
@@ -762,7 +763,7 @@ public class TransportHttp extends HttpTransport implements WalkTransport,
 
 	void processResponseCookies(HttpConnection conn) {
 		if (cookieFile != null && http.getSaveCookies()) {
-			List<HttpCookie> foundCookies = new ArrayList<>();
+			List<HttpCookie> foundCookies = new LinkedList<>();
 
 			List<String> cookieHeaderValues = conn
 					.getHeaderFields(HDR_SET_COOKIE);
@@ -794,7 +795,7 @@ public class TransportHttp extends HttpTransport implements WalkTransport,
 
 	private List<HttpCookie> extractCookies(String headerKey,
 			List<String> headerValues) {
-		List<HttpCookie> foundCookies = new ArrayList<>();
+		List<HttpCookie> foundCookies = new LinkedList<>();
 		for (String headerValue : headerValues) {
 			foundCookies
 					.addAll(HttpCookie.parse(headerKey + ':' + headerValue));
@@ -1040,7 +1041,7 @@ public class TransportHttp extends HttpTransport implements WalkTransport,
 	 * @param acceptEncoding
 	 *            accept-encoding header option
 	 * @return the HTTP connection
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 4.6
 	 */

@@ -21,7 +21,7 @@ import org.eclipse.jgit.revwalk.ObjectWalk;
  * Selects interesting objects when walking.
  * <p>
  * Applications should install the filter on an ObjectWalk by
- * {@link org.eclipse.jgit.revwalk.ObjectWalk#setObjectFilter(ObjectFilter)}
+ * {@link ObjectWalk#setObjectFilter(ObjectFilter)}
  * prior to starting traversal.
  *
  * @since 4.0
@@ -45,13 +45,13 @@ public abstract class ObjectFilter {
 	 * @param objid
 	 *            the object currently being tested.
 	 * @return {@code true} if the named object should be included in the walk.
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             an object the filter needed to consult to determine its
 	 *             answer was missing
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             an object the filter needed to consult to determine its
 	 *             answer was of the wrong type
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an object the filter needed to consult to determine its
 	 *             answer could not be read.
 	 */

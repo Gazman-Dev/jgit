@@ -102,7 +102,7 @@ public abstract class BaseConnection implements Connection {
 	 * Helper method for ensuring one-operation per connection. Check whether
 	 * operation was already marked as started, and mark it as started.
 	 *
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             if operation was already marked as started.
 	 */
 	protected void markStartedOperation() throws TransportException {

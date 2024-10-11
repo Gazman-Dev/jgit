@@ -100,7 +100,7 @@ public class PushCertificateParser {
 	/**
 	 * Parse a push certificate from a reader.
 	 * <p>
-	 * Differences from the {@link org.eclipse.jgit.transport.PacketLineIn}
+	 * Differences from the {@link PacketLineIn}
 	 * receiver methods:
 	 * <ul>
 	 * <li>Does not use pkt-line framing.</li>
@@ -113,9 +113,9 @@ public class PushCertificateParser {
 	 *            input reader; consumed only up until the end of the next
 	 *            signature in the input.
 	 * @return the parsed certificate, or null if the reader was at EOF.
-	 * @throws org.eclipse.jgit.errors.PackProtocolException
+	 * @throws PackProtocolException
 	 *             if the certificate is malformed.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if there was an error reading from the input.
 	 * @since 4.1
 	 */
@@ -131,9 +131,9 @@ public class PushCertificateParser {
 	 * @param str
 	 *            input string.
 	 * @return the parsed certificate.
-	 * @throws org.eclipse.jgit.errors.PackProtocolException
+	 * @throws PackProtocolException
 	 *             if the certificate is malformed.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if there was an error reading from the input.
 	 * @since 4.1
 	 */
@@ -210,9 +210,9 @@ public class PushCertificateParser {
 	 *            input reader; consumed only up until the end of the next
 	 *            signature in the input.
 	 * @return the parsed certificate, or null if the reader was at EOF.
-	 * @throws org.eclipse.jgit.errors.PackProtocolException
+	 * @throws PackProtocolException
 	 *             if the certificate is malformed.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if there was an error reading from the input.
 	 * @since 4.1
 	 */
@@ -241,7 +241,7 @@ public class PushCertificateParser {
 	 *
 	 * @return the parsed certificate, or null if push certificates are
 	 *         disabled.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if the push certificate has missing or invalid fields.
 	 * @since 4.1
 	 */
@@ -327,7 +327,7 @@ public class PushCertificateParser {
 	 *            {@code NonceGenerator} will allow for some time skew caused by
 	 *            clients disconnected and reconnecting in the stateless smart
 	 *            HTTP protocol.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if the certificate from the client is badly malformed or the
 	 *             client disconnects before sending the entire certificate.
 	 * @since 4.0
@@ -389,7 +389,7 @@ public class PushCertificateParser {
 	 *
 	 * @param pckIn
 	 *            where we read the signature from.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if the signature is invalid.
 	 * @since 4.0
 	 */
@@ -434,7 +434,7 @@ public class PushCertificateParser {
 	 * @param line
 	 *            the line read from the wire that produced this
 	 *            command, with optional trailing newline already trimmed.
-	 * @throws org.eclipse.jgit.errors.PackProtocolException
+	 * @throws PackProtocolException
 	 *             if the raw line cannot be parsed to a command.
 	 * @since 4.0
 	 */

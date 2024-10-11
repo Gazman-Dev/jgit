@@ -17,7 +17,7 @@ import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.BaseRepositoryBuilder;
 
 /**
- * Constructs a {@link org.eclipse.jgit.internal.storage.dfs.DfsRepository}.
+ * Constructs a {@link DfsRepository}.
  *
  * @param <B>
  *            type of the builder class.

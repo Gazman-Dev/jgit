@@ -99,7 +99,7 @@ public class DescribeCommand extends GitCommand<String> {
 	 * Constructor for DescribeCommand.
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected DescribeCommand(Repository repo) {
 		super(repo);
@@ -117,7 +117,7 @@ public class DescribeCommand extends GitCommand<String> {
 	 *             the supplied commit does not exist.
 	 * @throws IncorrectObjectTypeException
 	 *             the supplied id is not a commit or an annotated tag.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a pack file or loose object could not be read.
 	 */
 	public DescribeCommand setTarget(ObjectId target) throws IOException {
@@ -130,14 +130,14 @@ public class DescribeCommand extends GitCommand<String> {
 	 *
 	 * @param rev
 	 *            Commit ID, tag, branch, ref, etc. See
-	 *            {@link org.eclipse.jgit.lib.Repository#resolve(String)} for
+	 *            {@link Repository#resolve(String)} for
 	 *            allowed syntax.
 	 * @return {@code this}
 	 * @throws IncorrectObjectTypeException
 	 *             the supplied id is not a commit or an annotated tag.
-	 * @throws org.eclipse.jgit.api.errors.RefNotFoundException
+	 * @throws RefNotFoundException
 	 *             the given rev didn't resolve to any object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a pack file or loose object could not be read.
 	 */
 	public DescribeCommand setTarget(String rev) throws IOException,
@@ -249,7 +249,7 @@ public class DescribeCommand extends GitCommand<String> {
 	 * @param patterns
 	 *            the {@code glob(7)} pattern or patterns
 	 * @return {@code this}
-	 * @throws org.eclipse.jgit.errors.InvalidPatternException
+	 * @throws InvalidPatternException
 	 *             if the pattern passed in was invalid.
 	 * @see <a href=
 	 *      "https://www.kernel.org/pub/software/scm/git/docs/git-describe.html"
@@ -480,7 +480,7 @@ public class DescribeCommand extends GitCommand<String> {
 	 * @param ref
 	 *            reference under inspection
 	 * @return true if it should be used for describe or not regarding
-	 *         {@link org.eclipse.jgit.api.DescribeCommand#useTags}
+	 *         {@link DescribeCommand#useTags}
 	 */
 	@SuppressWarnings("null")
 	private boolean filterLightweightTags(Ref ref) {

@@ -19,7 +19,7 @@ import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 
 /**
- * An {@link org.eclipse.jgit.lib.AbbreviatedObjectId} cannot be extended.
+ * An {@link AbbreviatedObjectId} cannot be extended.
  */
 public class AmbiguousObjectException extends IOException {
 	private static final long serialVersionUID = 1L;

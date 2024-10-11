@@ -111,6 +111,32 @@ public class RepoCommand extends GitCommand<RevCommit> {
 		public ObjectId sha1(String uri, String ref) throws GitAPIException;
 
 		/**
+		 * Read a file from a remote repository.
+		 *
+		 * @param uri
+		 *            The URI of the remote repository
+		 * @param ref
+		 *            The ref (branch/tag/etc.) to read
+		 * @param path
+		 *            The relative path (inside the repo) to the file to read
+		 * @return the file content.
+		 * @throws GitAPIException
+		 *             If the ref have an invalid or ambiguous name, or it does
+		 *             not exist in the repository,
+		 * @throws IOException
+		 *             If the object does not exist or is too large
+		 * @since 3.5
+		 *
+		 * @deprecated Use {@link #readFileWithMode(String, String, String)}
+		 *             instead
+		 */
+		@Deprecated
+		public default byte[] readFile(String uri, String ref, String path)
+				throws GitAPIException, IOException {
+			return readFileWithMode(uri, ref, path).getContents();
+		}
+
+		/**
 		 * Read contents and mode (i.e. permissions) of the file from a remote
 		 * repository.
 		 *
@@ -229,8 +255,7 @@ public class RepoCommand extends GitCommand<RevCommit> {
 	@SuppressWarnings("serial")
 	static class ManifestErrorException extends GitAPIException {
 		ManifestErrorException(Throwable cause) {
-			super(RepoText.get().invalidManifest + " " + cause.getMessage(), //$NON-NLS-1$
-					cause);
+			super(RepoText.get().invalidManifest, cause);
 		}
 	}
 
@@ -245,7 +270,7 @@ public class RepoCommand extends GitCommand<RevCommit> {
 	 * Constructor for RepoCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	public RepoCommand(Repository repo) {
 		super(repo);
@@ -271,7 +296,7 @@ public class RepoCommand extends GitCommand<RevCommit> {
 	 * Setting inputStream will ignore the path set. It will be closed in
 	 * {@link #call}.
 	 *
-	 * @param inputStream a {@link java.io.InputStream} object.
+	 * @param inputStream a {@link InputStream} object.
 	 * @return this command
 	 * @since 3.5
 	 */
@@ -420,7 +445,7 @@ public class RepoCommand extends GitCommand<RevCommit> {
 	 *
 	 * @see org.eclipse.jgit.lib.NullProgressMonitor
 	 * @param monitor
-	 *            a {@link org.eclipse.jgit.lib.ProgressMonitor}
+	 *            a {@link ProgressMonitor}
 	 * @return this command
 	 */
 	public RepoCommand setProgressMonitor(ProgressMonitor monitor) {
@@ -455,7 +480,7 @@ public class RepoCommand extends GitCommand<RevCommit> {
 	 * ignored.
 	 *
 	 * @param author
-	 *            the author's {@link org.eclipse.jgit.lib.PersonIdent}
+	 *            the author's {@link PersonIdent}
 	 * @return this command
 	 */
 	public RepoCommand setAuthor(PersonIdent author) {
@@ -469,7 +494,7 @@ public class RepoCommand extends GitCommand<RevCommit> {
 	 * This is only used in bare repositories.
 	 *
 	 * @param callback
-	 *            a {@link org.eclipse.jgit.gitrepo.RepoCommand.RemoteReader}
+	 *            a {@link RemoteReader}
 	 *            object.
 	 * @return this command
 	 */
@@ -483,7 +508,7 @@ public class RepoCommand extends GitCommand<RevCommit> {
 	 *
 	 * @param reader
 	 *            a
-	 *            {@link org.eclipse.jgit.gitrepo.ManifestParser.IncludedFileReader}
+	 *            {@link IncludedFileReader}
 	 *            object.
 	 * @return this command
 	 * @since 4.0
@@ -590,7 +615,6 @@ public class RepoCommand extends GitCommand<RevCommit> {
 				p.setUrl(proj.getUrl());
 				p.addCopyFiles(proj.getCopyFiles());
 				p.addLinkFiles(proj.getLinkFiles());
-				p.setUpstream(proj.getUpstream());
 				ret.add(p);
 			}
 		}

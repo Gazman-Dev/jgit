@@ -87,7 +87,7 @@ public final class StringUtils {
 	 *
 	 * <p>
 	 * Capitalizes a String changing the first letter to title case as per
-	 * {@link java.lang.Character#toTitleCase(char)}. No other letters are
+	 * {@link Character#toTitleCase(char)}. No other letters are
 	 * changed.
 	 * </p>
 	 * <p>
@@ -185,7 +185,7 @@ public final class StringUtils {
 	 * @param stringValue
 	 *            the string to parse.
 	 * @return the boolean interpretation of {@code stringValue}.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             if {@code stringValue} is not recognized as one of the standard
 	 *             boolean names.
 	 */

@@ -66,14 +66,14 @@ abstract class WalkEncryption {
 	 * Validate
 	 *
 	 * @param u
-	 *            a {@link java.net.HttpURLConnection} object.
+	 *            a {@link HttpURLConnection} object.
 	 * @param prefix
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param version
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param name
-	 *            a {@link java.lang.String} object.
-	 * @throws java.io.IOException
+	 *            a {@link String} object.
+	 * @throws IOException
 	 *             if any.
 	 */
 	protected void validateImpl(final HttpURLConnection u, final String prefix,

@@ -14,7 +14,7 @@ import org.eclipse.jgit.lib.ObjectId;
 
 /**
  * An object representation
- * {@link org.eclipse.jgit.internal.storage.pack.PackWriter} can consider for
+ * {@link PackWriter} can consider for
  * packing.
  */
 public class StoredObjectRepresentation {

@@ -43,9 +43,9 @@ import org.eclipse.jgit.util.RawParseUtils;
  * Tree and blob objects reachable from interesting commits are automatically
  * scheduled for inclusion in the results of {@link #nextObject()}, returning
  * each object exactly once. Objects are sorted and returned according to the
- * commits that reference them and the order they appear within a tree.
+ * the commits that reference them and the order they appear within a tree.
  * Ordering can be affected by changing the
- * {@link org.eclipse.jgit.revwalk.RevSort} used to order the commits that are
+ * {@link RevSort} used to order the commits that are
  * returned first.
  */
 public class ObjectWalk extends RevWalk {
@@ -164,11 +164,34 @@ public class ObjectWalk extends RevWalk {
 	}
 
 	/**
+	 * Create an object reachability checker that will use bitmaps if possible.
+	 *
+	 * This reachability checker accepts any object as target. For checks
+	 * exclusively between commits, see
+	 * {@link RevWalk#createReachabilityChecker()}.
+	 *
+	 * @return an object reachability checker, using bitmaps if possible.
+	 *
+	 * @throws IOException
+	 *             when the index fails to load.
+	 *
+	 * @since 5.8
+	 * @deprecated use
+	 *             {@code ObjectReader#createObjectReachabilityChecker(ObjectWalk)}
+	 *             instead.
+	 */
+	@Deprecated
+	public final ObjectReachabilityChecker createObjectReachabilityChecker()
+			throws IOException {
+		return reader.createObjectReachabilityChecker(this);
+	}
+
+	/**
 	 * Mark an object or commit to start graph traversal from.
 	 * <p>
 	 * Callers are encouraged to use
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#parseAny(AnyObjectId)} instead of
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#lookupAny(AnyObjectId, int)}, as
+	 * {@link RevWalk#parseAny(AnyObjectId)} instead of
+	 * {@link RevWalk#lookupAny(AnyObjectId, int)}, as
 	 * this method requires the object to be parsed before it can be added as a
 	 * root for the traversal.
 	 * <p>
@@ -178,27 +201,27 @@ public class ObjectWalk extends RevWalk {
 	 * also be 'poisoned' by the invalid RevObject.
 	 * <p>
 	 * This method will automatically call
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#markStart(RevCommit)} if passed
+	 * {@link RevWalk#markStart(RevCommit)} if passed
 	 * RevCommit instance, or a RevTag that directly (or indirectly) references
 	 * a RevCommit.
 	 *
 	 * @param o
 	 *            the object to start traversing from. The object passed must be
 	 *            from this same revision walker.
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             the object supplied is not available from the object
 	 *             database. This usually indicates the supplied object is
 	 *             invalid, but the reference was constructed during an earlier
 	 *             invocation to
-	 *             {@link org.eclipse.jgit.revwalk.RevWalk#lookupAny(AnyObjectId, int)}.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 *             {@link RevWalk#lookupAny(AnyObjectId, int)}.
+	 * @throws IncorrectObjectTypeException
 	 *             the object was not parsed yet and it was discovered during
 	 *             parsing that it is not actually the type of the instance
 	 *             passed in. This usually indicates the caller used the wrong
 	 *             type in a
-	 *             {@link org.eclipse.jgit.revwalk.RevWalk#lookupAny(AnyObjectId, int)}
+	 *             {@link RevWalk#lookupAny(AnyObjectId, int)}
 	 *             call.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a pack file or loose object could not be read.
 	 */
 	public void markStart(RevObject o) throws MissingObjectException,
@@ -223,8 +246,8 @@ public class ObjectWalk extends RevWalk {
 	 * an otherwise interesting commit.
 	 * <p>
 	 * Callers are encouraged to use
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#parseAny(AnyObjectId)} instead of
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#lookupAny(AnyObjectId, int)}, as
+	 * {@link RevWalk#parseAny(AnyObjectId)} instead of
+	 * {@link RevWalk#lookupAny(AnyObjectId, int)}, as
 	 * this method requires the object to be parsed before it can be added as a
 	 * root for the traversal.
 	 * <p>
@@ -234,26 +257,26 @@ public class ObjectWalk extends RevWalk {
 	 * also be 'poisoned' by the invalid RevObject.
 	 * <p>
 	 * This method will automatically call
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#markStart(RevCommit)} if passed
+	 * {@link RevWalk#markStart(RevCommit)} if passed
 	 * RevCommit instance, or a RevTag that directly (or indirectly) references
 	 * a RevCommit.
 	 *
 	 * @param o
 	 *            the object to start traversing from. The object passed must be
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             the object supplied is not available from the object
 	 *             database. This usually indicates the supplied object is
 	 *             invalid, but the reference was constructed during an earlier
 	 *             invocation to
-	 *             {@link org.eclipse.jgit.revwalk.RevWalk#lookupAny(AnyObjectId, int)}.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 *             {@link RevWalk#lookupAny(AnyObjectId, int)}.
+	 * @throws IncorrectObjectTypeException
 	 *             the object was not parsed yet and it was discovered during
 	 *             parsing that it is not actually the type of the instance
 	 *             passed in. This usually indicates the caller used the wrong
 	 *             type in a
-	 *             {@link org.eclipse.jgit.revwalk.RevWalk#lookupAny(AnyObjectId, int)}
+	 *             {@link RevWalk#lookupAny(AnyObjectId, int)}
 	 *             call.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a pack file or loose object could not be read.
 	 */
 	public void markUninteresting(RevObject o) throws MissingObjectException,
@@ -311,7 +334,7 @@ public class ObjectWalk extends RevWalk {
 	 *
 	 * @param newFilter
 	 *            the new filter. If null the special
-	 *            {@link org.eclipse.jgit.revwalk.filter.ObjectFilter#ALL}
+	 *            {@link ObjectFilter#ALL}
 	 *            filter will be used instead, as it matches every object.
 	 * @since 4.0
 	 */
@@ -374,14 +397,14 @@ public class ObjectWalk extends RevWalk {
 	 * Pop the next most recent object.
 	 *
 	 * @return next most recent object; null if traversal is over.
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             one or more of the next objects are not available from the
 	 *             object database, but were thought to be candidates for
 	 *             traversal. This usually indicates a broken link.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             one or more of the objects in a tree do not match the type
 	 *             indicated.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a pack file or loose object could not be read.
 	 */
 	public RevObject nextObject() throws MissingObjectException,
@@ -570,14 +593,14 @@ public class ObjectWalk extends RevWalk {
 	 * exception if there is a connectivity problem. The exception message
 	 * provides some detail about the connectivity failure.
 	 *
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             one or more of the next objects are not available from the
 	 *             object database, but were thought to be candidates for
 	 *             traversal. This usually indicates a broken link.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             one or more of the objects in a tree do not match the type
 	 *             indicated.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a pack file or loose object could not be read.
 	 */
 	public void checkConnectivity() throws MissingObjectException,

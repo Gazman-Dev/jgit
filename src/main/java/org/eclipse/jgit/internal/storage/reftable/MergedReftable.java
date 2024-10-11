@@ -22,9 +22,9 @@ import org.eclipse.jgit.lib.ReflogEntry;
 /**
  * Merges multiple reference tables together.
  * <p>
- * A {@link org.eclipse.jgit.internal.storage.reftable.MergedReftable}
+ * A {@link MergedReftable}
  * merge-joins multiple
- * {@link org.eclipse.jgit.internal.storage.reftable.ReftableReader} on the fly.
+ * {@link ReftableReader} on the fly.
  * Tables higher/later in the stack shadow lower/earlier tables, hiding
  * references that been updated/replaced.
  * <p>

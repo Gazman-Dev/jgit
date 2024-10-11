@@ -34,7 +34,7 @@ import org.eclipse.jgit.util.RawParseUtils;
  * {@link #toString()} returns all written data, after converting it to a String
  * under the assumption of UTF-8 encoding.
  * <p>
- * Internally {@link org.eclipse.jgit.util.RawParseUtils#decode(byte[])} is used
+ * Internally {@link RawParseUtils#decode(byte[])} is used
  * by {@code toString()} tries to work out a reasonably correct character set
  * for the raw data.
  */

@@ -37,7 +37,7 @@ public class TransferConfig {
 	private static final String FSCK = "fsck"; //$NON-NLS-1$
 
 	/** Key for {@link Config#get(SectionParser)}. */
-	public static final Config.SectionParser<TransferConfig> KEY =
+	public static final SectionParser<TransferConfig> KEY =
 			TransferConfig::new;
 
 	/**
@@ -146,7 +146,7 @@ public class TransferConfig {
 
 	/**
 	 * Create a configuration honoring settings in a
-	 * {@link org.eclipse.jgit.lib.Config}.
+	 * {@link Config}.
 	 *
 	 * @param rc
 	 *            the source to read settings from. The source is not retained
@@ -368,10 +368,10 @@ public class TransferConfig {
 	}
 
 	/**
-	 * Get {@link org.eclipse.jgit.transport.RefFilter} respecting configured
+	 * Get {@link RefFilter} respecting configured
 	 * hidden refs.
 	 *
-	 * @return {@link org.eclipse.jgit.transport.RefFilter} respecting
+	 * @return {@link RefFilter} respecting
 	 *         configured hidden refs.
 	 * @since 3.1
 	 */

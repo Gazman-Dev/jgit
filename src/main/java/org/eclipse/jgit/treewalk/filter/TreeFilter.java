@@ -37,7 +37,7 @@ import org.eclipse.jgit.treewalk.WorkingTreeIterator;
  * <b>Path filters:</b>
  * <ul>
  * <li>Matching pathname:
- * {@link org.eclipse.jgit.treewalk.filter.PathFilter}</li>
+ * {@link PathFilter}</li>
  * </ul>
  *
  * <p>
@@ -49,9 +49,9 @@ import org.eclipse.jgit.treewalk.WorkingTreeIterator;
  * <p>
  * <b>Boolean modifiers:</b>
  * <ul>
- * <li>AND: {@link org.eclipse.jgit.treewalk.filter.AndTreeFilter}</li>
- * <li>OR: {@link org.eclipse.jgit.treewalk.filter.OrTreeFilter}</li>
- * <li>NOT: {@link org.eclipse.jgit.treewalk.filter.NotTreeFilter}</li>
+ * <li>AND: {@link AndTreeFilter}</li>
+ * <li>OR: {@link OrTreeFilter}</li>
+ * <li>NOT: {@link NotTreeFilter}</li>
  * </ul>
  */
 public abstract class TreeFilter {
@@ -143,7 +143,7 @@ public abstract class TreeFilter {
 	 * Determine if the current entry is interesting to report.
 	 * <p>
 	 * This method is consulted for subtree entries even if
-	 * {@link org.eclipse.jgit.treewalk.TreeWalk#isRecursive()} is enabled. The
+	 * {@link TreeWalk#isRecursive()} is enabled. The
 	 * consultation allows the filter to bypass subtree recursion on a
 	 * case-by-case basis, even when recursion is enabled at the application
 	 * level.
@@ -152,16 +152,16 @@ public abstract class TreeFilter {
 	 *            the walker the filter needs to examine.
 	 * @return true if the current entry should be seen by the application;
 	 *         false to hide the entry.
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             an object the filter needs to consult to determine its answer
 	 *             does not exist in the Git repository the walker is operating
 	 *             on. Filtering this current walker entry is impossible without
 	 *             the object.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             an object the filter needed to consult was not of the
 	 *             expected object type. This usually indicates a corrupt
 	 *             repository, as an object link is referencing the wrong type.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a loose object or pack file could not be read to obtain data
 	 *             necessary for the filter to make its decision.
 	 */
@@ -182,11 +182,11 @@ public abstract class TreeFilter {
 	 * @return -1 if the current entry is a parent of the filter but no exact
 	 *         match has been made; 0 if the current entry should be seen by the
 	 *         application; 1 if it should be hidden.
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             as thrown by {@link #include(TreeWalk)}
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             as thrown by {@link #include(TreeWalk)}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             as thrown by {@link #include(TreeWalk)}
 	 * @since 4.7
 	 */
@@ -210,7 +210,7 @@ public abstract class TreeFilter {
 	public abstract boolean shouldBeRecursive();
 
 	/**
-	 * If this filter checks that at least one of the paths in a set has been
+	 * If this filter checks that a specific set of paths have all been
 	 * modified, returns that set of paths to be checked against a changed path
 	 * filter. Otherwise, returns empty.
 	 *

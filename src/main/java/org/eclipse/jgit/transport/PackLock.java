@@ -24,7 +24,7 @@ public interface PackLock {
 	/**
 	 * Remove the {@code .keep} file that holds a pack in place.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if deletion of the {@code .keep} file failed
 	 */
 	void unlock() throws IOException;

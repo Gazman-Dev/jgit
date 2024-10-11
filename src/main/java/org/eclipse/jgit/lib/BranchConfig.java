@@ -183,7 +183,7 @@ public class BranchConfig {
 	/**
 	 * Retrieves the config value of branch.[name].rebase.
 	 *
-	 * @return the {@link org.eclipse.jgit.lib.BranchConfig.BranchRebaseMode}
+	 * @return the {@link BranchRebaseMode}
 	 * @since 4.5
 	 */
 	public BranchRebaseMode getRebaseMode() {

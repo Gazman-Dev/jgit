@@ -169,12 +169,12 @@ public class URIish implements Serializable {
 	private String host;
 
 	/**
-	 * Parse and construct an {@link org.eclipse.jgit.transport.URIish} from a
+	 * Parse and construct an {@link URIish} from a
 	 * string
 	 *
 	 * @param s
-	 *            a {@link java.lang.String} object.
-	 * @throws java.net.URISyntaxException
+	 *            a {@link String} object.
+	 * @throws URISyntaxException
 	 *             if {@code s} was null or couldn't be parsed
 	 */
 	public URIish(String s) throws URISyntaxException {
@@ -477,7 +477,7 @@ public class URIish implements Serializable {
 	 * @param n
 	 *            the new value for path.
 	 * @return a new URI with the updated value.
-	 * @throws java.net.URISyntaxException
+	 * @throws URISyntaxException
 	 *             if URI couldn't be parsed from String
 	 */
 	public URIish setRawPath(String n) throws URISyntaxException {
@@ -713,7 +713,7 @@ public class URIish implements Serializable {
 	 *
 	 * @return the "humanish" part of the path. May be an empty string. Never
 	 *         {@code null}.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             if it's impossible to determine a humanish part, or path is
 	 *             {@code null} or empty
 	 * @see #getPath

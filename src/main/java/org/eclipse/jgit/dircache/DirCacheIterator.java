@@ -30,7 +30,7 @@ import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.util.RawParseUtils;
 
 /**
- * Iterate a {@link org.eclipse.jgit.dircache.DirCache} as part of a
+ * Iterate a {@link DirCache} as part of a
  * <code>TreeWalk</code>.
  * <p>
  * This is an iterator to adapt a loaded <code>DirCache</code> instance (such as
@@ -252,15 +252,15 @@ public class DirCacheIterator extends AbstractTreeIterator {
 	}
 
 	/**
-	 * Retrieves the {@link org.eclipse.jgit.attributes.AttributesNode} for the
+	 * Retrieves the {@link AttributesNode} for the
 	 * current entry.
 	 *
 	 * @param reader
-	 *            {@link org.eclipse.jgit.lib.ObjectReader} used to parse the
+	 *            {@link ObjectReader} used to parse the
 	 *            .gitattributes entry.
-	 * @return {@link org.eclipse.jgit.attributes.AttributesNode} for the
+	 * @return {@link AttributesNode} for the
 	 *         current entry.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.7
 	 */

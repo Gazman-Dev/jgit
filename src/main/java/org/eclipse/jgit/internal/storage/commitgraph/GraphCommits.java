@@ -44,7 +44,7 @@ public class GraphCommits implements Iterable<RevCommit> {
 
 	/**
 	 * Prepare and create the commits for
-	 * {@link org.eclipse.jgit.internal.storage.commitgraph.CommitGraphWriter}
+	 * {@link CommitGraphWriter}
 	 * from the RevWalk.
 	 *
 	 * @param pm

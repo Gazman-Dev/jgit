@@ -58,7 +58,7 @@ public abstract class DfsOutputStream extends OutputStream {
 	 *            buffer to populate. Up to {@code buf.remaining()} bytes will
 	 *            be read from {@code position}.
 	 * @return number of bytes actually read.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             reading is not supported, or the read cannot be performed due
 	 *             to DFS errors.
 	 */

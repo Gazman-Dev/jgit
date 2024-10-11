@@ -14,7 +14,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.UploadPack;
 
 /**
- * Create and configure {@link org.eclipse.jgit.transport.UploadPack} service
+ * Create and configure {@link UploadPack} service
  * instance.
  *
  * @param <C>

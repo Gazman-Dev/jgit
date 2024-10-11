@@ -82,7 +82,7 @@ public class PullCommand extends TransportCommand<PullCommand, PullResult> {
 	 * Constructor for PullCommand.
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected PullCommand(Repository repo) {
 		super(repo);
@@ -130,7 +130,7 @@ public class PullCommand extends TransportCommand<PullCommand, PullResult> {
 	}
 
 	/**
-	 * Sets the {@link org.eclipse.jgit.lib.BranchConfig.BranchRebaseMode} to
+	 * Sets the {@link BranchRebaseMode} to
 	 * use after fetching.
 	 *
 	 * <dl>
@@ -158,7 +158,7 @@ public class PullCommand extends TransportCommand<PullCommand, PullResult> {
 	 * {@code pull.rebase}.
 	 *
 	 * @param rebaseMode
-	 *            the {@link org.eclipse.jgit.lib.BranchConfig.BranchRebaseMode}
+	 *            the {@link BranchRebaseMode}
 	 *            to use
 	 * @return {@code this}
 	 * @since 4.5
@@ -467,7 +467,7 @@ public class PullCommand extends TransportCommand<PullCommand, PullResult> {
 	 * Set the specification of annotated tag behavior during fetch
 	 *
 	 * @param tagOpt
-	 *            the {@link org.eclipse.jgit.transport.TagOpt}
+	 *            the {@link TagOpt}
 	 * @return {@code this}
 	 * @since 4.7
 	 */
@@ -503,7 +503,7 @@ public class PullCommand extends TransportCommand<PullCommand, PullResult> {
 	 *
 	 * @param recurse
 	 *            the
-	 *            {@link org.eclipse.jgit.lib.SubmoduleConfig.FetchRecurseSubmodulesMode}
+	 *            {@link FetchRecurseSubmodulesMode}
 	 *            to be used for recursing into submodules
 	 * @return {@code this}
 	 * @since 4.7
@@ -520,13 +520,13 @@ public class PullCommand extends TransportCommand<PullCommand, PullResult> {
 	 * configuration. This is the value defined for the configurations
 	 * {@code branch.[branchName].rebase}, or,if not set, {@code pull.rebase}.
 	 * If neither is set, yields
-	 * {@link org.eclipse.jgit.lib.BranchConfig.BranchRebaseMode#NONE}.
+	 * {@link BranchRebaseMode#NONE}.
 	 *
 	 * @param branchName
 	 *            name of the local branch
 	 * @param config
-	 *            the {@link org.eclipse.jgit.lib.Config} to read the value from
-	 * @return the {@link org.eclipse.jgit.lib.BranchConfig.BranchRebaseMode}
+	 *            the {@link Config} to read the value from
+	 * @return the {@link BranchRebaseMode}
 	 * @since 4.5
 	 */
 	public static BranchRebaseMode getRebaseMode(String branchName,

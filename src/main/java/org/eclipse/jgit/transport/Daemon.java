@@ -315,9 +315,9 @@ public class Daemon {
 	/**
 	 * Start this daemon on a background thread.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the server socket could not be opened.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             the daemon is already running.
 	 */
 	public synchronized void start() throws IOException {
@@ -362,7 +362,7 @@ public class Daemon {
 	/**
 	 * Stops this daemon and waits until it's acceptor thread has finished.
 	 *
-	 * @throws java.lang.InterruptedException
+	 * @throws InterruptedException
 	 *             if waiting for the acceptor thread is interrupted
 	 * @since 4.9
 	 */

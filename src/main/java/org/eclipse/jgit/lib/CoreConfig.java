@@ -24,7 +24,7 @@ import org.eclipse.jgit.lib.Config.SectionParser;
  */
 public class CoreConfig {
 	/** Key for {@link Config#get(SectionParser)}. */
-	public static final Config.SectionParser<CoreConfig> KEY = CoreConfig::new;
+	public static final SectionParser<CoreConfig> KEY = CoreConfig::new;
 
 	/** Permissible values for {@code core.autocrlf}. */
 	public enum AutoCRLF {
@@ -163,6 +163,8 @@ public class CoreConfig {
 
 	private final int packIndexVersion;
 
+	private final LogRefUpdates logAllRefUpdates;
+
 	private final String excludesfile;
 
 	private final String attributesfile;
@@ -203,6 +205,9 @@ public class CoreConfig {
 				ConfigConstants.CONFIG_KEY_COMPRESSION, DEFAULT_COMPRESSION);
 		packIndexVersion = rc.getInt(ConfigConstants.CONFIG_PACK_SECTION,
 				ConfigConstants.CONFIG_KEY_INDEXVERSION, 2);
+		logAllRefUpdates = rc.getEnum(ConfigConstants.CONFIG_CORE_SECTION, null,
+				ConfigConstants.CONFIG_KEY_LOGALLREFUPDATES,
+				LogRefUpdates.TRUE);
 		excludesfile = rc.getString(ConfigConstants.CONFIG_CORE_SECTION, null,
 				ConfigConstants.CONFIG_KEY_EXCLUDESFILE);
 		attributesfile = rc.getString(ConfigConstants.CONFIG_CORE_SECTION,
@@ -231,6 +236,20 @@ public class CoreConfig {
 	}
 
 	/**
+	 * Whether to log all refUpdates
+	 *
+	 * @return whether to log all refUpdates
+	 * @deprecated since 5.6; default value depends on whether the repository is
+	 *             bare. Use
+	 *             {@link Config#getEnum(String, String, String, Enum)}
+	 *             directly.
+	 */
+	@Deprecated
+	public boolean isLogAllRefUpdates() {
+		return !LogRefUpdates.FALSE.equals(logAllRefUpdates);
+	}
+
+	/**
 	 * Get path of excludesfile
 	 *
 	 * @return path of excludesfile
@@ -252,7 +271,7 @@ public class CoreConfig {
 	/**
 	 * Whether to read the commit-graph file (if it exists) to parse the graph
 	 * structure of commits. Default to
-	 * {@value org.eclipse.jgit.lib.CoreConfig#DEFAULT_COMMIT_GRAPH_ENABLE}.
+	 * {@value CoreConfig#DEFAULT_COMMIT_GRAPH_ENABLE}.
 	 *
 	 * @return whether to read the commit-graph file
 	 * @since 6.5

@@ -23,8 +23,8 @@ import org.eclipse.jgit.util.RefList;
 import org.eclipse.jgit.util.RefMap;
 
 /**
- * Writes out refs to the {@link org.eclipse.jgit.lib.Constants#INFO_REFS} and
- * {@link org.eclipse.jgit.lib.Constants#PACKED_REFS} files.
+ * Writes out refs to the {@link Constants#INFO_REFS} and
+ * {@link Constants#PACKED_REFS} files.
  *
  * This class is abstract as the writing of the files must be handled by the
  * caller. This is because it is used by transport classes as well.
@@ -70,13 +70,13 @@ public abstract class RefWriter {
 	}
 
 	/**
-	 * Rebuild the {@link org.eclipse.jgit.lib.Constants#INFO_REFS}.
+	 * Rebuild the {@link Constants#INFO_REFS}.
 	 * <p>
 	 * This method rebuilds the contents of the
-	 * {@link org.eclipse.jgit.lib.Constants#INFO_REFS} file to match the passed
+	 * {@link Constants#INFO_REFS} file to match the passed
 	 * list of references.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             writing is not supported, or attempting to write the file
 	 *             failed, possibly due to permissions or remote disk full, etc.
 	 */
@@ -115,14 +115,14 @@ public abstract class RefWriter {
 	}
 
 	/**
-	 * Rebuild the {@link org.eclipse.jgit.lib.Constants#PACKED_REFS} file.
+	 * Rebuild the {@link Constants#PACKED_REFS} file.
 	 * <p>
 	 * This method rebuilds the contents of the
-	 * {@link org.eclipse.jgit.lib.Constants#PACKED_REFS} file to match the
+	 * {@link Constants#PACKED_REFS} file to match the
 	 * passed list of references, including only those refs that have a storage
-	 * type of {@link org.eclipse.jgit.lib.Ref.Storage#PACKED}.
+	 * type of {@link Ref.Storage#PACKED}.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             writing is not supported, or attempting to write the file
 	 *             failed, possibly due to permissions or remote disk full, etc.
 	 */
@@ -176,7 +176,7 @@ public abstract class RefWriter {
 	 *            path to ref file.
 	 * @param content
 	 *            byte content of file to be written.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected abstract void writeFile(String file, byte[] content)

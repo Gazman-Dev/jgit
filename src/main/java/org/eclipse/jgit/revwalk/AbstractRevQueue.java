@@ -104,7 +104,7 @@ abstract class AbstractRevQueue extends Generator {
 	 * @param s
 	 *            a StringBuilder
 	 * @param c
-	 *            a {@link org.eclipse.jgit.revwalk.RevCommit}
+	 *            a {@link RevCommit}
 	 */
 	protected static void describe(StringBuilder s, RevCommit c) {
 		s.append(c.toString());

@@ -130,18 +130,18 @@ public class TrackingRefUpdate {
 		}
 
 		@Override
-		public void setResult(ReceiveCommand.Result status) {
+		public void setResult(Result status) {
 			result = decode(status);
 			super.setResult(status);
 		}
 
 		@Override
-		public void setResult(ReceiveCommand.Result status, String msg) {
+		public void setResult(Result status, String msg) {
 			result = decode(status);
 			super.setResult(status, msg);
 		}
 
-		private RefUpdate.Result decode(ReceiveCommand.Result status) {
+		private RefUpdate.Result decode(Result status) {
 			switch (status) {
 			case OK:
 				if (AnyObjectId.isEqual(oldObjectId, newObjectId))

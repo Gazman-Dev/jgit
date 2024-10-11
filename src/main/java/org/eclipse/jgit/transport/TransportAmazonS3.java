@@ -55,7 +55,7 @@ import org.eclipse.jgit.lib.SymbolicRef;
  * from a remote repository that is stored on S3.
  * <p>
  * Unlike the HTTP variant (see
- * {@link org.eclipse.jgit.transport.TransportHttp}) we rely upon being able to
+ * {@link TransportHttp}) we rely upon being able to
  * list objects in a bucket, as the S3 API supports this function. By listing
  * the bucket contents we can avoid relying on <code>objects/info/packs</code>
  * or <code>info/refs</code> in the remote repository.
@@ -326,7 +326,7 @@ public class TransportAmazonS3 extends HttpTransport implements WalkTransport {
 				if (r == null)
 					r = readRef(avail, target);
 				if (r == null)
-					r = new ObjectIdRef.Unpeeled(Ref.Storage.NEW, target, null);
+					r = new ObjectIdRef.Unpeeled(Storage.NEW, target, null);
 				r = new SymbolicRef(rn, r);
 				avail.put(r.getName(), r);
 				return r;

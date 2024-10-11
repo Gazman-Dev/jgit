@@ -68,27 +68,27 @@ public interface PackReverseIndex {
 	 *            offset).
 	 * @return offset of the next object in a pack or maxOffset if provided
 	 *         offset was the last one.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             when there is no object with the provided offset.
 	 */
 	long findNextOffset(long offset, long maxOffset)
 			throws CorruptObjectException;
 
 	/**
-	 * Find the position in the reverse index of the object at the given pack
+	 * Find the position in the primary index of the object at the given pack
 	 * offset.
 	 *
 	 * @param offset
 	 *            the pack offset of the object
-	 * @return the position in the reverse index of the object
+	 * @return the position in the primary index of the object
 	 */
 	int findPosition(long offset);
 
 	/**
-	 * Find the object that is in the given position in the reverse index.
+	 * Find the object that is in the given position in the primary index.
 	 *
 	 * @param nthPosition
-	 *            the position of the object in the reverse index
+	 *            the position of the object in the primary index
 	 * @return the object in that position
 	 */
 	ObjectId findObjectByPosition(int nthPosition);

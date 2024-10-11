@@ -39,7 +39,7 @@ import org.eclipse.jgit.lib.Repository;
  *
  * <p>
  * Applications may register additional protocols for use by JGit by calling
- * {@link org.eclipse.jgit.transport.Transport#register(TransportProtocol)}.
+ * {@link Transport#register(TransportProtocol)}.
  * Because that API holds onto the protocol object by a WeakReference,
  * applications must ensure their own ClassLoader retains the TransportProtocol
  * for the life of the application. Using a static singleton pattern as above
@@ -234,9 +234,9 @@ public abstract class TransportProtocol {
 	 *            name of the remote, if the remote as configured in
 	 *            {@code local}; otherwise null.
 	 * @return the transport.
-	 * @throws org.eclipse.jgit.errors.NotSupportedException
+	 * @throws NotSupportedException
 	 *             this protocol does not support the URI.
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             the transport cannot open this URI.
 	 */
 	public abstract Transport open(URIish uri, Repository local,
@@ -248,11 +248,11 @@ public abstract class TransportProtocol {
 	 * configuration instead of reading from configuration files.
 	 *
 	 * @param uri
-	 *            a {@link org.eclipse.jgit.transport.URIish} object.
+	 *            a {@link URIish} object.
 	 * @return new Transport
-	 * @throws org.eclipse.jgit.errors.NotSupportedException
+	 * @throws NotSupportedException
 	 *             this protocol does not support the URI.
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             the transport cannot open this URI.
 	 */
 	public Transport open(URIish uri)

@@ -37,7 +37,7 @@ public class ReflogCommand extends GitCommand<Collection<ReflogEntry>> {
 	 * Constructor for ReflogCommand.
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	public ReflogCommand(Repository repo) {
 		super(repo);

@@ -71,8 +71,8 @@ abstract class WalkRemoteObjectDatabase {
 	 * Obtain alternate connections to alternate object databases (if any).
 	 * <p>
          * Alternates are typically read from the file
-         * {@link org.eclipse.jgit.lib.Constants#INFO_ALTERNATES} or
-         * {@link org.eclipse.jgit.lib.Constants#INFO_HTTP_ALTERNATES}.
+         * {@link Constants#INFO_ALTERNATES} or
+         * {@link Constants#INFO_HTTP_ALTERNATES}.
          * The content of each line must be resolved
 	 * by the implementation and a new database reference should be returned to
 	 * represent the additional location.
@@ -378,7 +378,7 @@ abstract class WalkRemoteObjectDatabase {
 	 * @param avail
 	 *            return collection of references. Any existing entries will be
 	 *            replaced if they are found in the packed-refs file.
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             an error occurred reading from the packed refs file.
 	 */
 	protected void readPackedRefs(Map<String, Ref> avail)

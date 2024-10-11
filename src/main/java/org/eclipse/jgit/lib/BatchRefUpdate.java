@@ -167,7 +167,7 @@ public class BatchRefUpdate {
 	 * <p>
 	 * Describes the default for commands in this batch that do not override it
 	 * with
-	 * {@link org.eclipse.jgit.transport.ReceiveCommand#setRefLogMessage(String, boolean)}.
+	 * {@link ReceiveCommand#setRefLogMessage(String, boolean)}.
 	 *
 	 * @return true if the message should include the result.
 	 */
@@ -186,7 +186,7 @@ public class BatchRefUpdate {
 	 * <p>
 	 * Describes the default for commands in this batch that do not override it
 	 * with
-	 * {@link org.eclipse.jgit.transport.ReceiveCommand#setRefLogMessage(String, boolean)}.
+	 * {@link ReceiveCommand#setRefLogMessage(String, boolean)}.
 	 *
 	 * @param msg
 	 *            the message to describe this change. If null and appendStatus
@@ -263,7 +263,7 @@ public class BatchRefUpdate {
 	 * <p>
 	 * This method only works if the underlying ref database supports atomic
 	 * transactions, i.e.
-	 * {@link org.eclipse.jgit.lib.RefDatabase#performsAtomicTransactions()}
+	 * {@link RefDatabase#performsAtomicTransactions()}
 	 * returns true. Calling this method with true if the underlying ref
 	 * database does not support atomic transactions will cause all commands to
 	 * fail with {@code
@@ -402,7 +402,7 @@ public class BatchRefUpdate {
 	 * Request the batch to wait for the affected timestamps to resolve.
 	 *
 	 * @param ts
-	 *            a {@link org.eclipse.jgit.util.time.ProposedTimestamp} object.
+	 *            a {@link ProposedTimestamp} object.
 	 * @return {@code this}.
 	 * @since 4.6
 	 */
@@ -422,7 +422,7 @@ public class BatchRefUpdate {
 	 * <p>
 	 * Implementations must respect the atomicity requirements of the underlying
 	 * database as described in {@link #setAtomic(boolean)} and
-	 * {@link org.eclipse.jgit.lib.RefDatabase#performsAtomicTransactions()}.
+	 * {@link RefDatabase#performsAtomicTransactions()}.
 	 *
 	 * @param walk
 	 *            a RevWalk to parse tags in case the storage system wants to
@@ -431,7 +431,7 @@ public class BatchRefUpdate {
 	 *            progress monitor to receive update status on.
 	 * @param options
 	 *            a list of option strings; set null to execute without
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the database is unable to accept the update. Individual
 	 *             command status must be tested to determine if there is a
 	 *             partial failure, or a total failure.
@@ -579,7 +579,7 @@ public class BatchRefUpdate {
 	 *            store them pre-peeled, a common performance optimization.
 	 * @param monitor
 	 *            progress monitor to receive update status on.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the database is unable to accept the update. Individual
 	 *             command status must be tested to determine if there is a
 	 *             partial failure, or a total failure.
@@ -628,7 +628,7 @@ public class BatchRefUpdate {
 	 * @param cmd
 	 *            specific command the update should be created to copy.
 	 * @return a single reference update command.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the reference database cannot make a new update object for
 	 *             the given reference.
 	 */

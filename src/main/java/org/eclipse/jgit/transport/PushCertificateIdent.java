@@ -25,7 +25,7 @@ import org.eclipse.jgit.util.RawParseUtils;
 /**
  * Identity in a push certificate.
  * <p>
- * This is similar to a {@link org.eclipse.jgit.lib.PersonIdent} in that it
+ * This is similar to a {@link PersonIdent} in that it
  * contains a name, timestamp, and timezone offset, but differs in the following
  * ways:
  * <ul>
@@ -58,7 +58,7 @@ public class PushCertificateIdent {
 	 *
 	 * @param str
 	 *            string to parse.
-	 * @return a {@link org.eclipse.jgit.transport.PushCertificateIdent} object.
+	 * @return a {@link PushCertificateIdent} object.
 	 */
 	public static PushCertificateIdent parse(String str) {
 		MutableInteger p = new MutableInteger();

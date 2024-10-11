@@ -17,7 +17,7 @@ import org.eclipse.jgit.errors.InvalidPatternException;
 
 /**
  * Matcher built from path segments containing wildcards. This matcher converts
- * glob wildcards to Java {@link java.util.regex.Pattern}'s.
+ * glob wildcards to Java {@link Pattern}'s.
  * <p>
  * This class is immutable and thread safe.
  */

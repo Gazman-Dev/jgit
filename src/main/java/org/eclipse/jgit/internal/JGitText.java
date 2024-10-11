@@ -315,9 +315,6 @@ public class JGitText extends TranslationBundle {
 	/***/ public String downloadCancelled;
 	/***/ public String downloadCancelledDuringIndexing;
 	/***/ public String duplicateAdvertisementsOf;
-	/***/ public String duplicateCacheTablesGiven;
-	/***/ public String duplicatePackExtensionsForCacheTables;
-	/***/ public String duplicatePackExtensionsSet;
 	/***/ public String duplicateRef;
 	/***/ public String duplicateRefAttribute;
 	/***/ public String duplicateRemoteRefUpdateIsIllegal;
@@ -572,8 +569,6 @@ public class JGitText extends TranslationBundle {
 	/***/ public String noMergeHeadSpecified;
 	/***/ public String nonBareLinkFilesNotSupported;
 	/***/ public String nonCommitToHeads;
-	/***/ public String noPackExtConfigurationGiven;
-	/***/ public String noPackExtGivenForConfiguration;
 	/***/ public String noPathAttributesFound;
 	/***/ public String noSuchRef;
 	/***/ public String noSuchRefKnown;
@@ -606,6 +601,7 @@ public class JGitText extends TranslationBundle {
 	/***/ public String oldIdMustNotBeNull;
 	/***/ public String onlyOneFetchSupported;
 	/***/ public String onlyOneOperationCallPerConnectionIsSupported;
+	/***/ public String onlyOpenPgpSupportedForSigning;
 	/***/ public String openFilesMustBeAtLeast1;
 	/***/ public String openingConnection;
 	/***/ public String operationCanceled;
@@ -749,10 +745,7 @@ public class JGitText extends TranslationBundle {
 	/***/ public String shortReadOfOptionalDIRCExtensionExpectedAnotherBytes;
 	/***/ public String shortSkipOfBlock;
 	/***/ public String shutdownCleanup;
-	/***/ public String shutdownCleanupFailed;
 	/***/ public String shutdownCleanupListenerFailed;
-	/***/ public String signatureServiceConflict;
-	/***/ public String signatureTypeUnknown;
 	/***/ public String signatureVerificationError;
 	/***/ public String signatureVerificationUnavailable;
 	/***/ public String signedTagMessageNoLf;
@@ -839,7 +832,6 @@ public class JGitText extends TranslationBundle {
 	/***/ public String unableToCheckConnectivity;
 	/***/ public String unableToCreateNewObject;
 	/***/ public String unableToReadFullInt;
-	/***/ public String unableToReadFullArray;
 	/***/ public String unableToReadPackfile;
 	/***/ public String unableToRemovePath;
 	/***/ public String unableToWrite;
@@ -865,7 +857,6 @@ public class JGitText extends TranslationBundle {
 	/***/ public String unknownObjectInIndex;
 	/***/ public String unknownObjectType;
 	/***/ public String unknownObjectType2;
-	/***/ public String unknownPackExtension;
 	/***/ public String unknownPositionEncoding;
 	/***/ public String unknownRefStorageFormat;
 	/***/ public String unknownRepositoryFormat;

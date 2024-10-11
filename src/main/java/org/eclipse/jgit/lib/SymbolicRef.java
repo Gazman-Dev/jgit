@@ -15,7 +15,7 @@ import org.eclipse.jgit.annotations.Nullable;
 
 /**
  * A reference that indirectly points at another
- * {@link org.eclipse.jgit.lib.Ref}.
+ * {@link Ref}.
  * <p>
  * A symbolic reference always derives its current value from the target
  * reference.

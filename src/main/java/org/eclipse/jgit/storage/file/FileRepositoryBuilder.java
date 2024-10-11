@@ -19,7 +19,7 @@ import org.eclipse.jgit.lib.BaseRepositoryBuilder;
 import org.eclipse.jgit.lib.Repository;
 
 /**
- * Constructs a {@link org.eclipse.jgit.internal.storage.file.FileRepository}.
+ * Constructs a {@link FileRepository}.
  * <p>
  * Applications must set one of {@link #setGitDir(File)} or
  * {@link #setWorkTree(File)}, or use {@link #readEnvironment()} or
@@ -60,12 +60,12 @@ public class FileRepositoryBuilder extends
 
 	/**
 	 * Convenience factory method to construct a
-	 * {@link org.eclipse.jgit.internal.storage.file.FileRepository}.
+	 * {@link FileRepository}.
 	 *
 	 * @param gitDir
 	 *            {@code GIT_DIR}, the repository meta directory.
 	 * @return a repository matching this configuration.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository could not be accessed to configure the rest of
 	 *             the builder's parameters.
 	 * @since 3.0

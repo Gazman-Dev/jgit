@@ -42,7 +42,7 @@ import org.eclipse.jgit.util.NB;
 
 /**
  * Consumes a pack stream and stores as a pack file in
- * {@link org.eclipse.jgit.internal.storage.file.ObjectDirectory}.
+ * {@link ObjectDirectory}.
  * <p>
  * To obtain an instance of a parser, applications should use
  * {@link org.eclipse.jgit.lib.ObjectInserter#newPackParser(InputStream)}.
@@ -131,7 +131,7 @@ public class ObjectDirectoryPackParser extends PackParser {
 	}
 
 	/**
-	 * Get the imported {@link org.eclipse.jgit.internal.storage.file.Pack}.
+	 * Get the imported {@link Pack}.
 	 * <p>
 	 * This method is supplied only to support testing; applications shouldn't
 	 * be using it directly to access the imported data.

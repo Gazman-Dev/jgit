@@ -49,10 +49,10 @@ import org.eclipse.jgit.transport.RemoteRefUpdate.Status;
  * command executed through an SSH tunnel.
  * <p>
  * This implementation honors
- * {@link org.eclipse.jgit.transport.Transport#isPushThin()} option.
+ * {@link Transport#isPushThin()} option.
  * <p>
  * Concrete implementations should just call
- * {@link #init(java.io.InputStream, java.io.OutputStream)} and
+ * {@link #init(InputStream, OutputStream)} and
  * {@link #readAdvertisedRefs()} methods in constructor or before any use. They
  * should also handle resources releasing in {@link #close()} method if needed.
  */
@@ -169,7 +169,7 @@ public abstract class BasePackPushConnection extends BasePackConnection implemen
 	 *            update commands to be applied to the remote repository.
 	 * @param outputStream
 	 *            output stream to write sideband messages to
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             if any exception occurs.
 	 * @since 3.0
 	 */

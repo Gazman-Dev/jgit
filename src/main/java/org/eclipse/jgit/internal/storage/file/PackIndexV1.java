@@ -29,15 +29,12 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.NB;
 
-class PackIndexV1 implements PackIndex {
+class PackIndexV1 extends PackIndex {
 	private static final int IDX_HDR_LEN = 256 * 4;
 
 	private static final int RECORD_SIZE = 4 + Constants.OBJECT_ID_LENGTH;
 
 	private final long[] idxHeader;
-
-	/** Footer checksum applied on the bottom of the pack file. */
-	protected byte[] packChecksum;
 
 	byte[][] idxdata;
 
@@ -121,7 +118,7 @@ class PackIndexV1 implements PackIndex {
 	}
 
 	@Override
-	public long getOffset(long nthPosition) {
+	long getOffset(long nthPosition) {
 		final int levelOne = findLevelOne(nthPosition);
 		final int levelTwo = getLevelTwo(nthPosition, levelOne);
 		final int p = (4 + Constants.OBJECT_ID_LENGTH) * levelTwo;
@@ -203,7 +200,7 @@ class PackIndexV1 implements PackIndex {
 
 	@Override
 	public Iterator<MutableEntry> iterator() {
-		return new EntriesIteratorV1(this);
+		return new IndexV1Iterator();
 	}
 
 	@Override
@@ -241,35 +238,32 @@ class PackIndexV1 implements PackIndex {
 		return (RECORD_SIZE * mid) + 4;
 	}
 
-	@Override
-	public byte[] getChecksum() {
-		return packChecksum;
-	}
+	private class IndexV1Iterator extends EntriesIterator {
+		int levelOne;
 
-	private static class EntriesIteratorV1 extends EntriesIterator {
-		private int levelOne;
+		int levelTwo;
 
-		private int levelTwo;
-
-		private final PackIndexV1 packIndex;
-
-		private EntriesIteratorV1(PackIndexV1 packIndex) {
-			super(packIndex.objectCnt);
-			this.packIndex = packIndex;
+		@Override
+		protected MutableEntry initEntry() {
+			return new MutableEntry() {
+				@Override
+				protected void ensureId() {
+					idBuffer.fromRaw(idxdata[levelOne], levelTwo
+							- Constants.OBJECT_ID_LENGTH);
+				}
+			};
 		}
 
 		@Override
-		protected void readNext() {
-			for (; levelOne < packIndex.idxdata.length; levelOne++) {
-				if (packIndex.idxdata[levelOne] == null)
+		public MutableEntry next() {
+			for (; levelOne < idxdata.length; levelOne++) {
+				if (idxdata[levelOne] == null)
 					continue;
-				if (levelTwo < packIndex.idxdata[levelOne].length) {
-					super.setOffset(NB.decodeUInt32(packIndex.idxdata[levelOne],
-							levelTwo));
-					this.levelTwo += Constants.OBJECT_ID_LENGTH + 4;
-					super.setIdBuffer(packIndex.idxdata[levelOne],
-							levelTwo - Constants.OBJECT_ID_LENGTH);
-					return;
+				if (levelTwo < idxdata[levelOne].length) {
+					entry.offset = NB.decodeUInt32(idxdata[levelOne], levelTwo);
+					levelTwo += Constants.OBJECT_ID_LENGTH + 4;
+					returnedNumber++;
+					return entry;
 				}
 				levelTwo = 0;
 			}

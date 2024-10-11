@@ -12,8 +12,8 @@ package org.eclipse.jgit.util.io;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * An InputStream which reads from one or more InputStreams.
@@ -34,7 +34,7 @@ public class UnionInputStream extends InputStream {
 		}
 	};
 
-	private final Deque<InputStream> streams = new ArrayDeque<>();
+	private final LinkedList<InputStream> streams = new LinkedList<>();
 
 	/**
 	 * Create an empty InputStream that is currently at EOF state.
@@ -163,14 +163,14 @@ public class UnionInputStream extends InputStream {
 	public void close() throws IOException {
 		IOException err = null;
 
-		for (InputStream stream : streams) {
+		for (Iterator<InputStream> i = streams.iterator(); i.hasNext();) {
 			try {
-				stream.close();
+				i.next().close();
 			} catch (IOException closeError) {
 				err = closeError;
 			}
+			i.remove();
 		}
-		streams.clear();
 
 		if (err != null)
 			throw err;

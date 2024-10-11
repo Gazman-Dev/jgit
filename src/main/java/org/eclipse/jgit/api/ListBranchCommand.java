@@ -67,7 +67,7 @@ public class ListBranchCommand extends GitCommand<List<Ref>> {
 	 * Constructor for ListBranchCommand.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	protected ListBranchCommand(Repository repo) {
 		super(repo);

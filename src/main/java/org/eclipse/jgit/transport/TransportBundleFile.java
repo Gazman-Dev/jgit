@@ -96,7 +96,7 @@ class TransportBundleFile extends Transport implements TransportBundle {
 	 * Constructor for TransportBundleFile.
 	 *
 	 * @param uri
-	 *            a {@link org.eclipse.jgit.transport.URIish} object.
+	 *            a {@link URIish} object.
 	 * @param bundlePath
 	 *            transport bundle path
 	 */

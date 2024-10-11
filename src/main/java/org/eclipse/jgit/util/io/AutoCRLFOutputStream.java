@@ -44,7 +44,7 @@ public class AutoCRLFOutputStream extends OutputStream {
 	/**
 	 * <p>Constructor for AutoCRLFOutputStream.</p>
 	 *
-	 * @param out a {@link java.io.OutputStream} object.
+	 * @param out a {@link OutputStream} object.
 	 */
 	public AutoCRLFOutputStream(OutputStream out) {
 		this(out, true);
@@ -53,7 +53,7 @@ public class AutoCRLFOutputStream extends OutputStream {
 	/**
 	 * <p>Constructor for AutoCRLFOutputStream.</p>
 	 *
-	 * @param out a {@link java.io.OutputStream} object.
+	 * @param out a {@link OutputStream} object.
 	 * @param detectBinary
 	 *            whether binaries should be detected
 	 * @since 4.3

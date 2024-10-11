@@ -61,7 +61,7 @@ public abstract class DfsRepository extends Repository {
 	 * Check if the repository already exists.
 	 *
 	 * @return true if the repository exists; false if it is new.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be checked.
 	 */
 	public boolean exists() throws IOException {

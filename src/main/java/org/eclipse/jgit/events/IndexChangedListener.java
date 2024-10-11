@@ -11,7 +11,7 @@
 package org.eclipse.jgit.events;
 
 /**
- * Receives {@link org.eclipse.jgit.events.IndexChangedEvent}s.
+ * Receives {@link IndexChangedEvent}s.
  */
 public interface IndexChangedListener extends RepositoryListener {
 	/**

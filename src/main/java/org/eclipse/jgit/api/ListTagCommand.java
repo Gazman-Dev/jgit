@@ -40,7 +40,7 @@ public class ListTagCommand extends GitCommand<List<Ref>> {
 	 * Constructor for ListTagCommand.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	protected ListTagCommand(Repository repo) {
 		super(repo);

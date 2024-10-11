@@ -33,8 +33,8 @@ import org.eclipse.jgit.util.NB;
 import org.eclipse.jgit.util.io.SilentFileInputStream;
 
 /**
- * Access path to locate objects by {@link org.eclipse.jgit.lib.ObjectId} in a
- * {@link org.eclipse.jgit.internal.storage.file.Pack}.
+ * Access path to locate objects by {@link ObjectId} in a
+ * {@link Pack}.
  * <p>
  * Indexes are strictly redundant information in that we can rebuild all of the
  * data held in the index file from the on disk representation of the pack file
@@ -42,8 +42,8 @@ import org.eclipse.jgit.util.io.SilentFileInputStream;
  * by ObjectId.
  * </p>
  */
-public interface PackIndex
-		extends Iterable<PackIndex.MutableEntry>, ObjectIdSet {
+public abstract class PackIndex
+		implements Iterable<PackIndex.MutableEntry>, ObjectIdSet {
 	/**
 	 * Open an existing pack <code>.idx</code> file for reading.
 	 * <p>
@@ -57,11 +57,11 @@ public interface PackIndex
 	 * @return access implementation for the requested file.
 	 * @throws FileNotFoundException
 	 *             the file does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the file exists but could not be read due to security errors,
 	 *             unrecognized data version, or unexpected data corruption.
 	 */
-	static PackIndex open(File idxFile) throws IOException {
+	public static PackIndex open(File idxFile) throws IOException {
 		try (SilentFileInputStream fd = new SilentFileInputStream(
 				idxFile)) {
 			return read(fd);
@@ -87,12 +87,12 @@ public interface PackIndex
 	 *            buffered as some small IOs are performed against the stream.
 	 *            The caller is responsible for closing the stream.
 	 * @return a copy of the index in-memory.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be read.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the stream does not contain a valid pack index.
 	 */
-	static PackIndex read(InputStream fd) throws IOException,
+	public static PackIndex read(InputStream fd) throws IOException,
 			CorruptObjectException {
 		final byte[] hdr = new byte[8];
 		IO.readFully(fd, hdr, 0, hdr.length);
@@ -116,6 +116,9 @@ public interface PackIndex
 		return true;
 	}
 
+	/** Footer checksum applied on the bottom of the pack file. */
+	protected byte[] packChecksum;
+
 	/**
 	 * Determine if an object is contained within the pack file.
 	 *
@@ -123,12 +126,12 @@ public interface PackIndex
 	 *            the object to look for. Must not be null.
 	 * @return true if the object is listed in this index; false otherwise.
 	 */
-	default boolean hasObject(AnyObjectId id) {
+	public boolean hasObject(AnyObjectId id) {
 		return findOffset(id) != -1;
 	}
 
 	@Override
-	default boolean contains(AnyObjectId id) {
+	public boolean contains(AnyObjectId id) {
 		return findOffset(id) != -1;
 	}
 
@@ -144,7 +147,7 @@ public interface PackIndex
 	 * </p>
 	 */
 	@Override
-	Iterator<MutableEntry> iterator();
+	public abstract Iterator<MutableEntry> iterator();
 
 	/**
 	 * Obtain the total number of objects described by this index.
@@ -152,7 +155,7 @@ public interface PackIndex
 	 * @return number of objects in this index, and likewise in the associated
 	 *         pack that this index was generated from.
 	 */
-	long getObjectCount();
+	public abstract long getObjectCount();
 
 	/**
 	 * Obtain the total number of objects needing 64 bit offsets.
@@ -160,7 +163,7 @@ public interface PackIndex
 	 * @return number of objects in this index using a 64 bit offset; that is an
 	 *         object positioned after the 2 GB position within the file.
 	 */
-	long getOffset64Count();
+	public abstract long getOffset64Count();
 
 	/**
 	 * Get ObjectId for the n-th object entry returned by {@link #iterator()}.
@@ -178,11 +181,11 @@ public interface PackIndex
 	 * @param nthPosition
 	 *            position within the traversal of {@link #iterator()} that the
 	 *            caller needs the object for. The first returned
-	 *            {@link org.eclipse.jgit.internal.storage.file.PackIndex.MutableEntry}
+	 *            {@link MutableEntry}
 	 *            is 0, the second is 1, etc.
 	 * @return the ObjectId for the corresponding entry.
 	 */
-	ObjectId getObjectId(long nthPosition);
+	public abstract ObjectId getObjectId(long nthPosition);
 
 	/**
 	 * Get ObjectId for the n-th object entry returned by {@link #iterator()}.
@@ -201,12 +204,12 @@ public interface PackIndex
 	 *            unsigned 32 bit position within the traversal of
 	 *            {@link #iterator()} that the caller needs the object for. The
 	 *            first returned
-	 *            {@link org.eclipse.jgit.internal.storage.file.PackIndex.MutableEntry}
+	 *            {@link MutableEntry}
 	 *            is 0, the second is 1, etc. Positions past 2**31-1 are
 	 *            negative, but still valid.
 	 * @return the ObjectId for the corresponding entry.
 	 */
-	default ObjectId getObjectId(int nthPosition) {
+	public final ObjectId getObjectId(int nthPosition) {
 		if (nthPosition >= 0)
 			return getObjectId((long) nthPosition);
 		final int u31 = nthPosition >>> 1;
@@ -225,7 +228,7 @@ public interface PackIndex
 	 *            etc. Positions past 2**31-1 are negative, but still valid.
 	 * @return the offset in a pack for the corresponding entry.
 	 */
-	long getOffset(long nthPosition);
+	abstract long getOffset(long nthPosition);
 
 	/**
 	 * Locate the file offset position for the requested object.
@@ -236,7 +239,7 @@ public interface PackIndex
 	 *         object does not exist in this index and is thus not stored in the
 	 *         associated pack.
 	 */
-	long findOffset(AnyObjectId objId);
+	public abstract long findOffset(AnyObjectId objId);
 
 	/**
 	 * Locate the position of this id in the list of object-ids in the index
@@ -247,7 +250,7 @@ public interface PackIndex
 	 *         of ids stored in this index; -1 if the object does not exist in
 	 *         this index and is thus not stored in the associated pack.
 	 */
-	int findPosition(AnyObjectId objId);
+	public abstract int findPosition(AnyObjectId objId);
 
 	/**
 	 * Retrieve stored CRC32 checksum of the requested object raw-data
@@ -256,12 +259,12 @@ public interface PackIndex
 	 * @param objId
 	 *            id of object to look for
 	 * @return CRC32 checksum of specified object (at 32 less significant bits)
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             when requested ObjectId was not found in this index
-	 * @throws java.lang.UnsupportedOperationException
+	 * @throws UnsupportedOperationException
 	 *             when this index doesn't support CRC32 checksum
 	 */
-	long findCRC32(AnyObjectId objId)
+	public abstract long findCRC32(AnyObjectId objId)
 			throws MissingObjectException, UnsupportedOperationException;
 
 	/**
@@ -269,7 +272,7 @@ public interface PackIndex
 	 *
 	 * @return true if CRC32 is stored, false otherwise
 	 */
-	boolean hasCRC32Support();
+	public abstract boolean hasCRC32Support();
 
 	/**
 	 * Find objects matching the prefix abbreviation.
@@ -282,10 +285,10 @@ public interface PackIndex
 	 * @param matchLimit
 	 *            maximum number of results to return. At most this many
 	 *            ObjectIds should be added to matches before returning.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the index cannot be read.
 	 */
-	void resolve(Set<ObjectId> matches, AbbreviatedObjectId id,
+	public abstract void resolve(Set<ObjectId> matches, AbbreviatedObjectId id,
 			int matchLimit) throws IOException;
 
 	/**
@@ -294,17 +297,18 @@ public interface PackIndex
 	 * @return the checksum of the pack; caller must not modify it
 	 * @since 5.5
 	 */
-	byte[] getChecksum();
+	public byte[] getChecksum() {
+		return packChecksum;
+	}
 
 	/**
 	 * Represent mutable entry of pack index consisting of object id and offset
 	 * in pack (both mutable).
 	 *
 	 */
-	class MutableEntry {
-		/** Buffer of the ObjectId visited by the EntriesIterator. */
+	public static class MutableEntry {
 		final MutableObjectId idBuffer = new MutableObjectId();
-		/** Offset into the packfile of the current object. */
+
 		long offset;
 
 		/**
@@ -322,6 +326,7 @@ public interface PackIndex
 		 * @return hex string describing the object id of this entry.
 		 */
 		public String name() {
+			ensureId();
 			return idBuffer.name();
 		}
 
@@ -331,6 +336,7 @@ public interface PackIndex
 		 * @return a copy of the object id.
 		 */
 		public ObjectId toObjectId() {
+			ensureId();
 			return idBuffer.toObjectId();
 		}
 
@@ -341,37 +347,27 @@ public interface PackIndex
 		 */
 		public MutableEntry cloneEntry() {
 			final MutableEntry r = new MutableEntry();
+			ensureId();
 			r.idBuffer.fromObjectId(idBuffer);
 			r.offset = offset;
 			return r;
 		}
+
+		void ensureId() {
+			// Override in implementations.
+		}
 	}
 
-	/**
-	 * Base implementation of the iterator over index entries.
-	 */
 	abstract class EntriesIterator implements Iterator<MutableEntry> {
-		private final long objectCount;
+		protected final MutableEntry entry = initEntry();
 
-		private final MutableEntry entry = new MutableEntry();
+		protected long returnedNumber = 0;
 
-		/** Counts number of entries accessed so far. */
-		private long returnedNumber = 0;
-
-		/**
-		 * Construct an iterator that can move objectCount times forward.
-		 *
-		 * @param objectCount
-		 *            the number of objects in the PackFile.
-		 */
-		protected EntriesIterator(long objectCount) {
-			this.objectCount = objectCount;
-		}
-
+		protected abstract MutableEntry initEntry();
 
 		@Override
 		public boolean hasNext() {
-			return returnedNumber < objectCount;
+			return returnedNumber < getObjectCount();
 		}
 
 		/**
@@ -379,55 +375,7 @@ public interface PackIndex
 		 * element.
 		 */
 		@Override
-		public MutableEntry next() {
-			readNext();
-			returnedNumber++;
-			return entry;
-		}
-
-		/**
-		 * Used by subclasses to load the next entry into the MutableEntry.
-		 * <p>
-		 * Subclasses are expected to populate the entry with
-		 * {@link #setIdBuffer} and {@link #setOffset}.
-		 */
-		protected abstract void readNext();
-
-
-		/**
-		 * Copies to the entry an {@link ObjectId} from the int buffer and
-		 * position idx
-		 *
-		 * @param raw
-		 *            the raw data
-		 * @param idx
-		 *            the index into {@code raw}
-		 */
-		protected void setIdBuffer(int[] raw, int idx) {
-			entry.idBuffer.fromRaw(raw, idx);
-		}
-
-		/**
-		 * Copies to the entry an {@link ObjectId} from the byte array at
-		 * position idx.
-		 *
-		 * @param raw
-		 *            the raw data
-		 * @param idx
-		 *            the index into {@code raw}
-		 */
-		protected void setIdBuffer(byte[] raw, int idx) {
-			entry.idBuffer.fromRaw(raw, idx);
-		}
-
-		/**
-		 * Sets the {@code offset} to the entry
-		 *
-		 * @param offset the offset in the pack file
-		 */
-		protected void setOffset(long offset) {
-			entry.offset = offset;
-		}
+		public abstract MutableEntry next();
 
 		@Override
 		public void remove() {

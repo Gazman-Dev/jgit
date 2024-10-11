@@ -248,7 +248,7 @@ public class Base64 {
 	 * @param len
 	 *            The length of characters to decode
 	 * @return decoded data
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             the input is not a valid Base64 sequence.
 	 */
 	public static byte[] decode(byte[] source, int off, int len) {

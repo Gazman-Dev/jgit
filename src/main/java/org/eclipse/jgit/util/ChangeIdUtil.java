@@ -49,10 +49,10 @@ public class ChangeIdUtil {
 	 * @param firstParentId
 	 *            parent id of previous commit or null
 	 * @param author
-	 *            the {@link org.eclipse.jgit.lib.PersonIdent} for the presumed
+	 *            the {@link PersonIdent} for the presumed
 	 *            author and time
 	 * @param committer
-	 *            the {@link org.eclipse.jgit.lib.PersonIdent} for the presumed
+	 *            the {@link PersonIdent} for the presumed
 	 *            committer and time
 	 * @param message
 	 *            The commit message

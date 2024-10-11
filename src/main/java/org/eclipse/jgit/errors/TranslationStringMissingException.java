@@ -22,7 +22,7 @@ public class TranslationStringMissingException extends TranslationBundleExceptio
 
 	/**
 	 * Construct a
-	 * {@link org.eclipse.jgit.errors.TranslationStringMissingException} for the
+	 * {@link TranslationStringMissingException} for the
 	 * specified bundle class, locale and translation key
 	 *
 	 * @param bundleClass

@@ -38,7 +38,7 @@ class MergeFormatterPass {
 
 	/**
 	 * @param out
-	 *            the {@link java.io.OutputStream} where to write the textual
+	 *            the {@link OutputStream} where to write the textual
 	 *            presentation
 	 * @param res
 	 *            the merge result which should be presented
@@ -57,7 +57,7 @@ class MergeFormatterPass {
 
 	/**
 	 * @param out
-	 *            the {@link java.io.OutputStream} where to write the textual
+	 *            the {@link OutputStream} where to write the textual
 	 *            presentation
 	 * @param res
 	 *            the merge result which should be presented

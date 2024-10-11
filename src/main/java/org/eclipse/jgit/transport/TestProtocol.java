@@ -37,7 +37,7 @@ import org.eclipse.jgit.transport.resolver.UploadPackFactory;
  * Unlike the other built-in protocols, which are automatically-registered
  * singletons, callers are expected to register/unregister specific protocol
  * instances on demand with
- * {@link org.eclipse.jgit.transport.Transport#register(TransportProtocol)}.
+ * {@link Transport#register(TransportProtocol)}.
  *
  * @param <C>
  *            the connection type
@@ -67,11 +67,11 @@ public class TestProtocol<C> extends TransportProtocol {
 	 *
 	 * @param uploadPackFactory
 	 *            factory for creating
-	 *            {@link org.eclipse.jgit.transport.UploadPack} used by all
+	 *            {@link UploadPack} used by all
 	 *            connections from this protocol instance.
 	 * @param receivePackFactory
 	 *            factory for creating
-	 *            {@link org.eclipse.jgit.transport.ReceivePack} used by all
+	 *            {@link ReceivePack} used by all
 	 *            connections from this protocol instance.
 	 */
 	public TestProtocol(UploadPackFactory<C> uploadPackFactory,

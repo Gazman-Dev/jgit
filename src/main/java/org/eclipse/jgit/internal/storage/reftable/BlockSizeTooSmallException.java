@@ -13,7 +13,7 @@ package org.eclipse.jgit.internal.storage.reftable;
 import java.io.IOException;
 
 /**
- * Thrown if {@link org.eclipse.jgit.internal.storage.reftable.ReftableWriter}
+ * Thrown if {@link ReftableWriter}
  * cannot fit a reference.
  */
 public class BlockSizeTooSmallException extends IOException {

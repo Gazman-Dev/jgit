@@ -15,11 +15,11 @@ package org.eclipse.jgit.attributes;
  * According to the man page, an attribute can have the following states:
  * <ul>
  * <li>Set - represented by
- * {@link org.eclipse.jgit.attributes.Attribute.State#SET}</li>
+ * {@link State#SET}</li>
  * <li>Unset - represented by
- * {@link org.eclipse.jgit.attributes.Attribute.State#UNSET}</li>
+ * {@link State#UNSET}</li>
  * <li>Set to a value - represented by
- * {@link org.eclipse.jgit.attributes.Attribute.State#CUSTOM}</li>
+ * {@link State#CUSTOM}</li>
  * <li>Unspecified - used to revert an attribute . This is crucial in order to
  * mark an attribute as unspecified in the attributes map and thus preventing
  * following (with lower priority) nodes from setting the attribute to a value
@@ -63,8 +63,8 @@ public final class Attribute {
 	 *            the attribute key. Should not be <code>null</code>.
 	 * @param state
 	 *            the attribute state. It should be either
-	 *            {@link org.eclipse.jgit.attributes.Attribute.State#SET} or
-	 *            {@link org.eclipse.jgit.attributes.Attribute.State#UNSET}. In
+	 *            {@link State#SET} or
+	 *            {@link State#UNSET}. In
 	 *            order to create a custom value attribute prefer the use of
 	 *            {@link #Attribute(String, String)} constructor.
 	 */

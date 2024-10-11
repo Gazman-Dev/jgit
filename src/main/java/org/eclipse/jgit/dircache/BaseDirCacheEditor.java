@@ -124,7 +124,7 @@ abstract class BaseDirCacheEditor {
 
 	/**
 	 * Finish this builder and update the destination
-	 * {@link org.eclipse.jgit.dircache.DirCache}.
+	 * {@link DirCache}.
 	 * <p>
 	 * When this method completes this builder instance is no longer usable by
 	 * the calling application. A new builder must be created to make additional
@@ -236,9 +236,9 @@ abstract class BaseDirCacheEditor {
 	 * @return true if the commit was successful and the file contains the new
 	 *         data; false if the commit failed and the file remains with the
 	 *         old data.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             the lock is not held.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the output file could not be created. The caller no longer
 	 *             holds the lock.
 	 */

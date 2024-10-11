@@ -24,7 +24,7 @@ import org.eclipse.jgit.revwalk.RevWalk;
  * Includes a commit only if all subfilters include the same commit.
  * <p>
  * Classic shortcut behavior is used, so evaluation of the
- * {@link org.eclipse.jgit.revwalk.filter.RevFilter#include(RevWalk, RevCommit)}
+ * {@link RevFilter#include(RevWalk, RevCommit)}
  * method stops as soon as a false result is obtained. Applications can improve
  * filtering performance by placing faster filters that are more likely to
  * reject a result earlier in the list.

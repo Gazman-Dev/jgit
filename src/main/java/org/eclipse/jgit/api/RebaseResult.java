@@ -16,7 +16,7 @@ import org.eclipse.jgit.merge.ResolveMerger.MergeFailureReason;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 /**
- * The result of a {@link org.eclipse.jgit.api.RebaseCommand} execution
+ * The result of a {@link RebaseCommand} execution
  */
 public class RebaseResult {
 	/**
@@ -201,8 +201,8 @@ public class RebaseResult {
 	 *            current commit
 	 * @return the RebaseResult
 	 */
-	static RebaseResult result(RebaseResult.Status status,
-			RevCommit commit) {
+	static RebaseResult result(Status status,
+                               RevCommit commit) {
 		return new RebaseResult(status, commit);
 	}
 
@@ -258,11 +258,11 @@ public class RebaseResult {
 
 	/**
 	 * Get the current commit if status is
-	 * {@link org.eclipse.jgit.api.RebaseResult.Status#STOPPED}, otherwise
+	 * {@link Status#STOPPED}, otherwise
 	 * <code>null</code>
 	 *
 	 * @return the current commit if status is
-	 *         {@link org.eclipse.jgit.api.RebaseResult.Status#STOPPED},
+	 *         {@link Status#STOPPED},
 	 *         otherwise <code>null</code>
 	 */
 	public RevCommit getCurrentCommit() {
@@ -275,7 +275,7 @@ public class RebaseResult {
 	 * @return the list of paths causing this rebase to fail (see
 	 *         {@link org.eclipse.jgit.merge.ResolveMerger#getFailingPaths()}
 	 *         for details) if status is
-	 *         {@link org.eclipse.jgit.api.RebaseResult.Status#FAILED},
+	 *         {@link Status#FAILED},
 	 *         otherwise <code>null</code>
 	 */
 	public Map<String, MergeFailureReason> getFailingPaths() {
@@ -286,7 +286,7 @@ public class RebaseResult {
 	 * Get the list of conflicts
 	 *
 	 * @return the list of conflicts if status is
-	 *         {@link org.eclipse.jgit.api.RebaseResult.Status#CONFLICTS}
+	 *         {@link Status#CONFLICTS}
 	 */
 	public List<String> getConflicts() {
 		return conflicts;
@@ -296,7 +296,7 @@ public class RebaseResult {
 	 * <p>Getter for the field <code>uncommittedChanges</code>.</p>
 	 *
 	 * @return the list of uncommitted changes if status is
-	 *         {@link org.eclipse.jgit.api.RebaseResult.Status#UNCOMMITTED_CHANGES}
+	 *         {@link Status#UNCOMMITTED_CHANGES}
 	 * @since 3.2
 	 */
 	public List<String> getUncommittedChanges() {

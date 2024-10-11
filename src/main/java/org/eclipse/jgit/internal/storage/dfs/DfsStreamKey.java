@@ -18,7 +18,7 @@ import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.internal.storage.pack.PackExt;
 
 /**
- * Key used by {@link org.eclipse.jgit.internal.storage.dfs.DfsBlockCache} to disambiguate streams.
+ * Key used by {@link DfsBlockCache} to disambiguate streams.
  */
 public abstract class DfsStreamKey {
 	/**

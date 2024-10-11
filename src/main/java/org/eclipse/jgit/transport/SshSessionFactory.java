@@ -120,7 +120,7 @@ public abstract class SshSessionFactory {
 	 *            connection timeout for creating the session, in milliseconds
 	 * @return a connected and authenticated session for communicating with the
 	 *         remote host given by the {@code uri}
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             if the session could not be created
 	 */
 	public abstract RemoteSession getSession(URIish uri,

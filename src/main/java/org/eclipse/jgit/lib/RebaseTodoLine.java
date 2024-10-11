@@ -114,11 +114,11 @@ public class RebaseTodoLine {
 	 * Create a new non-comment line
 	 *
 	 * @param action
-	 *            a {@link org.eclipse.jgit.lib.RebaseTodoLine.Action} object.
+	 *            a {@link Action} object.
 	 * @param commit
-	 *            a {@link org.eclipse.jgit.lib.AbbreviatedObjectId} object.
+	 *            a {@link AbbreviatedObjectId} object.
 	 * @param shortMessage
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 */
 	public RebaseTodoLine(Action action, AbbreviatedObjectId commit,
 			String shortMessage) {
@@ -144,8 +144,8 @@ public class RebaseTodoLine {
 	 * non-comment.
 	 *
 	 * @param newAction
-	 *            a {@link org.eclipse.jgit.lib.RebaseTodoLine.Action} object.
-	 * @throws org.eclipse.jgit.errors.IllegalTodoFileModification
+	 *            a {@link Action} object.
+	 * @throws IllegalTodoFileModification
 	 *             on attempt to set a non-comment action on a line which was a
 	 *             comment line before.
 	 */
@@ -171,7 +171,7 @@ public class RebaseTodoLine {
 	/**
 	 * <p>
 	 * Set a comment for this line that is used if this line's
-	 * {@link org.eclipse.jgit.lib.RebaseTodoLine#action} is a {@link org.eclipse.jgit.lib.RebaseTodoLine.Action#COMMENT}
+	 * {@link RebaseTodoLine#action} is a {@link Action#COMMENT}
 	 * </p>
 	 * It's allowed to unset the comment by calling
 	 * <code>setComment(null)</code> <br>

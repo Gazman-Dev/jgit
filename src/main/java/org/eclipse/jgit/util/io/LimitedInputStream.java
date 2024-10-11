@@ -18,7 +18,7 @@ import java.io.InputStream;
 import org.eclipse.jgit.internal.JGitText;
 
 /**
- * Wraps a {@link java.io.InputStream}, limiting the number of bytes which can
+ * Wraps a {@link InputStream}, limiting the number of bytes which can
  * be read.
  *
  * This class was copied and modifed from the Google Guava 16.0. Differently
@@ -116,8 +116,8 @@ public abstract class LimitedInputStream extends FilterInputStream {
 	 * Called when trying to read past the given {@link #limit} and the wrapped
 	 * InputStream {@link #in} hasn't yet reached its EOF
 	 *
-	 * @throws java.io.IOException
-	 *             subclasses can throw an {@link java.io.IOException} when the
+	 * @throws IOException
+	 *             subclasses can throw an {@link IOException} when the
 	 *             limit is exceeded. The throws java.io.IOException will be
 	 *             forwarded back to the caller of the read method which read
 	 *             the stream past the limit.

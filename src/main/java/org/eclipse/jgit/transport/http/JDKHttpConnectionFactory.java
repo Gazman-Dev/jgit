@@ -27,7 +27,7 @@ import org.eclipse.jgit.util.HttpSupport;
 
 /**
  * A factory returning instances of
- * {@link org.eclipse.jgit.transport.http.JDKHttpConnection}
+ * {@link JDKHttpConnection}
  *
  * @since 3.3
  */

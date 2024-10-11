@@ -197,7 +197,7 @@ public class PushCertificate {
 	 *
 	 * @return original text payload plus signature; the final output will be
 	 *         valid as input to
-	 *         {@link org.eclipse.jgit.transport.PushCertificateParser#fromString(String)}.
+	 *         {@link PushCertificateParser#fromString(String)}.
 	 * @since 4.1
 	 */
 	public String toTextWithSignature() {

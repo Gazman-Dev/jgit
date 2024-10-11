@@ -26,7 +26,7 @@ import org.eclipse.jgit.lib.ProgressMonitor;
  * <p>
  * {@code ObjectReader} implementations may also optionally implement this
  * interface to support
- * {@link org.eclipse.jgit.internal.storage.pack.PackWriter} with a means of
+ * {@link PackWriter} with a means of
  * copying an object that is already in pack encoding format directly into the
  * output stream, without incurring decompression and recompression overheads.
  */
@@ -34,7 +34,7 @@ public interface ObjectReuseAsIs {
 	/**
 	 * Allocate a new {@code PackWriter} state structure for an object.
 	 * <p>
-	 * {@link org.eclipse.jgit.internal.storage.pack.PackWriter} allocates these
+	 * {@link PackWriter} allocates these
 	 * objects to keep track of the per-object state, and how to load the
 	 * objects efficiently into the generated stream. Implementers may subclass
 	 * this type with additional object state, such as to remember what file and
@@ -53,7 +53,7 @@ public interface ObjectReuseAsIs {
 	 * <p>
 	 * Implementations should iterate through all available representations of
 	 * an object, and pass them in turn to the PackWriter though
-	 * {@link org.eclipse.jgit.internal.storage.pack.PackWriter#select(ObjectToPack, StoredObjectRepresentation)}
+	 * {@link PackWriter#select(ObjectToPack, StoredObjectRepresentation)}
 	 * so the writer can select the most suitable representation to reuse into
 	 * the output stream.
 	 * <p>
@@ -75,10 +75,10 @@ public interface ObjectReuseAsIs {
 	 *            once for each item in the iteration when selection is done.
 	 * @param objects
 	 *            the objects that are being packed.
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             there is no representation available for the object, as it is
 	 *             no longer in the repository. Packing will abort.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be accessed. Packing will abort.
 	 */
 	void selectObjectRepresentation(PackWriter packer,
@@ -106,7 +106,7 @@ public interface ObjectReuseAsIs {
 	 * reduce data locality for the reader, slowing down data access.
 	 *
 	 * Invoking
-	 * {@link org.eclipse.jgit.internal.storage.pack.PackOutputStream#writeObject(ObjectToPack)}
+	 * {@link PackOutputStream#writeObject(ObjectToPack)}
 	 * will cause
 	 * {@link #copyObjectAsIs(PackOutputStream, ObjectToPack, boolean)} to be
 	 * invoked recursively on {@code this} if the current object is scheduled
@@ -118,7 +118,7 @@ public interface ObjectReuseAsIs {
 	 *            the list of objects to write. Objects should be written in
 	 *            approximately this order. Implementors may resort the list
 	 *            elements in-place during writing if desired.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be written to, or one or more required
 	 *             objects cannot be accessed from the object database.
 	 */
@@ -157,13 +157,13 @@ public interface ObjectReuseAsIs {
 	 *            corrupt before being reused. If false, validation may be
 	 *            skipped as it will be performed elsewhere in the processing
 	 *            pipeline.
-	 * @throws org.eclipse.jgit.errors.StoredObjectRepresentationNotAvailableException
+	 * @throws StoredObjectRepresentationNotAvailableException
 	 *             the previously selected representation is no longer
 	 *             available. If thrown before {@code out.writeHeader} the pack
 	 *             writer will try to find another representation, and write
 	 *             that one instead. If throw after {@code out.writeHeader},
 	 *             packing will abort.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream's write method threw an exception. Packing will
 	 *             abort.
 	 */
@@ -180,7 +180,7 @@ public interface ObjectReuseAsIs {
 	 *            stream to append the pack onto.
 	 * @param pack
 	 *            the cached pack to send.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the pack cannot be read, or stream did not accept a write.
 	 */
 	void copyPackAsIs(PackOutputStream out, CachedPack pack)
@@ -196,7 +196,7 @@ public interface ObjectReuseAsIs {
 	 * @param needBitmap
 	 *            the bitmap that contains all of the objects the client wants.
 	 * @return the available cached packs.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the cached packs cannot be listed from the repository.
 	 *             Callers may choose to ignore this and continue as-if there
 	 *             were no cached packs.

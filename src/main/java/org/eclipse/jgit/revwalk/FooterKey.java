@@ -15,7 +15,7 @@ import java.util.Locale;
 import org.eclipse.jgit.lib.Constants;
 
 /**
- * Case insensitive key for a {@link org.eclipse.jgit.revwalk.FooterLine}.
+ * Case insensitive key for a {@link FooterLine}.
  */
 public final class FooterKey {
 	/** Standard {@code Signed-off-by} */

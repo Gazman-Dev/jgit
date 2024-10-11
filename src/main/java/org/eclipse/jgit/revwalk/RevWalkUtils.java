@@ -23,7 +23,7 @@ import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.Ref;
 
 /**
- * Utility methods for {@link org.eclipse.jgit.revwalk.RevWalk}.
+ * Utility methods for {@link RevWalk}.
  */
 public final class RevWalkUtils {
 
@@ -38,7 +38,7 @@ public final class RevWalkUtils {
 	 * but not in <code>end</code>.
 	 * <p>
 	 * Note that this method calls
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#reset()} at the beginning. Also
+	 * {@link RevWalk#reset()} at the beginning. Also
 	 * note that the existing rev filter on the walk is left as-is, so be sure
 	 * to set the right rev filter before calling this method.
 	 *
@@ -50,11 +50,11 @@ public final class RevWalkUtils {
 	 *            the commit where counting should end, or null if counting
 	 *            should be done until there are no more commits
 	 * @return the number of commits
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             if object is missing
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             if object has unexpected type
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public static int count(final RevWalk walk, final RevCommit start,
@@ -70,7 +70,7 @@ public final class RevWalkUtils {
 	 * <code>end</code>.
 	 * <p>
 	 * Note that this method calls
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#reset()} at the beginning. Also
+	 * {@link RevWalk#reset()} at the beginning. Also
 	 * note that the existing rev filter on the walk is left as-is, so be sure
 	 * to set the right rev filter before calling this method.
 	 *
@@ -82,11 +82,11 @@ public final class RevWalkUtils {
 	 *            the commit where counting should end, or null if counting
 	 *            should be done until there are no more commits
 	 * @return the commits found
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             if object is missing
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             if object has unexpected type
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public static List<RevCommit> find(final RevWalk walk,
@@ -109,7 +109,7 @@ public final class RevWalkUtils {
 	 * parents.
 	 * <p>
 	 * Note that this method calls
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#reset()} at the beginning.
+	 * {@link RevWalk#reset()} at the beginning.
 	 * <p>
 	 * In order to improve performance this method assumes clock skew among
 	 * committers is never larger than 24 hours.
@@ -121,11 +121,11 @@ public final class RevWalkUtils {
 	 * @param refs
 	 *            the set of branches we want to see reachability from
 	 * @return the list of branches a given commit is reachable from
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             if object is missing
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             if object has unexpected type
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public static List<Ref> findBranchesReachableFrom(RevCommit commit,
@@ -141,7 +141,7 @@ public final class RevWalkUtils {
 	 * parents.
 	 * <p>
 	 * Note that this method calls
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#reset()} at the beginning.
+	 * {@link RevWalk#reset()} at the beginning.
 	 * <p>
 	 * In order to improve performance this method assumes clock skew among
 	 * committers is never larger than 24 hours.
@@ -155,11 +155,11 @@ public final class RevWalkUtils {
 	 * @param monitor
 	 *            the callback for progress and cancellation
 	 * @return the list of branches a given commit is reachable from
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             if object is missing
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             if object has unexpected type
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 5.4
 	 */

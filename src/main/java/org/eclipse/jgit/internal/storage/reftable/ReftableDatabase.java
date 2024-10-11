@@ -56,7 +56,7 @@ public abstract class ReftableDatabase {
 	 *
 	 * @return the next available logical timestamp for an additional reftable
 	 *         in the stack.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             on I/O problems.
 	 */
 	public long nextUpdateIndex() throws IOException {
@@ -230,7 +230,7 @@ public abstract class ReftableDatabase {
 	 * @param name
 	 *            the unabbreviated name of the reference.
 	 * @return the reference (if it exists); else {@code null}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the reference space cannot be accessed.
 	 */
 	@Nullable
@@ -255,7 +255,7 @@ public abstract class ReftableDatabase {
 	 *            string that names of refs should start with; may be empty (to
 	 *            return all refs).
 	 * @return immutable list of refs whose names start with {@code prefix}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the reference space cannot be accessed.
 	 */
 	public List<Ref> getRefsByPrefix(String prefix) throws IOException {
@@ -289,7 +289,7 @@ public abstract class ReftableDatabase {
 	 *            strings that names of refs can't start with; may be empty.
 	 * @return immutable list of refs whose names start with {@code include} and
 	 *         none of the strings in {@code excludes}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the reference space cannot be accessed.
 	 */
 	public List<Ref> getRefsByPrefixWithExclusions(String include, Set<String> excludes) throws IOException {
@@ -354,7 +354,7 @@ public abstract class ReftableDatabase {
 	 *            {@link ObjectId} to resolve
 	 * @return a {@link Set} of {@link Ref}s whose tips point to the provided
 	 *         id.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             on I/O errors.
 	 */
 	public Set<Ref> getTipsWithSha1(ObjectId id) throws IOException {

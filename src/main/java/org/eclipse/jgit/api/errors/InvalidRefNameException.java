@@ -59,7 +59,7 @@ public class InvalidRefNameException extends GitAPIException {
 	 * @param msg
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable}
+	 *            a {@link Throwable}
 	 */
 	public InvalidRefNameException(String msg, Throwable cause) {
 		super(msg, cause);

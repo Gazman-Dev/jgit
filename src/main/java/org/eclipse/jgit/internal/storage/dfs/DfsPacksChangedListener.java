@@ -13,7 +13,7 @@ package org.eclipse.jgit.internal.storage.dfs;
 import org.eclipse.jgit.events.RepositoryListener;
 
 /**
- * Receives {@link org.eclipse.jgit.internal.storage.dfs.DfsPacksChangedEvent}s.
+ * Receives {@link DfsPacksChangedEvent}s.
  */
 public interface DfsPacksChangedListener extends RepositoryListener {
 	/**

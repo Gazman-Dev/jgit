@@ -15,7 +15,7 @@ import java.util.Collections;
 import org.eclipse.jgit.annotations.NonNull;
 
 /**
- * A {@link org.eclipse.jgit.events.RepositoryEvent} describing changes to the
+ * A {@link RepositoryEvent} describing changes to the
  * working tree. It is fired whenever a
  * {@link org.eclipse.jgit.dircache.DirCacheCheckout} modifies
  * (adds/deletes/updates) files in the working tree.
@@ -30,7 +30,7 @@ public class WorkingTreeModifiedEvent
 	private Collection<String> deleted;
 
 	/**
-	 * Creates a new {@link org.eclipse.jgit.events.WorkingTreeModifiedEvent}
+	 * Creates a new {@link WorkingTreeModifiedEvent}
 	 * with the given collections.
 	 *
 	 * @param modified
@@ -56,7 +56,7 @@ public class WorkingTreeModifiedEvent
 	}
 
 	/**
-	 * Retrieves the {@link java.util.Collection} of repository-relative paths
+	 * Retrieves the {@link Collection} of repository-relative paths
 	 * of files that were modified (added or updated).
 	 *
 	 * @return the set
@@ -72,7 +72,7 @@ public class WorkingTreeModifiedEvent
 	}
 
 	/**
-	 * Retrieves the {@link java.util.Collection} of repository-relative paths
+	 * Retrieves the {@link Collection} of repository-relative paths
 	 * of files that were deleted.
 	 *
 	 * @return the set

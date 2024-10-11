@@ -58,10 +58,11 @@ import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.SearchForReuseTimeout;
 import org.eclipse.jgit.errors.StoredObjectRepresentationNotAvailableException;
 import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.internal.storage.file.PackBitmapIndexBuilder;
+import org.eclipse.jgit.internal.storage.file.PackBitmapIndexWriterV1;
 import org.eclipse.jgit.internal.storage.file.PackIndexWriter;
 import org.eclipse.jgit.internal.storage.file.PackObjectSizeIndexWriter;
 import org.eclipse.jgit.internal.storage.file.PackReverseIndexWriter;
-import org.eclipse.jgit.internal.storage.file.PackBitmapIndexBuilder;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.AsyncObjectSizeQueue;
 import org.eclipse.jgit.lib.BatchingProgressMonitor;
@@ -109,7 +110,7 @@ import org.eclipse.jgit.util.TemporaryBuffer;
  * <li>(usually) by providing sets of interesting and uninteresting objects in
  * repository - all interesting objects and their ancestors except uninteresting
  * objects and their ancestors will be included in pack, or</li>
- * <li>by providing iterator of {@link org.eclipse.jgit.revwalk.RevObject}
+ * <li>by providing iterator of {@link RevObject}
  * specifying exact list and order of objects in pack</li>
  * </ul>
  * <p>
@@ -120,11 +121,11 @@ import org.eclipse.jgit.util.TemporaryBuffer;
  * pack is being stored as a file the matching index can be written out after
  * writing the pack by {@link #writeIndex(OutputStream)}. An optional bitmap
  * index can be made by calling {@link #prepareBitmapIndex(ProgressMonitor)}
- * followed by {@link #writeBitmapIndex(PackBitmapIndexWriter)}.
+ * followed by {@link #writeBitmapIndex(OutputStream)}.
  * </p>
  * <p>
  * Class provide set of configurable options and
- * {@link org.eclipse.jgit.lib.ProgressMonitor} support, as operations may take
+ * {@link ProgressMonitor} support, as operations may take
  * a long time for big repositories. Deltas searching algorithm is <b>NOT
  * IMPLEMENTED</b> yet - this implementation relies only on deltas and objects
  * reuse.
@@ -300,6 +301,19 @@ public class PackWriter implements AutoCloseable {
 	 */
 	public PackWriter(Repository repo) {
 		this(repo, repo.newObjectReader());
+	}
+
+	/**
+	 * Create a writer to load objects from the specified reader.
+	 * <p>
+	 * Objects for packing are specified in {@link #preparePack(Iterator)} or
+	 * {@link #preparePack(ProgressMonitor, Set, Set)}.
+	 *
+	 * @param reader
+	 *            reader to read from the repository with.
+	 */
+	public PackWriter(ObjectReader reader) {
+		this(new PackConfig(), reader);
 	}
 
 	/**
@@ -611,7 +625,7 @@ public class PackWriter implements AutoCloseable {
 	 *
 	 * @return {@code true} to ignore objects that are uninteresting and also
 	 *         not found on local disk; false to throw a
-	 *         {@link org.eclipse.jgit.errors.MissingObjectException} out of
+	 *         {@link MissingObjectException} out of
 	 *         {@link #preparePack(ProgressMonitor, Set, Set)} if an
 	 *         uninteresting object is not in the source repository. By default,
 	 *         true, permitting gracefully ignoring of uninteresting objects.
@@ -627,7 +641,7 @@ public class PackWriter implements AutoCloseable {
 	 *            {@code true} if writer should ignore non existing
 	 *            uninteresting objects during construction set of objects to
 	 *            pack; false otherwise - non existing uninteresting objects may
-	 *            cause {@link org.eclipse.jgit.errors.MissingObjectException}
+	 *            cause {@link MissingObjectException}
 	 */
 	public void setIgnoreMissingUninteresting(boolean ignore) {
 		ignoreMissingUninteresting = ignore;
@@ -692,7 +706,7 @@ public class PackWriter implements AutoCloseable {
 	 * Returns objects number in a pack file that was created by this writer.
 	 *
 	 * @return number of objects in pack.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a cached pack cannot supply its object count.
 	 */
 	public long getObjectCount() throws IOException {
@@ -739,7 +753,7 @@ public class PackWriter implements AutoCloseable {
 	 * been invoked and completed successfully.
 	 *
 	 * @return set of objects in pack.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a cached pack cannot supply its object ids.
 	 */
 	public ObjectIdOwnerMap<ObjectIdOwnerMap.Entry> getObjectSet()
@@ -799,13 +813,13 @@ public class PackWriter implements AutoCloseable {
 	 *            iterator of object to store in a pack; order of objects within
 	 *            each type is important, ordering by type is not needed;
 	 *            allowed types for objects are
-	 *            {@link org.eclipse.jgit.lib.Constants#OBJ_COMMIT},
-	 *            {@link org.eclipse.jgit.lib.Constants#OBJ_TREE},
-	 *            {@link org.eclipse.jgit.lib.Constants#OBJ_BLOB} and
-	 *            {@link org.eclipse.jgit.lib.Constants#OBJ_TAG}; objects
+	 *            {@link Constants#OBJ_COMMIT},
+	 *            {@link Constants#OBJ_TREE},
+	 *            {@link Constants#OBJ_BLOB} and
+	 *            {@link Constants#OBJ_TAG}; objects
 	 *            returned by iterator may be later reused by caller as object
 	 *            id and type are internally copied in each iteration.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             when some I/O problem occur during reading objects.
 	 */
 	public void preparePack(@NonNull Iterator<RevObject> objectsSource)
@@ -834,7 +848,7 @@ public class PackWriter implements AutoCloseable {
 	 * Basing on these 2 sets, another set of objects to put in a pack file is
 	 * created: this set consists of all objects reachable (ancestors) from
 	 * interesting objects, except uninteresting objects and their ancestors.
-	 * This method uses class {@link org.eclipse.jgit.revwalk.ObjectWalk}
+	 * This method uses class {@link ObjectWalk}
 	 * extensively to find out that appropriate set of output objects and their
 	 * optimal order in output pack. Order is consistent with general git
 	 * in-pack rules: sort by object type, recency, path and delta-base first.
@@ -850,7 +864,7 @@ public class PackWriter implements AutoCloseable {
 	 *            points of graph traversal). Pass {@link #NONE} if all objects
 	 *            reachable from {@code want} are desired, such as when serving
 	 *            a clone.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             when some I/O problem occur during reading objects.
 	 */
 	public void preparePack(ProgressMonitor countingMonitor,
@@ -885,7 +899,7 @@ public class PackWriter implements AutoCloseable {
 	 *            {@code shallow} commits and earlier generations will be
 	 *            included in the pack if requested by {@code want}. Must not be
 	 *            {@code null}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an I/O problem occurred while reading objects.
 	 */
 	public void preparePack(ProgressMonitor countingMonitor,
@@ -924,7 +938,7 @@ public class PackWriter implements AutoCloseable {
 	 * @param noBitmaps
 	 *            collection of objects to be excluded from bitmap commit
 	 *            selection.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an I/O problem occurred while reading objects.
 	 */
 	public void preparePack(ProgressMonitor countingMonitor,
@@ -980,7 +994,7 @@ public class PackWriter implements AutoCloseable {
 	 * Basing on these 2 sets, another set of objects to put in a pack file is
 	 * created: this set consists of all objects reachable (ancestors) from
 	 * interesting objects, except uninteresting objects and their ancestors.
-	 * This method uses class {@link org.eclipse.jgit.revwalk.ObjectWalk}
+	 * This method uses class {@link ObjectWalk}
 	 * extensively to find out that appropriate set of output objects and their
 	 * optimal order in output pack. Order is consistent with general git
 	 * in-pack rules: sort by object type, recency, path and delta-base first.
@@ -1001,7 +1015,7 @@ public class PackWriter implements AutoCloseable {
 	 * @param noBitmaps
 	 *            collection of objects to be excluded from bitmap commit
 	 *            selection.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             when some I/O problem occur during reading objects.
 	 */
 	public void preparePack(ProgressMonitor countingMonitor,
@@ -1028,7 +1042,7 @@ public class PackWriter implements AutoCloseable {
 	 * @param id
 	 *            the object to test the existence of.
 	 * @return true if the object will appear in the output pack file.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a cached pack cannot be examined.
 	 */
 	public boolean willInclude(AnyObjectId id) throws IOException {
@@ -1095,7 +1109,7 @@ public class PackWriter implements AutoCloseable {
 	 * @param indexStream
 	 *            output for the index data. Caller is responsible for closing
 	 *            this stream.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the index data could not be written to the supplied stream.
 	 */
 	public void writeIndex(OutputStream indexStream) throws IOException {
@@ -1116,7 +1130,7 @@ public class PackWriter implements AutoCloseable {
 	 * Called after
 	 * {@link #writePack(ProgressMonitor, ProgressMonitor, OutputStream)} that
 	 * populates the list of objects to pack and before
-	 * {@link #writeBitmapIndex(PackBitmapIndexWriter)} that destroys it.
+	 * {@link #writeBitmapIndex(OutputStream)} that destroys it.
 	 * <p>
 	 * Writing this index is only required for local pack storage. Packs sent on
 	 * the network do not need to create an object size index.
@@ -1190,18 +1204,20 @@ public class PackWriter implements AutoCloseable {
 	 * <p>
 	 * Called after {@link #prepareBitmapIndex(ProgressMonitor)}.
 	 *
-	 * @param bitmapIndexWriter
-	 *            a writer to store the bitmap index in this object database
-	 * @throws java.io.IOException
-	 *             the index data could not be written using the supplied writer
+	 * @param bitmapIndexStream
+	 *            output for the bitmap index data. Caller is responsible for
+	 *            closing this stream.
+	 * @throws IOException
+	 *             the index data could not be written to the supplied stream.
 	 */
-	public void writeBitmapIndex(PackBitmapIndexWriter bitmapIndexWriter)
+	public void writeBitmapIndex(OutputStream bitmapIndexStream)
 			throws IOException {
 		if (writeBitmaps == null)
 			throw new IOException(JGitText.get().bitmapsMustBePrepared);
 
 		long writeStart = System.currentTimeMillis();
-		bitmapIndexWriter.write(writeBitmaps, packcsum);
+		final PackBitmapIndexWriterV1 iw = new PackBitmapIndexWriterV1(bitmapIndexStream);
+		iw.write(writeBitmaps, packcsum);
 		stats.timeWriting += System.currentTimeMillis() - writeStart;
 	}
 
@@ -1276,13 +1292,13 @@ public class PackWriter implements AutoCloseable {
 	 * @param packStream
 	 *            output stream of pack data. The stream should be buffered by
 	 *            the caller. The caller is responsible for closing the stream.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred reading a local object's data to include in
 	 *             the pack, or writing compressed object data to the output
 	 *             stream.
 	 * @throws WriteAbortedException
 	 *             the write operation is aborted by
-	 *             {@link org.eclipse.jgit.transport.ObjectCountCallback} .
+	 *             {@link ObjectCountCallback} .
 	 */
 	public void writePack(ProgressMonitor compressMonitor,
 			ProgressMonitor writeMonitor, OutputStream packStream)
@@ -2275,7 +2291,7 @@ public class PackWriter implements AutoCloseable {
 	 *
 	 * @param object
 	 *            the object to add.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             the object is an unsupported type.
 	 */
 	public void addObject(RevObject object)
@@ -2374,7 +2390,7 @@ public class PackWriter implements AutoCloseable {
 	/**
 	 * Select an object representation for this writer.
 	 * <p>
-	 * An {@link org.eclipse.jgit.lib.ObjectReader} implementation should invoke
+	 * An {@link ObjectReader} implementation should invoke
 	 * this method once for each representation available for an object, to
 	 * allow the writer to find the most suitable one for the output.
 	 *
@@ -2452,13 +2468,12 @@ public class PackWriter implements AutoCloseable {
 	 * <p>
 	 * To reduce memory internal state is cleared during this method, rendering
 	 * the PackWriter instance useless for anything further than a call to write
-	 * out the new bitmaps with
-	 * {@link #writeBitmapIndex(PackBitmapIndexWriter)}.
+	 * out the new bitmaps with {@link #writeBitmapIndex(OutputStream)}.
 	 *
 	 * @param pm
 	 *            progress monitor to report bitmap building work.
 	 * @return whether a bitmap index may be written.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             when some I/O problem occur during reading objects.
 	 */
 	public boolean prepareBitmapIndex(ProgressMonitor pm) throws IOException {

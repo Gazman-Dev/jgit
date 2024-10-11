@@ -60,6 +60,7 @@ import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileBasedConfig;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.storage.pack.PackConfig;
 import org.eclipse.jgit.transport.ReceiveCommand;
 import org.eclipse.jgit.util.FileUtils;
 import org.eclipse.jgit.util.IO;
@@ -113,7 +114,7 @@ public class FileRepository extends Repository {
 	 * The work tree, object directory, alternate object directories and index
 	 * file locations are deduced from the given git directory and the default
 	 * rules by running
-	 * {@link org.eclipse.jgit.storage.file.FileRepositoryBuilder}. This
+	 * {@link FileRepositoryBuilder}. This
 	 * constructor is the same as saying:
 	 *
 	 * <pre>
@@ -122,7 +123,7 @@ public class FileRepository extends Repository {
 	 *
 	 * @param gitDir
 	 *            GIT_DIR (the location of the repository metadata).
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository appears to already exist but cannot be
 	 *             accessed.
 	 * @see FileRepositoryBuilder
@@ -136,7 +137,7 @@ public class FileRepository extends Repository {
 	 *
 	 * @param gitDir
 	 *            GIT_DIR (the location of the repository metadata).
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository appears to already exist but cannot be
 	 *             accessed.
 	 * @see FileRepositoryBuilder
@@ -150,7 +151,7 @@ public class FileRepository extends Repository {
 	 *
 	 * @param options
 	 *            description of the repository's important paths.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the user configuration file or repository configuration file
 	 *             cannot be accessed.
 	 */
@@ -164,7 +165,7 @@ public class FileRepository extends Repository {
 			throw new IOException(e.getMessage(), e);
 		}
 		repoConfig = new FileBasedConfig(userConfig, getFS().resolve(
-				getCommonDirectory(), Constants.CONFIG),
+				getDirectory(), Constants.CONFIG),
 				getFS());
 		loadRepoConfig();
 
@@ -192,7 +193,7 @@ public class FileRepository extends Repository {
 				options.getObjectDirectory(), //
 				options.getAlternateObjectDirectories(), //
 				getFS(), //
-				new File(getCommonDirectory(), Constants.SHALLOW));
+				new File(getDirectory(), Constants.SHALLOW));
 
 		if (objectDatabase.exists()) {
 			if (repositoryFormatVersion > 1)
@@ -464,7 +465,7 @@ public class FileRepository extends Repository {
 	 *
 	 * @param pack
 	 *            path of the pack file to open.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             index file could not be opened, read, or is not recognized as
 	 *             a Git pack file index.
 	 */
@@ -594,6 +595,7 @@ public class FileRepository extends Repository {
 	@Override
 	public void autoGC(ProgressMonitor monitor) {
 		GC gc = new GC(this);
+		gc.setPackConfig(new PackConfig(this));
 		gc.setProgressMonitor(monitor);
 		gc.setAuto(true);
 		gc.setBackground(shouldAutoDetach());
@@ -620,17 +622,16 @@ public class FileRepository extends Repository {
 	 *             on IO problem
 	 */
 	void convertToPackedRefs(boolean writeLogs, boolean backup) throws IOException {
-		File commonDirectory = getCommonDirectory();
 		List<Ref> all = refs.getRefs();
-		File packedRefs = new File(commonDirectory, Constants.PACKED_REFS);
+		File packedRefs = new File(getDirectory(), Constants.PACKED_REFS);
 		if (packedRefs.exists()) {
 			throw new IOException(MessageFormat.format(JGitText.get().fileAlreadyExists,
 				packedRefs.getName()));
 		}
 
-		File refsFile = new File(commonDirectory, "refs"); //$NON-NLS-1$
+		File refsFile = new File(getDirectory(), "refs"); //$NON-NLS-1$
 		File refsHeadsFile = new File(refsFile, "heads");//$NON-NLS-1$
-		File headFile = new File(commonDirectory, Constants.HEAD);
+		File headFile = new File(getDirectory(), Constants.HEAD);
 		FileReftableDatabase oldDb = (FileReftableDatabase) refs;
 
 		// Remove the dummy files that ensure compatibility with older git
@@ -700,7 +701,7 @@ public class FileRepository extends Repository {
 		}
 
 		if (!backup) {
-			File reftableDir = new File(commonDirectory, Constants.REFTABLE);
+			File reftableDir = new File(getDirectory(), Constants.REFTABLE);
 			FileUtils.delete(reftableDir,
 					FileUtils.RECURSIVE | FileUtils.IGNORE_ERRORS);
 		}
@@ -729,10 +730,8 @@ public class FileRepository extends Repository {
 	@SuppressWarnings("nls")
 	void convertToReftable(boolean writeLogs, boolean backup)
 			throws IOException {
-		File commonDirectory = getCommonDirectory();
-		File directory = getDirectory();
-		File reftableDir = new File(commonDirectory, Constants.REFTABLE);
-		File headFile = new File(directory, Constants.HEAD);
+		File reftableDir = new File(getDirectory(), Constants.REFTABLE);
+		File headFile = new File(getDirectory(), Constants.HEAD);
 		if (reftableDir.exists() && FileUtils.hasFiles(reftableDir.toPath())) {
 			throw new IOException(JGitText.get().reftableDirExists);
 		}
@@ -740,28 +739,28 @@ public class FileRepository extends Repository {
 		// Ignore return value, as it is tied to temporary newRefs file.
 		FileReftableDatabase.convertFrom(this, writeLogs);
 
-		File refsFile = new File(commonDirectory, "refs");
+		File refsFile = new File(getDirectory(), "refs");
 
 		// non-atomic: remove old data.
-		File packedRefs = new File(commonDirectory, Constants.PACKED_REFS);
-		File logsDir = new File(commonDirectory, Constants.LOGS);
+		File packedRefs = new File(getDirectory(), Constants.PACKED_REFS);
+		File logsDir = new File(getDirectory(), Constants.LOGS);
 
 		List<String> additional = getRefDatabase().getAdditionalRefs().stream()
 				.map(Ref::getName).collect(toList());
 		additional.add(Constants.HEAD);
 		if (backup) {
-			FileUtils.rename(refsFile, new File(commonDirectory, "refs.old"));
+			FileUtils.rename(refsFile, new File(getDirectory(), "refs.old"));
 			if (packedRefs.exists()) {
-				FileUtils.rename(packedRefs, new File(commonDirectory,
+				FileUtils.rename(packedRefs, new File(getDirectory(),
 						Constants.PACKED_REFS + ".old"));
 			}
 			if (logsDir.exists()) {
 				FileUtils.rename(logsDir,
-						new File(commonDirectory, Constants.LOGS + ".old"));
+						new File(getDirectory(), Constants.LOGS + ".old"));
 			}
 			for (String r : additional) {
-				FileUtils.rename(new File(commonDirectory, r),
-						new File(commonDirectory, r + ".old"));
+				FileUtils.rename(new File(getDirectory(), r),
+					new File(getDirectory(), r + ".old"));
 			}
 		} else {
 			FileUtils.delete(packedRefs, FileUtils.SKIP_MISSING);
@@ -771,7 +770,7 @@ public class FileRepository extends Repository {
 			FileUtils.delete(refsFile,
 					FileUtils.RECURSIVE | FileUtils.SKIP_MISSING);
 			for (String r : additional) {
-				new File(commonDirectory, r).delete();
+				new File(getDirectory(), r).delete();
 			}
 		}
 
@@ -785,7 +784,7 @@ public class FileRepository extends Repository {
 
 		// Some tools might write directly into .git/refs/heads/BRANCH. By
 		// putting a file here, this fails spectacularly.
-		FileUtils.createNewFile(new File(refsFile, Constants.HEADS));
+		FileUtils.createNewFile(new File(refsFile, "heads"));
 
 		repoConfig.setString(ConfigConstants.CONFIG_EXTENSIONS_SECTION, null,
 				ConfigConstants.CONFIG_KEY_REF_STORAGE,

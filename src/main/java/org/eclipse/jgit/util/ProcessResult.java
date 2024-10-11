@@ -91,6 +91,6 @@ public class ProcessResult {
 	 * @since 4.0
 	 */
 	public boolean isExecutedWithError() {
-		return getStatus() == ProcessResult.Status.OK && getExitCode() != 0;
+		return getStatus() == Status.OK && getExitCode() != 0;
 	}
 }

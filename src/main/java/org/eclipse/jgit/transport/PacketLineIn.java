@@ -43,13 +43,24 @@ public class PacketLineIn {
 
 	/**
 	 * Magic return from {@link #readString()} when a flush packet is found.
+	 *
+	 * @deprecated Callers should use {@link #isEnd(String)} to check if a
+	 *             string is the end marker, or
+	 *             {@link PacketLineIn#readStrings()} to iterate over all
+	 *             strings in the input stream until the marker is reached.
 	 */
-	private static final String END = new String(); /* must not string pool */
+	@Deprecated
+	public static final String END = new String(); /* must not string pool */
 
 	/**
 	 * Magic return from {@link #readString()} when a delim packet is found.
+	 *
+	 * @since 5.0
+	 * @deprecated Callers should use {@link #isDelimiter(String)} to check if a
+	 *             string is the delimiter.
 	 */
-	private static final String DELIM = new String(); /* must not string pool */
+	@Deprecated
+	public static final String DELIM = new String(); /* must not string pool */
 
 	enum AckNackResult {
 		/** NAK */
@@ -162,7 +173,7 @@ public class PacketLineIn {
 	 * @return the string. {@link #END} if the string was the magic flush
 	 *         packet, {@link #DELIM} if the string was the magic DELIM
 	 *         packet.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be read.
 	 */
 	public String readString() throws IOException {
@@ -218,7 +229,7 @@ public class PacketLineIn {
 	 *
 	 * @return the string. {@link #END} if the string was the magic flush
 	 *         packet.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be read.
 	 */
 	public String readStringRaw() throws IOException {

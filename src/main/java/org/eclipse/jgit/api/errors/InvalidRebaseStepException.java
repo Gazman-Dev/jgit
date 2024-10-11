@@ -62,7 +62,7 @@ public class InvalidRebaseStepException extends GitAPIException {
 	 * @param msg
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable}
+	 *            a {@link Throwable}
 	 */
 	public InvalidRebaseStepException(String msg, Throwable cause) {
 		super(msg, cause);

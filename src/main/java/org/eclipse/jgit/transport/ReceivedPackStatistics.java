@@ -13,7 +13,7 @@ package org.eclipse.jgit.transport;
 import org.eclipse.jgit.lib.Constants;
 
 /**
- * Statistics about {@link org.eclipse.jgit.transport.PackParser}.
+ * Statistics about {@link PackParser}.
  *
  * @since 4.6
  */

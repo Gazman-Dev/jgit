@@ -71,7 +71,7 @@ public abstract class Reftable {
 	 *
 	 * @return the maximum update index for ref entries that appear in this
 	 *         reftable.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             file cannot be read.
 	 */
 	public abstract long maxUpdateIndex() throws IOException;
@@ -82,7 +82,7 @@ public abstract class Reftable {
 	 *
 	 * @return the minimum update index for ref entries that appear in this
 	 *         reftable.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             file cannot be read.
 	 */
 	public abstract long minUpdateIndex() throws IOException;
@@ -91,7 +91,7 @@ public abstract class Reftable {
 	 * Seek to the first reference, to iterate in order.
 	 *
 	 * @return cursor to iterate.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if references cannot be read.
 	 */
 	public abstract RefCursor allRefs() throws IOException;
@@ -106,7 +106,7 @@ public abstract class Reftable {
 	 * @param refName
 	 *            reference name.
 	 * @return cursor to iterate; empty cursor if no references match.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if references cannot be read.
 	 */
 	public abstract RefCursor seekRef(String refName) throws IOException;
@@ -121,7 +121,7 @@ public abstract class Reftable {
 	 * @param prefix
 	 *            prefix to find.
 	 * @return cursor to iterate; empty cursor if no references match.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if references cannot be read.
 	 */
 	public abstract RefCursor seekRefsWithPrefix(String prefix) throws IOException;
@@ -132,7 +132,7 @@ public abstract class Reftable {
 	 * @param id
 	 *            object to find.
 	 * @return cursor to iterate; empty cursor if no references match.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if references cannot be read.
 	 */
 	public abstract RefCursor byObjectId(AnyObjectId id) throws IOException;
@@ -150,7 +150,7 @@ public abstract class Reftable {
 	 * Seek reader to read log records.
 	 *
 	 * @return cursor to iterate; empty cursor if no logs are present.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if logs cannot be read.
 	 */
 	public abstract LogCursor allLogs() throws IOException;
@@ -161,7 +161,7 @@ public abstract class Reftable {
 	 * @param refName
 	 *            exact name of the reference whose log to read.
 	 * @return cursor to iterate; empty cursor if no logs match.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if logs cannot be read.
 	 */
 	public LogCursor seekLog(String refName) throws IOException {
@@ -177,7 +177,7 @@ public abstract class Reftable {
 	 *            most recent index to return first in the log cursor. Log
 	 *            records at or before {@code updateIndex} will be returned.
 	 * @return cursor to iterate; empty cursor if no logs match.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if logs cannot be read.
 	 */
 	public abstract LogCursor seekLog(String refName, long updateIndex)
@@ -189,7 +189,7 @@ public abstract class Reftable {
 	 * @param refName
 	 *            reference name to find.
 	 * @return the reference, or {@code null} if not found.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if references cannot be read.
 	 */
 	@Nullable
@@ -205,7 +205,7 @@ public abstract class Reftable {
 	 * @param refName
 	 *            reference name or subtree to find.
 	 * @return {@code true} if the reference exists.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if references cannot be read.
 	 */
 	public boolean hasRef(String refName) throws IOException {
@@ -220,7 +220,7 @@ public abstract class Reftable {
 	 * @param prefix
 	 *            prefix to find.
 	 * @return {@code true} if at least one reference exists with prefix.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if references cannot be read.
 	 */
 	public boolean hasRefsWithPrefix(String prefix) throws IOException {
@@ -236,7 +236,7 @@ public abstract class Reftable {
 	 *            ObjectId to find.
 	 * @return {@code true} if any reference exists directly referencing
 	 *         {@code id}, or a annotated tag that peels to {@code id}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if references cannot be read.
 	 */
 	public boolean hasId(AnyObjectId id) throws IOException {
@@ -251,7 +251,7 @@ public abstract class Reftable {
 	 * @param symref
 	 *            reference to resolve.
 	 * @return resolved {@code symref}, or {@code null}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if references cannot be read.
 	 */
 	@Nullable

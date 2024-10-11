@@ -24,7 +24,7 @@ public class ServiceUnavailableException extends GitAPIException {
 	 * @param message
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable}
+	 *            a {@link Throwable}
 	 */
 	public ServiceUnavailableException(String message, Throwable cause) {
 		super(message, cause);

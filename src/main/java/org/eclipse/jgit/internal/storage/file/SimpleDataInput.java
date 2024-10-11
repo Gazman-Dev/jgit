@@ -47,7 +47,7 @@ class SimpleDataInput implements DataInput {
 	 * Read unsigned int
 	 *
 	 * @return a long.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if any.
 	 */
 	public long readUnsignedInt() throws IOException {

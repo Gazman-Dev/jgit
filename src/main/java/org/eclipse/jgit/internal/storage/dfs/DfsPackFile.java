@@ -29,7 +29,6 @@ import java.nio.channels.Channels;
 import java.text.MessageFormat;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.CRC32;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
@@ -53,12 +52,10 @@ import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
 import org.eclipse.jgit.internal.storage.pack.StoredObjectRepresentation;
 import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.util.LongList;
 
 /**
@@ -71,10 +68,7 @@ public final class DfsPackFile extends BlockBasedFile {
 
 	private static final long REF_POSITION = 0;
 
-	/**
-	 * Loader for the default file-based {@link PackBitmapIndex} implementation.
-	 */
-	public static final PackBitmapIndexLoader DEFAULT_BITMAP_LOADER = new StreamPackBitmapIndexLoader();
+	private static final PackBitmapIndexLoader DEFAULT_BITMAP_LOADER = new StreamPackBitmapIndexLoader();
 
 	/** Index mapping {@link ObjectId} to position within the pack stream. */
 	private volatile PackIndex index;
@@ -107,53 +101,6 @@ public final class DfsPackFile extends BlockBasedFile {
 	/** Lock for {@link #corruptObjects}. */
 	private final Object corruptObjectsLock = new Object();
 
-	private final IndexFactory indexFactory;
-
-	/**
-	 * Returns the indexes for this pack.
-	 * <p>
-	 * We define indexes in different sub interfaces to allow implementing the
-	 * indexes over different combinations of backends.
-	 * <p>
-	 * Implementations decide if/how to cache the indexes. The calling
-	 * DfsPackFile will keep the reference to the index as long as it needs it.
-	 */
-	public interface IndexFactory {
-		/**
-		 * Take care of loading the primary and reverse indexes for this pack.
-		 */
-		interface PackIndexes {
-			/**
-			 * Load the primary index for the pack.
-			 *
-			 * @param ctx
-			 *            reader to find the raw bytes
-			 * @return a primary index
-			 * @throws IOException
-			 *             a problem finding/parsing the index
-			 */
-			PackIndex index(DfsReader ctx) throws IOException;
-
-			/**
-			 * Load the reverse index of the pack
-			 *
-			 * @param ctx
-			 *            reader to find the raw bytes
-			 * @return the reverse index of the pack
-			 * @throws IOException
-			 *             a problem finding/parsing the reverse index
-			 */
-			PackReverseIndex reverseIndex(DfsReader ctx) throws IOException;
-		}
-
-		/**
-		 * Returns a provider of the primary and reverse indexes of this pack
-		 *
-		 * @return an implementation of the {@link PackIndexes} interface
-		 */
-		PackIndexes getPackIndexes();
-	}
-
 	/**
 	 * Construct a reader for an existing, packfile.
 	 *
@@ -163,24 +110,10 @@ public final class DfsPackFile extends BlockBasedFile {
 	 *            description of the pack within the DFS.
 	 */
 	DfsPackFile(DfsBlockCache cache, DfsPackDescription desc) {
-		this(cache, desc, DEFAULT_BITMAP_LOADER,
-				new CachedStreamIndexFactory(cache, desc));
+		this(cache, desc, DEFAULT_BITMAP_LOADER);
 	}
 
-	/**
-	 * Create an instance of DfsPackFile with a custom bitmap loader
-	 *
-	 * @param cache
-	 *            cache that owns the pack data
-	 * @param desc
-	 *            description of the pack within the DFS
-	 * @param bitmapLoader
-	 *            loader to get the bitmaps of this pack (if any)
-	 * @param indexFactory
-	 *            an IndexFactory to get references to the indexes of this pack
-	 */
-	public DfsPackFile(DfsBlockCache cache, DfsPackDescription desc,
-			PackBitmapIndexLoader bitmapLoader, IndexFactory indexFactory) {
+	DfsPackFile(DfsBlockCache cache, DfsPackDescription desc, PackBitmapIndexLoader bitmapLoader) {
 		super(cache, desc, PACK);
 
 		int bs = desc.getBlockSize(PACK);
@@ -192,7 +125,6 @@ public final class DfsPackFile extends BlockBasedFile {
 		length = sz > 0 ? sz : -1;
 
 		this.bitmapLoader = bitmapLoader;
-		this.indexFactory = indexFactory;
 	}
 
 	/**
@@ -228,7 +160,7 @@ public final class DfsPackFile extends BlockBasedFile {
 	 *            reader context to support reading from the backing store if
 	 *            the index is not already loaded in memory.
 	 * @return the PackIndex.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the pack index is not available, or is corrupt.
 	 */
 	public PackIndex getPackIndex(DfsReader ctx) throws IOException {
@@ -247,10 +179,19 @@ public final class DfsPackFile extends BlockBasedFile {
 		Repository.getGlobalListenerList()
 				.dispatch(new BeforeDfsPackIndexLoadedEvent(this));
 		try {
-			index = indexFactory.getPackIndexes().index(ctx);
-			if (index == null) {
-				throw new IOException(
-						"Couldn't get a reference to the primary index"); //$NON-NLS-1$
+			DfsStreamKey idxKey = desc.getStreamKey(INDEX);
+			AtomicBoolean cacheHit = new AtomicBoolean(true);
+			DfsBlockCache.Ref<PackIndex> idxref = cache.getOrLoadRef(idxKey,
+					REF_POSITION, () -> {
+						cacheHit.set(false);
+						return loadPackIndex(ctx, idxKey);
+					});
+			if (cacheHit.get()) {
+				ctx.stats.idxCacheHit++;
+			}
+			PackIndex idx = idxref.get();
+			if (index == null && idx != null) {
+				index = idx;
 			}
 			ctx.emitIndexLoad(desc, INDEX, index);
 			return index;
@@ -272,7 +213,7 @@ public final class DfsPackFile extends BlockBasedFile {
 	 *            reader context to support reading from the backing store if
 	 *            the index is not already loaded in memory.
 	 * @return the BitmapIndex.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the bitmap index is not available, or is corrupt.
 	 */
 	public PackBitmapIndex getBitmapIndex(DfsReader ctx) throws IOException {
@@ -317,9 +258,9 @@ public final class DfsPackFile extends BlockBasedFile {
 	 * @param ctx
 	 *            reader context to support reading from the backing store if
 	 *            the index is not already loaded in memory.
-	 * @return {@link org.eclipse.jgit.internal.storage.commitgraph.CommitGraph},
+	 * @return {@link CommitGraph},
 	 *         null if pack doesn't have it.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the Commit Graph is not available, or is corrupt.
 	 */
 	public CommitGraph getCommitGraph(DfsReader ctx) throws IOException {
@@ -356,7 +297,7 @@ public final class DfsPackFile extends BlockBasedFile {
 	 *            reader context to support reading from the backing store if
 	 *            the index is not already loaded in memory
 	 * @return the PackReverseIndex
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the pack index is not available, or is corrupt
 	 */
 	public PackReverseIndex getReverseIdx(DfsReader ctx) throws IOException {
@@ -364,10 +305,20 @@ public final class DfsPackFile extends BlockBasedFile {
 			return reverseIndex;
 		}
 
-		reverseIndex = indexFactory.getPackIndexes().reverseIndex(ctx);
-		if (reverseIndex == null) {
-			throw new IOException(
-					"Couldn't get a reference to the reverse index"); //$NON-NLS-1$
+		PackIndex idx = idx(ctx);
+		DfsStreamKey revKey = desc.getStreamKey(REVERSE_INDEX);
+		AtomicBoolean cacheHit = new AtomicBoolean(true);
+		DfsBlockCache.Ref<PackReverseIndex> revref = cache.getOrLoadRef(revKey,
+				REF_POSITION, () -> {
+					cacheHit.set(false);
+					return loadReverseIdx(ctx, revKey, idx);
+				});
+		if (cacheHit.get()) {
+			ctx.stats.ridxCacheHit++;
+		}
+		PackReverseIndex revidx = revref.get();
+		if (reverseIndex == null && revidx != null) {
+			reverseIndex = revidx;
 		}
 		ctx.emitIndexLoad(desc, REVERSE_INDEX, reverseIndex);
 		return reverseIndex;
@@ -380,7 +331,6 @@ public final class DfsPackFile extends BlockBasedFile {
 		}
 
 		if (objectSizeIndexLoadAttempted
-				|| !ctx.getOptions().shouldUseObjectSizeIndex()
 				|| !desc.hasFileExt(OBJECT_SIZE_INDEX)) {
 			// Pack doesn't have object size index
 			return null;
@@ -421,7 +371,7 @@ public final class DfsPackFile extends BlockBasedFile {
 	 * @param id
 	 *            object to be located.
 	 * @return true if the object exists in this pack; false if it does not.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the pack index is not available, or is corrupt.
 	 */
 	public boolean hasObject(DfsReader ctx, AnyObjectId id) throws IOException {
@@ -1244,6 +1194,48 @@ public final class DfsPackFile extends BlockBasedFile {
 		}
 	}
 
+	private DfsBlockCache.Ref<PackIndex> loadPackIndex(
+			DfsReader ctx, DfsStreamKey idxKey) throws IOException {
+		try {
+			ctx.stats.readIdx++;
+			long start = System.nanoTime();
+			try (ReadableChannel rc = ctx.db.openFile(desc, INDEX)) {
+				PackIndex idx = PackIndex.read(alignTo8kBlocks(rc));
+				ctx.stats.readIdxBytes += rc.position();
+				index = idx;
+				return new DfsBlockCache.Ref<>(
+						idxKey,
+						REF_POSITION,
+						idx.getObjectCount() * REC_SIZE,
+						idx);
+			} finally {
+				ctx.stats.readIdxMicros += elapsedMicros(start);
+			}
+		} catch (EOFException e) {
+			throw new IOException(MessageFormat.format(
+					DfsText.get().shortReadOfIndex,
+					desc.getFileName(INDEX)), e);
+		} catch (IOException e) {
+			throw new IOException(MessageFormat.format(
+					DfsText.get().cannotReadIndex,
+					desc.getFileName(INDEX)), e);
+		}
+	}
+
+	private DfsBlockCache.Ref<PackReverseIndex> loadReverseIdx(
+			DfsReader ctx, DfsStreamKey revKey, PackIndex idx) {
+		ctx.stats.readReverseIdx++;
+		long start = System.nanoTime();
+		PackReverseIndex revidx = PackReverseIndexFactory.computeFromIndex(idx);
+		reverseIndex = revidx;
+		ctx.stats.readReverseIdxMicros += elapsedMicros(start);
+		return new DfsBlockCache.Ref<>(
+				revKey,
+				REF_POSITION,
+				idx.getObjectCount() * 8,
+				revidx);
+	}
+
 	private DfsBlockCache.Ref<PackObjectSizeIndex> loadObjectSizeIndex(
 			DfsReader ctx, DfsStreamKey objectSizeIndexKey) throws IOException {
 		ctx.stats.readObjectSizeIndex++;
@@ -1280,12 +1272,9 @@ public final class DfsPackFile extends BlockBasedFile {
 	private DfsBlockCache.Ref<PackBitmapIndex> loadBitmapIndex(DfsReader ctx,
 			DfsStreamKey bitmapKey) throws IOException {
 		ctx.stats.readBitmap++;
-		long start = System.nanoTime();
 		PackBitmapIndexLoader.LoadResult result = bitmapLoader
 				.loadPackBitmapIndex(ctx, this);
 		bitmapIndex = result.bitmapIndex;
-		ctx.stats.readBitmapIdxBytes += result.bytesRead;
-		ctx.stats.readBitmapIdxMicros += elapsedMicros(start);
 		return new DfsBlockCache.Ref<>(bitmapKey, REF_POSITION,
 				result.bytesRead, result.bitmapIndex);
 	}
@@ -1294,16 +1283,11 @@ public final class DfsPackFile extends BlockBasedFile {
 			DfsStreamKey cgkey) throws IOException {
 		ctx.stats.readCommitGraph++;
 		long start = System.nanoTime();
-		StoredConfig repoConfig = ctx.db.getRepository().getConfig();
-		boolean readChangedPathFilters = repoConfig.getBoolean(
-				ConfigConstants.CONFIG_COMMIT_GRAPH_SECTION,
-				ConfigConstants.CONFIG_KEY_READ_CHANGED_PATHS, false);
 		try (ReadableChannel rc = ctx.db.openFile(desc, COMMIT_GRAPH)) {
 			long size;
 			CommitGraph cg;
 			try {
-				cg = CommitGraphLoader.read(alignTo8kBlocks(rc),
-						readChangedPathFilters);
+				cg = CommitGraphLoader.read(alignTo8kBlocks(rc));
 			} finally {
 				size = rc.position();
 				ctx.stats.readCommitGraphBytes += size;
@@ -1380,22 +1364,12 @@ public final class DfsPackFile extends BlockBasedFile {
 		 * The bytes can be 0, if the implementation doesn't do any initial
 		 * loading.
 		 */
-		public class LoadResult {
-			/** The loaded {@link PackBitmapIndex}. */
-			public final PackBitmapIndex bitmapIndex;
+		class LoadResult {
+			final PackBitmapIndex bitmapIndex;
 
-			/** The bytes read upon initial load (may be 0). */
-			public final long bytesRead;
+			final long bytesRead;
 
-			/**
-			 * Constructs the LoadResult.
-			 *
-			 * @param packBitmapIndex
-			 *            the loaded index.
-			 * @param bytesRead
-			 *            the bytes read upon loading.
-			 */
-			public LoadResult(PackBitmapIndex packBitmapIndex, long bytesRead) {
+			LoadResult(PackBitmapIndex packBitmapIndex, long bytesRead) {
 				this.bitmapIndex = packBitmapIndex;
 				this.bytesRead = bytesRead;
 			}
@@ -1442,143 +1416,6 @@ public final class DfsPackFile extends BlockBasedFile {
 								desc.getFileName(BITMAP_INDEX)),
 						e);
 			}
-		}
-	}
-
-	/**
-	 * An index factory backed by Dfs streams and references cached in
-	 * DfsBlockCache
-	 */
-	public static final class CachedStreamIndexFactory implements IndexFactory {
-		private final CachedStreamPackIndexes indexes;
-
-		/**
-		 * An index factory
-		 *
-		 * @param cache
-		 *            DFS block cache to use for the references
-		 * @param desc
-		 *            This factory loads indexes for this package
-		 */
-		public CachedStreamIndexFactory(DfsBlockCache cache,
-				DfsPackDescription desc) {
-			this.indexes = new CachedStreamPackIndexes(cache, desc);
-		}
-
-		@Override
-		public PackIndexes getPackIndexes() {
-			return indexes;
-		}
-	}
-
-	/**
-	 * Load primary and reverse index from Dfs streams and cache the references
-	 * in DfsBlockCache.
-	 */
-	public static final class CachedStreamPackIndexes implements IndexFactory.PackIndexes {
-		private final DfsBlockCache cache;
-
-		private final DfsPackDescription desc;
-
-		/**
-		 * An index factory
-		 *
-		 * @param cache
-		 *            DFS block cache to use for the references
-		 * @param desc This factory loads indexes for this package
-		 */
-		public CachedStreamPackIndexes(DfsBlockCache cache,
-									   DfsPackDescription desc) {
-			this.cache = cache;
-			this.desc = desc;
-		}
-
-		@Override
-		public PackIndex index(DfsReader ctx) throws IOException {
-			DfsStreamKey idxKey = desc.getStreamKey(INDEX);
-			// Keep the value parsed in the loader, in case the Ref<> is
-			// nullified in ClockBlockCacheTable#reserveSpace
-			// before we read its value.
-			AtomicReference<PackIndex> loadedRef = new AtomicReference<>(null);
-			DfsBlockCache.Ref<PackIndex> cachedRef = cache.getOrLoadRef(idxKey,
-					REF_POSITION, () -> {
-						RefWithSize<PackIndex> idx = loadPackIndex(ctx, desc);
-						loadedRef.set(idx.ref);
-						return new DfsBlockCache.Ref<>(idxKey, REF_POSITION,
-								idx.size, idx.ref);
-					});
-			if (loadedRef.get() == null) {
-				ctx.stats.idxCacheHit++;
-			}
-			return cachedRef.get() != null ? cachedRef.get() : loadedRef.get();
-		}
-
-		private static RefWithSize<PackIndex> loadPackIndex(DfsReader ctx,
-				DfsPackDescription desc) throws IOException {
-			try {
-				ctx.stats.readIdx++;
-				long start = System.nanoTime();
-				try (ReadableChannel rc = ctx.db.openFile(desc, INDEX)) {
-					PackIndex idx = PackIndex.read(alignTo8kBlocks(rc));
-					ctx.stats.readIdxBytes += rc.position();
-					return new RefWithSize<>(idx,
-							idx.getObjectCount() * REC_SIZE);
-				} finally {
-					ctx.stats.readIdxMicros += elapsedMicros(start);
-				}
-			} catch (EOFException e) {
-				throw new IOException(
-						MessageFormat.format(DfsText.get().shortReadOfIndex,
-								desc.getFileName(INDEX)),
-						e);
-			} catch (IOException e) {
-				throw new IOException(
-						MessageFormat.format(DfsText.get().cannotReadIndex,
-								desc.getFileName(INDEX)),
-						e);
-			}
-		}
-
-		@Override
-		public PackReverseIndex reverseIndex(DfsReader ctx) throws IOException {
-			PackIndex idx = index(ctx);
-			DfsStreamKey revKey = desc.getStreamKey(REVERSE_INDEX);
-			// Keep the value parsed in the loader, in case the Ref<> is
-			// nullified in ClockBlockCacheTable#reserveSpace
-			// before we read its value.
-			AtomicReference<PackReverseIndex> loadedRef = new AtomicReference<>(
-					null);
-			DfsBlockCache.Ref<PackReverseIndex> cachedRef = cache
-					.getOrLoadRef(revKey, REF_POSITION, () -> {
-						RefWithSize<PackReverseIndex> ridx = loadReverseIdx(ctx,
-								idx);
-						loadedRef.set(ridx.ref);
-						return new DfsBlockCache.Ref<>(revKey, REF_POSITION,
-								ridx.size, ridx.ref);
-					});
-			if (loadedRef.get() == null) {
-				ctx.stats.ridxCacheHit++;
-			}
-			return cachedRef.get() != null ? cachedRef.get() : loadedRef.get();
-		}
-
-		private static RefWithSize<PackReverseIndex> loadReverseIdx(
-				DfsReader ctx, PackIndex idx) {
-			ctx.stats.readReverseIdx++;
-			long start = System.nanoTime();
-			PackReverseIndex revidx = PackReverseIndexFactory
-					.computeFromIndex(idx);
-			ctx.stats.readReverseIdxMicros += elapsedMicros(start);
-			return new RefWithSize<>(revidx, idx.getObjectCount() * 8);
-		}
-	}
-
-	private static final class RefWithSize<V> {
-		final V ref;
-		final long size;
-		RefWithSize(V ref, long size) {
-			this.ref = ref;
-			this.size = size;
 		}
 	}
 }

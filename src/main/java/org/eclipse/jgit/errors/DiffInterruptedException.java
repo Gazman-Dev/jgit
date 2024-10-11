@@ -25,7 +25,7 @@ public class DiffInterruptedException extends RuntimeException {
 	 * @param message
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable}
+	 *            a {@link Throwable}
 	 * @since 4.1
 	 */
 	public DiffInterruptedException(String message, Throwable cause) {

@@ -13,7 +13,7 @@ package org.eclipse.jgit.transport;
 import java.util.Collection;
 
 /**
- * Hook invoked by {@link org.eclipse.jgit.transport.ReceivePack} before any
+ * Hook invoked by {@link ReceivePack} before any
  * updates are executed.
  * <p>
  * The hook is called with any commands that are deemed valid after parsing them
@@ -26,21 +26,21 @@ import java.util.Collection;
  * This means the hook will not receive a non-fast-forward update command if
  * denyNonFastForwards is set to true in the configuration file. To get all
  * commands within the hook, see
- * {@link org.eclipse.jgit.transport.ReceivePack#getAllCommands()}.
+ * {@link ReceivePack#getAllCommands()}.
  * <p>
  * As the hook is invoked prior to the commands being executed, the hook may
  * choose to block any command by setting its result status with
- * {@link org.eclipse.jgit.transport.ReceiveCommand#setResult(ReceiveCommand.Result)}.
+ * {@link ReceiveCommand#setResult(ReceiveCommand.Result)}.
  * <p>
  * The hook may also choose to perform the command itself (or merely pretend
  * that it has performed the command), by setting the result status to
- * {@link org.eclipse.jgit.transport.ReceiveCommand.Result#OK}.
+ * {@link ReceiveCommand.Result#OK}.
  * <p>
  * Hooks should run quickly, as they block the caller thread and the client
  * process from completing.
  * <p>
  * Hooks may send optional messages back to the client via methods on
- * {@link org.eclipse.jgit.transport.ReceivePack}. Implementors should be aware
+ * {@link ReceivePack}. Implementors should be aware
  * that not all network transports support this output, so some (or all)
  * messages may simply be discarded. These messages should be advisory only.
  */

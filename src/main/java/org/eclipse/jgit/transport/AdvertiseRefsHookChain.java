@@ -14,14 +14,14 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * {@link org.eclipse.jgit.transport.AdvertiseRefsHook} that delegates to a list
+ * {@link AdvertiseRefsHook} that delegates to a list
  * of other hooks.
  * <p>
  * Hooks are run in the order passed to the constructor. A hook may inspect or
  * modify the results of the previous hooks in the chain by calling
- * {@link org.eclipse.jgit.transport.UploadPack#getAdvertisedRefs()}, or
- * {@link org.eclipse.jgit.transport.ReceivePack#getAdvertisedRefs()} or
- * {@link org.eclipse.jgit.transport.ReceivePack#getAdvertisedObjects()}.
+ * {@link UploadPack#getAdvertisedRefs()}, or
+ * {@link ReceivePack#getAdvertisedRefs()} or
+ * {@link ReceivePack#getAdvertisedObjects()}.
  */
 public class AdvertiseRefsHookChain implements AdvertiseRefsHook {
 	private final AdvertiseRefsHook[] hooks;

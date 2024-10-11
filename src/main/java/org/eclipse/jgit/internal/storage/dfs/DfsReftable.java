@@ -19,7 +19,7 @@ import org.eclipse.jgit.internal.storage.io.BlockSource;
 import org.eclipse.jgit.internal.storage.reftable.ReftableReader;
 
 /**
- * A reftable stored in {@link org.eclipse.jgit.internal.storage.dfs.DfsBlockCache}.
+ * A reftable stored in {@link DfsBlockCache}.
  */
 public class DfsReftable extends BlockBasedFile {
 	/**
@@ -69,7 +69,7 @@ public class DfsReftable extends BlockBasedFile {
 	 * @param ctx
 	 *            reader to access the DFS storage.
 	 * @return cursor to read the table; caller must close.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             table cannot be opened.
 	 */
 	public ReftableReader open(DfsReader ctx) throws IOException {

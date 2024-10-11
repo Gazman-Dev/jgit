@@ -11,7 +11,7 @@
 package org.eclipse.jgit.events;
 
 /**
- * Tracks a previously registered {@link org.eclipse.jgit.events.RepositoryListener}.
+ * Tracks a previously registered {@link RepositoryListener}.
  */
 public class ListenerHandle {
 	private final ListenerList parent;

@@ -88,7 +88,7 @@ public abstract class AbstractTreeIterator {
 	 * A numerical value from FileMode is usually faster for an iterator to
 	 * obtain from its data source so this is the preferred representation.
 	 *
-	 * @see org.eclipse.jgit.lib.FileMode
+	 * @see FileMode
 	 */
 	protected int mode;
 
@@ -308,7 +308,7 @@ public abstract class AbstractTreeIterator {
 	 * @param name
 	 *            file name to find (will not find a directory).
 	 * @return true if the file exists in this tree; false otherwise.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             tree is invalid.
 	 * @since 4.2
 	 */
@@ -322,7 +322,7 @@ public abstract class AbstractTreeIterator {
 	 * @param name
 	 *            file name to find (will not find a directory).
 	 * @return true if the file exists in this tree; false otherwise.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             tree is invalid.
 	 * @since 4.2
 	 */
@@ -516,10 +516,10 @@ public abstract class AbstractTreeIterator {
 	 * @param reader
 	 *            reader to load the tree data from.
 	 * @return a new parser that walks over the current subtree.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             the current entry is not actually a tree and cannot be parsed
 	 *             as though it were a tree.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a loose object or pack file could not be read.
 	 */
 	public abstract AbstractTreeIterator createSubtreeIterator(
@@ -547,10 +547,10 @@ public abstract class AbstractTreeIterator {
 	 * @param idBuffer
 	 *            temporary ObjectId buffer for use by this method.
 	 * @return a new parser that walks over the current subtree.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 * @throws IncorrectObjectTypeException
 	 *             the current entry is not actually a tree and cannot be parsed
 	 *             as though it were a tree.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a loose object or pack file could not be read.
 	 */
 	public AbstractTreeIterator createSubtreeIterator(
@@ -567,7 +567,7 @@ public abstract class AbstractTreeIterator {
 	 * method of repositioning the iterator to its first entry, so subclasses
 	 * are strongly encouraged to override the method.
 	 *
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the tree is invalid.
 	 */
 	public void reset() throws CorruptObjectException {
@@ -616,7 +616,7 @@ public abstract class AbstractTreeIterator {
 	 * @param delta
 	 *            number of entries to move the iterator by. Must be a positive,
 	 *            non-zero integer.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the tree is invalid.
 	 */
 	public abstract void next(int delta) throws CorruptObjectException;
@@ -640,7 +640,7 @@ public abstract class AbstractTreeIterator {
 	 * @param delta
 	 *            number of entries to move the iterator by. Must be a positive,
 	 *            non-zero integer.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the tree is invalid.
 	 */
 	public abstract void back(int delta) throws CorruptObjectException;
@@ -649,12 +649,12 @@ public abstract class AbstractTreeIterator {
 	 * Advance to the next tree entry, populating this iterator with its data.
 	 * <p>
 	 * This method behaves like <code>seek(1)</code> but is called by
-	 * {@link org.eclipse.jgit.treewalk.TreeWalk} only if a
+	 * {@link TreeWalk} only if a
 	 * {@link org.eclipse.jgit.treewalk.filter.TreeFilter} was used and ruled
 	 * out the current entry from the results. In such cases this tree iterator
 	 * may perform special behavior.
 	 *
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the tree is invalid.
 	 */
 	public void skip() throws CorruptObjectException {

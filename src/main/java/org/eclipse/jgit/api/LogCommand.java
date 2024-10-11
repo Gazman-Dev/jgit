@@ -42,7 +42,7 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
  * to finally execute the command. Each instance of this class should only be
  * used for one invocation of the command (means: one call to {@link #call()})
  * <p>
- * Examples (<code>git</code> is a {@link org.eclipse.jgit.api.Git} instance):
+ * Examples (<code>git</code> is a {@link Git} instance):
  * <p>
  * Get newest 10 commits, starting from the current branch:
  *
@@ -80,7 +80,7 @@ public class LogCommand extends GitCommand<Iterable<RevCommit>> {
 	 * Constructor for LogCommand.
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected LogCommand(Repository repo) {
 		super(repo);
@@ -153,24 +153,24 @@ public class LogCommand extends GitCommand<Iterable<RevCommit>> {
 	 * @param start
 	 *            the id of the commit to start from
 	 * @return {@code this}
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             the commit supplied is not available from the object
 	 *             database. This usually indicates the supplied commit is
 	 *             invalid, but the reference was constructed during an earlier
 	 *             invocation to
-	 *             {@link org.eclipse.jgit.revwalk.RevWalk#lookupCommit(AnyObjectId)}.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 *             {@link RevWalk#lookupCommit(AnyObjectId)}.
+	 * @throws IncorrectObjectTypeException
 	 *             the object was not parsed yet and it was discovered during
 	 *             parsing that it is not actually a commit. This usually
 	 *             indicates the caller supplied a non-commit SHA-1 to
-	 *             {@link org.eclipse.jgit.revwalk.RevWalk#lookupCommit(AnyObjectId)}.
+	 *             {@link RevWalk#lookupCommit(AnyObjectId)}.
 	 * @throws JGitInternalException
 	 *             a low-level exception of JGit has occurred. The original
 	 *             exception can be retrieved by calling
-	 *             {@link java.lang.Exception#getCause()}. Expect only
+	 *             {@link Exception#getCause()}. Expect only
 	 *             {@code IOException's} to be wrapped. Subclasses of
-	 *             {@link java.io.IOException} (e.g.
-	 *             {@link org.eclipse.jgit.errors.MissingObjectException}) are
+	 *             {@link IOException} (e.g.
+	 *             {@link MissingObjectException}) are
 	 *             typically not wrapped here but thrown as original exception
 	 */
 	public LogCommand add(AnyObjectId start) throws MissingObjectException,
@@ -182,26 +182,26 @@ public class LogCommand extends GitCommand<Iterable<RevCommit>> {
 	 * Same as {@code --not start}, or {@code ^start}
 	 *
 	 * @param start
-	 *            a {@link org.eclipse.jgit.lib.AnyObjectId}
+	 *            a {@link AnyObjectId}
 	 * @return {@code this}
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             the commit supplied is not available from the object
 	 *             database. This usually indicates the supplied commit is
 	 *             invalid, but the reference was constructed during an earlier
 	 *             invocation to
-	 *             {@link org.eclipse.jgit.revwalk.RevWalk#lookupCommit(AnyObjectId)}.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 *             {@link RevWalk#lookupCommit(AnyObjectId)}.
+	 * @throws IncorrectObjectTypeException
 	 *             the object was not parsed yet and it was discovered during
 	 *             parsing that it is not actually a commit. This usually
 	 *             indicates the caller supplied a non-commit SHA-1 to
-	 *             {@link org.eclipse.jgit.revwalk.RevWalk#lookupCommit(AnyObjectId)}.
+	 *             {@link RevWalk#lookupCommit(AnyObjectId)}.
 	 * @throws JGitInternalException
 	 *             a low-level exception of JGit has occurred. The original
 	 *             exception can be retrieved by calling
-	 *             {@link java.lang.Exception#getCause()}. Expect only
+	 *             {@link Exception#getCause()}. Expect only
 	 *             {@code IOException's} to be wrapped. Subclasses of
-	 *             {@link java.io.IOException} (e.g.
-	 *             {@link org.eclipse.jgit.errors.MissingObjectException}) are
+	 *             {@link IOException} (e.g.
+	 *             {@link MissingObjectException}) are
 	 *             typically not wrapped here but thrown as original exception
 	 */
 	public LogCommand not(AnyObjectId start) throws MissingObjectException,
@@ -213,28 +213,28 @@ public class LogCommand extends GitCommand<Iterable<RevCommit>> {
 	 * Adds the range {@code since..until}
 	 *
 	 * @param since
-	 *            a {@link org.eclipse.jgit.lib.AnyObjectId} object.
+	 *            a {@link AnyObjectId} object.
 	 * @param until
-	 *            a {@link org.eclipse.jgit.lib.AnyObjectId} object.
+	 *            a {@link AnyObjectId} object.
 	 * @return {@code this}
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             the commit supplied is not available from the object
 	 *             database. This usually indicates the supplied commit is
 	 *             invalid, but the reference was constructed during an earlier
 	 *             invocation to
-	 *             {@link org.eclipse.jgit.revwalk.RevWalk#lookupCommit(AnyObjectId)}.
-	 * @throws org.eclipse.jgit.errors.IncorrectObjectTypeException
+	 *             {@link RevWalk#lookupCommit(AnyObjectId)}.
+	 * @throws IncorrectObjectTypeException
 	 *             the object was not parsed yet and it was discovered during
 	 *             parsing that it is not actually a commit. This usually
 	 *             indicates the caller supplied a non-commit SHA-1 to
-	 *             {@link org.eclipse.jgit.revwalk.RevWalk#lookupCommit(AnyObjectId)}.
+	 *             {@link RevWalk#lookupCommit(AnyObjectId)}.
 	 * @throws JGitInternalException
 	 *             a low-level exception of JGit has occurred. The original
 	 *             exception can be retrieved by calling
-	 *             {@link java.lang.Exception#getCause()}. Expect only
+	 *             {@link Exception#getCause()}. Expect only
 	 *             {@code IOException's} to be wrapped. Subclasses of
-	 *             {@link java.io.IOException} (e.g.
-	 *             {@link org.eclipse.jgit.errors.MissingObjectException}) are
+	 *             {@link IOException} (e.g.
+	 *             {@link MissingObjectException}) are
 	 *             typically not wrapped here but thrown as original exception
 	 */
 	public LogCommand addRange(AnyObjectId since, AnyObjectId until)
@@ -247,7 +247,7 @@ public class LogCommand extends GitCommand<Iterable<RevCommit>> {
 	 *
 	 * @see #add(AnyObjectId)
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the references could not be accessed
 	 */
 	public LogCommand all() throws IOException {

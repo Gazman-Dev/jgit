@@ -65,7 +65,7 @@ public class ReflogWriter {
 	 * Create writer for ref directory.
 	 *
 	 * @param refdb
-	 *            a {@link org.eclipse.jgit.internal.storage.file.RefDirectory}
+	 *            a {@link RefDirectory}
 	 *            object.
 	 */
 	public ReflogWriter(RefDirectory refdb) {
@@ -76,7 +76,7 @@ public class ReflogWriter {
 	 * Create writer for ref directory.
 	 *
 	 * @param refdb
-	 *            a {@link org.eclipse.jgit.internal.storage.file.RefDirectory}
+	 *            a {@link RefDirectory}
 	 *            object.
 	 * @param forceWrite
 	 *            true to write to disk all entries logged, false to respect the
@@ -90,7 +90,7 @@ public class ReflogWriter {
 	/**
 	 * Create the log directories.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @return this writer.
 	 */
@@ -106,11 +106,11 @@ public class ReflogWriter {
 	 * Write the given entry to the ref's log.
 	 *
 	 * @param refName
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param entry
-	 *            a {@link org.eclipse.jgit.lib.ReflogEntry} object.
+	 *            a {@link ReflogEntry} object.
 	 * @return this writer
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public ReflogWriter log(String refName, ReflogEntry entry)
@@ -129,11 +129,11 @@ public class ReflogWriter {
 	 * @param newId
 	 *            new object id
 	 * @param ident
-	 *            a {@link org.eclipse.jgit.lib.PersonIdent}
+	 *            a {@link PersonIdent}
 	 * @param message
 	 *            reflog message
 	 * @return this writer
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public ReflogWriter log(String refName, ObjectId oldId,
@@ -146,13 +146,13 @@ public class ReflogWriter {
 	 * Write the given ref update to the ref's log.
 	 *
 	 * @param update
-	 *            a {@link org.eclipse.jgit.lib.RefUpdate}
+	 *            a {@link RefUpdate}
 	 * @param msg
 	 *            reflog message
 	 * @param deref
 	 *            whether to dereference symbolic refs
 	 * @return this writer
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public ReflogWriter log(RefUpdate update, String msg,

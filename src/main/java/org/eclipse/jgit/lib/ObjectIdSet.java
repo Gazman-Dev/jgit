@@ -15,7 +15,7 @@ package org.eclipse.jgit.lib;
  * <p>
  * Usually backed by a read-only data structure such as
  * {@link org.eclipse.jgit.internal.storage.file.PackIndex}. Mutable types like
- * {@link org.eclipse.jgit.lib.ObjectIdOwnerMap} also implement the interface by
+ * {@link ObjectIdOwnerMap} also implement the interface by
  * checking keys.
  *
  * @since 4.2

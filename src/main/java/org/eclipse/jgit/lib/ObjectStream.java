@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Stream of data coming from an object loaded by {@link org.eclipse.jgit.lib.ObjectLoader}.
+ * Stream of data coming from an object loaded by {@link ObjectLoader}.
  */
 public abstract class ObjectStream extends InputStream {
 	/**

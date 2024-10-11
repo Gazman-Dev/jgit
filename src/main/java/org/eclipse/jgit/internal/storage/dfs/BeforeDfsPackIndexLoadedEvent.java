@@ -13,7 +13,7 @@ package org.eclipse.jgit.internal.storage.dfs;
 import org.eclipse.jgit.events.RepositoryEvent;
 
 /**
- * Describes the {@link org.eclipse.jgit.internal.storage.dfs.DfsPackFile} just
+ * Describes the {@link DfsPackFile} just
  * before its index is loaded. Currently, DfsPackFile directly dispatches the
  * event on {@link org.eclipse.jgit.lib.Repository#getGlobalListenerList}. Which
  * means the call to {@link #getRepository} will always return null.

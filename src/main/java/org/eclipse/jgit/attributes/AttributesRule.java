@@ -24,7 +24,7 @@ import org.eclipse.jgit.ignore.internal.PathMatcher;
 /**
  * A single attributes rule corresponding to one line in a .gitattributes file.
  *
- * Inspiration from: {@link org.eclipse.jgit.ignore.FastIgnoreRule}
+ * Inspiration from: {@link FastIgnoreRule}
  *
  * @since 3.7
  */

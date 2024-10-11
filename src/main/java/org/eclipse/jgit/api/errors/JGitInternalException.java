@@ -65,7 +65,7 @@ public class JGitInternalException extends RuntimeException {
 	 * @param message
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable}
+	 *            a {@link Throwable}
 	 */
 	public JGitInternalException(String message, Throwable cause) {
 		super(message, cause);

@@ -153,7 +153,7 @@ class LeafBucket extends InMemoryNoteBucket {
 
 	@Override
 	ObjectId getTreeId() {
-		try (Formatter f = new ObjectInserter.Formatter()) {
+		try (Formatter f = new Formatter()) {
 			return f.idFor(build());
 		}
 	}

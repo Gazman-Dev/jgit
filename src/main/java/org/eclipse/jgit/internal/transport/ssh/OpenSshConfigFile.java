@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -99,7 +100,7 @@ public class OpenSshConfigFile implements SshConfigStore {
 	 * fully resolved entries created from that.
 	 */
 	private static class State {
-		List<HostEntry> entries = new ArrayList<>();
+		List<HostEntry> entries = new LinkedList<>();
 
 		// Previous lookups, keyed by user@hostname:port
 		Map<String, HostEntry> hosts = new HashMap<>();
@@ -217,7 +218,7 @@ public class OpenSshConfigFile implements SshConfigStore {
 
 	private List<HostEntry> parse(BufferedReader reader)
 			throws IOException {
-		final List<HostEntry> entries = new ArrayList<>();
+		final List<HostEntry> entries = new LinkedList<>();
 
 		// The man page doesn't say so, but the openssh parser (readconf.c)
 		// starts out in active mode and thus always applies any lines that
@@ -606,7 +607,7 @@ public class OpenSshConfigFile implements SshConfigStore {
 	 * of several matching host entries, %-substitutions, and ~ replacement have
 	 * all been done.
 	 */
-	public static class HostEntry implements SshConfigStore.HostConfig {
+	public static class HostEntry implements HostConfig {
 
 		/**
 		 * Keys that can be specified multiple times, building up a list. (I.e.,

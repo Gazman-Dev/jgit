@@ -17,7 +17,7 @@ import org.eclipse.jgit.lib.Constants;
 
 /**
  * Encodes an instruction stream for
- * {@link org.eclipse.jgit.internal.storage.pack.BinaryDelta}.
+ * {@link BinaryDelta}.
  */
 public class DeltaEncoder {
 	/**
@@ -61,7 +61,7 @@ public class DeltaEncoder {
 	 * @param resultSize
 	 *            size of the resulting object, after applying this instruction
 	 *            stream to the base object, in bytes.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the output buffer cannot store the instruction stream's
 	 *             header with the size fields.
 	 */
@@ -84,7 +84,7 @@ public class DeltaEncoder {
 	 *            maximum number of bytes to write to the out buffer declaring
 	 *            the stream is over limit and should be discarded. May be 0 to
 	 *            specify an infinite limit.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the output buffer cannot store the instruction stream's
 	 *             header with the size fields.
 	 */
@@ -124,7 +124,7 @@ public class DeltaEncoder {
 	 *            the string to insert.
 	 * @return true if the insert fits within the limit; false if the insert
 	 *         would cause the instruction stream to exceed the limit.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the instruction buffer can't store the instructions.
 	 */
 	public boolean insert(String text) throws IOException {
@@ -138,7 +138,7 @@ public class DeltaEncoder {
 	 *            the binary to insert.
 	 * @return true if the insert fits within the limit; false if the insert
 	 *         would cause the instruction stream to exceed the limit.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the instruction buffer can't store the instructions.
 	 */
 	public boolean insert(byte[] text) throws IOException {
@@ -156,7 +156,7 @@ public class DeltaEncoder {
 	 *            number of bytes to insert.
 	 * @return true if the insert fits within the limit; false if the insert
 	 *         would cause the instruction stream to exceed the limit.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the instruction buffer can't store the instructions.
 	 */
 	public boolean insert(byte[] text, int off, int cnt)
@@ -191,7 +191,7 @@ public class DeltaEncoder {
 	 *            number of bytes to copy.
 	 * @return true if the copy fits within the limit; false if the copy
 	 *         would cause the instruction stream to exceed the limit.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the instruction buffer cannot store the instructions.
 	 */
 	public boolean copy(long offset, int cnt) throws IOException {

@@ -25,7 +25,7 @@ import org.eclipse.jgit.merge.MergeChunk.ConflictState;
 
 /**
  * Provides the merge algorithm which does a three-way merge on content provided
- * as RawText. By default {@link org.eclipse.jgit.diff.HistogramDiff} is used as
+ * as RawText. By default {@link HistogramDiff} is used as
  * diff algorithm.
  */
 public final class MergeAlgorithm {
@@ -37,7 +37,7 @@ public final class MergeAlgorithm {
 
 	/**
 	 * Creates a new MergeAlgorithm which uses
-	 * {@link org.eclipse.jgit.diff.HistogramDiff} as diff algorithm
+	 * {@link HistogramDiff} as diff algorithm
 	 */
 	public MergeAlgorithm() {
 		this(new HistogramDiff());
@@ -218,18 +218,13 @@ public final class MergeAlgorithm {
 
 				// set some initial values for the ranges in A and B which we
 				// want to handle
-				int oursBeginA = oursEdit.getBeginA();
-				int theirsBeginA = theirsEdit.getBeginA();
 				int oursBeginB = oursEdit.getBeginB();
 				int theirsBeginB = theirsEdit.getBeginB();
 				// harmonize the start of the ranges in A and B
 				if (oursEdit.getBeginA() < theirsEdit.getBeginA()) {
-					theirsBeginA -= theirsEdit.getBeginA()
-							- oursEdit.getBeginA();
 					theirsBeginB -= theirsEdit.getBeginA()
 							- oursEdit.getBeginA();
 				} else {
-					oursBeginA -= oursEdit.getBeginA() - theirsEdit.getBeginA();
 					oursBeginB -= oursEdit.getBeginA() - theirsEdit.getBeginA();
 				}
 
@@ -275,15 +270,11 @@ public final class MergeAlgorithm {
 				}
 
 				// harmonize the end of the ranges in A and B
-				int oursEndA = oursEdit.getEndA();
-				int theirsEndA = theirsEdit.getEndA();
 				int oursEndB = oursEdit.getEndB();
 				int theirsEndB = theirsEdit.getEndB();
 				if (oursEdit.getEndA() < theirsEdit.getEndA()) {
-					oursEndA += theirsEdit.getEndA() - oursEdit.getEndA();
 					oursEndB += theirsEdit.getEndA() - oursEdit.getEndA();
 				} else {
-					theirsEndA += oursEdit.getEndA() - theirsEdit.getEndA();
 					theirsEndB += oursEdit.getEndA() - theirsEdit.getEndA();
 				}
 
@@ -338,10 +329,10 @@ public final class MergeAlgorithm {
 								oursEndB - commonSuffix,
 								ConflictState.FIRST_CONFLICTING_RANGE);
 
-						int baseBegin = Math.min(oursBeginA, theirsBeginA)
+						int baseBegin = Math.min(oursBeginB, theirsBeginB)
 								+ commonPrefix;
 						int baseEnd = Math.min(base.size(),
-								Math.max(oursEndA, theirsEndA)) - commonSuffix;
+								Math.max(oursEndB, theirsEndB)) - commonSuffix;
 						result.add(0, baseBegin, baseEnd,
 								ConflictState.BASE_CONFLICTING_RANGE);
 

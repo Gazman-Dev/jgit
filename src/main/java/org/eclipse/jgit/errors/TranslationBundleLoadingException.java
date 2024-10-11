@@ -20,7 +20,7 @@ public class TranslationBundleLoadingException extends TranslationBundleExceptio
 
 	/**
 	 * Construct a
-	 * {@link org.eclipse.jgit.errors.TranslationBundleLoadingException} for the
+	 * {@link TranslationBundleLoadingException} for the
 	 * specified bundle class and locale.
 	 *
 	 * @param bundleClass

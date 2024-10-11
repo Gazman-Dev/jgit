@@ -26,7 +26,7 @@ import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.util.TemporaryBuffer;
 
 /**
- * A parsed collection of {@link org.eclipse.jgit.patch.FileHeader}s from a
+ * A parsed collection of {@link FileHeader}s from a
  * unified diff patch file
  */
 public class Patch {
@@ -110,7 +110,7 @@ public class Patch {
 	 * @param is
 	 *            the stream to read the patch data from. The stream is read
 	 *            until EOF is reached.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             there was an error reading from the input stream.
 	 */
 	public void parse(InputStream is) throws IOException {

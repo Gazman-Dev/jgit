@@ -16,7 +16,6 @@ package org.eclipse.jgit.internal.storage.file;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.eclipse.jgit.lib.Constants.HEAD;
 import static org.eclipse.jgit.lib.Constants.LOGS;
-import static org.eclipse.jgit.lib.Constants.L_LOGS;
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_STRING_LENGTH;
 import static org.eclipse.jgit.lib.Constants.PACKED_REFS;
 import static org.eclipse.jgit.lib.Constants.R_HEADS;
@@ -42,11 +41,11 @@ import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -65,8 +64,8 @@ import org.eclipse.jgit.events.RefsChangedEvent;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.CoreConfig.TrustLooseRefStat;
 import org.eclipse.jgit.lib.CoreConfig.TrustPackedRefsStat;
+import org.eclipse.jgit.lib.CoreConfig.TrustLooseRefStat;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectIdRef;
 import org.eclipse.jgit.lib.Ref;
@@ -90,14 +89,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Traditional file system based {@link org.eclipse.jgit.lib.RefDatabase}.
+ * Traditional file system based {@link RefDatabase}.
  * <p>
  * This is the classical reference database representation for a Git repository.
  * References are stored in two formats: loose, and packed.
  * <p>
  * Loose references are stored as individual files within the {@code refs/}
  * directory. The file name matches the reference name and the file contents is
- * the current {@link org.eclipse.jgit.lib.ObjectId} in string form.
+ * the current {@link ObjectId} in string form.
  * <p>
  * Packed references are stored in a single text file named {@code packed-refs}.
  * In the packed format, each reference is stored on its own line. This file
@@ -124,8 +123,6 @@ public class RefDirectory extends RefDatabase {
 	private final FileRepository parent;
 
 	private final File gitDir;
-
-	private final File gitCommonDir;
 
 	final File refsDir;
 
@@ -191,7 +188,6 @@ public class RefDirectory extends RefDatabase {
 	RefDirectory(RefDirectory refDb) {
 		parent = refDb.parent;
 		gitDir = refDb.gitDir;
-		gitCommonDir = refDb.gitCommonDir;
 		refsDir = refDb.refsDir;
 		logsDir = refDb.logsDir;
 		logsRefsDir = refDb.logsRefsDir;
@@ -208,11 +204,10 @@ public class RefDirectory extends RefDatabase {
 		final FS fs = db.getFS();
 		parent = db;
 		gitDir = db.getDirectory();
-		gitCommonDir = db.getCommonDirectory();
-		refsDir = fs.resolve(gitCommonDir, R_REFS);
-		logsDir = fs.resolve(gitCommonDir, LOGS);
-		logsRefsDir = fs.resolve(gitCommonDir, L_LOGS + R_REFS);
-		packedRefsFile = fs.resolve(gitCommonDir, PACKED_REFS);
+		refsDir = fs.resolve(gitDir, R_REFS);
+		logsDir = fs.resolve(gitDir, LOGS);
+		logsRefsDir = fs.resolve(gitDir, LOGS + '/' + R_REFS);
+		packedRefsFile = fs.resolve(gitDir, PACKED_REFS);
 
 		looseRefs.set(RefList.<LooseRef> emptyList());
 		packedRefs.set(NO_PACKED_REFS);
@@ -418,7 +413,7 @@ public class RefDirectory extends RefDatabase {
 
 	@Override
 	public List<Ref> getAdditionalRefs() throws IOException {
-		List<Ref> ret = new ArrayList<>();
+		List<Ref> ret = new LinkedList<>();
 		for (String name : additionalRefsNames) {
 			Ref r = exactRef(name);
 			if (r != null)
@@ -733,7 +728,7 @@ public class RefDirectory extends RefDatabase {
 	 *
 	 * @param refs
 	 *            the refs to be added. Must be fully qualified.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void pack(List<String> refs) throws IOException {
@@ -1334,12 +1329,7 @@ public class RefDirectory extends RefDatabase {
 			name = name.substring(R_REFS.length());
 			return new File(refsDir, name);
 		}
-		// HEAD needs to get resolved from git dir as resolving it from common dir
-		// would always lead back to current default branch
-		if (name.equals(HEAD)) {
-			return new File(gitDir, name);
-		}
-		return new File(gitCommonDir, name);
+		return new File(gitDir, name);
 	}
 
 	static int levelsIn(String name) {

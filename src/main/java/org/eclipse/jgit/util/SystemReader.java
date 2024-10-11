@@ -579,7 +579,7 @@ public abstract class SystemReader {
 	 *
 	 * @param pattern
 	 *            the pattern as defined in
-	 *            {@link java.text.SimpleDateFormat#SimpleDateFormat(String)}
+	 *            {@link SimpleDateFormat#SimpleDateFormat(String)}
 	 * @return the simple date format
 	 * @since 2.0
 	 */
@@ -592,7 +592,7 @@ public abstract class SystemReader {
 	 *
 	 * @param pattern
 	 *            the pattern as defined in
-	 *            {@link java.text.SimpleDateFormat#SimpleDateFormat(String)}
+	 *            {@link SimpleDateFormat#SimpleDateFormat(String)}
 	 * @param locale
 	 *            locale to be used for the {@code SimpleDateFormat}
 	 * @return the simple date format
@@ -607,10 +607,10 @@ public abstract class SystemReader {
 	 *
 	 * @param dateStyle
 	 *            the date style as specified in
-	 *            {@link java.text.DateFormat#getDateTimeInstance(int, int)}
+	 *            {@link DateFormat#getDateTimeInstance(int, int)}
 	 * @param timeStyle
 	 *            the time style as specified in
-	 *            {@link java.text.DateFormat#getDateTimeInstance(int, int)}
+	 *            {@link DateFormat#getDateTimeInstance(int, int)}
 	 * @return the date format
 	 * @since 2.0
 	 */
@@ -681,7 +681,7 @@ public abstract class SystemReader {
 	 * Scans a multi-directory path string such as {@code "src/main.c"}.
 	 *
 	 * @param path path string to scan.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException path is invalid.
+	 * @throws CorruptObjectException path is invalid.
 	 * @since 3.6
 	 */
 	public void checkPath(String path) throws CorruptObjectException {
@@ -695,7 +695,7 @@ public abstract class SystemReader {
 	 *
 	 * @param path
 	 *            path string to scan.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             path is invalid.
 	 * @since 4.2
 	 */

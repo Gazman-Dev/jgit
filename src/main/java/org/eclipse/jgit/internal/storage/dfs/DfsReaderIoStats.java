@@ -13,7 +13,7 @@ package org.eclipse.jgit.internal.storage.dfs;
 import org.eclipse.jgit.lib.AnyObjectId;
 
 /**
- * IO statistics for a {@link org.eclipse.jgit.internal.storage.dfs.DfsReader}.
+ * IO statistics for a {@link DfsReader}.
  */
 public class DfsReaderIoStats {
 	/** POJO to accumulate IO statistics. */
@@ -40,11 +40,11 @@ public class DfsReaderIoStats {
 		/** Total number of complete pack indexes read into memory. */
 		long readIdx;
 
-		/** Total number of reverse indexes added into memory. */
-		long readReverseIdx;
-
 		/** Total number of complete bitmap indexes read into memory. */
 		long readBitmap;
+
+		/** Total number of reverse indexes added into memory. */
+		long readReverseIdx;
 
 		/** Total number of complete commit graphs read into memory. */
 		long readCommitGraph;
@@ -54,9 +54,6 @@ public class DfsReaderIoStats {
 
 		/** Total number of bytes read from pack indexes. */
 		long readIdxBytes;
-
-		/** Total number of bytes read from bitmap indexes. */
-		long readBitmapIdxBytes;
 
 		/** Total number of bytes read from commit graphs. */
 		long readCommitGraphBytes;
@@ -70,14 +67,17 @@ public class DfsReaderIoStats {
 		/** Total microseconds spent creating reverse indexes. */
 		long readReverseIdxMicros;
 
-		/** Total microseconds spent reading bitmap indexes. */
-		long readBitmapIdxMicros;
-
 		/** Total microseconds spent creating commit graphs. */
 		long readCommitGraphMicros;
 
 		/** Total microseconds spent creating object size indexes */
 		long readObjectSizeIndexMicros;
+
+		/** Total number of bytes read from bitmap indexes. */
+		long readBitmapIdxBytes;
+
+		/** Total microseconds spent reading bitmap indexes. */
+		long readBitmapIdxMicros;
 
 		/** Total number of block cache hits. */
 		long blockCacheHit;
@@ -195,21 +195,21 @@ public class DfsReaderIoStats {
 	}
 
 	/**
-	 * Get total number of complete bitmap indexes read into memory.
-	 *
-	 * @return total number of complete bitmap indexes read into memory.
-	 */
-	public long getReadBitmapIndexCount() {
-		return stats.readBitmap;
-	}
-
-	/**
 	 * Get total number of times the commit graph read into memory.
 	 *
 	 * @return total number of commit graph read into memory.
 	 */
 	public long getReadCommitGraphCount() {
 		return stats.readCommitGraph;
+	}
+
+	/**
+	 * Get total number of complete bitmap indexes read into memory.
+	 *
+	 * @return total number of complete bitmap indexes read into memory.
+	 */
+	public long getReadBitmapIndexCount() {
+		return stats.readBitmap;
 	}
 
 	/**
@@ -231,30 +231,12 @@ public class DfsReaderIoStats {
 	}
 
 	/**
-	 * Get total number of bytes read from bitmap indexes.
-	 *
-	 * @return total number of bytes read from bitmap indexes.
-	 */
-	public long getReadBitmapIndexBytes() {
-		return stats.readBitmapIdxBytes;
-	}
-
-	/**
 	 * Get total number of bytes read from commit graphs.
 	 *
 	 * @return total number of bytes read from commit graphs.
 	 */
 	public long getCommitGraphBytes() {
 		return stats.readCommitGraphBytes;
-	}
-
-	/**
-	 * Get total number of bytes read from object size indexes.
-	 *
-	 * @return total number of bytes read from object size indexes.
-	 */
-	public long getObjectSizeIndexBytes() {
-		return stats.readObjectSizeIndexBytes;
 	}
 
 	/**
@@ -276,15 +258,6 @@ public class DfsReaderIoStats {
 	}
 
 	/**
-	 * Get total microseconds spent reading bitmap indexes.
-	 *
-	 * @return total microseconds spent reading bitmap indexes.
-	 */
-	public long getReadBitmapIndexMicros() {
-		return stats.readBitmapIdxMicros;
-	}
-
-	/**
 	 * Get total microseconds spent reading commit graphs.
 	 *
 	 * @return total microseconds spent reading commit graphs.
@@ -294,12 +267,21 @@ public class DfsReaderIoStats {
 	}
 
 	/**
-	 * Get total microseconds spent reading object size indexes.
+	 * Get total number of bytes read from bitmap indexes.
 	 *
-	 * @return total microseconds spent reading object size indexes.
+	 * @return total number of bytes read from bitmap indexes.
 	 */
-	public long getReadObjectSizeIndexMicros() {
-		return stats.readObjectSizeIndexMicros;
+	public long getReadBitmapIndexBytes() {
+		return stats.readBitmapIdxBytes;
+	}
+
+	/**
+	 * Get total microseconds spent reading bitmap indexes.
+	 *
+	 * @return total microseconds spent reading bitmap indexes.
+	 */
+	public long getReadBitmapIndexMicros() {
+		return stats.readBitmapIdxMicros;
 	}
 
 	/**

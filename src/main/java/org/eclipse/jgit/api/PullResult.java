@@ -12,7 +12,7 @@ package org.eclipse.jgit.api;
 import org.eclipse.jgit.transport.FetchResult;
 
 /**
- * Encapsulates the result of a {@link org.eclipse.jgit.api.PullCommand}
+ * Encapsulates the result of a {@link PullCommand}
  */
 public class PullResult {
 	private final FetchResult fetchResult;

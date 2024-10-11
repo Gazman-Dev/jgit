@@ -11,7 +11,7 @@
 package org.eclipse.jgit.diff;
 
 /**
- * Equivalence function for a {@link org.eclipse.jgit.diff.Sequence} compared by
+ * Equivalence function for a {@link Sequence} compared by
  * difference algorithm.
  * <p>
  * Difference algorithms can use a comparator to compare portions of two

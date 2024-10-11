@@ -13,7 +13,7 @@ import static org.eclipse.jgit.lib.Constants.OBJECT_ID_ABBREV_STRING_LENGTH;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,13 +58,13 @@ import org.eclipse.jgit.treewalk.FileTreeIterator;
  *      >Git documentation about revert</a>
  */
 public class RevertCommand extends GitCommand<RevCommit> {
-	private List<Ref> commits = new ArrayList<>();
+	private List<Ref> commits = new LinkedList<>();
 
 	private String ourCommitName = null;
 
 	private boolean insertChangeId;
 
-	private List<Ref> revertedRefs = new ArrayList<>();
+	private List<Ref> revertedRefs = new LinkedList<>();
 
 	private MergeResult failingResult;
 
@@ -80,7 +80,7 @@ public class RevertCommand extends GitCommand<RevCommit> {
 	 * </p>
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected RevertCommand(Repository repo) {
 		super(repo);
@@ -271,10 +271,10 @@ public class RevertCommand extends GitCommand<RevCommit> {
 	}
 
 	/**
-	 * Get the list of successfully reverted {@link org.eclipse.jgit.lib.Ref}'s.
+	 * Get the list of successfully reverted {@link Ref}'s.
 	 *
 	 * @return the list of successfully reverted
-	 *         {@link org.eclipse.jgit.lib.Ref}'s. Never <code>null</code> but
+	 *         {@link Ref}'s. Never <code>null</code> but
 	 *         maybe an empty list if no commit was successfully cherry-picked
 	 */
 	public List<Ref> getRevertedRefs() {
@@ -319,7 +319,7 @@ public class RevertCommand extends GitCommand<RevCommit> {
 	 *
 	 * @see NullProgressMonitor
 	 * @param monitor
-	 *            a {@link org.eclipse.jgit.lib.ProgressMonitor}
+	 *            a {@link ProgressMonitor}
 	 * @return {@code this}
 	 * @since 4.11
 	 */

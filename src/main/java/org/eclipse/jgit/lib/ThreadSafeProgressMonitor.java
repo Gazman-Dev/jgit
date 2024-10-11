@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Wrapper around the general {@link org.eclipse.jgit.lib.ProgressMonitor} to
+ * Wrapper around the general {@link ProgressMonitor} to
  * make it thread safe.
  *
  * Updates to the underlying ProgressMonitor are made only from the thread that
@@ -111,7 +111,7 @@ public class ThreadSafeProgressMonitor implements ProgressMonitor {
 	 * This method can only be invoked by the same thread that allocated this
 	 * ThreadSafeProgressMonior.
 	 *
-	 * @throws java.lang.InterruptedException
+	 * @throws InterruptedException
 	 *             if the main thread is interrupted while waiting for
 	 *             completion of workers.
 	 */

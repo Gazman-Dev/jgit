@@ -33,7 +33,7 @@ public interface TransportConfigCallback {
 	 * Add any additional transport-specific configuration required.
 	 *
 	 * @param transport
-	 *            a {@link org.eclipse.jgit.transport.Transport} object.
+	 *            a {@link Transport} object.
 	 */
 	void configure(Transport transport);
 }

@@ -37,7 +37,7 @@ public class StashListCommand extends GitCommand<Collection<RevCommit>> {
 	/**
 	 * Create a new stash list command
 	 *
-	 * @param repo a {@link org.eclipse.jgit.lib.Repository} object.
+	 * @param repo a {@link Repository} object.
 	 */
 	public StashListCommand(Repository repo) {
 		super(repo);

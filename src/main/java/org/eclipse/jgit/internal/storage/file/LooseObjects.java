@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * <p>
  * This is the loose object representation for a Git object database, where
  * objects are stored loose by hashing them into directories by their
- * {@link org.eclipse.jgit.lib.ObjectId}.
+ * {@link ObjectId}.
  */
 class LooseObjects {
 	private static final Logger LOG = LoggerFactory
@@ -331,7 +331,7 @@ class LooseObjects {
 	 *
 	 * @param objectId
 	 *            identity of the object to get the File location for.
-	 * @return {@link java.io.File} location of the specified loose object.
+	 * @return {@link File} location of the specified loose object.
 	 */
 	File fileFor(AnyObjectId objectId) {
 		String n = objectId.name();

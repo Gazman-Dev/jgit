@@ -50,7 +50,7 @@ public class CleanCommand extends GitCommand<Set<String>> {
 	 * Constructor for CleanCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected CleanCommand(Repository repo) {
 		super(repo);

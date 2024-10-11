@@ -25,10 +25,11 @@ import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.GpgConfig;
+import org.eclipse.jgit.lib.GpgSignatureVerifier;
+import org.eclipse.jgit.lib.GpgSignatureVerifier.SignatureVerification;
+import org.eclipse.jgit.lib.GpgSignatureVerifierFactory;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.SignatureVerifier.SignatureVerification;
-import org.eclipse.jgit.lib.SignatureVerifiers;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevWalk;
 
@@ -64,7 +65,11 @@ public class VerifySignatureCommand extends GitCommand<Map<String, VerificationR
 
 	private VerifyMode mode = VerifyMode.ANY;
 
+	private GpgSignatureVerifier verifier;
+
 	private GpgConfig config;
+
+	private boolean ownVerifier;
 
 	/**
 	 * Creates a new {@link VerifySignatureCommand} for the given {@link Repository}.
@@ -135,7 +140,22 @@ public class VerifySignatureCommand extends GitCommand<Map<String, VerificationR
 	}
 
 	/**
-	 * Sets an external {@link GpgConfig} to use.
+	 * Sets the {@link GpgSignatureVerifier} to use.
+	 *
+	 * @param verifier
+	 *            the {@link GpgSignatureVerifier} to use, or {@code null} to
+	 *            use the default verifier
+	 * @return {@code this}
+	 */
+	public VerifySignatureCommand setVerifier(GpgSignatureVerifier verifier) {
+		checkCallable();
+		this.verifier = verifier;
+		return this;
+	}
+
+	/**
+	 * Sets an external {@link GpgConfig} to use. Whether it will be used it at
+	 * the discretion of the {@link #setVerifier(GpgSignatureVerifier)}.
 	 *
 	 * @param config
 	 *            to set; if {@code null}, the config will be loaded from the
@@ -147,6 +167,16 @@ public class VerifySignatureCommand extends GitCommand<Map<String, VerificationR
 		checkCallable();
 		this.config = config;
 		return this;
+	}
+
+	/**
+	 * Retrieves the currently set {@link GpgSignatureVerifier}. Can be used
+	 * after a successful {@link #call()} to get the verifier that was used.
+	 *
+	 * @return the {@link GpgSignatureVerifier}
+	 */
+	public GpgSignatureVerifier getVerifier() {
+		return verifier;
 	}
 
 	/**
@@ -163,6 +193,9 @@ public class VerifySignatureCommand extends GitCommand<Map<String, VerificationR
 	 *
 	 * @return a map of the given names to the corresponding
 	 *         {@link VerificationResult}, excluding ignored or skipped objects.
+	 * @throws ServiceUnavailableException
+	 *             if no {@link GpgSignatureVerifier} was set and no
+	 *             {@link GpgSignatureVerifierFactory} is available
 	 * @throws WrongObjectTypeException
 	 *             if a name resolves to an object of a type not allowed by the
 	 *             {@link #setMode(VerifyMode)} mode
@@ -174,6 +207,16 @@ public class VerifySignatureCommand extends GitCommand<Map<String, VerificationR
 		checkCallable();
 		setCallable(false);
 		Map<String, VerificationResult> result = new HashMap<>();
+		if (verifier == null) {
+			GpgSignatureVerifierFactory factory = GpgSignatureVerifierFactory
+					.getDefault();
+			if (factory == null) {
+				throw new ServiceUnavailableException(
+						JGitText.get().signatureVerificationUnavailable);
+			}
+			verifier = factory.getVerifier();
+			ownVerifier = true;
+		}
 		if (config == null) {
 			config = new GpgConfig(repo.getConfig());
 		}
@@ -196,6 +239,10 @@ public class VerifySignatureCommand extends GitCommand<Map<String, VerificationR
 		} catch (IOException e) {
 			throw new JGitInternalException(
 					JGitText.get().signatureVerificationError, e);
+		} finally {
+			if (ownVerifier) {
+				verifier.clear();
+			}
 		}
 		return result;
 	}
@@ -211,8 +258,8 @@ public class VerifySignatureCommand extends GitCommand<Map<String, VerificationR
 		}
 		if (type == Constants.OBJ_COMMIT || type == Constants.OBJ_TAG) {
 			try {
-				SignatureVerification verification = SignatureVerifiers
-						.verify(repo, config, object);
+				SignatureVerification verification = verifier
+						.verifySignature(object, config);
 				if (verification == null) {
 					// Not signed
 					return null;

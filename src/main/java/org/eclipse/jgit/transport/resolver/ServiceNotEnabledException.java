@@ -24,7 +24,7 @@ public class ServiceNotEnabledException extends Exception {
 	 * @param message
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable} object.
+	 *            a {@link Throwable} object.
 	 * @since 4.1
 	 */
 	public ServiceNotEnabledException(String message, Throwable cause) {

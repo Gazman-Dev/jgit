@@ -19,7 +19,7 @@ import org.eclipse.jgit.internal.JGitText;
  * <p>
  * Usually this exception is thrown from the Iterator created around a RevWalk
  * instance, as the Iterator API does not allow checked exceptions to be thrown
- * from hasNext() or next(). The {@link java.lang.Exception#getCause()} of this
+ * from hasNext() or next(). The {@link Exception#getCause()} of this
  * exception is the original checked exception that we really wanted to throw
  * back to the application for handling and recovery.
  */

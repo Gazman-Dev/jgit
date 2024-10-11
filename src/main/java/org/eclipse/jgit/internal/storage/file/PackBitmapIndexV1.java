@@ -46,8 +46,6 @@ class PackBitmapIndexV1 extends BasePackBitmapIndex {
 
 	private static final int MAX_XOR_OFFSET = 126;
 
-	private byte[] packChecksum;
-
 	private static final ExecutorService executor = Executors
 			.newCachedThreadPool(new ThreadFactory() {
 				private final ThreadFactory baseFactory = Executors
@@ -269,11 +267,6 @@ class PackBitmapIndexV1 extends BasePackBitmapIndex {
 	@Override
 	public int hashCode() {
 		return getPackIndex().hashCode();
-	}
-
-	@Override
-	public byte[] getPackChecksum() {
-		return this.packChecksum;
 	}
 
 	PackIndex getPackIndex() {

@@ -78,9 +78,9 @@ public class DiffEntry {
 	 * @param walk
 	 *            the TreeWalk to walk through. Must have exactly two trees.
 	 * @return headers describing the changed files.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be accessed.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             When given TreeWalk doesn't have exactly two trees.
 	 */
 	public static List<DiffEntry> scan(TreeWalk walk) throws IOException {
@@ -98,9 +98,9 @@ public class DiffEntry {
 	 * @param includeTrees
 	 *            include tree objects.
 	 * @return headers describing the changed files.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be accessed.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             when {@code includeTrees} is true and given TreeWalk is
 	 *             recursive. Or when given TreeWalk doesn't have exactly two
 	 *             trees
@@ -126,9 +126,9 @@ public class DiffEntry {
 	 *            queried through {{@link #isMarked(int)} (with the index from
 	 *            this passed array).
 	 * @return headers describing the changed files.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be accessed.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             when {@code includeTrees} is true and given TreeWalk is
 	 *             recursive. Or when given TreeWalk doesn't have exactly two
 	 *             trees
@@ -431,8 +431,8 @@ public class DiffEntry {
 	 *
 	 * @return similarity score between {@link #getOldPath()} and
 	 *         {@link #getNewPath()} if {@link #getChangeType()} is
-	 *         {@link org.eclipse.jgit.diff.DiffEntry.ChangeType#COPY} or
-	 *         {@link org.eclipse.jgit.diff.DiffEntry.ChangeType#RENAME}.
+	 *         {@link ChangeType#COPY} or
+	 *         {@link ChangeType#RENAME}.
 	 */
 	public int getScore() {
 		return score;
@@ -476,7 +476,7 @@ public class DiffEntry {
 	 *
 	 * @param index
 	 *            the index of the tree filter to check for (must be between 0
-	 *            and {@link java.lang.Integer#SIZE}).
+	 *            and {@link Integer#SIZE}).
 	 * @since 2.3
 	 * @return a boolean.
 	 */

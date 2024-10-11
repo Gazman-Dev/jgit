@@ -33,10 +33,10 @@ abstract class AbstractHead implements Head {
 	}
 
 	/**
-	 * Set {@link org.eclipse.jgit.fnmatch.Head}s which will not be modified.
+	 * Set {@link Head}s which will not be modified.
 	 *
 	 * @param newHeads
-	 *            a list of {@link org.eclipse.jgit.fnmatch.Head}s which will
+	 *            a list of {@link Head}s which will
 	 *            not be modified.
 	 */
 	public final void setNewHeads(List<Head> newHeads) {

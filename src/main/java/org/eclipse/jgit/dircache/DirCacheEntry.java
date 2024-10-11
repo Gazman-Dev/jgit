@@ -40,7 +40,7 @@ import org.eclipse.jgit.util.SystemReader;
 
 /**
  * A single file (or stage of a file) in a
- * {@link org.eclipse.jgit.dircache.DirCache}.
+ * {@link DirCache}.
  * <p>
  * An entry represents exactly one stage of a file. If a file path is unmerged
  * then multiple DirCacheEntry instances may appear for the same path name.
@@ -239,7 +239,7 @@ public class DirCacheEntry {
 	 *
 	 * @param newPath
 	 *            name of the cache entry.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             If the path starts or ends with "/", or contains "//" either
 	 *             "\0". These sequences are not permitted in a git tree object
 	 *             or DirCache file.
@@ -255,7 +255,7 @@ public class DirCacheEntry {
 	 *            name of the cache entry.
 	 * @param stage
 	 *            the stage index of the new entry.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             If the path starts or ends with "/", or contains "//" either
 	 *             "\0". These sequences are not permitted in a git tree object
 	 *             or DirCache file.  Or if {@code stage} is outside of the
@@ -270,7 +270,7 @@ public class DirCacheEntry {
 	 *
 	 * @param newPath
 	 *            name of the cache entry, in the standard encoding.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             If the path starts or ends with "/", or contains "//" either
 	 *             "\0". These sequences are not permitted in a git tree object
 	 *             or DirCache file.
@@ -286,7 +286,7 @@ public class DirCacheEntry {
 	 *            name of the cache entry, in the standard encoding.
 	 * @param stage
 	 *            the stage index of the new entry.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             If the path starts or ends with "/", or contains "//" either
 	 *             "\0". These sequences are not permitted in a git tree object
 	 *             or DirCache file.  Or if {@code stage} is outside of the
@@ -396,6 +396,28 @@ public class DirCacheEntry {
 	 * timestamp. This method tests to see if file was written out at the same
 	 * time as the index.
 	 *
+	 * @param smudge_s
+	 *            seconds component of the index's last modified time.
+	 * @param smudge_ns
+	 *            nanoseconds component of the index's last modified time.
+	 * @return true if extra careful checks should be used.
+	 * @deprecated use {@link #mightBeRacilyClean(Instant)} instead
+	 */
+	@Deprecated
+	public final boolean mightBeRacilyClean(int smudge_s, int smudge_ns) {
+		return mightBeRacilyClean(Instant.ofEpochSecond(smudge_s, smudge_ns));
+	}
+
+	/**
+	 * Is it possible for this entry to be accidentally assumed clean?
+	 * <p>
+	 * The "racy git" problem happens when a work file can be updated faster
+	 * than the filesystem records file modification timestamps. It is possible
+	 * for an application to edit a work file, update the index, then edit it
+	 * again before the filesystem will give the work file a new modification
+	 * timestamp. This method tests to see if file was written out at the same
+	 * time as the index.
+	 *
 	 * @param smudge
 	 *            index's last modified time.
 	 * @return true if extra careful checks should be used.
@@ -440,7 +462,7 @@ public class DirCacheEntry {
 	 * Check whether this entry has been smudged or not
 	 * <p>
 	 * If a blob has length 0 we know its id, see
-	 * {@link org.eclipse.jgit.lib.Constants#EMPTY_BLOB_ID}. If an entry has
+	 * {@link Constants#EMPTY_BLOB_ID}. If an entry has
 	 * length 0 and an ID different from the one for empty blob we know this
 	 * entry was smudged.
 	 *
@@ -567,7 +589,7 @@ public class DirCacheEntry {
 	}
 
 	/**
-	 * Obtain the raw {@link org.eclipse.jgit.lib.FileMode} bits for this entry.
+	 * Obtain the raw {@link FileMode} bits for this entry.
 	 *
 	 * @return mode bits for the entry.
 	 * @see FileMode#fromBits(int)
@@ -577,7 +599,7 @@ public class DirCacheEntry {
 	}
 
 	/**
-	 * Obtain the {@link org.eclipse.jgit.lib.FileMode} for this entry.
+	 * Obtain the {@link FileMode} for this entry.
 	 *
 	 * @return the file mode singleton for this entry.
 	 */
@@ -590,10 +612,10 @@ public class DirCacheEntry {
 	 *
 	 * @param mode
 	 *            the new mode constant.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             If {@code mode} is
-	 *             {@link org.eclipse.jgit.lib.FileMode#MISSING},
-	 *             {@link org.eclipse.jgit.lib.FileMode#TREE}, or any other type
+	 *             {@link FileMode#MISSING},
+	 *             {@link FileMode#TREE}, or any other type
 	 *             code not permitted in a tree object.
 	 */
 	public void setFileMode(FileMode mode) {
@@ -631,6 +653,22 @@ public class DirCacheEntry {
 	}
 
 	/**
+	 * Get the cached last modification date of this file, in milliseconds.
+	 * <p>
+	 * One of the indicators that the file has been modified by an application
+	 * changing the working tree is if the last modification time for the file
+	 * differs from the time stored in this entry.
+	 *
+	 * @return last modification time of this file, in milliseconds since the
+	 *         Java epoch (midnight Jan 1, 1970 UTC).
+	 * @deprecated use {@link #getLastModifiedInstant()} instead
+	 */
+	@Deprecated
+	public long getLastModified() {
+		return decodeTS(P_MTIME);
+	}
+
+	/**
 	 * Get the cached last modification date of this file.
 	 * <p>
 	 * One of the indicators that the file has been modified by an application
@@ -642,6 +680,18 @@ public class DirCacheEntry {
 	 */
 	public Instant getLastModifiedInstant() {
 		return decodeTSInstant(P_MTIME);
+	}
+
+	/**
+	 * Set the cached last modification date of this file, using milliseconds.
+	 *
+	 * @param when
+	 *            new cached modification date of the file, in milliseconds.
+	 * @deprecated use {@link #setLastModified(Instant)} instead
+	 */
+	@Deprecated
+	public void setLastModified(long when) {
+		encodeTS(P_MTIME, when);
 	}
 
 	/**
@@ -714,7 +764,7 @@ public class DirCacheEntry {
 	 *
 	 * @param id
 	 *            new object identifier for the entry. May be
-	 *            {@link org.eclipse.jgit.lib.ObjectId#zeroId()} to remove the
+	 *            {@link ObjectId#zeroId()} to remove the
 	 *            current identifier.
 	 */
 	public void setObjectId(AnyObjectId id) {

@@ -42,7 +42,7 @@ public class SubmoduleInitCommand extends GitCommand<Collection<String>> {
 	 * Constructor for SubmoduleInitCommand.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	public SubmoduleInitCommand(Repository repo) {
 		super(repo);

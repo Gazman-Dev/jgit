@@ -28,7 +28,7 @@ public class MergeConfig {
 	 * Get merge configuration for the current branch of the repository
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 * @return merge configuration for the current branch of the repository
 	 */
 	public static MergeConfig getConfigForCurrentBranch(Repository repo) {
@@ -45,13 +45,13 @@ public class MergeConfig {
 
 	/**
 	 * Get a parser for use with
-	 * {@link org.eclipse.jgit.lib.Config#get(SectionParser)}
+	 * {@link Config#get(SectionParser)}
 	 *
 	 * @param branch
 	 *            short branch name to get the configuration for, as returned
-	 *            e.g. by {@link org.eclipse.jgit.lib.Repository#getBranch()}
+	 *            e.g. by {@link Repository#getBranch()}
 	 * @return a parser for use with
-	 *         {@link org.eclipse.jgit.lib.Config#get(SectionParser)}
+	 *         {@link Config#get(SectionParser)}
 	 */
 	public static final SectionParser<MergeConfig> getParser(
 			final String branch) {

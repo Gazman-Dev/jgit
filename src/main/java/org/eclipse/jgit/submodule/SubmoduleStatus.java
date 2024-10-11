@@ -28,12 +28,12 @@ public class SubmoduleStatus {
 	 * Create submodule status
 	 *
 	 * @param type
-	 *            a {@link org.eclipse.jgit.submodule.SubmoduleStatusType}
+	 *            a {@link SubmoduleStatusType}
 	 *            object.
 	 * @param path
 	 *            submodule path
 	 * @param indexId
-	 *            an {@link org.eclipse.jgit.lib.ObjectId} object.
+	 *            an {@link ObjectId} object.
 	 */
 	public SubmoduleStatus(final SubmoduleStatusType type, final String path,
 			final ObjectId indexId) {
@@ -44,7 +44,7 @@ public class SubmoduleStatus {
 	 * Create submodule status
 	 *
 	 * @param type
-	 *            a {@link org.eclipse.jgit.submodule.SubmoduleStatusType}
+	 *            a {@link SubmoduleStatusType}
 	 *            object.
 	 * @param path
 	 *            submodule path

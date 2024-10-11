@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * sha1collisiondetection</a> for more information.
  * <p>
  * When detectCollision is true (default), this implementation throws
- * {@link org.eclipse.jgit.util.sha1.Sha1CollisionException} from any digest
+ * {@link Sha1CollisionException} from any digest
  * method if a potential collision was detected.
  *
  * @since 4.7
@@ -476,7 +476,7 @@ class SHA1Java extends SHA1 {
 	 * Once {@code digest()} is called, this instance should be discarded.
 	 *
 	 * @return the bytes for the resulting hash.
-	 * @throws org.eclipse.jgit.util.sha1.Sha1CollisionException
+	 * @throws Sha1CollisionException
 	 *             if a collision was detected and safeHash is false.
 	 */
 	@Override
@@ -498,7 +498,7 @@ class SHA1Java extends SHA1 {
 	 * Once {@code digest()} is called, this instance should be discarded.
 	 *
 	 * @return the ObjectId for the resulting hash.
-	 * @throws org.eclipse.jgit.util.sha1.Sha1CollisionException
+	 * @throws Sha1CollisionException
 	 *             if a collision was detected and safeHash is false.
 	 */
 	@Override
@@ -514,7 +514,7 @@ class SHA1Java extends SHA1 {
 	 *
 	 * @param id
 	 *            destination to copy the digest to.
-	 * @throws org.eclipse.jgit.util.sha1.Sha1CollisionException
+	 * @throws Sha1CollisionException
 	 *             if a collision was detected and safeHash is false.
 	 */
 	@Override

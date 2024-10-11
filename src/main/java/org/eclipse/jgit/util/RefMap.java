@@ -30,8 +30,8 @@ import org.eclipse.jgit.lib.RefComparator;
  * <p>
  * Although not declared as a {@link java.util.SortedMap}, iterators from this
  * map's projections always return references in
- * {@link org.eclipse.jgit.lib.RefComparator} ordering. The map's internal
- * representation is a sorted array of {@link org.eclipse.jgit.lib.Ref} objects,
+ * {@link RefComparator} ordering. The map's internal
+ * representation is a sorted array of {@link Ref} objects,
  * which means lookup and replacement is O(log N), while insertion and removal
  * can be as expensive as O(N + log N) while the list expands or contracts.
  * Since this is not a general map implementation, all entries must be keyed by
@@ -39,7 +39,7 @@ import org.eclipse.jgit.lib.RefComparator;
  * <p>
  * This class is really intended as a helper for {@code RefDatabase}, which
  * needs to perform a merge-join of three sorted
- * {@link org.eclipse.jgit.util.RefList}s in order to present the unified
+ * {@link RefList}s in order to present the unified
  * namespace of the packed-refs file, the loose refs/ directory tree, and the
  * resolved form of any symbolic references.
  */
@@ -397,8 +397,8 @@ public class RefMap extends AbstractMap<String, Ref> {
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof Map.Entry) {
-				final Object key = ((Map.Entry) obj).getKey();
-				final Object val = ((Map.Entry) obj).getValue();
+				final Object key = ((Entry) obj).getKey();
+				final Object val = ((Entry) obj).getValue();
 				if (key instanceof String && val instanceof Ref) {
 					final Ref r = (Ref) val;
 					if (r.getName().equals(ref.getName())) {

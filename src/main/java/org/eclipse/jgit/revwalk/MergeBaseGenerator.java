@@ -12,7 +12,7 @@ package org.eclipse.jgit.revwalk;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -47,8 +47,7 @@ class MergeBaseGenerator extends Generator {
 	private int recarryTest;
 	private int recarryMask;
 	private int mergeBaseAncestor = -1;
-
-	private ArrayDeque<RevCommit> ret = new ArrayDeque<>();
+	private LinkedList<RevCommit> ret = new LinkedList<>();
 
 	private CarryStack stack;
 

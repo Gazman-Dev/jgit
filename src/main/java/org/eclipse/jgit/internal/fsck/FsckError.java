@@ -79,7 +79,7 @@ public class FsckError {
 	public static class CorruptIndex {
 		String fileName;
 
-		CorruptPackIndexException.ErrorType errorType;
+		ErrorType errorType;
 
 		/**
 		 * @param fileName

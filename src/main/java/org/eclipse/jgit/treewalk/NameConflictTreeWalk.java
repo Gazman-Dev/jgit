@@ -22,7 +22,7 @@ import org.eclipse.jgit.lib.Repository;
  * Specialized TreeWalk to detect directory-file (D/F) name conflicts.
  * <p>
  * Due to the way a Git tree is organized the standard
- * {@link org.eclipse.jgit.treewalk.TreeWalk} won't easily find a D/F conflict
+ * {@link TreeWalk} won't easily find a D/F conflict
  * when merging two or more trees together. In the standard TreeWalk the file
  * will be returned first, and then much later the directory will be returned.
  * This makes it impossible for the application to efficiently detect and handle
@@ -34,8 +34,8 @@ import org.eclipse.jgit.lib.Repository;
  * returned only once, so it does not get returned later in the iteration.
  * <p>
  * When a D/F conflict is detected
- * {@link org.eclipse.jgit.treewalk.TreeWalk#isSubtree()} will return true and
- * {@link org.eclipse.jgit.treewalk.TreeWalk#enterSubtree()} will recurse into
+ * {@link TreeWalk#isSubtree()} will return true and
+ * {@link TreeWalk#enterSubtree()} will recurse into
  * the subtree, no matter which iterator originally supplied the subtree.
  * <p>
  * Because conflicted directories report early, using this walk implementation

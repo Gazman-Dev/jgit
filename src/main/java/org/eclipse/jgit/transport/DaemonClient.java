@@ -24,7 +24,7 @@ import org.eclipse.jgit.transport.resolver.ServiceNotAuthorizedException;
 import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
 
 /**
- * Active network client of {@link org.eclipse.jgit.transport.Daemon}.
+ * Active network client of {@link Daemon}.
  */
 public class DaemonClient {
 	private final Daemon daemon;

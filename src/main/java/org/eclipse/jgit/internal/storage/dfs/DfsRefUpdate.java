@@ -115,7 +115,7 @@ final class DfsRefUpdate extends RefUpdate {
 						null));
 		if (getRefDatabase().compareAndPut(dstRef, newRef)) {
 			getRefDatabase().stored(newRef);
-			if (dstRef.getStorage() == Ref.Storage.NEW)
+			if (dstRef.getStorage() == Storage.NEW)
 				return Result.NEW;
 			return Result.FORCED;
 		}

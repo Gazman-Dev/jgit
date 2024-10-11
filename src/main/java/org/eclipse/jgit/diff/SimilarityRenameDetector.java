@@ -91,7 +91,7 @@ class SimilarityRenameDetector {
 	/** Skip content renames for binary files. */
 	private boolean skipBinaryFiles = false;
 
-	/** Set if any {@link SimilarityIndex.TableFullException} occurs. */
+	/** Set if any {@link TableFullException} occurs. */
 	private boolean tableOverflow;
 
 	private List<DiffEntry> out;

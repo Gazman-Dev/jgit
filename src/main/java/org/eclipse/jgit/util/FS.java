@@ -271,7 +271,7 @@ public abstract class FS {
 		 * as appropriate.
 		 * </p>
 		 *
-		 * @see java.util.concurrent.Executors#newCachedThreadPool()
+		 * @see Executors#newCachedThreadPool()
 		 */
 		private static final ExecutorService FUTURE_RUNNER = new ThreadPoolExecutor(
 				5, 5, 30L, TimeUnit.SECONDS,
@@ -898,6 +898,21 @@ public abstract class FS {
 	}
 
 	/**
+	 * Whether FileStore attributes should be determined asynchronously
+	 *
+	 * @param asynch
+	 *            whether FileStore attributes should be determined
+	 *            asynchronously. If false access to cached attributes may block
+	 *            for some seconds for the first call per FileStore
+	 * @since 5.1.9
+	 * @deprecated Use {@link FileStoreAttributes#setBackground} instead
+	 */
+	@Deprecated
+	public static void setAsyncFileStoreAttributes(boolean asynch) {
+		FileStoreAttributes.setBackground(asynch);
+	}
+
+	/**
 	 * Auto-detect the appropriate file system abstraction, taking into account
 	 * the presence of a Cygwin installation on the system. Using jgit in
 	 * combination with Cygwin requires a more elaborate (and possibly slower)
@@ -919,7 +934,7 @@ public abstract class FS {
 	 */
 	public static FS detect(Boolean cygwinUsed) {
 		if (factory == null) {
-			factory = new FS.FSFactory();
+			factory = new FSFactory();
 		}
 		return factory.detect(cygwinUsed);
 	}
@@ -984,7 +999,7 @@ public abstract class FS {
 	 * created a new file.
 	 *
 	 * @return true if this implementation support atomic creation of new Files
-	 *         by {@link java.io.File#createNewFile()}
+	 *         by {@link File#createNewFile()}
 	 * @since 4.5
 	 */
 	public boolean supportsAtomicCreateNewFile() {
@@ -1070,6 +1085,24 @@ public abstract class FS {
 	 * symbolic links, the modification time of the link is returned, rather
 	 * than that of the link target.
 	 *
+	 * @param f
+	 *            a {@link File} object.
+	 * @return last modified time of f
+	 * @throws IOException
+	 *             if an IO error occurred
+	 * @since 3.0
+	 * @deprecated use {@link #lastModifiedInstant(Path)} instead
+	 */
+	@Deprecated
+	public long lastModified(File f) throws IOException {
+		return FileUtils.lastModified(f);
+	}
+
+	/**
+	 * Get the last modified time of a file system object. If the OS/JRE support
+	 * symbolic links, the modification time of the link is returned, rather
+	 * than that of the link target.
+	 *
 	 * @param p
 	 *            a {@link Path} object.
 	 * @return last modified time of p
@@ -1098,11 +1131,30 @@ public abstract class FS {
 	 * <p>
 	 * For symlinks it sets the modified time of the link target.
 	 *
+	 * @param f
+	 *            a {@link File} object.
+	 * @param time
+	 *            last modified time
+	 * @throws IOException
+	 *             if an IO error occurred
+	 * @since 3.0
+	 * @deprecated use {@link #setLastModified(Path, Instant)} instead
+	 */
+	@Deprecated
+	public void setLastModified(File f, long time) throws IOException {
+		FileUtils.setLastModified(f, time);
+	}
+
+	/**
+	 * Set the last modified time of a file system object.
+	 * <p>
+	 * For symlinks it sets the modified time of the link target.
+	 *
 	 * @param p
 	 *            a {@link Path} object.
 	 * @param time
 	 *            last modified time
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 5.1.9
 	 */
@@ -1115,9 +1167,9 @@ public abstract class FS {
 	 * it's the length of the link, else the length of the target.
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return length of a file
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.0
 	 */
@@ -1129,8 +1181,8 @@ public abstract class FS {
 	 * Delete a file. Throws an exception if delete fails.
 	 *
 	 * @param f
-	 *            a {@link java.io.File} object.
-	 * @throws java.io.IOException
+	 *            a {@link File} object.
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.3
 	 */
@@ -1306,7 +1358,7 @@ public abstract class FS {
 	 *            to be used to parse the command's output
 	 * @return the one-line output of the command or {@code null} if there is
 	 *         none
-	 * @throws org.eclipse.jgit.errors.CommandFailedException
+	 * @throws CommandFailedException
 	 *             thrown when the command failed (return code was non-zero)
 	 */
 	@Nullable
@@ -1329,7 +1381,7 @@ public abstract class FS {
 	 *            current process
 	 * @return the one-line output of the command or {@code null} if there is
 	 *         none
-	 * @throws org.eclipse.jgit.errors.CommandFailedException
+	 * @throws CommandFailedException
 	 *             thrown when the command failed (return code was non-zero)
 	 * @since 4.0
 	 */
@@ -1620,7 +1672,7 @@ public abstract class FS {
 	 * Get the parent directory of this file's parent directory
 	 *
 	 * @param grandchild
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return the parent directory of this file's parent directory or
 	 *         {@code null} in case there's no grandparent directory
 	 * @since 4.0
@@ -1638,9 +1690,9 @@ public abstract class FS {
 	 * Check if a file is a symbolic link and read it
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return target of link or null
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.0
 	 */
@@ -1652,9 +1704,9 @@ public abstract class FS {
 	 * Whether the path is a symbolic link (and we support these).
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return true if the path is a symbolic link (and we support these)
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.0
 	 */
@@ -1667,7 +1719,7 @@ public abstract class FS {
 	 * target does not exist
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return true if path exists
 	 * @since 3.0
 	 */
@@ -1680,7 +1732,7 @@ public abstract class FS {
 	 * path is a symbolic link to a directory, this method returns false.
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return true if file is a directory,
 	 * @since 3.0
 	 */
@@ -1693,7 +1745,7 @@ public abstract class FS {
 	 * symbolic links the test returns false if path represents a symbolic link.
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return true if path represents a regular file
 	 * @since 3.0
 	 */
@@ -1706,10 +1758,10 @@ public abstract class FS {
 	 * attribute in windows
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return true if path is hidden, either starts with . on unix or has the
 	 *         hidden attribute in windows
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.0
 	 */
@@ -1721,10 +1773,10 @@ public abstract class FS {
 	 * Set the hidden attribute for file whose name starts with a period.
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @param hidden
 	 *            whether to set the file hidden
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.0
 	 */
@@ -1736,15 +1788,34 @@ public abstract class FS {
 	 * Create a symbolic link
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @param target
 	 *            target path of the symlink
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 3.0
 	 */
 	public void createSymLink(File path, String target) throws IOException {
 		FileUtils.createSymLink(path, target);
+	}
+
+	/**
+	 * Create a new file. See {@link File#createNewFile()}. Subclasses
+	 * of this class may take care to provide a safe implementation for this
+	 * even if {@link #supportsAtomicCreateNewFile()} is <code>false</code>
+	 *
+	 * @param path
+	 *            the file to be created
+	 * @return <code>true</code> if the file was created, <code>false</code> if
+	 *         the file already existed
+	 * @throws IOException
+	 *             if an IO error occurred
+	 * @deprecated use {@link #createNewFileAtomic(File)} instead
+	 * @since 4.5
+	 */
+	@Deprecated
+	public boolean createNewFile(File path) throws IOException {
+		return path.createNewFile();
 	}
 
 	/**
@@ -1802,7 +1873,7 @@ public abstract class FS {
 	}
 
 	/**
-	 * Create a new file. See {@link java.io.File#createNewFile()}. Subclasses
+	 * Create a new file. See {@link File#createNewFile()}. Subclasses
 	 * of this class may take care to provide a safe implementation for this
 	 * even if {@link #supportsAtomicCreateNewFile()} is <code>false</code>
 	 *
@@ -1820,7 +1891,7 @@ public abstract class FS {
 
 	/**
 	 * See
-	 * {@link org.eclipse.jgit.util.FileUtils#relativizePath(String, String, String, boolean)}.
+	 * {@link FileUtils#relativizePath(String, String, String, boolean)}.
 	 *
 	 * @param base
 	 *            The path against which <code>other</code> should be
@@ -1876,7 +1947,7 @@ public abstract class FS {
 	 *            Arguments to pass to this hook. Cannot be <code>null</code>,
 	 *            but can be an empty array.
 	 * @return The ProcessResult describing this hook's execution.
-	 * @throws org.eclipse.jgit.api.errors.JGitInternalException
+	 * @throws JGitInternalException
 	 *             if we fail to run the hook somehow. Causes may include an
 	 *             interrupted process or I/O errors.
 	 * @since 4.0
@@ -1910,7 +1981,7 @@ public abstract class FS {
 	 *            A string to pass on to the standard input of the hook. May be
 	 *            <code>null</code>.
 	 * @return The ProcessResult describing this hook's execution.
-	 * @throws org.eclipse.jgit.api.errors.JGitInternalException
+	 * @throws JGitInternalException
 	 *             if we fail to run the hook somehow. Causes may include an
 	 *             interrupted process or I/O errors.
 	 * @since 5.11
@@ -1946,7 +2017,7 @@ public abstract class FS {
 	 *            A string to pass on to the standard input of the hook. May be
 	 *            <code>null</code>.
 	 * @return The ProcessResult describing this hook's execution.
-	 * @throws org.eclipse.jgit.api.errors.JGitInternalException
+	 * @throws JGitInternalException
 	 *             if we fail to run the hook somehow. Causes may include an
 	 *             interrupted process or I/O errors.
 	 * @since 5.11
@@ -1971,8 +2042,6 @@ public abstract class FS {
 		environment.put(Constants.GIT_DIR_KEY,
 				repository.getDirectory().getAbsolutePath());
 		if (!repository.isBare()) {
-			environment.put(Constants.GIT_COMMON_DIR_KEY,
-					repository.getCommonDirectory().getAbsolutePath());
 			environment.put(Constants.GIT_WORK_TREE_KEY,
 					repository.getWorkTree().getAbsolutePath());
 		}
@@ -2013,7 +2082,7 @@ public abstract class FS {
 	 *            The repository within which to find a hook.
 	 * @param hookName
 	 *            The name of the hook we're trying to find.
-	 * @return The {@link java.io.File} containing this particular hook if it
+	 * @return The {@link File} containing this particular hook if it
 	 *         exists in the given repository, <code>null</code> otherwise.
 	 * @since 4.0
 	 */
@@ -2068,7 +2137,7 @@ public abstract class FS {
 		case "post-receive": //$NON-NLS-1$
 		case "post-update": //$NON-NLS-1$
 		case "push-to-checkout": //$NON-NLS-1$
-			return repository.getCommonDirectory();
+			return repository.getDirectory();
 		default:
 			return repository.getWorkTree();
 		}
@@ -2081,7 +2150,7 @@ public abstract class FS {
 		if (hooksDir != null) {
 			return new File(hooksDir);
 		}
-		File dir = repository.getCommonDirectory();
+		File dir = repository.getDirectory();
 		return dir == null ? null : new File(dir, Constants.HOOKS);
 	}
 
@@ -2103,9 +2172,9 @@ public abstract class FS {
 	 *            A string to pass on to the standard input of the hook. Can be
 	 *            <code>null</code>.
 	 * @return the exit value of this process.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an I/O error occurs while executing this process.
-	 * @throws java.lang.InterruptedException
+	 * @throws InterruptedException
 	 *             if the current thread is interrupted while waiting for the
 	 *             process to end.
 	 * @since 4.2
@@ -2139,9 +2208,9 @@ public abstract class FS {
 	 *            will be consumed by the process. The method will close the
 	 *            inputstream after all bytes are read.
 	 * @return the return code of this process.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an I/O error occurs while executing this process.
-	 * @throws java.lang.InterruptedException
+	 * @throws InterruptedException
 	 *             if the current thread is interrupted while waiting for the
 	 *             process to end.
 	 * @since 4.2
@@ -2271,16 +2340,16 @@ public abstract class FS {
 	public abstract ProcessBuilder runInShell(String cmd, String[] args);
 
 	/**
-	 * Execute a command defined by a {@link java.lang.ProcessBuilder}.
+	 * Execute a command defined by a {@link ProcessBuilder}.
 	 *
 	 * @param pb
 	 *            The command to be executed
 	 * @param in
 	 *            The standard input stream passed to the process
 	 * @return The result of the executed command
-	 * @throws java.lang.InterruptedException
+	 * @throws InterruptedException
 	 *             if thread was interrupted
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 4.2
 	 */
@@ -2352,6 +2421,19 @@ public abstract class FS {
 		 */
 		public long getCreationTime() {
 			return creationTime;
+		}
+
+		/**
+		 * Get the time when the file was last modified in milliseconds since
+		 * the epoch
+		 *
+		 * @return the time (milliseconds since 1970-01-01) when this object was
+		 *         last modified
+		 * @deprecated use getLastModifiedInstant instead
+		 */
+		@Deprecated
+		public long getLastModifiedTime() {
+			return lastModifiedInstant.toEpochMilli();
 		}
 
 		/**
@@ -2454,7 +2536,7 @@ public abstract class FS {
 	 * Get the file attributes we care for.
 	 *
 	 * @param path
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return the file attributes we care for.
 	 * @since 3.3
 	 */
@@ -2475,7 +2557,7 @@ public abstract class FS {
 	 * Normalize the unicode path to composed form.
 	 *
 	 * @param file
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return NFC-format File
 	 * @since 3.3
 	 */
@@ -2493,33 +2575,6 @@ public abstract class FS {
 	 */
 	public String normalize(String name) {
 		return name;
-	}
-
-	/**
-	 * Get common dir path.
-	 *
-	 * @param dir
-	 *            the .git folder
-	 * @return common dir path
-	 * @throws IOException
-	 *             if commondir file can't be read
-	 *
-	 * @since 7.0
-	 */
-	public File getCommonDir(File dir) throws IOException {
-		// first the GIT_COMMON_DIR is same as GIT_DIR
-		File commonDir = dir;
-		// now check if commondir file exists (e.g. worktree repository)
-		File commonDirFile = new File(dir, Constants.COMMONDIR_FILE);
-		if (commonDirFile.isFile()) {
-			String commonDirPath = new String(IO.readFully(commonDirFile))
-					.trim();
-			commonDir = new File(commonDirPath);
-			if (!commonDir.isAbsolute()) {
-				commonDir = new File(dir, commonDirPath).getCanonicalFile();
-			}
-		}
-		return commonDir;
 	}
 
 	/**

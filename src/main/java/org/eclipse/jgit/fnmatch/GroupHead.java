@@ -132,7 +132,7 @@ final class GroupHead extends AbstractHead {
 	}
 
 	private static final class DigitPattern implements CharacterPattern {
-		static final GroupHead.DigitPattern INSTANCE = new DigitPattern();
+		static final DigitPattern INSTANCE = new DigitPattern();
 
 		@Override
 		public final boolean matches(char c) {
@@ -141,7 +141,7 @@ final class GroupHead extends AbstractHead {
 	}
 
 	private static final class LetterPattern implements CharacterPattern {
-		static final GroupHead.LetterPattern INSTANCE = new LetterPattern();
+		static final LetterPattern INSTANCE = new LetterPattern();
 
 		@Override
 		public final boolean matches(char c) {
@@ -150,7 +150,7 @@ final class GroupHead extends AbstractHead {
 	}
 
 	private static final class LowerPattern implements CharacterPattern {
-		static final GroupHead.LowerPattern INSTANCE = new LowerPattern();
+		static final LowerPattern INSTANCE = new LowerPattern();
 
 		@Override
 		public final boolean matches(char c) {
@@ -159,7 +159,7 @@ final class GroupHead extends AbstractHead {
 	}
 
 	private static final class UpperPattern implements CharacterPattern {
-		static final GroupHead.UpperPattern INSTANCE = new UpperPattern();
+		static final UpperPattern INSTANCE = new UpperPattern();
 
 		@Override
 		public final boolean matches(char c) {
@@ -168,7 +168,7 @@ final class GroupHead extends AbstractHead {
 	}
 
 	private static final class WhitespacePattern implements CharacterPattern {
-		static final GroupHead.WhitespacePattern INSTANCE = new WhitespacePattern();
+		static final WhitespacePattern INSTANCE = new WhitespacePattern();
 
 		@Override
 		public final boolean matches(char c) {
@@ -190,7 +190,7 @@ final class GroupHead extends AbstractHead {
 	}
 
 	private static final class PunctPattern implements CharacterPattern {
-		static final GroupHead.PunctPattern INSTANCE = new PunctPattern();
+		static final PunctPattern INSTANCE = new PunctPattern();
 
 		private static String punctCharacters = "-!\"#$%&'()*+,./:;<=>?@[\\]_`{|}~"; //$NON-NLS-1$
 

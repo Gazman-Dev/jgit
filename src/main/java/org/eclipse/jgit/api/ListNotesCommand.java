@@ -38,7 +38,7 @@ public class ListNotesCommand extends GitCommand<List<Note>> {
 	 * Constructor for ListNotesCommand.
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected ListNotesCommand(Repository repo) {
 		super(repo);
@@ -73,7 +73,7 @@ public class ListNotesCommand extends GitCommand<List<Note>> {
 	 * @param notesRef
 	 *            the name of the {@code Ref} to read notes from. Note, the
 	 *            default value of
-	 *            {@link org.eclipse.jgit.lib.Constants#R_NOTES_COMMITS} will be
+	 *            {@link Constants#R_NOTES_COMMITS} will be
 	 *            used if nothing is set
 	 * @return {@code this}
 	 * @see Constants#R_NOTES_COMMITS

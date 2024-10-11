@@ -44,7 +44,7 @@ public class SubmoduleSyncCommand extends GitCommand<Map<String, String>> {
 	 * Constructor for SubmoduleSyncCommand.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	public SubmoduleSyncCommand(Repository repo) {
 		super(repo);
@@ -67,9 +67,9 @@ public class SubmoduleSyncCommand extends GitCommand<Map<String, String>> {
 	 * Get branch that HEAD currently points to
 	 *
 	 * @param subRepo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 * @return shortened branch name, null on failures
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected String getHeadBranch(Repository subRepo) throws IOException {

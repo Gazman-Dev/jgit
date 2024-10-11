@@ -10,7 +10,7 @@
 package org.eclipse.jgit.api;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -46,7 +46,7 @@ public class StatusCommand extends GitCommand<Status> {
 	 * Constructor for StatusCommand.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	protected StatusCommand(Repository repo) {
 		super(repo);
@@ -57,7 +57,7 @@ public class StatusCommand extends GitCommand<Status> {
 	 *
 	 * @param mode
 	 *            the
-	 *            {@link org.eclipse.jgit.submodule.SubmoduleWalk.IgnoreSubmoduleMode}
+	 *            {@link IgnoreSubmoduleMode}
 	 * @return {@code this}
 	 * @since 3.6
 	 */
@@ -83,7 +83,7 @@ public class StatusCommand extends GitCommand<Status> {
 	 */
 	public StatusCommand addPath(String path) {
 		if (paths == null)
-			paths = new ArrayList<>();
+			paths = new LinkedList<>();
 		paths.add(path);
 		return this;
 	}
@@ -130,9 +130,9 @@ public class StatusCommand extends GitCommand<Status> {
 	}
 
 	/**
-	 * To set the {@link org.eclipse.jgit.treewalk.WorkingTreeIterator} which
+	 * To set the {@link WorkingTreeIterator} which
 	 * should be used. If this method is not called a standard
-	 * {@link org.eclipse.jgit.treewalk.FileTreeIterator} is used.
+	 * {@link FileTreeIterator} is used.
 	 *
 	 * @param workingTreeIt
 	 *            a working tree iterator
@@ -144,11 +144,11 @@ public class StatusCommand extends GitCommand<Status> {
 	}
 
 	/**
-	 * To set the {@link org.eclipse.jgit.lib.ProgressMonitor} which contains
+	 * To set the {@link ProgressMonitor} which contains
 	 * callback methods to inform you about the progress of this command.
 	 *
 	 * @param progressMonitor
-	 *            a {@link org.eclipse.jgit.lib.ProgressMonitor} object.
+	 *            a {@link ProgressMonitor} object.
 	 * @return {@code this}
 	 * @since 3.1
 	 */

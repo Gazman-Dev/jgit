@@ -29,7 +29,7 @@ public class PatchFormatException extends GitAPIException {
 	 * Constructor for PatchFormatException
 	 *
 	 * @param errors
-	 *            a {@link java.util.List} of {@link FormatError}s
+	 *            a {@link List} of {@link FormatError}s
 	 */
 	public PatchFormatException(List<FormatError> errors) {
 		super(MessageFormat.format(JGitText.get().patchFormatException, errors));

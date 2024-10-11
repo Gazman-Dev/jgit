@@ -19,7 +19,7 @@ import org.eclipse.jgit.internal.storage.reftable.ReftableReader;
 
 /**
  * Tracks multiple open
- * {@link org.eclipse.jgit.internal.storage.reftable.ReftableReader} instances.
+ * {@link ReftableReader} instances.
  */
 public class DfsReftableStack implements AutoCloseable {
 	/**
@@ -31,7 +31,7 @@ public class DfsReftableStack implements AutoCloseable {
 	 * @param files
 	 *            the tables to open.
 	 * @return stack reference to close the tables.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a table could not be opened
 	 */
 	public static DfsReftableStack open(DfsReader ctx, List<DfsReftable> files)

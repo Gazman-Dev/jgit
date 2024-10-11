@@ -19,7 +19,6 @@ import java.text.MessageFormat;
 
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.internal.storage.file.PackBitmapIndexBuilder.StoredEntry;
-import org.eclipse.jgit.internal.storage.pack.PackBitmapIndexWriter;
 import org.eclipse.jgit.lib.Constants;
 
 import com.googlecode.javaewah.EWAHCompressedBitmap;
@@ -29,7 +28,7 @@ import com.googlecode.javaewah.EWAHCompressedBitmap;
  *
  * @see PackBitmapIndexV1
  */
-public class PackBitmapIndexWriterV1 implements PackBitmapIndexWriter {
+public class PackBitmapIndexWriterV1 {
 	private final DigestOutputStream out;
 	private final DataOutput dataOutput;
 
@@ -57,11 +56,10 @@ public class PackBitmapIndexWriterV1 implements PackBitmapIndexWriter {
 	 * @param packDataChecksum
 	 *            checksum signature of the entire pack data content. This is
 	 *            traditionally the last 20 bytes of the pack file's own stream.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred while writing to the output stream, or this
 	 *             index format cannot store the object data supplied.
 	 */
-	@Override
 	public void write(PackBitmapIndexBuilder bitmaps, byte[] packDataChecksum)
 			throws IOException {
 		if (bitmaps == null || packDataChecksum.length != 20)
@@ -115,7 +113,7 @@ public class PackBitmapIndexWriterV1 implements PackBitmapIndexWriter {
 
 	private void writeBitmapEntry(StoredEntry entry) throws IOException {
 		// Write object, XOR offset, and bitmap
-		dataOutput.writeInt((int) entry.getIdxPosition());
+		dataOutput.writeInt((int) entry.getObjectId());
 		out.write(entry.getXorOffset());
 		out.write(entry.getFlags());
 		writeBitmap(entry.getBitmap());

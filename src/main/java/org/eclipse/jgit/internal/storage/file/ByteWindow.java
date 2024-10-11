@@ -37,7 +37,7 @@ abstract class ByteWindow {
 	 * Constructor for ByteWindow.
 	 *
 	 * @param p
-	 *            a {@link org.eclipse.jgit.internal.storage.file.Pack}.
+	 *            a {@link Pack}.
 	 * @param s
 	 *            where the byte window starts in the pack file
 	 * @param n
@@ -110,9 +110,9 @@ abstract class ByteWindow {
 	 * @param pos
 	 *            position
 	 * @param inf
-	 *            an {@link java.util.zip.Inflater} object.
+	 *            an {@link Inflater} object.
 	 * @return size of the byte window
-	 * @throws java.util.zip.DataFormatException
+	 * @throws DataFormatException
 	 *             if any.
 	 */
 	protected abstract int setInput(int pos, Inflater inf)

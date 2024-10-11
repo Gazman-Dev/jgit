@@ -35,7 +35,7 @@ import org.eclipse.jgit.util.FS;
  * <p>
  * This iterator uses the standard <code>java.io</code> package to read the
  * specified working directory as part of a
- * {@link org.eclipse.jgit.treewalk.TreeWalk}.
+ * {@link TreeWalk}.
  */
 public class FileTreeIterator extends WorkingTreeIterator {
 
@@ -369,6 +369,12 @@ public class FileTreeIterator extends WorkingTreeIterator {
 		@Override
 		public long getLength() {
 			return attributes.getLength();
+		}
+
+		@Override
+		@Deprecated
+		public long getLastModified() {
+			return attributes.getLastModifiedInstant().toEpochMilli();
 		}
 
 		/**

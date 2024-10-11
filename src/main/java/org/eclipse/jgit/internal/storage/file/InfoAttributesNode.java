@@ -28,7 +28,7 @@ public class InfoAttributesNode extends AttributesNode {
 	 * Constructor for InfoAttributesNode.
 	 *
 	 * @param repository
-	 *            the {@link org.eclipse.jgit.lib.Repository}.
+	 *            the {@link Repository}.
 	 */
 	public InfoAttributesNode(Repository repository) {
 		this.repository = repository;
@@ -38,7 +38,7 @@ public class InfoAttributesNode extends AttributesNode {
 	 * Load the attributes node
 	 *
 	 * @return the attributes node
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public AttributesNode load() throws IOException {
@@ -46,7 +46,7 @@ public class InfoAttributesNode extends AttributesNode {
 
 		FS fs = repository.getFS();
 
-		File attributes = fs.resolve(repository.getCommonDirectory(),
+		File attributes = fs.resolve(repository.getDirectory(),
 				Constants.INFO_ATTRIBUTES);
 		FileRepository.AttributesNodeProviderImpl.loadRulesFromFile(r, attributes);
 

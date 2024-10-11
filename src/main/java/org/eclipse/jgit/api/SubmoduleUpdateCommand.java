@@ -68,7 +68,7 @@ public class SubmoduleUpdateCommand extends
 	 * </p>
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	public SubmoduleUpdateCommand(Repository repo) {
 		super(repo);
@@ -81,7 +81,7 @@ public class SubmoduleUpdateCommand extends
 	 *
 	 * @see NullProgressMonitor
 	 * @param monitor
-	 *            a {@link org.eclipse.jgit.lib.ProgressMonitor} object.
+	 *            a {@link ProgressMonitor} object.
 	 * @return this command
 	 */
 	public SubmoduleUpdateCommand setProgressMonitor(
@@ -128,7 +128,7 @@ public class SubmoduleUpdateCommand extends
 			clone.setURI(url);
 			clone.setDirectory(generator.getDirectory());
 			clone.setGitDir(
-					new File(new File(repo.getCommonDirectory(), Constants.MODULES),
+					new File(new File(repo.getDirectory(), Constants.MODULES),
 							generator.getPath()));
 			if (monitor != null) {
 				clone.setProgressMonitor(monitor);

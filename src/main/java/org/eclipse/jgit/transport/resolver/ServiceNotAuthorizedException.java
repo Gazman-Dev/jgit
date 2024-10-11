@@ -28,7 +28,7 @@ public class ServiceNotAuthorizedException extends Exception {
 	 * @param message
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable} object.
+	 *            a {@link Throwable} object.
 	 * @since 4.1
 	 */
 	public ServiceNotAuthorizedException(String message, Throwable cause) {

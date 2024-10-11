@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * A {@link org.eclipse.jgit.util.time.MonotonicClock} based on
+ * A {@link MonotonicClock} based on
  * {@code System.currentTimeMillis}.
  *
  * @since 4.6

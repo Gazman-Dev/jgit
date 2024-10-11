@@ -21,7 +21,7 @@ package org.eclipse.jgit.transport;
  * have the object as a loose object.
  * <p>
  * WalkTransports are not as efficient as
- * {@link org.eclipse.jgit.transport.PackTransport} instances, but can be useful
+ * {@link PackTransport} instances, but can be useful
  * in situations where a pack transport is not acceptable.
  *
  * @see WalkFetchConnection

@@ -53,7 +53,7 @@ public class RevCommit extends RevObject {
 	 *
 	 * Applications are discouraged from using this API. Callers usually need
 	 * more than one commit. Use
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#parseCommit(AnyObjectId)} to
+	 * {@link RevWalk#parseCommit(AnyObjectId)} to
 	 * obtain a RevCommit from an existing repository.
 	 *
 	 * @param raw
@@ -89,7 +89,7 @@ public class RevCommit extends RevObject {
 	 *            modified by the caller.
 	 * @return the parsed commit, in an isolated revision pool that is not
 	 *         available to the caller.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             in case of RevWalk initialization fails
 	 */
 	public static RevCommit parse(RevWalk rw, byte[] raw) throws IOException {
@@ -346,7 +346,7 @@ public class RevCommit extends RevObject {
 	 *            parent index to obtain. Must be in the range 0 through
 	 *            {@link #getParentCount()}-1.
 	 * @return the specified parent.
-	 * @throws java.lang.ArrayIndexOutOfBoundsException
+	 * @throws ArrayIndexOutOfBoundsException
 	 *             an invalid parent index was specified.
 	 */
 	public RevCommit getParent(int nth) {
@@ -393,7 +393,7 @@ public class RevCommit extends RevObject {
 	 * necessary to use all information from it.
 	 * <p>
 	 * RevFilter implementations should try to use
-	 * {@link org.eclipse.jgit.util.RawParseUtils} to scan the
+	 * {@link RawParseUtils} to scan the
 	 * {@link #getRawBuffer()} instead, as this will allow faster evaluation of
 	 * commits.
 	 *
@@ -423,7 +423,7 @@ public class RevCommit extends RevObject {
 	 * information from it.
 	 * <p>
 	 * RevFilter implementations should try to use
-	 * {@link org.eclipse.jgit.util.RawParseUtils} to scan the
+	 * {@link RawParseUtils} to scan the
 	 * {@link #getRawBuffer()} instead, as this will allow faster evaluation of
 	 * commits.
 	 *
@@ -450,7 +450,7 @@ public class RevCommit extends RevObject {
 	 * information from it.
 	 * <p>
 	 * RevFilter implementations should try to use
-	 * {@link org.eclipse.jgit.util.RawParseUtils} to scan the
+	 * {@link RawParseUtils} to scan the
 	 * {@link #getRawBuffer()} instead, as this will allow faster evaluation of
 	 * commits.
 	 *
@@ -622,11 +622,11 @@ public class RevCommit extends RevObject {
 	 * {@link org.eclipse.jgit.internal.storage.commitgraph.CommitGraph}
 	 * <p>
 	 * Generation number is
-	 * {@link org.eclipse.jgit.lib.Constants#COMMIT_GENERATION_UNKNOWN} when the
+	 * {@link Constants#COMMIT_GENERATION_UNKNOWN} when the
 	 * commit is not in the commit-graph. If a commit-graph file was written by
 	 * a version of Git that did not compute generation numbers, then those
 	 * commits in commit-graph will have generation number represented by
-	 * {@link org.eclipse.jgit.lib.Constants#COMMIT_GENERATION_NOT_COMPUTED}.
+	 * {@link Constants#COMMIT_GENERATION_NOT_COMPUTED}.
 	 *
 	 * @return the generation number
 	 * @since 6.5
@@ -668,7 +668,7 @@ public class RevCommit extends RevObject {
 	 * time in {@link #getCommitTime()}. Accessing other properties such as
 	 * {@link #getAuthorIdent()}, {@link #getCommitterIdent()} or either message
 	 * function requires reloading the buffer by invoking
-	 * {@link org.eclipse.jgit.revwalk.RevWalk#parseBody(RevObject)}.
+	 * {@link RevWalk#parseBody(RevObject)}.
 	 *
 	 * @since 4.0
 	 */

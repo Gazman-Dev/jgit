@@ -19,7 +19,7 @@ import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.FileUtils;
 
 /**
- * Keeps track of a {@link org.eclipse.jgit.internal.storage.file.Pack}'s
+ * Keeps track of a {@link Pack}'s
  * associated <code>.keep</code> file.
  */
 public class PackLockImpl implements PackLock {
@@ -45,7 +45,7 @@ public class PackLockImpl implements PackLock {
 	 * @param msg
 	 *            message to store in the file.
 	 * @return true if the keep file was successfully written; false otherwise.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the keep file could not be written.
 	 */
 	public boolean lock(String msg) throws IOException {

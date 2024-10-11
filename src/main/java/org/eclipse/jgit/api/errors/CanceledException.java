@@ -47,7 +47,7 @@ public class CanceledException extends GitAPIException {
 	/**
 	 * <p>Constructor for CanceledException.</p>
 	 *
-	 * @param message a {@link java.lang.String} object.
+	 * @param message a {@link String} object.
 	 */
 	public CanceledException(String message) {
 		super(message);

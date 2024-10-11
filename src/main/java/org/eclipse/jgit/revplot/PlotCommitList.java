@@ -24,12 +24,12 @@ import org.eclipse.jgit.revwalk.RevCommitList;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
- * An ordered list of {@link org.eclipse.jgit.revplot.PlotCommit} subclasses.
+ * An ordered list of {@link PlotCommit} subclasses.
  * <p>
  * Commits are allocated into lanes as they enter the list, based upon their
  * connections between descendant (child) commits and ancestor (parent) commits.
  * <p>
- * The source of the list must be a {@link org.eclipse.jgit.revplot.PlotWalk}
+ * The source of the list must be a {@link PlotWalk}
  * and {@link #fillTo(int)} must be used to populate the list.
  *
  * @param <L>

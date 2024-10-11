@@ -60,7 +60,7 @@ public class DetachedHeadException extends GitAPIException {
 	 * @param message
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable} object.
+	 *            a {@link Throwable} object.
 	 */
 	public DetachedHeadException(String message, Throwable cause) {
 		super(message, cause);

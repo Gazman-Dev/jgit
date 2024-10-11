@@ -173,12 +173,12 @@ abstract class BasePackConnection extends BaseConnection {
 	 * <p>
 	 * If any errors occur, this connection is automatically closed by invoking
 	 * {@link #close()} and the exception is wrapped (if necessary) and thrown
-	 * as a {@link org.eclipse.jgit.errors.TransportException}.
+	 * as a {@link TransportException}.
 	 *
 	 * @return {@code true} if the refs were read; {@code false} otherwise
 	 *         indicating that {@link #lsRefs} must be called
 	 *
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             the reference list could not be scanned.
 	 */
 	protected boolean readAdvertisedRefs() throws TransportException {
@@ -624,7 +624,7 @@ abstract class BasePackConnection extends BaseConnection {
 	 * Add user agent capability
 	 *
 	 * @param b
-	 *            a {@link java.lang.StringBuilder} object.
+	 *            a {@link StringBuilder} object.
 	 */
 	protected void addUserAgentCapability(StringBuilder b) {
 		String a = UserAgent.get();

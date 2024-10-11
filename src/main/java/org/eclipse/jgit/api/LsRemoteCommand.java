@@ -70,7 +70,7 @@ public class LsRemoteCommand extends
 	 *
 	 * @see Constants#DEFAULT_REMOTE_NAME
 	 * @param remote
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @return {@code this}
 	 */
 	public LsRemoteCommand setRemote(String remote) {
@@ -135,9 +135,9 @@ public class LsRemoteCommand extends
 	 * Same as {@link #call()}, but return Map instead of Collection.
 	 *
 	 * @return a map from names to references in the remote repository
-	 * @throws org.eclipse.jgit.api.errors.GitAPIException
+	 * @throws GitAPIException
 	 *             or subclass thereof when an error occurs
-	 * @throws org.eclipse.jgit.api.errors.InvalidRemoteException
+	 * @throws InvalidRemoteException
 	 *             when called with an invalid remote uri
 	 * @throws org.eclipse.jgit.api.errors.TransportException
 	 *             for errors that occurs during transport

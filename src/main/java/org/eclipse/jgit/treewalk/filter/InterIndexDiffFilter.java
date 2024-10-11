@@ -16,7 +16,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
  * A filter for extracting changes between two versions of the dircache. In
- * addition to what {@link org.eclipse.jgit.treewalk.filter.TreeFilter#ANY_DIFF}
+ * addition to what {@link TreeFilter#ANY_DIFF}
  * would do, it also detects changes that will affect decorations and show up in
  * an attempt to commit.
  */

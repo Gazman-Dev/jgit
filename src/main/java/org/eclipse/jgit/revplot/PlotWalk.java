@@ -81,7 +81,7 @@ public class PlotWalk extends RevWalk {
 	 *
 	 * @param refs
 	 *            additional refs
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void addAdditionalRefs(Iterable<Ref> refs) throws IOException {

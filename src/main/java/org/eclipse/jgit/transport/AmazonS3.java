@@ -301,7 +301,7 @@ public class AmazonS3 {
 	 * @return connection to stream the content of the object. The request
 	 *         properties of the connection may not be modified by the caller as
 	 *         the request parameters have already been signed.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             sending the request was not possible.
 	 */
 	public URLConnection get(String bucket, String key)
@@ -330,7 +330,7 @@ public class AmazonS3 {
 	 * @param u
 	 *            connection previously created by {@link #get(String, String)}}.
 	 * @return stream to read plain text from.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             decryption could not be configured.
 	 */
 	public InputStream decrypt(URLConnection u) throws IOException {
@@ -355,7 +355,7 @@ public class AmazonS3 {
 	 * @return list of keys starting with <code>prefix</code>, after removing
 	 *         <code>prefix</code> (or <code>prefix + "/"</code>)from all
 	 *         of them.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             sending the request was not possible, or the response XML
 	 *             document could not be parsed properly.
 	 */
@@ -382,7 +382,7 @@ public class AmazonS3 {
 	 *            name of the bucket storing the object.
 	 * @param key
 	 *            key of the object within its bucket.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             deletion failed due to communications error.
 	 */
 	public void delete(String bucket, String key)
@@ -419,7 +419,7 @@ public class AmazonS3 {
 	 * @param data
 	 *            new data content for the object. Must not be null. Zero length
 	 *            array will create a zero length object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             creation/updating failed due to communications error.
 	 */
 	public void put(String bucket, String key, byte[] data)
@@ -488,7 +488,7 @@ public class AmazonS3 {
 	 * @param monitorTask
 	 *            (optional) task name to display during the close method.
 	 * @return a stream which accepts the new data, and transmits once closed.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if encryption was enabled it could not be configured.
 	 */
 	public OutputStream beginPut(final String bucket, final String key,
@@ -757,10 +757,8 @@ public class AmazonS3 {
 
 					final XMLReader xr;
 					try {
-						SAXParserFactory saxParserFactory = SAXParserFactory
-								.newInstance();
-						saxParserFactory.setNamespaceAware(true);
-						xr = saxParserFactory.newSAXParser().getXMLReader();
+						xr = SAXParserFactory.newInstance().newSAXParser()
+								.getXMLReader();
 					} catch (SAXException | ParserConfigurationException e) {
 						throw new IOException(
 								JGitText.get().noXMLParserAvailable, e);

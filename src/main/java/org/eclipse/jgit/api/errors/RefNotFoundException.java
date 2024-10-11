@@ -49,7 +49,7 @@ public class RefNotFoundException extends GitAPIException {
 	 * @param message
 	 *            error message
 	 * @param cause
-	 *            a {@link java.lang.Throwable}
+	 *            a {@link Throwable}
 	 * @since 4.1
 	 */
 	public RefNotFoundException(String message, Throwable cause) {

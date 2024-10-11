@@ -146,7 +146,7 @@ public class RefSpec implements Serializable {
 	 * @param mode
 	 *            whether to allow a wildcard on one side without a wildcard on
 	 *            the other.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             the specification is invalid.
 	 * @since 4.5
 	 */
@@ -247,7 +247,7 @@ public class RefSpec implements Serializable {
 	 *
 	 * @param spec
 	 *            string describing the specification.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             the specification is invalid.
 	 */
 	public RefSpec(String spec) {
@@ -345,7 +345,7 @@ public class RefSpec implements Serializable {
 	 * @param source
 	 *            new value for source in the returned instance.
 	 * @return a new RefSpec with source as specified.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             There is already a destination configured, and the wildcard
 	 *             status of the existing destination disagrees with the
 	 *             wildcard status of the new source.
@@ -384,7 +384,7 @@ public class RefSpec implements Serializable {
 	 * @param destination
 	 *            new value for destination in the returned instance.
 	 * @return a new RefSpec with destination as specified.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             There is already a source configured, and the wildcard status
 	 *             of the existing source disagrees with the wildcard status of
 	 *             the new destination.
@@ -407,7 +407,7 @@ public class RefSpec implements Serializable {
 	 * @param destination
 	 *            new value for destination in the returned instance.
 	 * @return a new RefSpec with destination as specified.
-	 * @throws java.lang.IllegalArgumentException
+	 * @throws IllegalArgumentException
 	 *             The wildcard status of the new source disagrees with the
 	 *             wildcard status of the new destination.
 	 */
@@ -477,7 +477,7 @@ public class RefSpec implements Serializable {
 	 * @return a new specification expanded from provided ref name. Result
 	 *         specification is wildcard if and only if provided ref name is
 	 *         wildcard.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             when the RefSpec was constructed with wildcard mode that
 	 *             doesn't require matching wildcards.
 	 */
@@ -513,7 +513,7 @@ public class RefSpec implements Serializable {
 	 * @return a new specification expanded from provided ref name. Result
 	 *         specification is wildcard if and only if provided ref name is
 	 *         wildcard.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             when the RefSpec was constructed with wildcard mode that
 	 *             doesn't require matching wildcards.
 	 */
@@ -533,7 +533,7 @@ public class RefSpec implements Serializable {
 	 * @return a new specification expanded from provided ref name. Result
 	 *         specification is wildcard if and only if provided ref name is
 	 *         wildcard.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             when the RefSpec was constructed with wildcard mode that
 	 *             doesn't require matching wildcards.
 	 */
@@ -564,7 +564,7 @@ public class RefSpec implements Serializable {
 	 * @return a new specification expanded from provided ref name. Result
 	 *         specification is wildcard if and only if provided ref name is
 	 *         wildcard.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             when the RefSpec was constructed with wildcard mode that
 	 *             doesn't require matching wildcards.
 	 */

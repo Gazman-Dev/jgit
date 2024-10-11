@@ -56,7 +56,7 @@ public abstract class GitHook<T> implements Callable<T> {
 	 * </p>
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 * @param outputStream
 	 *            The output stream the hook must use. {@code null} is allowed,
 	 *            in which case the hook will use {@code System.out}.
@@ -69,7 +69,7 @@ public abstract class GitHook<T> implements Callable<T> {
 	 * Constructor for GitHook
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 * @param outputStream
 	 *            The output stream the hook must use. {@code null} is allowed,
 	 *            in which case the hook will use {@code System.out}.
@@ -152,7 +152,7 @@ public abstract class GitHook<T> implements Callable<T> {
 	/**
 	 * Runs the hook, without performing any validity checks.
 	 *
-	 * @throws org.eclipse.jgit.api.errors.AbortedByHookException
+	 * @throws AbortedByHookException
 	 *             If the underlying hook script exited with non-zero.
 	 * @throws IOException
 	 *             if an IO error occurred

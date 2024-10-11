@@ -32,10 +32,10 @@ import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
  * A command being processed by
- * {@link org.eclipse.jgit.transport.ReceivePack}.
+ * {@link ReceivePack}.
  * <p>
  * This command instance roughly translates to the server side representation of
- * the {@link org.eclipse.jgit.transport.RemoteRefUpdate} created by the client.
+ * the {@link RemoteRefUpdate} created by the client.
  */
 public class ReceiveCommand {
 	/** Type of operation requested. */
@@ -145,9 +145,9 @@ public class ReceiveCommand {
 	 * Set unprocessed commands as failed due to transaction aborted.
 	 * <p>
 	 * If a command is still
-	 * {@link org.eclipse.jgit.transport.ReceiveCommand.Result#NOT_ATTEMPTED} it
+	 * {@link Result#NOT_ATTEMPTED} it
 	 * will be set to
-	 * {@link org.eclipse.jgit.transport.ReceiveCommand.Result#REJECTED_OTHER_REASON}.
+	 * {@link Result#REJECTED_OTHER_REASON}.
 	 *
 	 * @param commands
 	 *            commands to mark as failed.
@@ -257,15 +257,15 @@ public class ReceiveCommand {
 
 	/**
 	 * Create a new command for
-	 * {@link org.eclipse.jgit.transport.ReceivePack}.
+	 * {@link ReceivePack}.
 	 *
 	 * @param oldId
 	 *            the expected old object id; must not be null. Use
-	 *            {@link org.eclipse.jgit.lib.ObjectId#zeroId()} to indicate a
+	 *            {@link ObjectId#zeroId()} to indicate a
 	 *            ref creation.
 	 * @param newId
 	 *            the new object id; must not be null. Use
-	 *            {@link org.eclipse.jgit.lib.ObjectId#zeroId()} to indicate a
+	 *            {@link ObjectId#zeroId()} to indicate a
 	 *            ref deletion.
 	 * @param name
 	 *            name of the ref being affected.
@@ -301,24 +301,24 @@ public class ReceiveCommand {
 
 	/**
 	 * Create a new command for
-	 * {@link org.eclipse.jgit.transport.ReceivePack}.
+	 * {@link ReceivePack}.
 	 *
 	 * @param oldId
 	 *            the old object id; must not be null. Use
-	 *            {@link org.eclipse.jgit.lib.ObjectId#zeroId()} to indicate a
+	 *            {@link ObjectId#zeroId()} to indicate a
 	 *            ref creation.
 	 * @param newId
 	 *            the new object id; must not be null. Use
-	 *            {@link org.eclipse.jgit.lib.ObjectId#zeroId()} to indicate a
+	 *            {@link ObjectId#zeroId()} to indicate a
 	 *            ref deletion.
 	 * @param name
 	 *            name of the ref being affected.
 	 * @param type
 	 *            type of the command. Must be
-	 *            {@link org.eclipse.jgit.transport.ReceiveCommand.Type#CREATE}
+	 *            {@link Type#CREATE}
 	 *            if {@code
 	 *            oldId} is zero, or
-	 *            {@link org.eclipse.jgit.transport.ReceiveCommand.Type#DELETE}
+	 *            {@link Type#DELETE}
 	 *            if {@code newId} is zero.
 	 * @since 2.0
 	 */
@@ -704,12 +704,12 @@ public class ReceiveCommand {
 	 * using the supplied RevWalk to determine if {@link #getOldId()} is fully
 	 * merged into {@link #getNewId()}. If some commits are not merged the
 	 * update type is changed to
-	 * {@link org.eclipse.jgit.transport.ReceiveCommand.Type#UPDATE_NONFASTFORWARD}.
+	 * {@link Type#UPDATE_NONFASTFORWARD}.
 	 *
 	 * @param walk
 	 *            an instance to perform the merge test with. The caller must
 	 *            allocate and release this object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             either oldId or newId is not accessible in the repository
 	 *             used by the RevWalk. This usually indicates data corruption,
 	 *             and the command cannot be processed.

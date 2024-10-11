@@ -11,7 +11,7 @@
 package org.eclipse.jgit.events;
 
 /**
- * Receives {@link org.eclipse.jgit.events.ConfigChangedEvent}s.
+ * Receives {@link ConfigChangedEvent}s.
  */
 public interface ConfigChangedListener extends RepositoryListener {
 	/**

@@ -53,7 +53,7 @@ import org.eclipse.jgit.lib.SymbolicRef;
  * Git installed.
  * <p>
  * Unlike the HTTP variant (see
- * {@link org.eclipse.jgit.transport.TransportHttp}) we rely upon being able to
+ * {@link TransportHttp}) we rely upon being able to
  * list files in directories, as the SFTP protocol supports this function. By
  * listing files through SFTP we can avoid needing to have current
  * <code>objects/info/packs</code> or <code>info/refs</code> files on the remote
@@ -404,7 +404,7 @@ public class TransportSftp extends SshTransport implements WalkTransport {
 				if (r == null)
 					r = readRef(avail, ROOT_DIR + target, target);
 				if (r == null)
-					r = new ObjectIdRef.Unpeeled(Ref.Storage.NEW, target, null);
+					r = new ObjectIdRef.Unpeeled(Storage.NEW, target, null);
 				r = new SymbolicRef(name, r);
 				avail.put(r.getName(), r);
 				return r;

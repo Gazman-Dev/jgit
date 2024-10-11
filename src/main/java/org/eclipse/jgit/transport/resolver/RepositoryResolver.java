@@ -15,7 +15,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.ServiceMayNotContinueException;
 
 /**
- * Locate a Git {@link org.eclipse.jgit.lib.Repository} by name from the URL.
+ * Locate a Git {@link Repository} by name from the URL.
  *
  * @param <C>
  *            type of connection.

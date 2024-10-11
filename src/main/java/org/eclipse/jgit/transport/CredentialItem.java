@@ -16,17 +16,17 @@ import org.eclipse.jgit.internal.JGitText;
 
 /**
  * A credential requested from a
- * {@link org.eclipse.jgit.transport.CredentialsProvider}.
+ * {@link CredentialsProvider}.
  *
  * Most users should work with the specialized subclasses:
  * <ul>
- * <li>{@link org.eclipse.jgit.transport.CredentialItem.Username} for
+ * <li>{@link Username} for
  * usernames</li>
- * <li>{@link org.eclipse.jgit.transport.CredentialItem.Password} for
+ * <li>{@link Password} for
  * passwords</li>
- * <li>{@link org.eclipse.jgit.transport.CredentialItem.StringType} for other
+ * <li>{@link StringType} for other
  * general string information</li>
- * <li>{@link org.eclipse.jgit.transport.CredentialItem.CharArrayType} for other
+ * <li>{@link CharArrayType} for other
  * general secret information</li>
  * </ul>
  *

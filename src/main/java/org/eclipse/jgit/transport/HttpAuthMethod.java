@@ -365,7 +365,7 @@ abstract class HttpAuthMethod {
 				r.put("nc", nc); //$NON-NLS-1$
 
 			StringBuilder v = new StringBuilder();
-			for (Map.Entry<String, String> e : r.entrySet()) {
+			for (Entry<String, String> e : r.entrySet()) {
 				if (v.length() > 0)
 					v.append(", "); //$NON-NLS-1$
 				v.append(e.getKey());

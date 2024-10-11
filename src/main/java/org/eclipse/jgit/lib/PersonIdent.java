@@ -134,45 +134,45 @@ public class PersonIdent implements Serializable {
 	 * This new PersonIdent gets the info from the default committer as available
 	 * from the configuration.
 	 *
-	 * @param repo a {@link org.eclipse.jgit.lib.Repository} object.
+	 * @param repo a {@link Repository} object.
 	 */
 	public PersonIdent(Repository repo) {
 		this(repo.getConfig().get(UserConfig.KEY));
 	}
 
 	/**
-	 * Copy a {@link org.eclipse.jgit.lib.PersonIdent}.
+	 * Copy a {@link PersonIdent}.
 	 *
 	 * @param pi
-	 *            Original {@link org.eclipse.jgit.lib.PersonIdent}
+	 *            Original {@link PersonIdent}
 	 */
 	public PersonIdent(PersonIdent pi) {
 		this(pi.getName(), pi.getEmailAddress());
 	}
 
 	/**
-	 * Construct a new {@link org.eclipse.jgit.lib.PersonIdent} with current
+	 * Construct a new {@link PersonIdent} with current
 	 * time.
 	 *
 	 * @param aName
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param aEmailAddress
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 */
 	public PersonIdent(String aName, String aEmailAddress) {
 		this(aName, aEmailAddress, SystemReader.getInstance().getCurrentTime());
 	}
 
 	/**
-	 * Construct a new {@link org.eclipse.jgit.lib.PersonIdent} with current
+	 * Construct a new {@link PersonIdent} with current
 	 * time.
 	 *
 	 * @param aName
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param aEmailAddress
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param when
-	 *            a {@link org.eclipse.jgit.util.time.ProposedTimestamp} object.
+	 *            a {@link ProposedTimestamp} object.
 	 * @since 4.6
 	 */
 	public PersonIdent(String aName, String aEmailAddress,
@@ -184,7 +184,7 @@ public class PersonIdent implements Serializable {
 	 * Copy a PersonIdent, but alter the clone's time stamp
 	 *
 	 * @param pi
-	 *            original {@link org.eclipse.jgit.lib.PersonIdent}
+	 *            original {@link PersonIdent}
 	 * @param when
 	 *            local time
 	 * @param tz
@@ -195,11 +195,11 @@ public class PersonIdent implements Serializable {
 	}
 
 	/**
-	 * Copy a {@link org.eclipse.jgit.lib.PersonIdent}, but alter the clone's
+	 * Copy a {@link PersonIdent}, but alter the clone's
 	 * time stamp
 	 *
 	 * @param pi
-	 *            original {@link org.eclipse.jgit.lib.PersonIdent}
+	 *            original {@link PersonIdent}
 	 * @param aWhen
 	 *            local time
 	 */
@@ -208,11 +208,11 @@ public class PersonIdent implements Serializable {
 	}
 
 	/**
-	 * Copy a {@link org.eclipse.jgit.lib.PersonIdent}, but alter the clone's
+	 * Copy a {@link PersonIdent}, but alter the clone's
 	 * time stamp
 	 *
 	 * @param pi
-	 *            original {@link org.eclipse.jgit.lib.PersonIdent}
+	 *            original {@link PersonIdent}
 	 * @param aWhen
 	 *            local time as Instant
 	 * @since 6.1
@@ -224,8 +224,8 @@ public class PersonIdent implements Serializable {
 	/**
 	 * Construct a PersonIdent from simple data
 	 *
-	 * @param aName a {@link java.lang.String} object.
-	 * @param aEmailAddress a {@link java.lang.String} object.
+	 * @param aName a {@link String} object.
+	 * @param aEmailAddress a {@link String} object.
 	 * @param aWhen
 	 *            local time stamp
 	 * @param aTZ
@@ -241,9 +241,9 @@ public class PersonIdent implements Serializable {
 	 * Construct a PersonIdent from simple data
 	 *
 	 * @param aName
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param aEmailAddress
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param aWhen
 	 *            local time stamp
 	 * @param zoneId
@@ -262,7 +262,7 @@ public class PersonIdent implements Serializable {
 	 * Copy a PersonIdent, but alter the clone's time stamp
 	 *
 	 * @param pi
-	 *            original {@link org.eclipse.jgit.lib.PersonIdent}
+	 *            original {@link PersonIdent}
 	 * @param aWhen
 	 *            local time stamp
 	 * @param aTZ
@@ -283,7 +283,7 @@ public class PersonIdent implements Serializable {
 	}
 
 	/**
-	 * Construct a {@link org.eclipse.jgit.lib.PersonIdent}.
+	 * Construct a {@link PersonIdent}.
 	 * <p>
 	 * Whitespace in the name and email is preserved for the lifetime of this
 	 * object, but are trimmed by {@link #toExternalString()}. This means that
@@ -291,9 +291,9 @@ public class PersonIdent implements Serializable {
 	 * equivalent instance.
 	 *
 	 * @param aName
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param aEmailAddress
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param aWhen
 	 *            local time stamp
 	 * @param aTZ

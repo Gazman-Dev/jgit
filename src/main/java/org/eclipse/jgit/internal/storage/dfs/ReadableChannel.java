@@ -21,7 +21,7 @@ public interface ReadableChannel extends ReadableByteChannel {
 	 * Get the current position of the channel.
 	 *
 	 * @return r current offset.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the channel's current position cannot be obtained.
 	 */
 	long position() throws IOException;
@@ -32,7 +32,7 @@ public interface ReadableChannel extends ReadableByteChannel {
 	 * @param newPosition
 	 *            position to move the channel to. The next read will start from
 	 *            here. This should be a multiple of the {@link #blockSize()}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the position cannot be updated. This may be because the
 	 *             channel only supports block aligned IO and the current
 	 *             position is not block aligned.
@@ -47,7 +47,7 @@ public interface ReadableChannel extends ReadableByteChannel {
 	 * read has been completed, the underlying file size should be available.
 	 *
 	 * @return r total size of the channel; -1 if not yet available.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the size cannot be determined.
 	 */
 	long size() throws IOException;
@@ -61,7 +61,7 @@ public interface ReadableChannel extends ReadableByteChannel {
 	 * <p>
 	 * Channels should not recommend large block sizes. Sizes up to 1-4 MiB may
 	 * be reasonable, but sizes above that may be horribly inefficient. The
-	 * {@link org.eclipse.jgit.internal.storage.dfs.DfsBlockCache} favors the
+	 * {@link DfsBlockCache} favors the
 	 * alignment suggested by the channel rather than the configured size under
 	 * the assumption that reads are very expensive and the channel knows what
 	 * size is best to access it with.
@@ -95,7 +95,7 @@ public interface ReadableChannel extends ReadableByteChannel {
 	 *
 	 * @param bufferSize
 	 *            requested size of the read ahead buffer, in bytes.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if the read ahead cannot be adjusted.
 	 */
 	void setReadAheadBytes(int bufferSize) throws IOException;

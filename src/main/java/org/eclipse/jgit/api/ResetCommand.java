@@ -11,8 +11,8 @@ package org.eclipse.jgit.api;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -90,7 +90,7 @@ public class ResetCommand extends GitCommand<Ref> {
 
 	private ResetType mode;
 
-	private Collection<String> filepaths = new ArrayList<>();
+	private Collection<String> filepaths = new LinkedList<>();
 
 	private boolean isReflogDisabled;
 
@@ -102,7 +102,7 @@ public class ResetCommand extends GitCommand<Ref> {
 	 * </p>
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	public ResetCommand(Repository repo) {
 		super(repo);
@@ -313,7 +313,7 @@ public class ResetCommand extends GitCommand<Ref> {
 	 *
 	 * @see NullProgressMonitor
 	 * @param monitor
-	 *            a {@link org.eclipse.jgit.lib.ProgressMonitor}
+	 *            a {@link ProgressMonitor}
 	 * @return {@code this}
 	 * @since 4.11
 	 */

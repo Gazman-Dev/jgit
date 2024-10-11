@@ -33,7 +33,7 @@ import static org.eclipse.jgit.internal.storage.pack.PackExt.REFTABLE;
 
 /**
  * {@link org.eclipse.jgit.lib.BatchRefUpdate} for
- * {@link org.eclipse.jgit.internal.storage.dfs.DfsReftableDatabase}.
+ * {@link DfsReftableDatabase}.
  */
 public class DfsReftableBatchRefUpdate extends ReftableBatchRefUpdate {
 	private static final int AVG_BYTES = 36;

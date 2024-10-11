@@ -36,7 +36,7 @@ import org.eclipse.jgit.lib.internal.BooleanTriState;
 public class MergeToolConfig {
 
 	/** Key for {@link Config#get(SectionParser)}. */
-	public static final Config.SectionParser<MergeToolConfig> KEY = MergeToolConfig::new;
+	public static final SectionParser<MergeToolConfig> KEY = MergeToolConfig::new;
 
 	private final String toolName;
 

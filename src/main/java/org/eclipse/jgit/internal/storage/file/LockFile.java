@@ -24,7 +24,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileTime;
 import java.text.MessageFormat;
@@ -63,7 +62,7 @@ public class LockFile {
 	 * to unlock it.
 	 *
 	 * @param file
-	 *            a {@link java.io.File} object.
+	 *            a {@link File} object.
 	 * @return true if unlocked, false if unlocking failed
 	 */
 	public static boolean unlock(File file) {
@@ -133,7 +132,7 @@ public class LockFile {
 	 *
 	 * @return true if the lock is now held by the caller; false if it is held
 	 *         by someone else.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the temporary output file could not be created. The caller
 	 *             does not hold the lock.
 	 */
@@ -142,8 +141,9 @@ public class LockFile {
 			throw new IllegalStateException(
 					MessageFormat.format(JGitText.get().lockAlreadyHeld, ref));
 		}
+		FileUtils.mkdirs(lck.getParentFile(), true);
 		try {
-			token = createLockFileWithRetry();
+			token = FS.DETECTED.createNewFileAtomic(lck);
 		} catch (IOException e) {
 			LOG.error(JGitText.get().failedCreateLockFile, lck, e);
 			throw e;
@@ -160,25 +160,12 @@ public class LockFile {
 		return obtainedLock;
 	}
 
-	private FS.LockToken createLockFileWithRetry() throws IOException {
-		try {
-			return createLockFile();
-		} catch (NoSuchFileException e) {
-			return createLockFile();
-		}
-	}
-
-	private FS.LockToken createLockFile() throws IOException {
-		FileUtils.mkdirs(lck.getParentFile(), true);
-		return FS.DETECTED.createNewFileAtomic(lck);
-	}
-
 	/**
 	 * Try to establish the lock for appending.
 	 *
 	 * @return true if the lock is now held by the caller; false if it is held
 	 *         by someone else.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the temporary output file could not be created. The caller
 	 *             does not hold the lock.
 	 */
@@ -211,12 +198,12 @@ public class LockFile {
 	 * This method does nothing if the current file does not exist, or exists
 	 * but is empty.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the temporary file could not be written, or a read error
 	 *             occurred while reading from the current file. The lock is
 	 *             released before throwing the underlying IO exception to the
 	 *             caller.
-	 * @throws java.lang.RuntimeException
+	 * @throws RuntimeException
 	 *             the temporary file could not be written. The lock is released
 	 *             before throwing the underlying exception to the caller.
 	 */
@@ -259,10 +246,10 @@ public class LockFile {
 	 * @param id
 	 *            the id to store in the file. The id will be written in hex,
 	 *            followed by a sole LF.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the temporary file could not be written. The lock is released
 	 *             before throwing the underlying IO exception to the caller.
-	 * @throws java.lang.RuntimeException
+	 * @throws RuntimeException
 	 *             the temporary file could not be written. The lock is released
 	 *             before throwing the underlying exception to the caller.
 	 */
@@ -280,10 +267,10 @@ public class LockFile {
 	 *            the bytes to store in the temporary file. No additional bytes
 	 *            are added, so if the file must end with an LF it must appear
 	 *            at the end of the byte array.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the temporary file could not be written. The lock is released
 	 *             before throwing the underlying IO exception to the caller.
-	 * @throws java.lang.RuntimeException
+	 * @throws RuntimeException
 	 *             the temporary file could not be written. The lock is released
 	 *             before throwing the underlying exception to the caller.
 	 */
@@ -413,7 +400,7 @@ public class LockFile {
 
 	/**
 	 * Request that {@link #commit()} remember the
-	 * {@link org.eclipse.jgit.internal.storage.file.FileSnapshot}.
+	 * {@link FileSnapshot}.
 	 *
 	 * @param on
 	 *            true if the commit method must remember the FileSnapshot.
@@ -424,7 +411,7 @@ public class LockFile {
 
 	/**
 	 * Request that {@link #commit()} remember the
-	 * {@link org.eclipse.jgit.internal.storage.file.FileSnapshot} without using
+	 * {@link FileSnapshot} without using
 	 * config file to get filesystem timestamp resolution.
 	 * This method should be invoked before the file is accessed.
 	 * It is used by FileBasedConfig to avoid endless recursion.
@@ -454,7 +441,7 @@ public class LockFile {
 	 * method sleeps until it can force the new lock file's modification date to
 	 * be later than the target file.
 	 *
-	 * @throws java.lang.InterruptedException
+	 * @throws InterruptedException
 	 *             the thread was interrupted before the last modified date of
 	 *             the lock file was different from the last modified date of
 	 *             the target file.
@@ -484,7 +471,7 @@ public class LockFile {
 	 * @return true if the commit was successful and the file contains the new
 	 *         data; false if the commit failed and the file remains with the
 	 *         old data.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             the lock is not held.
 	 */
 	public boolean commit() {
@@ -522,6 +509,17 @@ public class LockFile {
 				FileSnapshot.saveNoConfig(lck)
 				: FileSnapshot.save(lck);
 		}
+	}
+
+	/**
+	 * Get the modification time of the output file when it was committed.
+	 *
+	 * @return modification time of the lock file right before we committed it.
+	 * @deprecated use {@link #getCommitLastModifiedInstant()} instead
+	 */
+	@Deprecated
+	public long getCommitLastModified() {
+		return commitSnapshot.lastModified();
 	}
 
 	/**

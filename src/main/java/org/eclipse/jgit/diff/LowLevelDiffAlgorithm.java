@@ -37,7 +37,7 @@ public abstract class LowLevelDiffAlgorithm extends DiffAlgorithm {
 	 * elimination of common starting and ending elements is automatically
 	 * performed by the {@link #diff(SequenceComparator, Sequence, Sequence)}
 	 * method, which invokes this method using
-	 * {@link org.eclipse.jgit.diff.Subsequence}s.
+	 * {@link Subsequence}s.
 	 *
 	 * @param <S>
 	 *            type of Sequence compared
@@ -48,13 +48,13 @@ public abstract class LowLevelDiffAlgorithm extends DiffAlgorithm {
 	 * @param a
 	 *            the first (also known as old or pre-image) sequence. Edits
 	 *            returned by this algorithm will reference indexes using the
-	 *            'A' side: {@link org.eclipse.jgit.diff.Edit#getBeginA()},
-	 *            {@link org.eclipse.jgit.diff.Edit#getEndA()}.
+	 *            'A' side: {@link Edit#getBeginA()},
+	 *            {@link Edit#getEndA()}.
 	 * @param b
 	 *            the second (also known as new or post-image) sequence. Edits
 	 *            returned by this algorithm will reference indexes using the
-	 *            'B' side: {@link org.eclipse.jgit.diff.Edit#getBeginB()},
-	 *            {@link org.eclipse.jgit.diff.Edit#getEndB()}.
+	 *            'B' side: {@link Edit#getBeginB()},
+	 *            {@link Edit#getEndB()}.
 	 * @param region
 	 *            the region being compared within the two sequences.
 	 */

@@ -24,8 +24,8 @@ import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.util.StringUtils;
 
 /**
- * An {@link org.eclipse.jgit.lib.TypedConfigGetter} that throws
- * {@link java.lang.IllegalArgumentException} on invalid values.
+ * An {@link TypedConfigGetter} that throws
+ * {@link IllegalArgumentException} on invalid values.
  *
  * @since 4.9
  */

@@ -56,7 +56,7 @@ public class SubmoduleAddCommand extends
 	 * Constructor for SubmoduleAddCommand.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	public SubmoduleAddCommand(Repository repo) {
 		super(repo);
@@ -91,7 +91,7 @@ public class SubmoduleAddCommand extends
 	 * Set URI to clone submodule from
 	 *
 	 * @param uri
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @return this command
 	 */
 	public SubmoduleAddCommand setURI(String uri) {
@@ -105,7 +105,7 @@ public class SubmoduleAddCommand extends
 	 *
 	 * @see NullProgressMonitor
 	 * @param monitor
-	 *            a {@link org.eclipse.jgit.lib.ProgressMonitor} object.
+	 *            a {@link ProgressMonitor} object.
 	 * @return this command
 	 */
 	public SubmoduleAddCommand setProgressMonitor(ProgressMonitor monitor) {
@@ -117,7 +117,7 @@ public class SubmoduleAddCommand extends
 	 * Is the configured already a submodule in the index?
 	 *
 	 * @return true if submodule exists in index, false otherwise
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected boolean submoduleExists() throws IOException {
@@ -176,7 +176,7 @@ public class SubmoduleAddCommand extends
 		CloneCommand clone = Git.cloneRepository();
 		configure(clone);
 		clone.setDirectory(moduleDirectory);
-		clone.setGitDir(new File(new File(repo.getCommonDirectory(),
+		clone.setGitDir(new File(new File(repo.getDirectory(),
 				Constants.MODULES), path));
 		clone.setURI(resolvedUri);
 		if (monitor != null)

@@ -25,7 +25,7 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 
 /**
- * Blame command for building a {@link org.eclipse.jgit.blame.BlameResult} for a
+ * Blame command for building a {@link BlameResult} for a
  * file path.
  */
 public class BlameCommand extends GitCommand<BlameResult> {
@@ -46,7 +46,7 @@ public class BlameCommand extends GitCommand<BlameResult> {
 	 * Constructor for BlameCommand
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	public BlameCommand(Repository repo) {
 		super(repo);
@@ -68,7 +68,7 @@ public class BlameCommand extends GitCommand<BlameResult> {
 	 * Set diff algorithm
 	 *
 	 * @param diffAlgorithm
-	 *            a {@link org.eclipse.jgit.diff.DiffAlgorithm} object.
+	 *            a {@link DiffAlgorithm} object.
 	 * @return this command
 	 */
 	public BlameCommand setDiffAlgorithm(DiffAlgorithm diffAlgorithm) {
@@ -80,7 +80,7 @@ public class BlameCommand extends GitCommand<BlameResult> {
 	 * Set raw text comparator
 	 *
 	 * @param textComparator
-	 *            a {@link org.eclipse.jgit.diff.RawTextComparator}
+	 *            a {@link RawTextComparator}
 	 * @return this command
 	 */
 	public BlameCommand setTextComparator(RawTextComparator textComparator) {
@@ -127,7 +127,7 @@ public class BlameCommand extends GitCommand<BlameResult> {
 	 *            most recent commit to stop traversal at. Usually an active
 	 *            branch tip, tag, or HEAD.
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be read.
 	 */
 	public BlameCommand reverse(AnyObjectId start, AnyObjectId end)
@@ -145,7 +145,7 @@ public class BlameCommand extends GitCommand<BlameResult> {
 	 *            most recent commits to stop traversal at. Usually an active
 	 *            branch tip, tag, or HEAD.
 	 * @return {@code this}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository cannot be read.
 	 */
 	public BlameCommand reverse(AnyObjectId start, Collection<ObjectId> end)

@@ -377,7 +377,7 @@ public class PackConfig {
 
 	/**
 	 * Create a configuration honoring settings in a
-	 * {@link org.eclipse.jgit.lib.Config}.
+	 * {@link Config}.
 	 *
 	 * @param cfg
 	 *            the source to read settings from. The source is not retained
@@ -909,9 +909,9 @@ public class PackConfig {
 	/**
 	 * Get the compression level applied to objects in the pack.
 	 *
-	 * Default setting: {@value java.util.zip.Deflater#DEFAULT_COMPRESSION}
+	 * Default setting: {@value Deflater#DEFAULT_COMPRESSION}
 	 *
-	 * @return current compression level, see {@link java.util.zip.Deflater}.
+	 * @return current compression level, see {@link Deflater}.
 	 */
 	public int getCompressionLevel() {
 		return compressionLevel;
@@ -920,11 +920,11 @@ public class PackConfig {
 	/**
 	 * Set the compression level applied to objects in the pack.
 	 *
-	 * Default setting: {@value java.util.zip.Deflater#DEFAULT_COMPRESSION}
+	 * Default setting: {@value Deflater#DEFAULT_COMPRESSION}
 	 *
 	 * @param level
 	 *            compression level, must be a valid level recognized by the
-	 *            {@link java.util.zip.Deflater} class.
+	 *            {@link Deflater} class.
 	 */
 	public void setCompressionLevel(int level) {
 		compressionLevel = level;

@@ -52,7 +52,7 @@ import static org.eclipse.jgit.transport.ReceiveCommand.Type.DELETE;
 import static org.eclipse.jgit.transport.ReceiveCommand.Type.UPDATE_NONFASTFORWARD;
 
 /**
- * {@link org.eclipse.jgit.lib.BatchRefUpdate} for Reftable based RefDatabase.
+ * {@link BatchRefUpdate} for Reftable based RefDatabase.
  */
 public abstract class ReftableBatchRefUpdate extends BatchRefUpdate {
 	private final Lock lock;

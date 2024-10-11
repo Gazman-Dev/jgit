@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jgit.lib.RebaseTodoLine.Action;
@@ -37,7 +37,7 @@ public class RebaseTodoFile {
 	 * Constructor for RebaseTodoFile.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	public RebaseTodoFile(Repository repo) {
 		this.repo = repo;
@@ -54,7 +54,7 @@ public class RebaseTodoFile {
 	 * @param includeComments
 	 *            <code>true</code> if also comments should be reported
 	 * @return the list of steps
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public List<RebaseTodoLine> readRebaseTodo(String path,
@@ -62,7 +62,7 @@ public class RebaseTodoFile {
 		byte[] buf = IO.readFully(new File(repo.getDirectory(), path));
 		int ptr = 0;
 		int tokenBegin = 0;
-		List<RebaseTodoLine> r = new ArrayList<>();
+		List<RebaseTodoLine> r = new LinkedList<>();
 		while (ptr < buf.length) {
 			tokenBegin = ptr;
 			ptr = RawParseUtils.nextLF(buf, ptr);
@@ -147,7 +147,7 @@ public class RebaseTodoFile {
 
 	private static RebaseTodoLine parseLine(byte[] buf, int tokenBegin,
 			int lineEnd) {
-		RebaseTodoLine.Action action = null;
+		Action action = null;
 		AbbreviatedObjectId commit = null;
 
 		int nextSpace = RawParseUtils.next(buf, tokenBegin, ' ');
@@ -158,7 +158,7 @@ public class RebaseTodoFile {
 				String actionToken = new String(buf, tokenBegin,
 						nextSpace - tokenBegin - 1, UTF_8);
 				tokenBegin = nextSpace;
-				action = RebaseTodoLine.Action.parse(actionToken);
+				action = Action.parse(actionToken);
 				if (action == null)
 					return null; // parsing failed
 				break;
@@ -196,7 +196,7 @@ public class RebaseTodoFile {
 	 *            the steps to be written
 	 * @param append
 	 *            whether to append to an existing file or to write a new file
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void writeRebaseTodoFile(String path, List<RebaseTodoLine> steps,
@@ -206,7 +206,7 @@ public class RebaseTodoFile {
 			StringBuilder sb = new StringBuilder();
 			for (RebaseTodoLine step : steps) {
 				sb.setLength(0);
-				if (RebaseTodoLine.Action.COMMENT.equals(step.action))
+				if (Action.COMMENT.equals(step.action))
 					sb.append(step.getComment());
 				else {
 					sb.append(step.getAction().toToken());

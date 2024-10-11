@@ -88,6 +88,52 @@ import org.eclipse.jgit.util.io.TimeoutOutputStream;
  * Implements the server side of a push connection, receiving objects.
  */
 public class ReceivePack {
+	/**
+	 * Data in the first line of a request, the line itself plus capabilities.
+	 *
+	 * @deprecated Use {@link FirstCommand} instead.
+	 * @since 5.6
+	 */
+	@Deprecated
+	public static class FirstLine {
+		private final FirstCommand command;
+
+		/**
+		 * Parse the first line of a receive-pack request.
+		 *
+		 * @param line
+		 *            line from the client.
+		 */
+		public FirstLine(String line) {
+			command = FirstCommand.fromLine(line);
+		}
+
+		/**
+		 * Get non-capabilities part of the line
+		 *
+		 * @return non-capabilities part of the line.
+		 */
+		public String getLine() {
+			return command.getLine();
+		}
+
+		/**
+		 * Get capabilities parsed from the line
+		 *
+		 * @return capabilities parsed from the line.
+		 */
+		public Set<String> getCapabilities() {
+			Set<String> reconstructedCapabilites = new HashSet<>();
+			for (Map.Entry<String, String> e : command.getCapabilities()
+					.entrySet()) {
+				String cap = e.getValue() == null ? e.getKey()
+						: e.getKey() + "=" + e.getValue(); //$NON-NLS-1$
+				reconstructedCapabilites.add(cap);
+			}
+
+			return reconstructedCapabilites;
+		}
+	}
 
 	/** Database we write the stored objects into. */
 	private final Repository db;
@@ -409,7 +455,7 @@ public class ReceivePack {
 	 * Set the refs advertised by this ReceivePack.
 	 * <p>
 	 * Intended to be called from a
-	 * {@link org.eclipse.jgit.transport.PreReceiveHook}.
+	 * {@link PreReceiveHook}.
 	 *
 	 * @param allRefs
 	 *            explicit set of references to claim as advertised by this
@@ -481,8 +527,8 @@ public class ReceivePack {
 	 * not provide a forged SHA-1 reference to an object, in an attempt to
 	 * access parts of the DAG that they aren't allowed to see and which have
 	 * been hidden from them via the configured
-	 * {@link org.eclipse.jgit.transport.AdvertiseRefsHook} or
-	 * {@link org.eclipse.jgit.transport.RefFilter}.
+	 * {@link AdvertiseRefsHook} or
+	 * {@link RefFilter}.
 	 * <p>
 	 * Enabling this feature may imply at least some, if not all, of the same
 	 * functionality performed by {@link #setCheckReceivedObjects(boolean)}.
@@ -737,14 +783,14 @@ public class ReceivePack {
 	/**
 	 * Set the hook used while advertising the refs to the client.
 	 * <p>
-	 * If the {@link org.eclipse.jgit.transport.AdvertiseRefsHook} chooses to
+	 * If the {@link AdvertiseRefsHook} chooses to
 	 * call {@link #setAdvertisedRefs(Map,Set)}, only refs set by this hook
-	 * <em>and</em> selected by the {@link org.eclipse.jgit.transport.RefFilter}
+	 * <em>and</em> selected by the {@link RefFilter}
 	 * will be shown to the client. Clients may still attempt to create or
 	 * update a reference not advertised by the configured
-	 * {@link org.eclipse.jgit.transport.AdvertiseRefsHook}. These attempts
+	 * {@link AdvertiseRefsHook}. These attempts
 	 * should be rejected by a matching
-	 * {@link org.eclipse.jgit.transport.PreReceiveHook}.
+	 * {@link PreReceiveHook}.
 	 *
 	 * @param advertiseRefsHook
 	 *            the hook; may be null to show all refs.
@@ -761,7 +807,7 @@ public class ReceivePack {
 	 * <p>
 	 * Only refs allowed by this filter will be shown to the client. The filter
 	 * is run against the refs specified by the
-	 * {@link org.eclipse.jgit.transport.AdvertiseRefsHook} (if applicable).
+	 * {@link AdvertiseRefsHook} (if applicable).
 	 *
 	 * @param refFilter
 	 *            the filter; may be null to show all refs.
@@ -858,7 +904,7 @@ public class ReceivePack {
 	 *
 	 * @return true if the client has advertised a side-band capability, false
 	 *         otherwise.
-	 * @throws org.eclipse.jgit.transport.RequestNotYetReadException
+	 * @throws RequestNotYetReadException
 	 *             if the client's request has not yet been read from the wire,
 	 *             so we do not know if they expect side-band. Note that the
 	 *             client may have already written the request, it just has not
@@ -918,7 +964,7 @@ public class ReceivePack {
 	 * True if the client wants less verbose output.
 	 *
 	 * @return true if the client has requested the server to be less verbose.
-	 * @throws org.eclipse.jgit.transport.RequestNotYetReadException
+	 * @throws RequestNotYetReadException
 	 *             if the client's request has not yet been read from the wire,
 	 *             so we do not know if they expect side-band. Note that the
 	 *             client may have already written the request, it just has not
@@ -1008,11 +1054,11 @@ public class ReceivePack {
 	 * message will be discarded, with no other indication to the caller or to
 	 * the client.
 	 * <p>
-	 * {@link org.eclipse.jgit.transport.PreReceiveHook}s should always try to
+	 * {@link PreReceiveHook}s should always try to
 	 * use
-	 * {@link org.eclipse.jgit.transport.ReceiveCommand#setResult(Result, String)}
+	 * {@link ReceiveCommand#setResult(Result, String)}
 	 * with a result status of
-	 * {@link org.eclipse.jgit.transport.ReceiveCommand.Result#REJECTED_OTHER_REASON}
+	 * {@link Result#REJECTED_OTHER_REASON}
 	 * to indicate any reasons for rejecting an update. Messages attached to a
 	 * command are much more likely to be returned to the client.
 	 *
@@ -1086,7 +1132,7 @@ public class ReceivePack {
 	 * This can only be called if the pack is already received.
 	 *
 	 * @return the size of the received pack including index size
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             if called before the pack has been received
 	 * @since 3.3
 	 */
@@ -1192,7 +1238,7 @@ public class ReceivePack {
 	 * it reads the pack from the input and parses it before running the
 	 * connectivity checks).
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred during unpacking or connectivity checking.
 	 * @throws LargeObjectException
 	 *             an large object needs to be opened for the check.
@@ -1212,7 +1258,7 @@ public class ReceivePack {
 	/**
 	 * Unlock the pack written by this object.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the pack could not be unlocked.
 	 */
 	private void unlockPack() throws IOException {
@@ -1227,9 +1273,9 @@ public class ReceivePack {
 	 *
 	 * @param adv
 	 *            the advertisement formatter.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the formatter failed to write an advertisement.
-	 * @throws org.eclipse.jgit.transport.ServiceMayNotContinueException
+	 * @throws ServiceMayNotContinueException
 	 *             the hook denied advertisement.
 	 */
 	public void sendAdvertisedRefs(RefAdvertiser adv)
@@ -1787,7 +1833,7 @@ public class ReceivePack {
 	 *
 	 * @param unpackError
 	 *            an error that occurred during unpacking, or {@code null}
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred writing the status report.
 	 * @since 5.6
 	 */
@@ -1935,7 +1981,7 @@ public class ReceivePack {
 	/**
 	 * Release any resources used by this object.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the pack could not be unlocked.
 	 */
 	private void release() throws IOException {
@@ -2044,7 +2090,7 @@ public class ReceivePack {
 	 * Only valid commands (those which have no obvious errors according to the
 	 * received input and this instance's configuration) are passed into the
 	 * hook. The hook may mark a command with a result of any value other than
-	 * {@link org.eclipse.jgit.transport.ReceiveCommand.Result#NOT_ATTEMPTED} to
+	 * {@link Result#NOT_ATTEMPTED} to
 	 * block its execution.
 	 * <p>
 	 * The hook may be called with an empty command collection if the current
@@ -2070,7 +2116,7 @@ public class ReceivePack {
 	 * Set the hook which is invoked after commands are executed.
 	 * <p>
 	 * Only successful commands (type is
-	 * {@link org.eclipse.jgit.transport.ReceiveCommand.Result#OK}) are passed
+	 * {@link Result#OK}) are passed
 	 * into the hook. The hook may be called with an empty command collection if
 	 * the current set all resulted in an error.
 	 *
@@ -2103,6 +2149,22 @@ public class ReceivePack {
 	}
 
 	/**
+	 * Set whether this class will report command failures as warning messages
+	 * before sending the command results.
+	 *
+	 * @param echo
+	 *            if true this class will report command failures as warning
+	 *            messages before sending the command results. This is usually
+	 *            not necessary, but may help buggy Git clients that discard the
+	 *            errors when all branches fail.
+	 * @deprecated no widely used Git versions need this any more
+	 */
+	@Deprecated
+	public void setEchoCommandFailures(boolean echo) {
+		// No-op.
+	}
+
+	/**
 	 * Get the client session-id
 	 *
 	 * @return The client session-id.
@@ -2128,7 +2190,7 @@ public class ReceivePack {
 	 *            through. When run over SSH this should be tied back to the
 	 *            standard error channel of the command execution. For most
 	 *            other network connections this should be null.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void receive(final InputStream input, final OutputStream output,
@@ -2172,7 +2234,7 @@ public class ReceivePack {
 	 *            through. When run over SSH this should be tied back to the
 	 *            standard error channel of the command execution. For most
 	 *            other network connections this should be null.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 5.7
 	 */

@@ -31,7 +31,7 @@ import org.eclipse.jgit.treewalk.WorkingTreeIterator;
  * the various gitattributes files. Furthermore it collects and expands macro
  * expressions. The method {@link #getAttributes()} yields the ready processed
  * attributes for the current path represented by the
- * {@link org.eclipse.jgit.treewalk.TreeWalk}
+ * {@link TreeWalk}
  * <p>
  * The implementation is based on the specifications in
  * http://git-scm.com/docs/gitattributes
@@ -62,13 +62,13 @@ public class AttributesHandler {
 	private final Map<String, List<Attribute>> expansions = new HashMap<>();
 
 	/**
-	 * Create an {@link org.eclipse.jgit.attributes.AttributesHandler} with
+	 * Create an {@link AttributesHandler} with
 	 * default rules as well as merged rules from global, info and worktree root
 	 * attributes
 	 *
 	 * @param treeWalk
-	 *            a {@link org.eclipse.jgit.treewalk.TreeWalk}
-	 * @throws java.io.IOException
+	 *            a {@link TreeWalk}
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @deprecated since 6.1, use {@link #AttributesHandler(TreeWalk, Supplier)}
 	 *             instead
@@ -79,15 +79,15 @@ public class AttributesHandler {
 	}
 
 	/**
-	 * Create an {@link org.eclipse.jgit.attributes.AttributesHandler} with
+	 * Create an {@link AttributesHandler} with
 	 * default rules as well as merged rules from global, info and worktree root
 	 * attributes
 	 *
 	 * @param treeWalk
-	 *            a {@link org.eclipse.jgit.treewalk.TreeWalk}
+	 *            a {@link TreeWalk}
 	 * @param attributesTree
 	 *            the tree to read .gitattributes from
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 * @since 6.1
 	 */
@@ -124,12 +124,12 @@ public class AttributesHandler {
 	}
 
 	/**
-	 * See {@link org.eclipse.jgit.treewalk.TreeWalk#getAttributes()}
+	 * See {@link TreeWalk#getAttributes()}
 	 *
-	 * @return the {@link org.eclipse.jgit.attributes.Attributes} for the
+	 * @return the {@link Attributes} for the
 	 *         current path represented by the
-	 *         {@link org.eclipse.jgit.treewalk.TreeWalk}
-	 * @throws java.io.IOException
+	 *         {@link TreeWalk}
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public Attributes getAttributes() throws IOException {
@@ -286,7 +286,7 @@ public class AttributesHandler {
 	 * Expand a macro
 	 *
 	 * @param attr
-	 *            a {@link org.eclipse.jgit.attributes.Attribute}
+	 *            a {@link Attribute}
 	 * @param result
 	 *            contains the (recursive) expanded and merged macro attributes
 	 *            including the attribute iself

@@ -28,7 +28,7 @@ public class GlobalAttributesNode extends AttributesNode {
 	 * Constructor for GlobalAttributesNode.
 	 *
 	 * @param repository
-	 *            the {@link org.eclipse.jgit.lib.Repository}.
+	 *            the {@link Repository}.
 	 */
 	public GlobalAttributesNode(Repository repository) {
 		this.repository = repository;
@@ -38,7 +38,7 @@ public class GlobalAttributesNode extends AttributesNode {
 	 * Load the attributes node
 	 *
 	 * @return the attributes node
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public AttributesNode load() throws IOException {

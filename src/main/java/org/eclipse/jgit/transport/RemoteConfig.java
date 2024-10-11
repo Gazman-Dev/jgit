@@ -69,7 +69,7 @@ public class RemoteConfig implements Serializable {
 	 * @return all remotes configurations existing in provided repository
 	 *         configuration. Returned configurations are ordered
 	 *         lexicographically by names.
-	 * @throws java.net.URISyntaxException
+	 * @throws URISyntaxException
 	 *             one of the URIs within the remote's configuration is invalid.
 	 */
 	public static List<RemoteConfig> getAllRemoteConfigs(Config rc)
@@ -117,7 +117,7 @@ public class RemoteConfig implements Serializable {
 	 *            The configuration must already be loaded into memory.
 	 * @param remoteName
 	 *            subsection key indicating the name of this remote.
-	 * @throws java.net.URISyntaxException
+	 * @throws URISyntaxException
 	 *             one of the URIs within the remote's configuration is invalid.
 	 */
 	public RemoteConfig(Config rc, String remoteName)

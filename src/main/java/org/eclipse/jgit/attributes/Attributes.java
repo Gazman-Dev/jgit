@@ -63,7 +63,7 @@ public final class Attributes {
 	 * Creates a new instance
 	 *
 	 * @param attributes
-	 *            a {@link org.eclipse.jgit.attributes.Attribute}
+	 *            a {@link Attribute}
 	 */
 	public Attributes(Attribute... attributes) {
 		if (attributes != null) {
@@ -86,7 +86,7 @@ public final class Attributes {
 	 * Get the attribute with the given key
 	 *
 	 * @param key
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @return the attribute or null
 	 */
 	public Attribute get(String key) {
@@ -106,7 +106,7 @@ public final class Attributes {
 	 * Put an attribute
 	 *
 	 * @param a
-	 *            an {@link org.eclipse.jgit.attributes.Attribute}
+	 *            an {@link Attribute}
 	 */
 	public void put(Attribute a) {
 		map.put(a.getKey(), a);
@@ -127,7 +127,7 @@ public final class Attributes {
 	 *
 	 * @param key
 	 *            key of an attribute
-	 * @return true if the {@link org.eclipse.jgit.attributes.Attributes}
+	 * @return true if the {@link Attributes}
 	 *         contains this key
 	 */
 	public boolean containsKey(String key) {
@@ -141,18 +141,18 @@ public final class Attributes {
 	 *            key of an attribute
 	 * @return the state (never returns <code>null</code>)
 	 */
-	public Attribute.State getState(String key) {
+	public State getState(String key) {
 		Attribute a = map.get(key);
-		return a != null ? a.getState() : Attribute.State.UNSPECIFIED;
+		return a != null ? a.getState() : State.UNSPECIFIED;
 	}
 
 	/**
 	 * Whether the attribute is set
 	 *
 	 * @param key
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @return true if the key is
-	 *         {@link org.eclipse.jgit.attributes.Attribute.State#SET}, false in
+	 *         {@link State#SET}, false in
 	 *         all other cases
 	 */
 	public boolean isSet(String key) {
@@ -163,9 +163,9 @@ public final class Attributes {
 	 * Whether the attribute is unset
 	 *
 	 * @param key
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @return true if the key is
-	 *         {@link org.eclipse.jgit.attributes.Attribute.State#UNSET}, false
+	 *         {@link State#UNSET}, false
 	 *         in all other cases
 	 */
 	public boolean isUnset(String key) {
@@ -176,9 +176,9 @@ public final class Attributes {
 	 * Whether the attribute with the given key is unspecified
 	 *
 	 * @param key
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @return true if the key is
-	 *         {@link org.eclipse.jgit.attributes.Attribute.State#UNSPECIFIED},
+	 *         {@link State#UNSPECIFIED},
 	 *         false in all other cases
 	 */
 	public boolean isUnspecified(String key) {
@@ -189,9 +189,9 @@ public final class Attributes {
 	 * Is this a custom attribute
 	 *
 	 * @param key
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @return true if the key is
-	 *         {@link org.eclipse.jgit.attributes.Attribute.State#CUSTOM}, false
+	 *         {@link State#CUSTOM}, false
 	 *         in all other cases see {@link #getValue(String)} for the value of
 	 *         the key
 	 */

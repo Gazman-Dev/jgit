@@ -69,7 +69,7 @@ public class GarbageCollectCommand extends GitCommand<Properties> {
 	 * Constructor for GarbageCollectCommand.
 	 *
 	 * @param repo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	protected GarbageCollectCommand(Repository repo) {
 		super(repo);
@@ -219,7 +219,7 @@ public class GarbageCollectCommand extends GitCommand<Properties> {
 	 * Computes and returns the repository statistics.
 	 *
 	 * @return the repository statistics
-	 * @throws org.eclipse.jgit.api.errors.GitAPIException
+	 * @throws GitAPIException
 	 *             thrown if the repository statistics cannot be computed
 	 * @since 3.0
 	 */

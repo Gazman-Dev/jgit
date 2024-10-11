@@ -30,11 +30,11 @@ import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_MULTI_ACK_D
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_NO_DONE;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_NO_PROGRESS;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_OFS_DELTA;
-import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SESSION_ID;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SHALLOW;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SIDEBAND_ALL;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SIDE_BAND;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SIDE_BAND_64K;
+import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SESSION_ID;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_THIN_PACK;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_WAIT_FOR_DONE;
 import static org.eclipse.jgit.transport.GitProtocolConstants.PACKET_ACK;
@@ -80,6 +80,7 @@ import org.eclipse.jgit.errors.PackProtocolException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.internal.storage.pack.CachedPackUriProvider;
 import org.eclipse.jgit.internal.storage.pack.PackWriter;
+import org.eclipse.jgit.internal.transport.parser.FirstWant;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.NullProgressMonitor;
 import org.eclipse.jgit.lib.ObjectId;
@@ -169,6 +170,52 @@ public class UploadPack implements Closeable {
 		 */
 		void checkWants(UploadPack up, List<ObjectId> wants)
 				throws PackProtocolException, IOException;
+	}
+
+	/**
+	 * Data in the first line of a want-list, the line itself plus options.
+	 *
+	 * @deprecated Use {@link FirstWant} instead
+	 */
+	@Deprecated
+	public static class FirstLine {
+
+		private final FirstWant firstWant;
+
+		/**
+		 * @param line
+		 *            line from the client.
+		 */
+		public FirstLine(String line) {
+			try {
+				firstWant = FirstWant.fromLine(line);
+			} catch (PackProtocolException e) {
+				throw new UncheckedIOException(e);
+			}
+		}
+
+		/**
+		 * Get non-capabilities part of the line
+		 *
+		 * @return non-capabilities part of the line.
+		 */
+		public String getLine() {
+			return firstWant.getLine();
+		}
+
+		/**
+		 * Get capabilities parsed from the line
+		 *
+		 * @return capabilities parsed from the line.
+		 */
+		public Set<String> getOptions() {
+			if (firstWant.getAgent() != null) {
+				Set<String> caps = new HashSet<>(firstWant.getCapabilities());
+				caps.add(OPTION_AGENT + '=' + firstWant.getAgent());
+				return caps;
+			}
+			return firstWant.getCapabilities();
+		}
 	}
 
 	/*
@@ -367,7 +414,7 @@ public class UploadPack implements Closeable {
 	 * Set the refs advertised by this UploadPack.
 	 * <p>
 	 * Intended to be called from a
-	 * {@link org.eclipse.jgit.transport.PreUploadHook}.
+	 * {@link PreUploadHook}.
 	 *
 	 * @param allRefs
 	 *            explicit set of references to claim as advertised by this
@@ -463,16 +510,16 @@ public class UploadPack implements Closeable {
 	 * @param policy
 	 *            the policy used to enforce validation of a client's want list.
 	 *            By default the policy is
-	 *            {@link org.eclipse.jgit.transport.UploadPack.RequestPolicy#ADVERTISED},
+	 *            {@link RequestPolicy#ADVERTISED},
 	 *            which is the Git default requiring clients to only ask for an
 	 *            object that a reference directly points to. This may be
 	 *            relaxed to
-	 *            {@link org.eclipse.jgit.transport.UploadPack.RequestPolicy#REACHABLE_COMMIT}
+	 *            {@link RequestPolicy#REACHABLE_COMMIT}
 	 *            or
-	 *            {@link org.eclipse.jgit.transport.UploadPack.RequestPolicy#REACHABLE_COMMIT_TIP}
+	 *            {@link RequestPolicy#REACHABLE_COMMIT_TIP}
 	 *            when callers have {@link #setBiDirectionalPipe(boolean)} set
 	 *            to false. Overrides any policy specified in a
-	 *            {@link org.eclipse.jgit.transport.TransferConfig}.
+	 *            {@link TransferConfig}.
 	 */
 	public void setRequestPolicy(RequestPolicy policy) {
 		switch (policy) {
@@ -528,9 +575,9 @@ public class UploadPack implements Closeable {
 	/**
 	 * Set the hook used while advertising the refs to the client.
 	 * <p>
-	 * If the {@link org.eclipse.jgit.transport.AdvertiseRefsHook} chooses to
+	 * If the {@link AdvertiseRefsHook} chooses to
 	 * call {@link #setAdvertisedRefs(Map)}, only refs set by this hook
-	 * <em>and</em> selected by the {@link org.eclipse.jgit.transport.RefFilter}
+	 * <em>and</em> selected by the {@link RefFilter}
 	 * will be shown to the client.
 	 *
 	 * @param advertiseRefsHook
@@ -570,9 +617,9 @@ public class UploadPack implements Closeable {
 	 * <p>
 	 * Only refs allowed by this filter will be sent to the client. The filter
 	 * is run against the refs specified by the
-	 * {@link org.eclipse.jgit.transport.AdvertiseRefsHook} (if applicable). If
+	 * {@link AdvertiseRefsHook} (if applicable). If
 	 * null or not set, uses the filter implied by the
-	 * {@link org.eclipse.jgit.transport.TransferConfig}.
+	 * {@link TransferConfig}.
 	 *
 	 * @param refFilter
 	 *            the filter; may be null to show all refs.
@@ -660,7 +707,7 @@ public class UploadPack implements Closeable {
 	 *
 	 * @return true if the client has advertised a side-band capability, false
 	 *     otherwise.
-	 * @throws org.eclipse.jgit.transport.RequestNotYetReadException
+	 * @throws RequestNotYetReadException
 	 *             if the client's request has not yet been read from the wire, so
 	 *             we do not know if they expect side-band. Note that the client
 	 *             may have already written the request, it just has not been
@@ -740,7 +787,7 @@ public class UploadPack implements Closeable {
 	 *            output stream
 	 * @param messages
 	 *            stream for messages
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void upload(InputStream input, OutputStream output,
@@ -953,7 +1000,7 @@ public class UploadPack implements Closeable {
 	 *            unabbreviated names of references.
 	 * @return the requested Refs, omitting any that are not visible or
 	 *         do not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *            on failure to read a ref or check it for visibility.
 	 */
 	@NonNull
@@ -986,7 +1033,7 @@ public class UploadPack implements Closeable {
 	 *            "refs/heads/master".
 	 * @return the requested Ref, or {@code null} if it is not visible or
 	 *         does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *            on failure to read the ref or check it for visibility.
 	 */
 	@Nullable
@@ -1522,9 +1569,9 @@ public class UploadPack implements Closeable {
 	 *
 	 * @param adv
 	 *            the advertisement formatter.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *            the formatter failed to write an advertisement.
-	 * @throws org.eclipse.jgit.transport.ServiceMayNotContinueException
+	 * @throws ServiceMayNotContinueException
 	 *            the hook denied advertisement.
 	 */
 	public void sendAdvertisedRefs(RefAdvertiser adv) throws IOException,
@@ -1542,9 +1589,9 @@ public class UploadPack implements Closeable {
 	 *            flush packet before the advertisement. This is required
 	 *            in v0 of the HTTP protocol, described in Git's
 	 *            Documentation/technical/http-protocol.txt.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *            the formatter failed to write an advertisement.
-	 * @throws org.eclipse.jgit.transport.ServiceMayNotContinueException
+	 * @throws ServiceMayNotContinueException
 	 *            the hook denied advertisement.
 	 * @since 5.0
 	 */
@@ -1643,6 +1690,18 @@ public class UploadPack implements Closeable {
 		if (currentRequest == null)
 			throw new RequestNotYetReadException();
 		return currentRequest.getDepth();
+	}
+
+	/**
+	 * Deprecated synonym for {@code getFilterSpec().getBlobLimit()}.
+	 *
+	 * @return filter blob limit requested by the client, or -1 if no limit
+	 * @since 5.3
+	 * @deprecated Use {@link #getFilterSpec()} instead
+	 */
+	@Deprecated
+	public final long getFilterBlobLimit() {
+		return getFilterSpec().getBlobLimit();
 	}
 
 	/**
@@ -1937,9 +1996,10 @@ public class UploadPack implements Closeable {
 		@Override
 		public void checkWants(UploadPack up, List<ObjectId> wants)
 				throws PackProtocolException, IOException {
-			if (!up.isBiDirectionalPipe() || !wants.isEmpty()) {
+			if (!up.isBiDirectionalPipe())
 				new ReachableCommitRequestValidator().checkWants(up, wants);
-			}
+			else if (!wants.isEmpty())
+				throw new WantNotValidException(wants.iterator().next());
 		}
 	}
 

@@ -40,7 +40,7 @@ public class Status {
 	 * Constructor for Status.
 	 *
 	 * @param diff
-	 *            the {@link org.eclipse.jgit.lib.IndexDiff} having the status
+	 *            the {@link IndexDiff} having the status
 	 */
 	public Status(IndexDiff diff) {
 		super();
@@ -161,7 +161,7 @@ public class Status {
 	 * Get StageState of conflicting files
 	 *
 	 * @return a map from conflicting path to its
-	 *         {@link org.eclipse.jgit.lib.IndexDiff.StageState}.
+	 *         {@link StageState}.
 	 * @since 3.0
 	 */
 	public Map<String, StageState> getConflictingStageState() {

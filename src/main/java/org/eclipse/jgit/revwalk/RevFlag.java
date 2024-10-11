@@ -15,10 +15,10 @@ import java.text.MessageFormat;
 import org.eclipse.jgit.internal.JGitText;
 
 /**
- * Application level mark bit for {@link org.eclipse.jgit.revwalk.RevObject}s.
+ * Application level mark bit for {@link RevObject}s.
  * <p>
  * To create a flag use
- * {@link org.eclipse.jgit.revwalk.RevWalk#newFlag(String)}.
+ * {@link RevWalk#newFlag(String)}.
  */
 public class RevFlag {
 	/**

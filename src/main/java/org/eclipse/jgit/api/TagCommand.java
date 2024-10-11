@@ -18,11 +18,14 @@ import org.eclipse.jgit.api.errors.InvalidTagNameException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.api.errors.RefAlreadyExistsException;
+import org.eclipse.jgit.api.errors.ServiceUnavailableException;
 import org.eclipse.jgit.api.errors.UnsupportedSigningFormatException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.GpgConfig;
 import org.eclipse.jgit.lib.GpgConfig.GpgFormat;
+import org.eclipse.jgit.lib.GpgObjectSigner;
+import org.eclipse.jgit.lib.GpgSigner;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -30,8 +33,6 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.RefUpdate;
 import org.eclipse.jgit.lib.RefUpdate.Result;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.Signer;
-import org.eclipse.jgit.lib.Signers;
 import org.eclipse.jgit.lib.TagBuilder;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevWalk;
@@ -40,7 +41,7 @@ import org.eclipse.jgit.transport.CredentialsProvider;
 /**
  * Create/update an annotated tag object or a simple unannotated tag
  * <p>
- * Examples (<code>git</code> is a {@link org.eclipse.jgit.api.Git} instance):
+ * Examples (<code>git</code> is a {@link Git} instance):
  * <p>
  * Create a new tag for the current commit:
  *
@@ -78,14 +79,14 @@ public class TagCommand extends GitCommand<Ref> {
 
 	private GpgConfig gpgConfig;
 
-	private Signer signer;
+	private GpgObjectSigner gpgSigner;
 
 	private CredentialsProvider credentialsProvider;
 
 	/**
 	 * <p>Constructor for TagCommand.</p>
 	 *
-	 * @param repo a {@link org.eclipse.jgit.lib.Repository} object.
+	 * @param repo a {@link Repository} object.
 	 */
 	protected TagCommand(Repository repo) {
 		super(repo);
@@ -132,9 +133,9 @@ public class TagCommand extends GitCommand<Ref> {
 			newTag.setTagger(tagger);
 			newTag.setObjectId(id);
 
-			if (signer != null) {
-				signer.signObject(repo, gpgConfig, newTag, tagger, signingKey,
-						credentialsProvider);
+			if (gpgSigner != null) {
+				gpgSigner.signObject(newTag, signingKey, tagger,
+						credentialsProvider, gpgConfig);
 			}
 
 			// write the tag object
@@ -195,12 +196,15 @@ public class TagCommand extends GitCommand<Ref> {
 	 *
 	 * @throws InvalidTagNameException
 	 *             if the tag name is null or invalid
+	 * @throws ServiceUnavailableException
+	 *             if the tag should be signed but no signer can be found
 	 * @throws UnsupportedSigningFormatException
 	 *             if the tag should be signed but {@code gpg.format} is not
 	 *             {@link GpgFormat#OPENPGP}
 	 */
 	private void processOptions()
-			throws InvalidTagNameException, UnsupportedSigningFormatException {
+			throws InvalidTagNameException, ServiceUnavailableException,
+			UnsupportedSigningFormatException {
 		if (name == null
 				|| !Repository.isValidRefName(Constants.R_TAGS + name)) {
 			throw new InvalidTagNameException(
@@ -226,15 +230,16 @@ public class TagCommand extends GitCommand<Ref> {
 					doSign = gpgConfig.isSignAnnotated();
 				}
 				if (doSign) {
-					if (signer == null) {
-						signer = Signers.get(gpgConfig.getKeyFormat());
-						if (signer == null) {
-							throw new UnsupportedSigningFormatException(
-									MessageFormat.format(
-											JGitText.get().signatureTypeUnknown,
-											gpgConfig.getKeyFormat()
-													.toConfigValue()));
+					if (signingKey == null) {
+						signingKey = gpgConfig.getSigningKey();
+					}
+					if (gpgSigner == null) {
+						GpgSigner signer = GpgSigner.getDefault();
+						if (!(signer instanceof GpgObjectSigner)) {
+							throw new ServiceUnavailableException(
+									JGitText.get().signingServiceUnavailable);
 						}
+						gpgSigner = (GpgObjectSigner) signer;
 					}
 					// The message of a signed tag must end in a newline because
 					// the signature will be appended.
@@ -321,22 +326,22 @@ public class TagCommand extends GitCommand<Ref> {
 	}
 
 	/**
-	 * Sets the {@link Signer} to use if the commit is to be signed.
+	 * Sets the {@link GpgSigner} to use if the commit is to be signed.
 	 *
 	 * @param signer
 	 *            to use; if {@code null}, the default signer will be used
 	 * @return {@code this}
-	 * @since 7.0
+	 * @since 5.11
 	 */
-	public TagCommand setSigner(Signer signer) {
+	public TagCommand setGpgSigner(GpgObjectSigner signer) {
 		checkCallable();
-		this.signer = signer;
+		this.gpgSigner = signer;
 		return this;
 	}
 
 	/**
 	 * Sets an external {@link GpgConfig} to use. Whether it will be used is at
-	 * the discretion of the {@link #setSigner(Signer)}.
+	 * the discretion of the {@link #setGpgSigner(GpgObjectSigner)}.
 	 *
 	 * @param config
 	 *            to set; if {@code null}, the config will be loaded from the
@@ -355,7 +360,7 @@ public class TagCommand extends GitCommand<Ref> {
 	 * created from the info in the repository.
 	 *
 	 * @param tagger
-	 *            a {@link org.eclipse.jgit.lib.PersonIdent} object.
+	 *            a {@link PersonIdent} object.
 	 * @return {@code this}
 	 */
 	public TagCommand setTagger(PersonIdent tagger) {
@@ -387,7 +392,7 @@ public class TagCommand extends GitCommand<Ref> {
 	 * commit pointed to from HEAD will be used.
 	 *
 	 * @param id
-	 *            a {@link org.eclipse.jgit.revwalk.RevObject} object.
+	 *            a {@link RevObject} object.
 	 * @return {@code this}
 	 */
 	public TagCommand setObjectId(RevObject id) {

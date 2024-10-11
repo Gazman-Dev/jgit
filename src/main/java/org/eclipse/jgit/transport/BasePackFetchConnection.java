@@ -79,13 +79,13 @@ import org.eclipse.jgit.util.TemporaryBuffer;
  * easily wrapped up into a local process pipe, anonymous TCP socket, or a
  * command executed through an SSH tunnel.
  * <p>
- * If {@link org.eclipse.jgit.transport.BasePackConnection#statelessRPC} is
+ * If {@link BasePackConnection#statelessRPC} is
  * {@code true}, this connection can be tunneled over a request-response style
  * RPC system like HTTP. The RPC call boundary is determined by this class
  * switching from writing to the OutputStream to reading from the InputStream.
  * <p>
  * Concrete implementations should just call
- * {@link #init(java.io.InputStream, java.io.OutputStream)} and
+ * {@link #init(InputStream, OutputStream)} and
  * {@link #readAdvertisedRefs()} methods in constructor or before any use. They
  * should also handle resources releasing in {@link #close()} method if needed.
  */
@@ -385,7 +385,7 @@ public abstract class BasePackFetchConnection extends BasePackConnection
 	 *
 	 * @param monitor
 	 *            progress monitor to receive status updates. If the monitor is
-	 *            the {@link org.eclipse.jgit.lib.NullProgressMonitor#INSTANCE}, then the no-progress
+	 *            the {@link NullProgressMonitor#INSTANCE}, then the no-progress
 	 *            option enabled.
 	 * @param want
 	 *            the advertised remote references the caller wants to fetch.
@@ -395,7 +395,7 @@ public abstract class BasePackFetchConnection extends BasePackConnection
 	 *            destination repository's references.
 	 * @param outputStream
 	 *            ouputStream to write sideband messages to
-	 * @throws org.eclipse.jgit.errors.TransportException
+	 * @throws TransportException
 	 *             if any exception occurs.
 	 * @since 3.0
 	 */
@@ -1202,7 +1202,7 @@ public abstract class BasePackFetchConnection extends BasePackConnection
 
 	/**
 	 * Notification event delivered just before the pack is received from the
-	 * network. This event can be used by RPC such as {@link org.eclipse.jgit.transport.TransportHttp} to
+	 * network. This event can be used by RPC such as {@link TransportHttp} to
 	 * disable its request magic and ensure the pack stream is read correctly.
 	 *
 	 * @since 2.0

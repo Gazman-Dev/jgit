@@ -50,7 +50,7 @@ public class AutoLFOutputStream extends OutputStream {
 	 * Constructor for AutoLFOutputStream.
 	 *
 	 * @param out
-	 *            an {@link java.io.OutputStream} object.
+	 *            an {@link OutputStream} object.
 	 */
 	public AutoLFOutputStream(OutputStream out) {
 		this(out, true);
@@ -60,7 +60,7 @@ public class AutoLFOutputStream extends OutputStream {
 	 * Constructor for AutoLFOutputStream.
 	 *
 	 * @param out
-	 *            an {@link java.io.OutputStream} object.
+	 *            an {@link OutputStream} object.
 	 * @param detectBinary
 	 *            whether binaries should be detected
 	 */

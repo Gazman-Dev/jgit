@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -226,7 +227,7 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 	 * </p>
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected RebaseCommand(Repository repo) {
 		super(repo);
@@ -499,7 +500,7 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 	private String editCommitMessage(boolean[] doChangeId, String message,
 			@NonNull CleanupMode mode, char commentChar) {
 		String newMessage;
-		CommitConfig.CleanupMode cleanup;
+		CleanupMode cleanup;
 		if (interactiveHandler instanceof InteractiveHandler2) {
 			InteractiveHandler2.ModifyResult modification = ((InteractiveHandler2) interactiveHandler)
 					.editCommitMessage(message, mode, commentChar);
@@ -511,7 +512,7 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 			doChangeId[0] = modification.shouldAddChangeId();
 		} else {
 			newMessage = interactiveHandler.modifyCommitMessage(message);
-			cleanup = CommitConfig.CleanupMode.STRIP;
+			cleanup = CleanupMode.STRIP;
 			doChangeId[0] = false;
 		}
 		return CommitConfig.cleanText(newMessage, cleanup, commentChar);
@@ -742,8 +743,8 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 			throws InvalidRebaseStepException, IOException {
 		if (steps.isEmpty())
 			return;
-		if (RebaseTodoLine.Action.SQUASH.equals(steps.get(0).getAction())
-				|| RebaseTodoLine.Action.FIXUP.equals(steps.get(0).getAction())) {
+		if (Action.SQUASH.equals(steps.get(0).getAction())
+				|| Action.FIXUP.equals(steps.get(0).getAction())) {
 			if (!rebaseState.getFile(DONE).exists()
 					|| rebaseState.readFile(DONE).trim().length() == 0) {
 				throw new InvalidRebaseStepException(MessageFormat.format(
@@ -861,7 +862,7 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 				// Figure out a new comment character taking into account the
 				// new message
 				String cleaned = CommitConfig.cleanText(currentMessage,
-						CommitConfig.CleanupMode.STRIP, commentChar) + '\n'
+						CleanupMode.STRIP, commentChar) + '\n'
 						+ newMessage;
 				char newCommentChar = commitConfig.getCommentChar(cleaned);
 				if (newCommentChar != commentChar) {
@@ -1057,7 +1058,7 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 		return parseAuthor(raw);
 	}
 
-	private RebaseResult stop(RevCommit commitToPick, RebaseResult.Status status)
+	private RebaseResult stop(RevCommit commitToPick, Status status)
 			throws IOException {
 		PersonIdent author = commitToPick.getAuthorIdent();
 		String authorScript = toAuthorScript(author);
@@ -1119,13 +1120,13 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 	private void popSteps(int numSteps) throws IOException {
 		if (numSteps == 0)
 			return;
-		List<RebaseTodoLine> todoLines = new ArrayList<>();
-		List<RebaseTodoLine> poppedLines = new ArrayList<>();
+		List<RebaseTodoLine> todoLines = new LinkedList<>();
+		List<RebaseTodoLine> poppedLines = new LinkedList<>();
 
 		for (RebaseTodoLine line : repo.readRebaseTodo(
 				rebaseState.getPath(GIT_REBASE_TODO), true)) {
 			if (poppedLines.size() >= numSteps
-					|| RebaseTodoLine.Action.COMMENT.equals(line.getAction()))
+					|| Action.COMMENT.equals(line.getAction()))
 				todoLines.add(line);
 			else
 				poppedLines.add(line);
@@ -1305,12 +1306,12 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 	 * Check if we can fast-forward and returns the new head if it is possible
 	 *
 	 * @param newCommit
-	 *            a {@link org.eclipse.jgit.revwalk.RevCommit} object to check
+	 *            a {@link RevCommit} object to check
 	 *            if we can fast-forward to.
 	 * @return the new head, or null
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
-	 * @throws org.eclipse.jgit.api.errors.GitAPIException
+	 * @throws GitAPIException
 	 *             if a JGit API exception occurred
 	 */
 	public RevCommit tryFastForward(RevCommit newCommit) throws IOException,
@@ -1562,7 +1563,7 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 	 * @param upstream
 	 *            the name of the upstream branch
 	 * @return {@code this}
-	 * @throws org.eclipse.jgit.api.errors.RefNotFoundException
+	 * @throws RefNotFoundException
 	 *             if {@code upstream} Ref couldn't be resolved
 	 */
 	public RebaseCommand setUpstream(String upstream)
@@ -1629,13 +1630,13 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 	 * <p>
 	 * Does not stop after initialization of interactive rebase. This is
 	 * equivalent to
-	 * {@link org.eclipse.jgit.api.RebaseCommand#runInteractively(InteractiveHandler, boolean)
+	 * {@link RebaseCommand#runInteractively(InteractiveHandler, boolean)
 	 * runInteractively(handler, false)};
 	 * </p>
 	 *
 	 * @param handler
 	 *            the
-	 *            {@link org.eclipse.jgit.api.RebaseCommand.InteractiveHandler}
+	 *            {@link InteractiveHandler}
 	 *            to use
 	 * @return this
 	 */
@@ -1648,12 +1649,12 @@ public class RebaseCommand extends GitCommand<RebaseResult> {
 	 * <p>
 	 * If stopAfterRebaseInteractiveInitialization is {@code true} the rebase
 	 * stops after initialization of interactive rebase returning
-	 * {@link org.eclipse.jgit.api.RebaseResult#INTERACTIVE_PREPARED_RESULT}
+	 * {@link RebaseResult#INTERACTIVE_PREPARED_RESULT}
 	 * </p>
 	 *
 	 * @param handler
 	 *            the
-	 *            {@link org.eclipse.jgit.api.RebaseCommand.InteractiveHandler}
+	 *            {@link InteractiveHandler}
 	 *            to use
 	 * @param stopAfterRebaseInteractiveInitialization
 	 *            if {@code true} the rebase stops after initialization

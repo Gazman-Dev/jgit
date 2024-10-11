@@ -87,7 +87,7 @@ public class NameRevCommand extends GitCommand<Map<ObjectId, String>> {
 	 * Create a new name-rev command.
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected NameRevCommand(Repository repo) {
 		super(repo);
@@ -167,13 +167,13 @@ public class NameRevCommand extends GitCommand<Map<ObjectId, String>> {
 	 * @param id
 	 *            object ID to add.
 	 * @return {@code this}
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             the object supplied is not available from the object
 	 *             database.
-	 * @throws org.eclipse.jgit.api.errors.JGitInternalException
+	 * @throws JGitInternalException
 	 *             a low-level exception of JGit has occurred. The original
 	 *             exception can be retrieved by calling
-	 *             {@link java.lang.Exception#getCause()}.
+	 *             {@link Exception#getCause()}.
 	 */
 	public NameRevCommand add(ObjectId id) throws MissingObjectException,
 			JGitInternalException {
@@ -195,13 +195,13 @@ public class NameRevCommand extends GitCommand<Map<ObjectId, String>> {
 	 * @param ids
 	 *            object IDs to add.
 	 * @return {@code this}
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             the object supplied is not available from the object
 	 *             database.
-	 * @throws org.eclipse.jgit.api.errors.JGitInternalException
+	 * @throws JGitInternalException
 	 *             a low-level exception of JGit has occurred. The original
 	 *             exception can be retrieved by calling
-	 *             {@link java.lang.Exception#getCause()}.
+	 *             {@link Exception#getCause()}.
 	 */
 	public NameRevCommand add(Iterable<ObjectId> ids)
 			throws MissingObjectException, JGitInternalException {
@@ -238,7 +238,7 @@ public class NameRevCommand extends GitCommand<Map<ObjectId, String>> {
 	 * @throws JGitInternalException
 	 *             a low-level exception of JGit has occurred. The original
 	 *             exception can be retrieved by calling
-	 *             {@link java.lang.Exception#getCause()}.
+	 *             {@link Exception#getCause()}.
 	 */
 	public NameRevCommand addAnnotatedTags() {
 		checkCallable();

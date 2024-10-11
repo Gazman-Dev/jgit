@@ -24,7 +24,7 @@ import org.eclipse.jgit.util.NB;
 
 /**
  * Custom output stream to support
- * {@link org.eclipse.jgit.internal.storage.pack.PackWriter}.
+ * {@link PackWriter}.
  */
 public final class PackOutputStream extends CancellableDigestOutputStream {
 
@@ -41,7 +41,7 @@ public final class PackOutputStream extends CancellableDigestOutputStream {
 	 * <p>
 	 * This constructor is exposed to support debugging the JGit library only.
 	 * Application or storage level code should not create a PackOutputStream,
-	 * instead use {@link org.eclipse.jgit.internal.storage.pack.PackWriter},
+	 * instead use {@link PackWriter},
 	 * and let the writer create the stream.
 	 *
 	 * @param writeMonitor
@@ -75,7 +75,7 @@ public final class PackOutputStream extends CancellableDigestOutputStream {
 	 *
 	 * @param otp
 	 *            the object to write.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object cannot be read from the object reader, or the
 	 *             output stream is no longer accepting output. Caller must
 	 *             examine the type of exception and possibly its message to
@@ -98,7 +98,7 @@ public final class PackOutputStream extends CancellableDigestOutputStream {
 	 *            in whole object format, this is the same as the object size.
 	 *            For an object that is in a delta format, this is the size of
 	 *            the inflated delta instruction stream.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the underlying stream refused to accept the header.
 	 */
 	@SuppressWarnings("ShortCircuitBoolean")

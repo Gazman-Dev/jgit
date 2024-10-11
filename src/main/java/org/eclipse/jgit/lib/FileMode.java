@@ -174,7 +174,7 @@ public abstract class FileMode {
 
 	/**
 	 * Test a file mode for equality with this
-	 * {@link org.eclipse.jgit.lib.FileMode} object.
+	 * {@link FileMode} object.
 	 *
 	 * @param modeBits
 	 *            a int.
@@ -194,7 +194,7 @@ public abstract class FileMode {
 	 *
 	 * @param os
 	 *            stream to copy the mode to.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream encountered an error during the copy.
 	 */
 	public void copyTo(OutputStream os) throws IOException {
@@ -230,7 +230,7 @@ public abstract class FileMode {
 	/**
 	 * Get the object type that should appear for this type of mode.
 	 * <p>
-	 * See the object type constants in {@link org.eclipse.jgit.lib.Constants}.
+	 * See the object type constants in {@link Constants}.
 	 *
 	 * @return one of the well known object type constants.
 	 */

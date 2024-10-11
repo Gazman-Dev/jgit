@@ -53,7 +53,7 @@ public class LongList {
 	 * @param i
 	 *            index to read, must be in the range [0, {@link #size()}).
 	 * @return the number at the specified index
-	 * @throws java.lang.ArrayIndexOutOfBoundsException
+	 * @throws ArrayIndexOutOfBoundsException
 	 *             the index outside the valid range
 	 */
 	public long get(int i) {

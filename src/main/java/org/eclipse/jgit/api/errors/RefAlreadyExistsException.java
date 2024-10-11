@@ -47,10 +47,10 @@ public class RefAlreadyExistsException extends GitAPIException {
 	}
 
 	/**
-	 * Retrieves the {@link org.eclipse.jgit.lib.RefUpdate.Result
+	 * Retrieves the {@link RefUpdate.Result
 	 * RefUpdate.Result} that caused the exception.
 	 *
-	 * @return the {@link org.eclipse.jgit.lib.RefUpdate.Result
+	 * @return the {@link RefUpdate.Result
 	 *         RefUpdate.Result} or {@code null} if unknown
 	 * @since 5.11
 	 */

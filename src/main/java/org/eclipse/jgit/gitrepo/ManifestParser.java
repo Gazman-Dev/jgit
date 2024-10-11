@@ -88,18 +88,18 @@ public class ManifestParser extends DefaultHandler {
 	 *
 	 * @param includedReader
 	 *            a
-	 *            {@link org.eclipse.jgit.gitrepo.ManifestParser.IncludedFileReader}
+	 *            {@link IncludedFileReader}
 	 *            object.
 	 * @param filename
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param defaultBranch
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param baseUrl
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param groups
-	 *            a {@link java.lang.String} object.
+	 *            a {@link String} object.
 	 * @param rootRepo
-	 *            a {@link org.eclipse.jgit.lib.Repository} object.
+	 *            a {@link Repository} object.
 	 */
 	public ManifestParser(IncludedFileReader includedReader, String filename,
 			String defaultBranch, String baseUrl, String groups,
@@ -134,8 +134,8 @@ public class ManifestParser extends DefaultHandler {
 	 * Read the xml file.
 	 *
 	 * @param inputStream
-	 *            a {@link java.io.InputStream} object.
-	 * @throws java.io.IOException
+	 *            a {@link InputStream} object.
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void read(InputStream inputStream) throws IOException {
@@ -176,10 +176,6 @@ public class ManifestParser extends DefaultHandler {
 					attributes.getValue("groups"));
 			currentProject
 					.setRecommendShallow(attributes.getValue("clone-depth"));
-			currentProject
-					.setUpstream(attributes.getValue("upstream"));
-			currentProject
-					.setDestBranch(attributes.getValue("dest-branch"));
 			break;
 		case "remote":
 			String alias = attributes.getValue("alias");

@@ -132,7 +132,7 @@ public abstract class TemporaryBuffer extends OutputStream {
 	/**
 	 * Dumps the entire buffer into the overflow stream, and flushes it.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the overflow stream cannot be started, or the buffer contents
 	 *             cannot be written to it, or it failed to flush.
 	 */
@@ -147,7 +147,7 @@ public abstract class TemporaryBuffer extends OutputStream {
 	 *
 	 * @param in
 	 *            the stream to read from, until EOF is reached.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred reading from the input stream, or while
 	 *             writing to a local temporary file.
 	 */
@@ -197,7 +197,7 @@ public abstract class TemporaryBuffer extends OutputStream {
 	 * The buffer is only complete after {@link #close()} has been invoked.
 	 *
 	 * @return the complete byte array; length matches {@link #length()}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred reading from a local temporary file
 	 */
 	public byte[] toByteArray() throws IOException {
@@ -240,7 +240,7 @@ public abstract class TemporaryBuffer extends OutputStream {
 	 * @param limit
 	 *            the maximum number of bytes to be returned
 	 * @return the byte array limited to {@code limit} bytes.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred reading from a local temporary file
 	 * @since 4.2
 	 */
@@ -275,7 +275,7 @@ public abstract class TemporaryBuffer extends OutputStream {
 	 *            if not null progress updates are sent here. Caller should
 	 *            initialize the task and the number of work units to <code>
 	 *            {@link #length()}/1024</code>.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred reading from a temporary file on the local
 	 *             system, or writing to the output stream.
 	 */
@@ -297,7 +297,7 @@ public abstract class TemporaryBuffer extends OutputStream {
 	 *
 	 * @return a stream to read from the buffer. The caller must close the
 	 *         stream when it is no longer useful.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an error occurred opening the temporary file.
 	 */
 	public InputStream openInputStream() throws IOException {
@@ -343,7 +343,7 @@ public abstract class TemporaryBuffer extends OutputStream {
 	 *
 	 * @return the output stream to receive the buffered content, followed by
 	 *         the remaining output.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the buffer cannot create the overflow stream.
 	 */
 	protected abstract OutputStream overflow() throws IOException;

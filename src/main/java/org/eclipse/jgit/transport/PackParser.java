@@ -472,7 +472,7 @@ public abstract class PackParser {
 	 * <p>
 	 * This should only be called after pack parsing is finished.
 	 *
-	 * @return {@link org.eclipse.jgit.transport.ReceivedPackStatistics}
+	 * @return {@link ReceivedPackStatistics}
 	 * @since 4.6
 	 */
 	public ReceivedPackStatistics getReceivedPackStatistics() {
@@ -484,10 +484,10 @@ public abstract class PackParser {
 	 *
 	 * @param progress
 	 *            callback to provide progress feedback during parsing. If null,
-	 *            {@link org.eclipse.jgit.lib.NullProgressMonitor} will be used.
+	 *            {@link NullProgressMonitor} will be used.
 	 * @return the pack lock, if one was requested by setting
 	 *         {@link #setLockMessage(String)}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream is malformed, or contains corrupt objects.
 	 * @since 6.0
 	 */
@@ -501,12 +501,12 @@ public abstract class PackParser {
 	 * @param receiving
 	 *            receives progress feedback during the initial receiving
 	 *            objects phase. If null,
-	 *            {@link org.eclipse.jgit.lib.NullProgressMonitor} will be used.
+	 *            {@link NullProgressMonitor} will be used.
 	 * @param resolving
 	 *            receives progress feedback during the resolving objects phase.
 	 * @return the pack lock, if one was requested by setting
 	 *         {@link #setLockMessage(String)}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream is malformed, or contains corrupt objects.
 	 * @since 6.0
 	 */
@@ -530,7 +530,7 @@ public abstract class PackParser {
 			receiving.beginTask(JGitText.get().receivingObjects,
 					(int) expectedObjectCount);
 			try {
-				for (long done = 0; done < expectedObjectCount; done++) {
+				for (int done = 0; done < expectedObjectCount; done++) {
 					indexOneObject();
 					receiving.update(1);
 					if (receiving.isCancelled())
@@ -735,7 +735,7 @@ public abstract class PackParser {
 	 * @param info
 	 *            the info object to populate.
 	 * @return {@code info}, after populating.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the size cannot be read.
 	 */
 	protected ObjectTypeAndSize readObjectHeader(ObjectTypeAndSize info)
@@ -1101,7 +1101,7 @@ public abstract class PackParser {
 	 *            the type of the object.
 	 * @param data
 	 *            raw content of the object.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             if a corrupt object was found
 	 * @since 4.9
 	 */
@@ -1335,7 +1335,7 @@ public abstract class PackParser {
 	 *            first offset within the buffer that is valid.
 	 * @param len
 	 *            number of bytes in the buffer that are valid.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be archived.
 	 */
 	protected abstract void onStoreStream(byte[] raw, int pos, int len)
@@ -1355,7 +1355,7 @@ public abstract class PackParser {
 	 *            first offset within buffer that is valid.
 	 * @param len
 	 *            number of bytes in buffer that are valid.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be archived.
 	 */
 	protected abstract void onObjectHeader(Source src, byte[] raw, int pos,
@@ -1378,7 +1378,7 @@ public abstract class PackParser {
 	 *            first offset within buffer that is valid.
 	 * @param len
 	 *            number of bytes in buffer that are valid.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be archived.
 	 */
 	protected abstract void onObjectData(Source src, byte[] raw, int pos,
@@ -1393,7 +1393,7 @@ public abstract class PackParser {
 	 *            the type of the object.
 	 * @param data
 	 *            inflated data for the object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object cannot be archived.
 	 */
 	protected abstract void onInflatedObjectData(PackedObjectInfo obj,
@@ -1404,7 +1404,7 @@ public abstract class PackParser {
 	 *
 	 * @param objCnt
 	 *            number of objects expected in the stream.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the implementation refuses to work with this many objects.
 	 */
 	protected abstract void onPackHeader(long objCnt) throws IOException;
@@ -1415,7 +1415,7 @@ public abstract class PackParser {
 	 * @param hash
 	 *            the trailing 20 bytes of the pack, this is a SHA-1 checksum of
 	 *            all of the pack data.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream cannot be archived.
 	 */
 	protected abstract void onPackFooter(byte[] hash) throws IOException;
@@ -1438,7 +1438,7 @@ public abstract class PackParser {
 	 * @return true if the {@code info} should be included in the object list
 	 *         returned by {@link #getSortedObjectList(Comparator)}, false if it
 	 *         should not be included.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the base could not be included into the pack.
 	 */
 	protected abstract boolean onAppendBase(int typeCode, byte[] data,
@@ -1451,7 +1451,7 @@ public abstract class PackParser {
 	 * external from the pack. The event is called after all of those deltas
 	 * have been resolved.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the pack cannot be archived.
 	 */
 	protected abstract void onEndThinPack() throws IOException;
@@ -1468,7 +1468,7 @@ public abstract class PackParser {
 	 * @param info
 	 *            object to populate with type and size.
 	 * @return the {@code info} object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the database cannot reposition to this location.
 	 */
 	protected abstract ObjectTypeAndSize seekDatabase(PackedObjectInfo obj,
@@ -1486,7 +1486,7 @@ public abstract class PackParser {
 	 * @param info
 	 *            object to populate with type and size.
 	 * @return the {@code info} object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the database cannot reposition to this location.
 	 */
 	protected abstract ObjectTypeAndSize seekDatabase(UnresolvedDelta delta,
@@ -1503,7 +1503,7 @@ public abstract class PackParser {
 	 *            ideal target number of bytes to read. Actual read length may
 	 *            be shorter.
 	 * @return number of bytes stored.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the database cannot be accessed.
 	 */
 	protected abstract int readDatabase(byte[] dst, int pos, int cnt)
@@ -1534,14 +1534,14 @@ public abstract class PackParser {
 	 *            position of this object in the incoming stream.
 	 * @param type
 	 *            type of the object; one of
-	 *            {@link org.eclipse.jgit.lib.Constants#OBJ_COMMIT},
-	 *            {@link org.eclipse.jgit.lib.Constants#OBJ_TREE},
-	 *            {@link org.eclipse.jgit.lib.Constants#OBJ_BLOB}, or
-	 *            {@link org.eclipse.jgit.lib.Constants#OBJ_TAG}.
+	 *            {@link Constants#OBJ_COMMIT},
+	 *            {@link Constants#OBJ_TREE},
+	 *            {@link Constants#OBJ_BLOB}, or
+	 *            {@link Constants#OBJ_TAG}.
 	 * @param inflatedSize
 	 *            size of the object when fully inflated. The size stored within
 	 *            the pack may be larger or smaller, and is not yet known.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object cannot be recorded.
 	 */
 	protected abstract void onBeginWholeObject(long streamPosition, int type,
@@ -1552,7 +1552,7 @@ public abstract class PackParser {
 	 *
 	 *@param info
 	 *            object information.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object cannot be recorded.
 	 */
 	protected abstract void onEndWholeObject(PackedObjectInfo info)
@@ -1571,7 +1571,7 @@ public abstract class PackParser {
 	 * @param inflatedSize
 	 *            size of the delta when fully inflated. The size stored within
 	 *            the pack may be larger or smaller, and is not yet known.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object cannot be recorded.
 	 */
 	protected abstract void onBeginOfsDelta(long deltaStreamPosition,
@@ -1589,7 +1589,7 @@ public abstract class PackParser {
 	 * @param inflatedSize
 	 *            size of the delta when fully inflated. The size stored within
 	 *            the pack may be larger or smaller, and is not yet known.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object cannot be recorded.
 	 */
 	protected abstract void onBeginRefDelta(long deltaStreamPosition,
@@ -1600,7 +1600,7 @@ public abstract class PackParser {
 	 *
 	 *@return object information that must be populated with at least the
 	 *         offset.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the object cannot be recorded.
 	 */
 	protected UnresolvedDelta onEndDelta() throws IOException {

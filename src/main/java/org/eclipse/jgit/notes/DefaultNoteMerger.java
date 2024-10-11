@@ -20,7 +20,7 @@ import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.util.io.UnionInputStream;
 
 /**
- * Default implementation of the {@link org.eclipse.jgit.notes.NoteMerger}.
+ * Default implementation of the {@link NoteMerger}.
  * <p>
  * If ours and theirs are both non-null, which means they are either both edits
  * or both adds, then this merger will simply join the content of ours and

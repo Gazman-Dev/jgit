@@ -128,7 +128,7 @@ class CachedObjectDirectory extends FileObjectDatabase {
 
 	private CachedObjectDirectory[] myAlternates() {
 		if (alts == null) {
-			ObjectDirectory.AlternateHandle[] src = wrapped.myAlternates();
+			AlternateHandle[] src = wrapped.myAlternates();
 			alts = new CachedObjectDirectory[src.length];
 			for (int i = 0; i < alts.length; i++)
 				alts[i] = src[i].db.newCachedFileObjectDatabase();

@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Cache of active {@link org.eclipse.jgit.lib.Repository} instances.
+ * Cache of active {@link Repository} instances.
  */
 public class RepositoryCache {
 	private static final Logger LOG = LoggerFactory
@@ -43,17 +43,17 @@ public class RepositoryCache {
 	 * Open an existing repository, reusing a cached instance if possible.
 	 * <p>
 	 * When done with the repository, the caller must call
-	 * {@link org.eclipse.jgit.lib.Repository#close()} to decrement the
+	 * {@link Repository#close()} to decrement the
 	 * repository's usage counter.
 	 *
 	 * @param location
 	 *            where the local repository is. Typically a
-	 *            {@link org.eclipse.jgit.lib.RepositoryCache.FileKey}.
+	 *            {@link FileKey}.
 	 * @return the repository instance requested; caller must close when done.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository could not be read (likely its core.version
 	 *             property is not supported).
-	 * @throws org.eclipse.jgit.errors.RepositoryNotFoundException
+	 * @throws RepositoryNotFoundException
 	 *             there is no repository at the given location.
 	 */
 	public static Repository open(Key location) throws IOException,
@@ -65,18 +65,18 @@ public class RepositoryCache {
 	 * Open a repository, reusing a cached instance if possible.
 	 * <p>
 	 * When done with the repository, the caller must call
-	 * {@link org.eclipse.jgit.lib.Repository#close()} to decrement the
+	 * {@link Repository#close()} to decrement the
 	 * repository's usage counter.
 	 *
 	 * @param location
 	 *            where the local repository is. Typically a
-	 *            {@link org.eclipse.jgit.lib.RepositoryCache.FileKey}.
+	 *            {@link FileKey}.
 	 * @param mustExist
 	 *            If true, and the repository is not found, throws {@code
 	 *            RepositoryNotFoundException}. If false, a repository instance
 	 *            is created and registered anyway.
 	 * @return the repository instance requested; caller must close when done.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the repository could not be read (likely its core.version
 	 *             property is not supported).
 	 * @throws RepositoryNotFoundException
@@ -93,8 +93,8 @@ public class RepositoryCache {
 	 * <p>
 	 * During registration the cache automatically increments the usage counter,
 	 * permitting it to retain the reference. A
-	 * {@link org.eclipse.jgit.lib.RepositoryCache.FileKey} for the repository's
-	 * {@link org.eclipse.jgit.lib.Repository#getDirectory()} is used to index
+	 * {@link FileKey} for the repository's
+	 * {@link Repository#getDirectory()} is used to index
 	 * the repository in the cache.
 	 * <p>
 	 * If another repository already is registered in the cache at this
@@ -131,7 +131,7 @@ public class RepositoryCache {
 	 * <p>
 	 * Removes a repository from the cache, if it is still registered here. This
 	 * method will not close the repository, only remove it from the cache. See
-	 * {@link org.eclipse.jgit.lib.RepositoryCache#close(Repository)} to remove
+	 * {@link RepositoryCache#close(Repository)} to remove
 	 * and close the repository.
 	 *
 	 * @param db
@@ -149,7 +149,7 @@ public class RepositoryCache {
 	 * <p>
 	 * Removes a repository from the cache, if it is still registered here. This
 	 * method will not close the repository, only remove it from the cache. See
-	 * {@link org.eclipse.jgit.lib.RepositoryCache#close(Repository)} to remove
+	 * {@link RepositoryCache#close(Repository)} to remove
 	 * and close the repository.
 	 *
 	 * @param location
@@ -450,21 +450,10 @@ public class RepositoryCache {
 		 *         Git directory.
 		 */
 		public static boolean isGitRepository(File dir, FS fs) {
-			// check if common-dir available or fallback to git-dir
-			File commonDir;
-			try {
-				commonDir = fs.getCommonDir(dir);
-			} catch (IOException e) {
-				commonDir = null;
-			}
-			if (commonDir == null) {
-				commonDir = dir;
-			}
-			return fs.resolve(commonDir, Constants.OBJECTS).exists()
-					&& fs.resolve(commonDir, "refs").exists() //$NON-NLS-1$
-					&& (fs.resolve(commonDir, Constants.REFTABLE).exists()
-							|| isValidHead(
-									new File(commonDir, Constants.HEAD)));
+			return fs.resolve(dir, Constants.OBJECTS).exists()
+					&& fs.resolve(dir, "refs").exists() //$NON-NLS-1$
+					&& (fs.resolve(dir, Constants.REFTABLE).exists()
+							|| isValidHead(new File(dir, Constants.HEAD)));
 		}
 
 		private static boolean isValidHead(File head) {
@@ -507,31 +496,15 @@ public class RepositoryCache {
 		 *         null if there is no suitable match.
 		 */
 		public static File resolve(File directory, FS fs) {
-			// the folder itself
-			if (isGitRepository(directory, fs)) {
+			if (isGitRepository(directory, fs))
 				return directory;
-			}
-			// the .git subfolder or file (reference)
-			File dotDir = new File(directory, Constants.DOT_GIT);
-			if (dotDir.isFile()) {
-				try {
-					File refDir = BaseRepositoryBuilder.getSymRef(directory,
-							dotDir, fs);
-					if (refDir != null && isGitRepository(refDir, fs)) {
-						return refDir;
-					}
-				} catch (IOException ignored) {
-					// Continue searching if gitdir ref isn't found
-				}
-			} else if (isGitRepository(dotDir, fs)) {
-				return dotDir;
-			}
-			// the folder extended with .git (bare)
-			File bareDir = new File(directory.getParentFile(),
-					directory.getName() + Constants.DOT_GIT_EXT);
-			if (isGitRepository(bareDir, fs)) {
-				return bareDir;
-			}
+			if (isGitRepository(new File(directory, Constants.DOT_GIT), fs))
+				return new File(directory, Constants.DOT_GIT);
+
+			final String name = directory.getName();
+			final File parent = directory.getParentFile();
+			if (isGitRepository(new File(parent, name + Constants.DOT_GIT_EXT), fs))
+				return new File(parent, name + Constants.DOT_GIT_EXT);
 			return null;
 		}
 	}

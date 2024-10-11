@@ -129,7 +129,7 @@ public class DirCache {
 	 *            tree to read. Must identify a tree, not a tree-ish.
 	 * @return a new cache which has no backing store file, but contains the
 	 *         contents of {@code treeId}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             one or more trees not available from the ObjectReader.
 	 * @since 4.2
 	 */
@@ -153,9 +153,9 @@ public class DirCache {
 	 *            repository containing the index to read
 	 * @return a cache representing the contents of the specified index file (if
 	 *         it exists) or an empty cache if the file does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the index file is present but could not be read.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the index file is using a format or extension that this
 	 *             library does not support.
 	 */
@@ -180,9 +180,9 @@ public class DirCache {
 	 *            certain file system operations.
 	 * @return a cache representing the contents of the specified index file (if
 	 *         it exists) or an empty cache if the file does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the index file is present but could not be read.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the index file is using a format or extension that this
 	 *             library does not support.
 	 */
@@ -208,10 +208,10 @@ public class DirCache {
 	 *            certain file system operations.
 	 * @return a cache representing the contents of the specified index file (if
 	 *         it exists) or an empty cache if the file does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the index file is present but could not be read, or the lock
 	 *             could not be obtained.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the index file is using a format or extension that this
 	 *             library does not support.
 	 */
@@ -245,10 +245,10 @@ public class DirCache {
 	 *            listener to be informed when DirCache is committed
 	 * @return a cache representing the contents of the specified index file (if
 	 *         it exists) or an empty cache if the file does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the index file is present but could not be read, or the lock
 	 *             could not be obtained.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the index file is using a format or extension that this
 	 *             library does not support.
 	 * @since 2.0
@@ -279,10 +279,10 @@ public class DirCache {
 	 *            listener to be informed when DirCache is committed
 	 * @return a cache representing the contents of the specified index file (if
 	 *         it exists) or an empty cache if the file does not exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the index file is present but could not be read, or the lock
 	 *             could not be obtained.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the index file is using a format or extension that this
 	 *             library does not support.
 	 */
@@ -352,7 +352,7 @@ public class DirCache {
 	 * Create a new builder to update this cache.
 	 * <p>
 	 * Callers should add all entries to the builder, then use
-	 * {@link org.eclipse.jgit.dircache.DirCacheBuilder#finish()} to update this
+	 * {@link DirCacheBuilder#finish()} to update this
 	 * instance.
 	 *
 	 * @return a new builder instance for this cache.
@@ -365,7 +365,7 @@ public class DirCache {
 	 * Create a new editor to recreate this cache.
 	 * <p>
 	 * Callers should add commands to the editor, then use
-	 * {@link org.eclipse.jgit.dircache.DirCacheEditor#finish()} to update this
+	 * {@link DirCacheEditor#finish()} to update this
 	 * instance.
 	 *
 	 * @return a new builder instance for this cache.
@@ -391,10 +391,10 @@ public class DirCache {
 	 * the last time we consulted it. A missing index file will be treated as
 	 * though it were present but had no file entries in it.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the index file is present but could not be read. This
 	 *             DirCache instance may not be populated correctly.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             the index file is using a format or extension that this
 	 *             library does not support.
 	 */
@@ -428,7 +428,7 @@ public class DirCache {
 	 * Whether the memory state differs from the index file
 	 *
 	 * @return {@code true} if the memory state differs from the index file
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public boolean isOutdated() throws IOException {
@@ -593,7 +593,7 @@ public class DirCache {
 	 *
 	 * @return true if the lock is now held by the caller; false if it is held
 	 *         by someone else.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the output file could not be created. The caller does not
 	 *             hold the lock.
 	 */
@@ -620,7 +620,7 @@ public class DirCache {
 	 * Once written the lock is closed and must be either committed with
 	 * {@link #commit()} or rolled back with {@link #unlock()}.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the output file could not be created. The caller no longer
 	 *             holds the lock.
 	 */
@@ -735,7 +735,7 @@ public class DirCache {
 	 * @return true if the commit was successful and the file contains the new
 	 *         data; false if the commit failed and the file remains with the
 	 *         old data.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             the lock is not held.
 	 */
 	public boolean commit() {
@@ -964,13 +964,13 @@ public class DirCache {
 	 *            responsible for flushing the inserter before trying to use the
 	 *            returned tree identity.
 	 * @return identity for the root tree.
-	 * @throws org.eclipse.jgit.errors.UnmergedPathException
+	 * @throws UnmergedPathException
 	 *             one or more paths contain higher-order stages (stage &gt; 0),
 	 *             which cannot be stored in a tree object.
-	 * @throws java.lang.IllegalStateException
+	 * @throws IllegalStateException
 	 *             one or more paths contain an invalid mode which should never
 	 *             appear in a tree object.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             an unexpected error occurred writing to the object store.
 	 */
 	public ObjectId writeTree(ObjectInserter ow)

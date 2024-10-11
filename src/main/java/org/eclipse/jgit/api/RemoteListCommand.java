@@ -36,7 +36,7 @@ public class RemoteListCommand extends GitCommand<List<RemoteConfig>> {
 	 * </p>
 	 *
 	 * @param repo
-	 *            the {@link org.eclipse.jgit.lib.Repository}
+	 *            the {@link Repository}
 	 */
 	protected RemoteListCommand(Repository repo) {
 		super(repo);

@@ -92,7 +92,7 @@ public class PackStatistics {
 			public long deltaBytes;
 		}
 
-		private ObjectType.Accumulator objectType;
+		private Accumulator objectType;
 
 		/**
 		 * Creates a new {@link ObjectType} object from the accumulator.
@@ -100,7 +100,7 @@ public class PackStatistics {
 		 * @param accumulator
 		 *            the accumulator of the statistics
 		 */
-		public ObjectType(ObjectType.Accumulator accumulator) {
+		public ObjectType(Accumulator accumulator) {
 			/*
 			 * For efficiency this wraps and serves up the Accumulator object
 			 * rather than making a deep clone. Normal usage of PackWriter is to
@@ -331,7 +331,7 @@ public class PackStatistics {
 	private Accumulator statistics;
 
 	/**
-	 * Creates a new {@link org.eclipse.jgit.storage.pack.PackStatistics} object
+	 * Creates a new {@link PackStatistics} object
 	 * from the accumulator.
 	 *
 	 * @param accumulator

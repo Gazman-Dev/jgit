@@ -50,8 +50,8 @@ public class NoteMapMerger {
 
 	/**
 	 * Constructs a NoteMapMerger with custom
-	 * {@link org.eclipse.jgit.notes.NoteMerger} and custom
-	 * {@link org.eclipse.jgit.merge.MergeStrategy}.
+	 * {@link NoteMerger} and custom
+	 * {@link MergeStrategy}.
 	 *
 	 * @param db
 	 *            Git repository
@@ -72,8 +72,8 @@ public class NoteMapMerger {
 
 	/**
 	 * Constructs a NoteMapMerger with
-	 * {@link org.eclipse.jgit.notes.DefaultNoteMerger} as the merger for notes
-	 * and the {@link org.eclipse.jgit.merge.MergeStrategy#RESOLVE} as the
+	 * {@link DefaultNoteMerger} as the merger for notes
+	 * and the {@link MergeStrategy#RESOLVE} as the
 	 * strategy for resolving conflicts on non-notes
 	 *
 	 * @param db
@@ -93,7 +93,7 @@ public class NoteMapMerger {
 	 * @param theirs
 	 *            theirs version of the note tree
 	 * @return merge result as a new NoteMap
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public NoteMap merge(NoteMap base, NoteMap ours, NoteMap theirs)
@@ -199,7 +199,7 @@ public class NoteMapMerger {
 		if (child == null)
 			return;
 		if (child instanceof InMemoryNoteBucket)
-			b.setBucket(cell, child.writeTree(inserter));
+			b.setBucket(cell, ((InMemoryNoteBucket) child).writeTree(inserter));
 		else
 			b.setBucket(cell, child.getTreeId());
 	}

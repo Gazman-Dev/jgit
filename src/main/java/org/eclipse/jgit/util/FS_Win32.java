@@ -104,7 +104,7 @@ public class FS_Win32 extends FS {
 						public FileVisitResult visitFile(Path file,
 								BasicFileAttributes attrs) throws IOException {
 							File f = file.toFile();
-							FS.Attributes attributes = new FS.Attributes(fs, f,
+							Attributes attributes = new Attributes(fs, f,
 									true, attrs.isDirectory(),
 									checkExecutable && f.canExecute(),
 									attrs.isSymbolicLink(),

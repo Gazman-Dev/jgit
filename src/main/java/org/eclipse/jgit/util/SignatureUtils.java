@@ -13,8 +13,8 @@ import java.text.MessageFormat;
 import java.util.Locale;
 
 import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.SignatureVerifier.SignatureVerification;
-import org.eclipse.jgit.lib.SignatureVerifier.TrustLevel;
+import org.eclipse.jgit.lib.GpgSignatureVerifier.SignatureVerification;
+import org.eclipse.jgit.lib.GpgSignatureVerifier.TrustLevel;
 import org.eclipse.jgit.lib.PersonIdent;
 
 /**
@@ -39,31 +39,29 @@ public final class SignatureUtils {
 	 *            to use for dates
 	 * @return a textual representation of the {@link SignatureVerification},
 	 *         using LF as line separator
-	 *
-	 * @since 7.0
 	 */
 	public static String toString(SignatureVerification verification,
 			PersonIdent creator, GitDateFormatter formatter) {
 		StringBuilder result = new StringBuilder();
 		// Use the creator's timezone for the signature date
 		PersonIdent dateId = new PersonIdent(creator,
-				verification.creationDate());
+				verification.getCreationDate());
 		result.append(MessageFormat.format(JGitText.get().verifySignatureMade,
 				formatter.formatDate(dateId)));
 		result.append('\n');
 		result.append(MessageFormat.format(
 				JGitText.get().verifySignatureKey,
-				verification.keyFingerprint().toUpperCase(Locale.ROOT)));
+				verification.getKeyFingerprint().toUpperCase(Locale.ROOT)));
 		result.append('\n');
-		if (!StringUtils.isEmptyOrNull(verification.signer())) {
+		if (!StringUtils.isEmptyOrNull(verification.getSigner())) {
 			result.append(
 					MessageFormat.format(JGitText.get().verifySignatureIssuer,
-							verification.signer()));
+							verification.getSigner()));
 			result.append('\n');
 		}
 		String msg;
-		if (verification.verified()) {
-			if (verification.expired()) {
+		if (verification.getVerified()) {
+			if (verification.isExpired()) {
 				msg = JGitText.get().verifySignatureExpired;
 			} else {
 				msg = JGitText.get().verifySignatureGood;
@@ -71,14 +69,14 @@ public final class SignatureUtils {
 		} else {
 			msg = JGitText.get().verifySignatureBad;
 		}
-		result.append(MessageFormat.format(msg, verification.keyUser()));
-		if (!TrustLevel.UNKNOWN.equals(verification.trustLevel())) {
+		result.append(MessageFormat.format(msg, verification.getKeyUser()));
+		if (!TrustLevel.UNKNOWN.equals(verification.getTrustLevel())) {
 			result.append(' ' + MessageFormat
 					.format(JGitText.get().verifySignatureTrust, verification
-							.trustLevel().name().toLowerCase(Locale.ROOT)));
+							.getTrustLevel().name().toLowerCase(Locale.ROOT)));
 		}
 		result.append('\n');
-		msg = verification.message();
+		msg = verification.getMessage();
 		if (!StringUtils.isEmptyOrNull(msg)) {
 			result.append(msg);
 			result.append('\n');

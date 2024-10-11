@@ -37,8 +37,8 @@ import org.eclipse.jgit.lib.RefComparator;
 import org.eclipse.jgit.lib.Repository;
 
 /**
- * Support for the start of {@link org.eclipse.jgit.transport.UploadPack} and
- * {@link org.eclipse.jgit.transport.ReceivePack}.
+ * Support for the start of {@link UploadPack} and
+ * {@link ReceivePack}.
  */
 public abstract class RefAdvertiser {
 	/** Advertiser which frames lines in a {@link PacketLineOut} format. */
@@ -178,6 +178,7 @@ public abstract class RefAdvertiser {
 	 *
 	 * This method must be invoked prior to any of the following:
 	 * <ul>
+	 * <li>{@link #send(Map)}</li>
 	 * <li>{@link #send(Collection)}</li>
 	 * </ul>
 	 *
@@ -194,6 +195,7 @@ public abstract class RefAdvertiser {
 	 * <p>
 	 * This method must be invoked prior to any of the following:
 	 * <ul>
+	 * <li>{@link #send(Map)}</li>
 	 * <li>{@link #send(Collection)}</li>
 	 * <li>{@link #advertiseHave(AnyObjectId)}</li>
 	 * </ul>
@@ -228,6 +230,7 @@ public abstract class RefAdvertiser {
 	 * <p>
 	 * This method must be invoked prior to any of the following:
 	 * <ul>
+	 * <li>{@link #send(Map)}</li>
 	 * <li>{@link #send(Collection)}</li>
 	 * <li>{@link #advertiseHave(AnyObjectId)}</li>
 	 * </ul>
@@ -254,7 +257,25 @@ public abstract class RefAdvertiser {
 	 *            sorted before display if necessary, and therefore may appear
 	 *            in any order.
 	 * @return set of ObjectIds that were advertised to the client.
-	 * @throws java.io.IOException
+	 * @throws IOException
+	 *             the underlying output stream failed to write out an
+	 *             advertisement record.
+	 * @deprecated use {@link #send(Collection)} instead.
+	 */
+	@Deprecated
+	public Set<ObjectId> send(Map<String, Ref> refs) throws IOException {
+		return send(refs.values());
+	}
+
+	/**
+	 * Format an advertisement for the supplied refs.
+	 *
+	 * @param refs
+	 *            zero or more refs to format for the client. The collection is
+	 *            sorted before display if necessary, and therefore may appear
+	 *            in any order.
+	 * @return set of ObjectIds that were advertised to the client.
+	 * @throws IOException
 	 *             the underlying output stream failed to write out an
 	 *             advertisement record.
 	 * @since 5.0
@@ -316,7 +337,7 @@ public abstract class RefAdvertiser {
 	 *
 	 * @param id
 	 *            identity of the object that is assumed to exist.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the underlying output stream failed to write out an
 	 *             advertisement record.
 	 */
@@ -356,7 +377,7 @@ public abstract class RefAdvertiser {
 	 * @param refName
 	 *            name of the reference to advertise the object as, can be any
 	 *            string not including the NUL byte.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the underlying output stream failed to write out an
 	 *             advertisement record.
 	 */
@@ -387,7 +408,7 @@ public abstract class RefAdvertiser {
 	 * @param line
 	 *            the advertisement line to be written. The line always ends
 	 *            with LF. Never null or the empty string.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the underlying output stream failed to write out an
 	 *             advertisement record.
 	 */
@@ -396,7 +417,7 @@ public abstract class RefAdvertiser {
 	/**
 	 * Mark the end of the advertisements.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the underlying output stream failed to write out an
 	 *             advertisement record.
 	 */

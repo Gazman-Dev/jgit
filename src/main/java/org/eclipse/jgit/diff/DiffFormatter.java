@@ -372,7 +372,7 @@ public class DiffFormatter implements AutoCloseable {
 	 * Set the filter to produce only specific paths.
 	 *
 	 * If the filter is an instance of
-	 * {@link org.eclipse.jgit.revwalk.FollowFilter}, the filter path will be
+	 * {@link FollowFilter}, the filter path will be
 	 * updated during successive scan or format invocations. The updated path
 	 * can be obtained from {@link #getPathFilter()}.
 	 *
@@ -395,7 +395,7 @@ public class DiffFormatter implements AutoCloseable {
 	/**
 	 * Flush the underlying output stream of this formatter.
 	 *
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream's own flush method threw an exception.
 	 */
 	public void flush() throws IOException {
@@ -421,7 +421,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *
 	 * No output is created, instead only the file paths that are different are
 	 * returned. Callers may choose to format these paths themselves, or convert
-	 * them into {@link org.eclipse.jgit.patch.FileHeader} instances with a
+	 * them into {@link FileHeader} instances with a
 	 * complete edit list by calling {@link #toFileHeader(DiffEntry)}.
 	 * <p>
 	 * Either side may be null to indicate that the tree has beed added or
@@ -432,7 +432,7 @@ public class DiffFormatter implements AutoCloseable {
 	 * @param b
 	 *            the new (or updated) side or null
 	 * @return the paths that are different.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             trees cannot be read or file contents cannot be read.
 	 */
 	public List<DiffEntry> scan(AnyObjectId a, AnyObjectId b)
@@ -451,7 +451,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *
 	 * No output is created, instead only the file paths that are different are
 	 * returned. Callers may choose to format these paths themselves, or convert
-	 * them into {@link org.eclipse.jgit.patch.FileHeader} instances with a
+	 * them into {@link FileHeader} instances with a
 	 * complete edit list by calling {@link #toFileHeader(DiffEntry)}.
 	 * <p>
 	 * Either side may be null to indicate that the tree has beed added or
@@ -462,7 +462,7 @@ public class DiffFormatter implements AutoCloseable {
 	 * @param b
 	 *            the new (or updated) side or null
 	 * @return the paths that are different.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             trees cannot be read or file contents cannot be read.
 	 */
 	public List<DiffEntry> scan(RevTree a, RevTree b) throws IOException {
@@ -488,7 +488,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *
 	 * No output is created, instead only the file paths that are different are
 	 * returned. Callers may choose to format these paths themselves, or convert
-	 * them into {@link org.eclipse.jgit.patch.FileHeader} instances with a
+	 * them into {@link FileHeader} instances with a
 	 * complete edit list by calling {@link #toFileHeader(DiffEntry)}.
 	 *
 	 * @param a
@@ -496,7 +496,7 @@ public class DiffFormatter implements AutoCloseable {
 	 * @param b
 	 *            the new (or updated) side.
 	 * @return the paths that are different.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             trees cannot be read or file contents cannot be read.
 	 */
 	public List<DiffEntry> scan(AbstractTreeIterator a, AbstractTreeIterator b)
@@ -624,7 +624,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *            the old (or previous) side or null
 	 * @param b
 	 *            the new (or updated) side or null
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             trees cannot be read, file contents cannot be read, or the
 	 *             patch cannot be output.
 	 */
@@ -646,7 +646,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *            the old (or previous) side or null
 	 * @param b
 	 *            the new (or updated) side or null
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             trees cannot be read, file contents cannot be read, or the
 	 *             patch cannot be output.
 	 */
@@ -667,7 +667,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *            the old (or previous) side or null
 	 * @param b
 	 *            the new (or updated) side or null
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             trees cannot be read, file contents cannot be read, or the
 	 *             patch cannot be output.
 	 */
@@ -683,7 +683,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *
 	 * @param entries
 	 *            entries describing the affected files.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a file's content cannot be read, or the output stream cannot
 	 *             be written to.
 	 */
@@ -697,7 +697,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *
 	 * @param ent
 	 *            the entry to be formatted.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             a file's content cannot be read, or the output stream cannot
 	 *             be written to.
 	 */
@@ -744,12 +744,12 @@ public class DiffFormatter implements AutoCloseable {
 	 * @param a
 	 *            text source for the pre-image version of the content. This
 	 *            must match the content of
-	 *            {@link org.eclipse.jgit.patch.FileHeader#getOldId()}.
+	 *            {@link FileHeader#getOldId()}.
 	 * @param b
 	 *            text source for the post-image version of the content. This
 	 *            must match the content of
-	 *            {@link org.eclipse.jgit.patch.FileHeader#getNewId()}.
-	 * @throws java.io.IOException
+	 *            {@link FileHeader#getNewId()}.
+	 * @throws IOException
 	 *             writing to the supplied stream failed.
 	 */
 	public void format(FileHeader head, RawText a, RawText b)
@@ -776,7 +776,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *            the text A which was compared
 	 * @param b
 	 *            the text B which was compared
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	public void format(EditList edits, RawText a, RawText b)
@@ -825,7 +825,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *            RawText for accessing raw data
 	 * @param line
 	 *            the line number within text
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected void writeContextLine(RawText text, int line)
@@ -844,7 +844,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *            RawText for accessing raw data
 	 * @param line
 	 *            the line number within text
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected void writeAddedLine(RawText text, int line)
@@ -859,7 +859,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *            RawText for accessing raw data
 	 * @param line
 	 *            the line number within text
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected void writeRemovedLine(RawText text, int line)
@@ -878,7 +878,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *            within second source
 	 * @param bEndLine
 	 *            within second source
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             if an IO error occurred
 	 */
 	protected void writeHunkHeader(int aStartLine, int aEndLine,
@@ -932,7 +932,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *            the text object to obtain the line from.
 	 * @param cur
 	 *            line number to output.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream threw an exception while writing to it.
 	 */
 	protected void writeLine(final char prefix, final RawText text,
@@ -943,8 +943,8 @@ public class DiffFormatter implements AutoCloseable {
 	}
 
 	/**
-	 * Creates a {@link org.eclipse.jgit.patch.FileHeader} representing the
-	 * given {@link org.eclipse.jgit.diff.DiffEntry}
+	 * Creates a {@link FileHeader} representing the
+	 * given {@link DiffEntry}
 	 * <p>
 	 * This method does not use the OutputStream associated with this
 	 * DiffFormatter instance. It is therefore safe to instantiate this
@@ -957,12 +957,12 @@ public class DiffFormatter implements AutoCloseable {
 	 * @return a FileHeader representing the DiffEntry. The FileHeader's buffer
 	 *         will contain only the header of the diff output. It will also
 	 *         contain one {@link org.eclipse.jgit.patch.HunkHeader}.
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream threw an exception while writing to it, or one of
 	 *             the blobs referenced by the DiffEntry could not be read.
-	 * @throws org.eclipse.jgit.errors.CorruptObjectException
+	 * @throws CorruptObjectException
 	 *             one of the blobs referenced by the DiffEntry is corrupt.
-	 * @throws org.eclipse.jgit.errors.MissingObjectException
+	 * @throws MissingObjectException
 	 *             one of the blobs referenced by the DiffEntry is missing.
 	 */
 	public FileHeader toFileHeader(DiffEntry ent) throws IOException,
@@ -983,7 +983,7 @@ public class DiffFormatter implements AutoCloseable {
 		final FormatResult res = new FormatResult();
 		ByteArrayOutputStream buf = new ByteArrayOutputStream();
 		final EditList editList;
-		final FileHeader.PatchType type;
+		final PatchType type;
 
 		formatHeader(buf, ent);
 
@@ -1087,12 +1087,12 @@ public class DiffFormatter implements AutoCloseable {
 	 * @param o
 	 *            The stream the formatter will write the first header line to
 	 * @param type
-	 *            The {@link org.eclipse.jgit.diff.DiffEntry.ChangeType}
+	 *            The {@link ChangeType}
 	 * @param oldPath
 	 *            old path to the file
 	 * @param newPath
 	 *            new path to the file
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             the stream threw an exception while writing to it.
 	 */
 	protected void formatGitDiffFirstHeaderLine(ByteArrayOutputStream o,
@@ -1183,7 +1183,7 @@ public class DiffFormatter implements AutoCloseable {
 	 *            the stream the formatter will write line data to
 	 * @param ent
 	 *            the DiffEntry to create the FileHeader for
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 *             writing to the supplied stream failed.
 	 */
 	protected void formatIndexLine(OutputStream o, DiffEntry ent)
