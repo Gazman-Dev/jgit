@@ -1,11 +1,13 @@
-# JGit (Gradle Version)
+# JGit (Android Version)
 
-This repository is a fork of the [JGit](https://github.com/eclipse-jgit/jgit) project, modified to use Gradle for build management and stripped down to include only the core code. The testing components have been removed for simplicity.
+This repository is a fork of the [JGit](https://github.com/eclipse-jgit/jgit) project, modified to use Gradle for build management and stripped down to include only the core code. The testing components and some monitoring features have been removed for simplicity. The project is now fully compatible with Android API level 26 and above.
 
 ## Features
 
 - Migrated to Gradle build system
 - Core JGit functionality only (tests removed)
+- Compatibility with Android API 26+
+- Some monitoring features removed for a streamlined experience
 
 ## License
 
