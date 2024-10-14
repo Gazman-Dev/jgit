@@ -1903,8 +1903,8 @@ public class GC {
 			return s.toString();
 		}
 
-		private long getPID() {
-			return ProcessHandle.current().pid();
+		private int getPID() {
+			return android.os.Process.myPid();
 		}
 
 		private String getHostName() {

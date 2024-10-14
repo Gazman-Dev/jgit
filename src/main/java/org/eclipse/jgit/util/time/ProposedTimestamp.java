@@ -140,7 +140,7 @@ public abstract class ProposedTimestamp implements AutoCloseable {
 	 * @return time since epoch, with up to microsecond resolution.
 	 */
 	public Timestamp timestamp() {
-		return Timestamp.from(instant());
+		return new Timestamp(instant().toEpochMilli());
 	}
 
 	/**

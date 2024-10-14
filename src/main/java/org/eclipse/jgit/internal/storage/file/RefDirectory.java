@@ -407,9 +407,10 @@ public class RefDirectory extends RefDatabase {
 		return getRefsByPrefix(StringUtils.commonPrefix(prefixes))
 				.parallelStream()
 				.filter(ref -> Stream.of(prefixes)
-						.anyMatch(ref.getName()::startsWith))
-				.collect(Collectors.toUnmodifiableList());
+						.anyMatch(prefix -> ref.getName().startsWith(prefix)))
+				.collect(Collectors.toList());
 	}
+
 
 	@Override
 	public List<Ref> getAdditionalRefs() throws IOException {

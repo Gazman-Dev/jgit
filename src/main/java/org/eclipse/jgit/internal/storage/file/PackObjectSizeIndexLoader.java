@@ -9,6 +9,9 @@
  */
 package org.eclipse.jgit.internal.storage.file;
 
+import static org.eclipse.jgit.util.IO.readFully;
+
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
@@ -32,7 +35,9 @@ public class PackObjectSizeIndexLoader {
 	 *             object size index
 	 */
 	public static PackObjectSizeIndex load(InputStream in) throws IOException {
-		byte[] header = in.readNBytes(4);
+		// Read the header (4 bytes)
+		byte[] header = new byte[4];
+		readFully(in, header, 0, 4);
 		if (!Arrays.equals(header, PackObjectSizeIndexWriter.HEADER)) {
 			throw new IOException(MessageFormat.format(
 					JGitText.get().unreadableObjectSizeIndex,
@@ -40,12 +45,19 @@ public class PackObjectSizeIndexLoader {
 					Arrays.toString(header)));
 		}
 
-		int version = in.readNBytes(1)[0];
+		// Read the version (1 byte)
+		int versionByte = in.read();
+		if (versionByte == -1) {
+			throw new EOFException("Unexpected end of stream while reading version");
+		}
+		int version = versionByte & 0xFF; // Ensure the value is between 0 and 255
 		if (version != 1) {
 			throw new IOException(MessageFormat.format(
 					JGitText.get().unsupportedObjectSizeIndexVersion,
 					Integer.valueOf(version)));
 		}
+
 		return PackObjectSizeIndexV1.parse(in);
 	}
+
 }
