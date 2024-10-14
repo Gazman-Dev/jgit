@@ -10,12 +10,16 @@
 
 package org.eclipse.jgit.transport;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.eclipse.jgit.util.HttpSupport.HDR_AUTHORIZATION;
 import static org.eclipse.jgit.util.HttpSupport.HDR_WWW_AUTHENTICATE;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import org.eclipse.jgit.transport.http.HttpConnection;
+import org.eclipse.jgit.util.Base64;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -27,15 +31,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.eclipse.jgit.transport.http.HttpConnection;
-import org.eclipse.jgit.util.Base64;
-import org.eclipse.jgit.util.GSSManagerFactory;
-import org.ietf.jgss.GSSContext;
-import org.ietf.jgss.GSSException;
-import org.ietf.jgss.GSSManager;
-import org.ietf.jgss.GSSName;
-import org.ietf.jgss.Oid;
 
 /**
  * Support class to populate user authentication data on a connection.
@@ -90,7 +85,7 @@ abstract class HttpAuthMethod {
 
 			@Override
 			public String getSchemeName() {
-				return "Negotiate"; //$NON-NLS-1$
+				return "Basic"; //$NON-NLS-1$
 			}
 		};
 		/**
@@ -480,53 +475,27 @@ abstract class HttpAuthMethod {
 	}
 
 	private static class Negotiate extends HttpAuthMethod {
-		private static final GSSManagerFactory GSS_MANAGER_FACTORY = GSSManagerFactory
-				.detect();
-
-		private static final Oid OID;
-		static {
-			try {
-				// OID for SPNEGO
-				OID = new Oid("1.3.6.1.5.5.2"); //$NON-NLS-1$
-			} catch (GSSException e) {
-				throw new Error("Cannot create NEGOTIATE oid.", e); //$NON-NLS-1$
-			}
-		}
-
-		private final byte[] prevToken;
+		private String credentials;
 
 		public Negotiate(String hdr) {
 			super(Type.NEGOTIATE);
-			prevToken = Base64.decode(hdr);
+			// Initialize credentials; hdr can be parsed if needed
+			this.credentials = "";
 		}
 
 		@Override
 		void authorize(String user, String pass) {
-			// not used
+			// Set credentials for Basic Authentication
+			String auth = user + ":" + pass;
+			// Encode credentials using org.eclipse.jgit.util.Base64
+			this.credentials = Base64.encodeBytes(auth.getBytes(StandardCharsets.ISO_8859_1));
 		}
 
 		@Override
 		void configureRequest(HttpConnection conn) throws IOException {
-			GSSManager gssManager = GSS_MANAGER_FACTORY.newInstance(conn
-					.getURL());
-			String host = conn.getURL().getHost();
-			String peerName = "HTTP@" + host.toLowerCase(Locale.ROOT); //$NON-NLS-1$
-			try {
-				GSSName gssName = gssManager.createName(peerName,
-						GSSName.NT_HOSTBASED_SERVICE);
-				GSSContext context = gssManager.createContext(gssName, OID,
-						null, GSSContext.DEFAULT_LIFETIME);
-				// Respect delegation policy in HTTP/SPNEGO.
-				context.requestCredDeleg(true);
-
-				byte[] token = context.initSecContext(prevToken, 0,
-						prevToken.length);
-
-				conn.setRequestProperty(HDR_AUTHORIZATION, getType().getSchemeName()
-						+ " " + Base64.encodeBytes(token)); //$NON-NLS-1$
-			} catch (GSSException e) {
-				throw new IOException(e);
-			}
+			// Set the Authorization header with the encoded credentials
+			conn.setRequestProperty(HDR_AUTHORIZATION, getType().getSchemeName() + " " + credentials);
 		}
 	}
+
 }

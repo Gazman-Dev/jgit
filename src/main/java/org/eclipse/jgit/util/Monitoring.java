@@ -9,81 +9,19 @@
  */
 package org.eclipse.jgit.util;
 
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.InstanceNotFoundException;
-import javax.management.MBeanRegistrationException;
-import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.NotCompliantMBeanException;
-import javax.management.ObjectInstance;
-import javax.management.ObjectName;
-
 import org.eclipse.jgit.annotations.Nullable;
-import org.eclipse.jgit.errors.ConfigInvalidException;
-import org.eclipse.jgit.lib.ConfigConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-/**
- * Enables monitoring JGit via JMX
- *
- * @since 5.1.13
- */
 public class Monitoring {
-	private static final Logger LOG = LoggerFactory.getLogger(Monitoring.class);
 
 	/**
-	 * Register a MBean with the platform MBean server
+	 * No-op method for registering an MBean.
 	 *
-	 * @param mbean
-	 *            the mbean object to register
-	 * @param metricName
-	 *            name of the JGit metric, will be prefixed with
-	 *            "org.eclipse.jgit/"
-	 * @return the registered mbean's object instance
+	 * @param mbean      the MBean object to register
+	 * @param metricName name of the JGit metric
+	 * @return null, since JMX is not supported on Android
 	 */
-	public static @Nullable ObjectInstance registerMBean(Object mbean,
-			String metricName) {
-		boolean register = false;
-		try {
-			Class<?>[] interfaces = mbean.getClass().getInterfaces();
-			for (Class<?> i : interfaces) {
-				register = SystemReader.getInstance().getUserConfig()
-						.getBoolean(
-					ConfigConstants.CONFIG_JMX_SECTION,
-								i.getSimpleName(), false);
-				if (register) {
-					break;
-				}
-			}
-		} catch (IOException | ConfigInvalidException e) {
-			LOG.error(e.getMessage(), e);
-			return null;
-		}
-		if (!register) {
-			return null;
-		}
-		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-		try {
-			ObjectName mbeanName = objectName(mbean.getClass(), metricName);
-			if (server.isRegistered(mbeanName)) {
-				server.unregisterMBean(mbeanName);
-			}
-			return server.registerMBean(mbean, mbeanName);
-		} catch (MalformedObjectNameException | InstanceAlreadyExistsException
-				| MBeanRegistrationException | NotCompliantMBeanException
-				| InstanceNotFoundException e) {
-			LOG.error(e.getMessage(), e);
-			return null;
-		}
-	}
-
-	private static ObjectName objectName(Class mbean, String metricName)
-			throws MalformedObjectNameException {
-		return new ObjectName(String.format("org.eclipse.jgit/%s:type=%s", //$NON-NLS-1$
-				metricName, mbean.getSimpleName()));
+	public static @Nullable Object registerMBean(Object mbean, String metricName) {
+		// JMX is not supported on Android; return null
+		return null;
 	}
 }

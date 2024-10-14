@@ -517,7 +517,7 @@ public class PatchApplier {
 		}
 
 		if (fileStreamSupplier == null)
-			fileStreamSupplier = inCore() ? InputStream::nullInputStream
+			fileStreamSupplier = inCore() ? () -> new ByteArrayInputStream(new byte[0])
 					: () -> new FileInputStream(f);
 
 		FileMode fileMode = fh.getNewMode() != null ? fh.getNewMode()
@@ -741,12 +741,15 @@ public class PatchApplier {
 
 	private ObjectId hash(File f) throws IOException {
 		try (FileInputStream fis = new FileInputStream(f);
-				SHA1InputStream shaStream = new SHA1InputStream(fis,
-						f.length())) {
-			shaStream.transferTo(OutputStream.nullOutputStream());
+			 SHA1InputStream shaStream = new SHA1InputStream(fis, f.length())) {
+			byte[] buffer = new byte[8192]; // Buffer size can be adjusted as needed
+			while (shaStream.read(buffer) != -1) {
+				// Read and discard the data to compute the hash
+			}
 			return shaStream.getHash().toObjectId();
 		}
 	}
+
 
 	private boolean checkOid(ObjectId baseId, ObjectId id, ChangeType type, File f,
 			String path, Result result) throws IOException {
@@ -1074,9 +1077,26 @@ public class PatchApplier {
 
 	@SuppressWarnings("ByteBufferBackingArray")
 	private boolean isNoNewlineAtEnd(ByteBuffer hunkLine) {
-		return Arrays.equals(NO_EOL, 0, NO_EOL.length, hunkLine.array(),
-				hunkLine.position(), hunkLine.limit());
+		int lengthA = NO_EOL.length;
+		int lengthB = hunkLine.remaining(); // hunkLine.limit() - hunkLine.position()
+
+		if (lengthA != lengthB) {
+			return false;
+		}
+
+		// Compare the bytes without modifying the buffer's position
+		for (int i = 0; i < lengthA; i++) {
+			byte byteA = NO_EOL[i];
+			byte byteB = hunkLine.get(hunkLine.position() + i);
+			if (byteA != byteB) {
+				return false;
+			}
+		}
+
+		return true;
 	}
+
+
 
 	/**
 	 * An {@link InputStream} that updates a {@link SHA1} on every byte read.

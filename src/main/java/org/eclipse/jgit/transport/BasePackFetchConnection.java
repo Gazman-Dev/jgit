@@ -737,8 +737,9 @@ public abstract class BasePackFetchConnection extends BasePackConnection
 
 	private Collection<Ref> translateToLocalTips(Collection<Ref> want)
 			throws IOException {
-		String[] refs = want.stream().map(Ref::getName)
-				.collect(Collectors.toSet()).toArray(String[]::new);
+
+        String[] refs = want.stream()
+                .map(Ref::getName).toArray(String[]::new);
 		Map<String, Ref> wantRefMap = local.getRefDatabase().exactRef(refs);
 		return wantRefMap.values().stream()
 				.filter(r -> getRefObjectId(r) != null)

@@ -41,7 +41,7 @@ final class UInt24Array {
 
 	int get(int index) {
 		if (index < 0 || index >= size) {
-			throw new IndexOutOfBoundsException(index);
+			throw new IndexOutOfBoundsException(index + "< 0 || " + index + " >= " + size);
 		}
 		int offset = index * ENTRY_SZ;
 		int e = data[offset] & 0xff;

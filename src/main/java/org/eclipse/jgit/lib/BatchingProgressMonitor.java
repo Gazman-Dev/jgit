@@ -22,7 +22,7 @@ import org.eclipse.jgit.util.SystemReader;
  * ProgressMonitor that batches update events.
  */
 public abstract class BatchingProgressMonitor implements ProgressMonitor {
-	private static boolean performanceTrace = SystemReader.getInstance()
+	private static final boolean performanceTrace = SystemReader.getInstance()
 			.isPerformanceTraceEnabled();
 
 	private long delayStartTime;
@@ -169,9 +169,13 @@ public abstract class BatchingProgressMonitor implements ProgressMonitor {
 		if (!showDuration()) {
 			return;
 		}
-		long hours = duration.toHours();
-		int minutes = duration.toMinutesPart();
-		int seconds = duration.toSecondsPart();
+		long totalSeconds = duration.getSeconds();
+		int millis = duration.getNano() / 1_000_000;
+
+		long hours = totalSeconds / 3600;
+		long minutes = (totalSeconds % 3600) / 60;
+		long seconds = totalSeconds % 60;
+
 		s.append(" [");
 		if (hours > 0) {
 			s.append(hours).append(':');
@@ -183,7 +187,7 @@ public abstract class BatchingProgressMonitor implements ProgressMonitor {
 		} else {
 			s.append(seconds);
 		}
-		s.append('.').append(String.format("%03d", duration.toMillisPart()));
+		s.append('.').append(String.format("%03d", millis));
 		if (hours > 0) {
 			s.append('h');
 		} else if (minutes > 0) {
@@ -193,6 +197,7 @@ public abstract class BatchingProgressMonitor implements ProgressMonitor {
 		}
 		s.append(']');
 	}
+
 
 	private static class Task implements Runnable {
 		/** Title of the current task. */

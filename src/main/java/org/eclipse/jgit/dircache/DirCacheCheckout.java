@@ -1631,11 +1631,21 @@ public class DirCacheCheckout {
 				}
 			} else {
 				try (InputStream in = inputStream.load()) {
-					in.transferTo(channel);
+					transferToChannel(in, channel);
 				}
 			}
 		}
 	}
+
+	private static void transferToChannel(InputStream in, OutputStream channel) throws IOException {
+		byte[] buffer = new byte[8192]; // Adjust the buffer size if needed
+		int bytesRead;
+		while ((bytesRead = in.read(buffer)) != -1) {
+			channel.write(buffer, 0, bytesRead);
+		}
+		channel.flush(); // Ensure all data is written out
+	}
+
 
 	// Run an external filter command
 	private static void runExternalFilterCommand(Repository repo, String path,
@@ -1693,7 +1703,7 @@ public class DirCacheCheckout {
 					// command then proceed as if there would not have been a
 					// builtin filter (only if the filter is not mandatory).
 					try (InputStream again = inputStream.load()) {
-						again.transferTo(channel);
+						transferToChannel(again, channel);
 					}
 				} else {
 					throw e;

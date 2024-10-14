@@ -11,8 +11,6 @@ package org.eclipse.jgit.storage.file;
 
 import java.util.Map;
 
-import javax.management.MXBean;
-
 import org.eclipse.jgit.internal.storage.file.WindowCache;
 
 /**
@@ -20,7 +18,6 @@ import org.eclipse.jgit.internal.storage.file.WindowCache;
  *
  * @since 4.11
  */
-@MXBean
 public interface WindowCacheStats {
 	/**
 	 * Get number of open files
