@@ -16,15 +16,16 @@ package org.eclipse.jgit.errors;
  * @since 4.10
  */
 public class BinaryBlobException extends Exception {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct a BinaryBlobException.
-	 */
-	public BinaryBlobException() {}
+    /**
+     * Construct a BinaryBlobException.
+     */
+    public BinaryBlobException() {
+    }
 
-	@Override
-	public synchronized Throwable fillInStackTrace() {
-		return this;
-	}
+    @Override
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }

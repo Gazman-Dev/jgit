@@ -18,117 +18,117 @@ import com.googlecode.javaewah.IntIterator;
  * operation.
  */
 final class InflatingBitSet {
-	private static final long[] EMPTY = new long[0];
+    private static final long[] EMPTY = new long[0];
 
-	private final EWAHCompressedBitmap bitmap;
+    private final EWAHCompressedBitmap bitmap;
 
-	private IntIterator iterator;
+    private IntIterator iterator;
 
-	private long[] inflated;
+    private long[] inflated;
 
-	private int nextPosition = -1;
+    private int nextPosition = -1;
 
-	private final int sizeInBits;
+    private final int sizeInBits;
 
-	InflatingBitSet(EWAHCompressedBitmap bitmap) {
-		this(bitmap, EMPTY);
-	}
+    InflatingBitSet(EWAHCompressedBitmap bitmap) {
+        this(bitmap, EMPTY);
+    }
 
-	private InflatingBitSet(EWAHCompressedBitmap orBitmap, long[] inflated) {
-		this.bitmap = orBitmap;
-		this.inflated = inflated;
-		this.sizeInBits = bitmap.sizeInBits();
-	}
+    private InflatingBitSet(EWAHCompressedBitmap orBitmap, long[] inflated) {
+        this.bitmap = orBitmap;
+        this.inflated = inflated;
+        this.sizeInBits = bitmap.sizeInBits();
+    }
 
-	final boolean maybeContains(int position) {
-		if (get(position))
-			return true;
-		return nextPosition <= position && position < sizeInBits;
-	}
+    final boolean maybeContains(int position) {
+        if (get(position))
+            return true;
+        return nextPosition <= position && position < sizeInBits;
+    }
 
-	final boolean contains(int position) {
-		if (get(position))
-			return true;
-		if (position <= nextPosition || position >= sizeInBits)
-			return position == nextPosition;
+    final boolean contains(int position) {
+        if (get(position))
+            return true;
+        if (position <= nextPosition || position >= sizeInBits)
+            return position == nextPosition;
 
-		if (iterator == null) {
-			iterator = bitmap.intIterator();
-			if (iterator.hasNext())
-				nextPosition = iterator.next();
-			else
-				return false;
-		} else if (!iterator.hasNext())
-			return false;
+        if (iterator == null) {
+            iterator = bitmap.intIterator();
+            if (iterator.hasNext())
+                nextPosition = iterator.next();
+            else
+                return false;
+        } else if (!iterator.hasNext())
+            return false;
 
-		int positionBlock = block(position);
-		if (positionBlock >= inflated.length) {
-			long[] tmp = new long[block(sizeInBits) + 1];
-			System.arraycopy(inflated, 0, tmp, 0, inflated.length);
-			inflated = tmp;
-		}
+        int positionBlock = block(position);
+        if (positionBlock >= inflated.length) {
+            long[] tmp = new long[block(sizeInBits) + 1];
+            System.arraycopy(inflated, 0, tmp, 0, inflated.length);
+            inflated = tmp;
+        }
 
-		int block = block(nextPosition);
-		long word = mask(nextPosition);
-		int end = Math.max(nextPosition, position) | 63;
-		while (iterator.hasNext()) {
-			nextPosition = iterator.next();
-			if (end < nextPosition)
-				break;
+        int block = block(nextPosition);
+        long word = mask(nextPosition);
+        int end = Math.max(nextPosition, position) | 63;
+        while (iterator.hasNext()) {
+            nextPosition = iterator.next();
+            if (end < nextPosition)
+                break;
 
-			int b = block(nextPosition);
-			long m = mask(nextPosition);
-			if (block == b) {
-				word |= m;
-			} else {
-				inflated[block] = word;
-				block = b;
-				word = m;
-			}
-		}
-		inflated[block] = word;
-		return block == positionBlock && (word & mask(position)) != 0;
-	}
+            int b = block(nextPosition);
+            long m = mask(nextPosition);
+            if (block == b) {
+                word |= m;
+            } else {
+                inflated[block] = word;
+                block = b;
+                word = m;
+            }
+        }
+        inflated[block] = word;
+        return block == positionBlock && (word & mask(position)) != 0;
+    }
 
-	private final boolean get(int position) {
-		int b = block(position);
-		return b < inflated.length && (inflated[b] & mask(position)) != 0;
-	}
+    private final boolean get(int position) {
+        int b = block(position);
+        return b < inflated.length && (inflated[b] & mask(position)) != 0;
+    }
 
-	private static final int block(int position) {
-		return position >> 6;
-	}
+    private static final int block(int position) {
+        return position >> 6;
+    }
 
-	private static final long mask(int position) {
-		return 1L << position;
-	}
+    private static final long mask(int position) {
+        return 1L << position;
+    }
 
-	private final boolean isEmpty() {
-		return sizeInBits == 0;
-	}
+    private final boolean isEmpty() {
+        return sizeInBits == 0;
+    }
 
-	final InflatingBitSet or(EWAHCompressedBitmap other) {
-		if (other.sizeInBits() == 0)
-			return this;
-		return new InflatingBitSet(bitmap.or(other), inflated);
-	}
+    final InflatingBitSet or(EWAHCompressedBitmap other) {
+        if (other.sizeInBits() == 0)
+            return this;
+        return new InflatingBitSet(bitmap.or(other), inflated);
+    }
 
-	final InflatingBitSet andNot(EWAHCompressedBitmap other) {
-		if (isEmpty())
-			return this;
-		return new InflatingBitSet(bitmap.andNot(other));
-	}
+    final InflatingBitSet andNot(EWAHCompressedBitmap other) {
+        if (isEmpty())
+            return this;
+        return new InflatingBitSet(bitmap.andNot(other));
+    }
 
-	final InflatingBitSet xor(EWAHCompressedBitmap other) {
-		if (isEmpty()) {
-			if (other.sizeInBits() == 0)
-				return this;
-			return new InflatingBitSet(other);
-		}
-		return new InflatingBitSet(bitmap.xor(other));
-	}
+    final InflatingBitSet xor(EWAHCompressedBitmap other) {
+        if (isEmpty()) {
+            if (other.sizeInBits() == 0)
+                return this;
+            return new InflatingBitSet(other);
+        }
+        return new InflatingBitSet(bitmap.xor(other));
+    }
 
-	final EWAHCompressedBitmap getBitmap() {
-		return bitmap;
-	}
+    final EWAHCompressedBitmap getBitmap() {
+        return bitmap;
+    }
 }

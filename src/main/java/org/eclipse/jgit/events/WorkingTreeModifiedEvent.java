@@ -23,77 +23,75 @@ import org.eclipse.jgit.annotations.NonNull;
  * @since 4.9
  */
 public class WorkingTreeModifiedEvent
-		extends RepositoryEvent<WorkingTreeModifiedListener> {
+        extends RepositoryEvent<WorkingTreeModifiedListener> {
 
-	private Collection<String> modified;
+    private Collection<String> modified;
 
-	private Collection<String> deleted;
+    private Collection<String> deleted;
 
-	/**
-	 * Creates a new {@link WorkingTreeModifiedEvent}
-	 * with the given collections.
-	 *
-	 * @param modified
-	 *            repository-relative paths that were added or updated
-	 * @param deleted
-	 *            repository-relative paths that were deleted
-	 */
-	public WorkingTreeModifiedEvent(Collection<String> modified,
-			Collection<String> deleted) {
-		this.modified = modified;
-		this.deleted = deleted;
-	}
+    /**
+     * Creates a new {@link WorkingTreeModifiedEvent}
+     * with the given collections.
+     *
+     * @param modified repository-relative paths that were added or updated
+     * @param deleted  repository-relative paths that were deleted
+     */
+    public WorkingTreeModifiedEvent(Collection<String> modified,
+                                    Collection<String> deleted) {
+        this.modified = modified;
+        this.deleted = deleted;
+    }
 
-	/**
-	 * Determines whether there are any changes recorded in this event.
-	 *
-	 * @return {@code true} if no files were modified or deleted, {@code false}
-	 *         otherwise
-	 */
-	public boolean isEmpty() {
-		return (modified == null || modified.isEmpty())
-				&& (deleted == null || deleted.isEmpty());
-	}
+    /**
+     * Determines whether there are any changes recorded in this event.
+     *
+     * @return {@code true} if no files were modified or deleted, {@code false}
+     * otherwise
+     */
+    public boolean isEmpty() {
+        return (modified == null || modified.isEmpty())
+                && (deleted == null || deleted.isEmpty());
+    }
 
-	/**
-	 * Retrieves the {@link Collection} of repository-relative paths
-	 * of files that were modified (added or updated).
-	 *
-	 * @return the set
-	 */
-	@NonNull
-	public Collection<String> getModified() {
-		Collection<String> result = modified;
-		if (result == null) {
-			result = Collections.emptyList();
-			modified = result;
-		}
-		return result;
-	}
+    /**
+     * Retrieves the {@link Collection} of repository-relative paths
+     * of files that were modified (added or updated).
+     *
+     * @return the set
+     */
+    @NonNull
+    public Collection<String> getModified() {
+        Collection<String> result = modified;
+        if (result == null) {
+            result = Collections.emptyList();
+            modified = result;
+        }
+        return result;
+    }
 
-	/**
-	 * Retrieves the {@link Collection} of repository-relative paths
-	 * of files that were deleted.
-	 *
-	 * @return the set
-	 */
-	@NonNull
-	public Collection<String> getDeleted() {
-		Collection<String> result = deleted;
-		if (result == null) {
-			result = Collections.emptyList();
-			deleted = result;
-		}
-		return result;
-	}
+    /**
+     * Retrieves the {@link Collection} of repository-relative paths
+     * of files that were deleted.
+     *
+     * @return the set
+     */
+    @NonNull
+    public Collection<String> getDeleted() {
+        Collection<String> result = deleted;
+        if (result == null) {
+            result = Collections.emptyList();
+            deleted = result;
+        }
+        return result;
+    }
 
-	@Override
-	public Class<WorkingTreeModifiedListener> getListenerType() {
-		return WorkingTreeModifiedListener.class;
-	}
+    @Override
+    public Class<WorkingTreeModifiedListener> getListenerType() {
+        return WorkingTreeModifiedListener.class;
+    }
 
-	@Override
-	public void dispatch(WorkingTreeModifiedListener listener) {
-		listener.onWorkingTreeModified(this);
-	}
+    @Override
+    public void dispatch(WorkingTreeModifiedListener listener) {
+        listener.onWorkingTreeModified(this);
+    }
 }

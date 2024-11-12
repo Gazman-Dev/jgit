@@ -20,7 +20,7 @@
  *   copyright notice, this list of conditions and the following
  *   disclaimer in the documentation and/or other materials provided
  *   with the distribution.
-*
+ *
  * - Neither the name of the Eclipse Foundation, Inc. nor the
  *   names of its contributors may be used to endorse or promote
  *   products derived from this software without specific prior
@@ -55,11 +55,10 @@ public class SubmoduleConflict extends Sequence {
     private final ObjectId objectId;
 
     /**
-	 * Create a SubmoduleConflict for the given submodule object id
-	 *
-	 * @param objectId
-	 *            the id of the object to create a submodule conflict for
-	 */
+     * Create a SubmoduleConflict for the given submodule object id
+     *
+     * @param objectId the id of the object to create a submodule conflict for
+     */
     public SubmoduleConflict(ObjectId objectId) {
         super();
         this.objectId = objectId;
@@ -71,10 +70,10 @@ public class SubmoduleConflict extends Sequence {
     }
 
     /**
-	 * Get objectId for the conflicting submodule
-	 *
-	 * @return the object id for the conflicting submodule
-	 */
+     * Get objectId for the conflicting submodule
+     *
+     * @return the object id for the conflicting submodule
+     */
     public ObjectId getObjectId() {
         return objectId;
     }

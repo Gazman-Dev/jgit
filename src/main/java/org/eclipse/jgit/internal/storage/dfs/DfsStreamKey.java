@@ -21,75 +21,70 @@ import org.eclipse.jgit.internal.storage.pack.PackExt;
  * Key used by {@link DfsBlockCache} to disambiguate streams.
  */
 public abstract class DfsStreamKey {
-	/**
-	 * Create a {@code DfsStreamKey}
-	 *
-	 * @param repo
-	 *            description of the containing repository.
-	 * @param name
-	 *            compute the key from a string name.
-	 * @param ext
-	 *            pack file extension, or {@code null}.
-	 * @return key for {@code name}
-	 */
-	public static DfsStreamKey of(DfsRepositoryDescription repo, String name,
-			@Nullable PackExt ext) {
-		return new ByteArrayDfsStreamKey(repo, name.getBytes(UTF_8), ext);
-	}
+    /**
+     * Create a {@code DfsStreamKey}
+     *
+     * @param repo description of the containing repository.
+     * @param name compute the key from a string name.
+     * @param ext  pack file extension, or {@code null}.
+     * @return key for {@code name}
+     */
+    public static DfsStreamKey of(DfsRepositoryDescription repo, String name,
+                                  @Nullable PackExt ext) {
+        return new ByteArrayDfsStreamKey(repo, name.getBytes(UTF_8), ext);
+    }
 
-	final int hash;
+    final int hash;
 
-	final int packExtPos;
+    final int packExtPos;
 
-	/**
-	 * Constructor for DfsStreamKey.
-	 *
-	 * @param hash
-	 *            hash of the other identifying components of the key.
-	 * @param ext
-	 *            pack file extension, or {@code null}.
-	 */
-	protected DfsStreamKey(int hash, @Nullable PackExt ext) {
-		// Multiply by 31 here so we can more directly combine with another
-		// value without doing the multiply there.
-		this.hash = hash * 31;
-		this.packExtPos = ext == null ? 0 : ext.getPosition();
-	}
+    /**
+     * Constructor for DfsStreamKey.
+     *
+     * @param hash hash of the other identifying components of the key.
+     * @param ext  pack file extension, or {@code null}.
+     */
+    protected DfsStreamKey(int hash, @Nullable PackExt ext) {
+        // Multiply by 31 here so we can more directly combine with another
+        // value without doing the multiply there.
+        this.hash = hash * 31;
+        this.packExtPos = ext == null ? 0 : ext.getPosition();
+    }
 
-	@Override
-	public int hashCode() {
-		return hash;
-	}
+    @Override
+    public int hashCode() {
+        return hash;
+    }
 
-	@Override
-	public abstract boolean equals(Object o);
+    @Override
+    public abstract boolean equals(Object o);
 
-	@SuppressWarnings("boxing")
-	@Override
-	public String toString() {
-		return String.format("DfsStreamKey[hash=%08x]", hash); //$NON-NLS-1$
-	}
+    @SuppressWarnings("boxing")
+    @Override
+    public String toString() {
+        return String.format("DfsStreamKey[hash=%08x]", hash); //$NON-NLS-1$
+    }
 
-	private static final class ByteArrayDfsStreamKey extends DfsStreamKey {
-		private final DfsRepositoryDescription repo;
+    private static final class ByteArrayDfsStreamKey extends DfsStreamKey {
+        private final DfsRepositoryDescription repo;
 
-		private final byte[] name;
+        private final byte[] name;
 
-		ByteArrayDfsStreamKey(DfsRepositoryDescription repo, byte[] name,
-				@Nullable PackExt ext) {
-			super(repo.hashCode() * 31 + Arrays.hashCode(name), ext);
-			this.repo = repo;
-			this.name = name;
-		}
+        ByteArrayDfsStreamKey(DfsRepositoryDescription repo, byte[] name,
+                              @Nullable PackExt ext) {
+            super(repo.hashCode() * 31 + Arrays.hashCode(name), ext);
+            this.repo = repo;
+            this.name = name;
+        }
 
-		@Override
-		public boolean equals(Object o) {
-			if (o instanceof ByteArrayDfsStreamKey) {
-				ByteArrayDfsStreamKey k = (ByteArrayDfsStreamKey) o;
-				return hash == k.hash && repo.equals(k.repo)
-						&& Arrays.equals(name, k.name);
-			}
-			return false;
-		}
-	}
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof ByteArrayDfsStreamKey) {
+                ByteArrayDfsStreamKey k = (ByteArrayDfsStreamKey) o;
+                return hash == k.hash && repo.equals(k.repo)
+                        && Arrays.equals(name, k.name);
+            }
+            return false;
+        }
+    }
 }

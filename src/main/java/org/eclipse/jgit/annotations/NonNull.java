@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Retention(RetentionPolicy.CLASS)
-@Target({ FIELD, METHOD, PARAMETER, LOCAL_VARIABLE })
+@Target({FIELD, METHOD, PARAMETER, LOCAL_VARIABLE})
 public @interface NonNull {
-	// marker annotation with no members
+    // marker annotation with no members
 }

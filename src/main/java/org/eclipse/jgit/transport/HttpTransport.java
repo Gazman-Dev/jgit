@@ -21,58 +21,55 @@ import org.eclipse.jgit.transport.http.JDKHttpConnectionFactory;
  * allows customizing HTTP connection settings.
  */
 public abstract class HttpTransport extends Transport {
-	/**
-	 * factory for creating HTTP connections
-	 *
-	 * @since 3.3
-	 */
-	protected static volatile HttpConnectionFactory connectionFactory = new JDKHttpConnectionFactory();
+    /**
+     * factory for creating HTTP connections
+     *
+     * @since 3.3
+     */
+    protected static volatile HttpConnectionFactory connectionFactory = new JDKHttpConnectionFactory();
 
-	/**
-	 * Get the {@link HttpConnectionFactory}
-	 * used to create new connections
-	 *
-	 * @return the {@link HttpConnectionFactory}
-	 *         used to create new connections
-	 * @since 3.3
-	 */
-	public static HttpConnectionFactory getConnectionFactory() {
-		return connectionFactory;
-	}
+    /**
+     * Get the {@link HttpConnectionFactory}
+     * used to create new connections
+     *
+     * @return the {@link HttpConnectionFactory}
+     * used to create new connections
+     * @since 3.3
+     */
+    public static HttpConnectionFactory getConnectionFactory() {
+        return connectionFactory;
+    }
 
-	/**
-	 * Set the {@link HttpConnectionFactory} to
-	 * be used to create new connections
-	 *
-	 * @param cf
-	 *            connection factory
-	 * @since 3.3
-	 */
-	public static void setConnectionFactory(HttpConnectionFactory cf) {
-		connectionFactory = cf;
-	}
+    /**
+     * Set the {@link HttpConnectionFactory} to
+     * be used to create new connections
+     *
+     * @param cf connection factory
+     * @since 3.3
+     */
+    public static void setConnectionFactory(HttpConnectionFactory cf) {
+        connectionFactory = cf;
+    }
 
-	/**
-	 * Create a new transport instance.
-	 *
-	 * @param local
-	 *            the repository this instance will fetch into, or push out of.
-	 *            This must be the repository passed to
-	 *            {@link #open(Repository, URIish)}.
-	 * @param uri
-	 *            the URI used to access the remote repository. This must be the
-	 *            URI passed to {@link #open(Repository, URIish)}.
-	 */
-	protected HttpTransport(Repository local, URIish uri) {
-		super(local, uri);
-	}
+    /**
+     * Create a new transport instance.
+     *
+     * @param local the repository this instance will fetch into, or push out of.
+     *              This must be the repository passed to
+     *              {@link #open(Repository, URIish)}.
+     * @param uri   the URI used to access the remote repository. This must be the
+     *              URI passed to {@link #open(Repository, URIish)}.
+     */
+    protected HttpTransport(Repository local, URIish uri) {
+        super(local, uri);
+    }
 
-	/**
-	 * Create a minimal HTTP transport instance not tied to a single repository.
-	 *
-	 * @param uri a {@link URIish} object.
-	 */
-	protected HttpTransport(URIish uri) {
-		super(uri);
-	}
+    /**
+     * Create a minimal HTTP transport instance not tied to a single repository.
+     *
+     * @param uri a {@link URIish} object.
+     */
+    protected HttpTransport(URIish uri) {
+        super(uri);
+    }
 }

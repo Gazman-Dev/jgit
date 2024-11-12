@@ -20,129 +20,130 @@ import org.eclipse.jgit.lib.RefUpdate;
 import org.eclipse.jgit.lib.ReflogEntry;
 import org.eclipse.jgit.lib.Repository;
 
-/** Updates any reference stored by {@link RefDirectory}. */
+/**
+ * Updates any reference stored by {@link RefDirectory}.
+ */
 class RefDirectoryUpdate extends RefUpdate {
-	private final RefDirectory database;
+    private final RefDirectory database;
 
-	private boolean shouldDeref;
-	private LockFile lock;
+    private boolean shouldDeref;
+    private LockFile lock;
 
-	RefDirectoryUpdate(RefDirectory r, Ref ref) {
-		super(ref);
-		database = r;
-	}
+    RefDirectoryUpdate(RefDirectory r, Ref ref) {
+        super(ref);
+        database = r;
+    }
 
-	@Override
-	protected RefDirectory getRefDatabase() {
-		return database;
-	}
+    @Override
+    protected RefDirectory getRefDatabase() {
+        return database;
+    }
 
-	@Override
-	protected Repository getRepository() {
-		return database.getRepository();
-	}
+    @Override
+    protected Repository getRepository() {
+        return database.getRepository();
+    }
 
-	@Override
-	protected boolean tryLock(boolean deref) throws IOException {
-		shouldDeref = deref;
-		Ref dst = getRef();
-		if (deref)
-			dst = dst.getLeaf();
-		String name = dst.getName();
-		lock = new LockFile(database.fileFor(name));
-		if (lock.lock()) {
-			doAfterLocking(name);
-			dst = database.findRef(name);
-			setOldObjectId(dst != null ? dst.getObjectId() : null);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    protected boolean tryLock(boolean deref) throws IOException {
+        shouldDeref = deref;
+        Ref dst = getRef();
+        if (deref)
+            dst = dst.getLeaf();
+        String name = dst.getName();
+        lock = new LockFile(database.fileFor(name));
+        if (lock.lock()) {
+            doAfterLocking(name);
+            dst = database.findRef(name);
+            setOldObjectId(dst != null ? dst.getObjectId() : null);
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	protected void unlock() {
-		if (lock != null) {
-			lock.unlock();
-			lock = null;
-		}
-	}
+    @Override
+    protected void unlock() {
+        if (lock != null) {
+            lock.unlock();
+            lock = null;
+        }
+    }
 
-	@Override
-	protected Result doUpdate(Result status) throws IOException {
-		WriteConfig wc = database.getRepository().getConfig()
-				.get(WriteConfig.KEY);
+    @Override
+    protected Result doUpdate(Result status) throws IOException {
+        WriteConfig wc = database.getRepository().getConfig()
+                .get(WriteConfig.KEY);
 
-		lock.setFSync(wc.getFSyncRefFiles());
-		lock.setNeedStatInformation(true);
-		lock.write(getNewObjectId());
+        lock.setFSync(wc.getFSyncRefFiles());
+        lock.setNeedStatInformation(true);
+        lock.write(getNewObjectId());
 
-		String msg = getRefLogMessage();
-		if (msg != null) {
-			if (isRefLogIncludingResult()) {
-				String strResult = toResultString(status);
-				if (strResult != null) {
-					if (msg.length() > 0)
-						msg = msg + ": " + strResult; //$NON-NLS-1$
-					else
-						msg = strResult;
-				}
-			}
-			database.log(isForceRefLog(), this, msg, shouldDeref);
-		}
-		if (!lock.commit())
-			return Result.LOCK_FAILURE;
-		database.stored(this, lock.getCommitSnapshot());
-		return status;
-	}
+        String msg = getRefLogMessage();
+        if (msg != null) {
+            if (isRefLogIncludingResult()) {
+                String strResult = toResultString(status);
+                if (strResult != null) {
+                    if (msg.length() > 0)
+                        msg = msg + ": " + strResult; //$NON-NLS-1$
+                    else
+                        msg = strResult;
+                }
+            }
+            database.log(isForceRefLog(), this, msg, shouldDeref);
+        }
+        if (!lock.commit())
+            return Result.LOCK_FAILURE;
+        database.stored(this, lock.getCommitSnapshot());
+        return status;
+    }
 
-	private String toResultString(Result status) {
-		switch (status) {
-		case FORCED:
-			return ReflogEntry.PREFIX_FORCED_UPDATE;
-		case FAST_FORWARD:
-			return ReflogEntry.PREFIX_FAST_FORWARD;
-		case NEW:
-			return ReflogEntry.PREFIX_CREATED;
-		default:
-			return null;
-		}
-	}
+    private String toResultString(Result status) {
+        switch (status) {
+            case FORCED:
+                return ReflogEntry.PREFIX_FORCED_UPDATE;
+            case FAST_FORWARD:
+                return ReflogEntry.PREFIX_FAST_FORWARD;
+            case NEW:
+                return ReflogEntry.PREFIX_CREATED;
+            default:
+                return null;
+        }
+    }
 
-	@Override
-	protected Result doDelete(Result status) throws IOException {
-		if (getRef().getStorage() != Ref.Storage.NEW)
-			database.delete(this);
-		return status;
-	}
+    @Override
+    protected Result doDelete(Result status) throws IOException {
+        if (getRef().getStorage() != Ref.Storage.NEW)
+            database.delete(this);
+        return status;
+    }
 
-	@Override
-	protected Result doLink(String target) throws IOException {
-		WriteConfig wc = database.getRepository().getConfig()
-				.get(WriteConfig.KEY);
+    @Override
+    protected Result doLink(String target) throws IOException {
+        WriteConfig wc = database.getRepository().getConfig()
+                .get(WriteConfig.KEY);
 
-		lock.setFSync(wc.getFSyncRefFiles());
-		lock.setNeedStatInformation(true);
-		lock.write(encode(RefDirectory.SYMREF + target + '\n'));
+        lock.setFSync(wc.getFSyncRefFiles());
+        lock.setNeedStatInformation(true);
+        lock.write(encode(RefDirectory.SYMREF + target + '\n'));
 
-		String msg = getRefLogMessage();
-		if (msg != null)
-			database.log(isForceRefLog(), this, msg, false);
-		if (!lock.commit())
-			return Result.LOCK_FAILURE;
-		database.storedSymbolicRef(this, lock.getCommitSnapshot(), target);
+        String msg = getRefLogMessage();
+        if (msg != null)
+            database.log(isForceRefLog(), this, msg, false);
+        if (!lock.commit())
+            return Result.LOCK_FAILURE;
+        database.storedSymbolicRef(this, lock.getCommitSnapshot(), target);
 
-		if (getRef().getStorage() == Ref.Storage.NEW)
-			return Result.NEW;
-		return Result.FORCED;
-	}
+        if (getRef().getStorage() == Ref.Storage.NEW)
+            return Result.NEW;
+        return Result.FORCED;
+    }
 
-	/**
-	 * Do any actions needed immediately after a lock on the ref is acquired
-	 *
-	 * @param name
-	 *            the name of the reference.
-	 */
-	protected void doAfterLocking(String name) {
-		// No actions by default
-	}
+    /**
+     * Do any actions needed immediately after a lock on the ref is acquired
+     *
+     * @param name the name of the reference.
+     */
+    protected void doAfterLocking(String name) {
+        // No actions by default
+    }
 }

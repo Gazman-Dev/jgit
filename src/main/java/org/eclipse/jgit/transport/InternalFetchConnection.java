@@ -22,100 +22,95 @@ import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
 import org.eclipse.jgit.transport.resolver.UploadPackFactory;
 
 class InternalFetchConnection<C> extends BasePackFetchConnection {
-	private Thread worker;
+    private Thread worker;
 
-	/**
-	 * Constructor for InternalFetchConnection.
-	 *
-	 * @param transport
-	 *            a {@link PackTransport}
-	 * @param uploadPackFactory
-	 *            a
-	 *            {@link UploadPackFactory}
-	 * @param req
-	 *            request
-	 * @param remote
-	 *            the remote {@link Repository}
-	 * @throws TransportException
-	 *             if any.
-	 */
-	public InternalFetchConnection(PackTransport transport,
-			final UploadPackFactory<C> uploadPackFactory,
-			final C req, final Repository remote) throws TransportException {
-		super(transport);
+    /**
+     * Constructor for InternalFetchConnection.
+     *
+     * @param transport         a {@link PackTransport}
+     * @param uploadPackFactory a
+     *                          {@link UploadPackFactory}
+     * @param req               request
+     * @param remote            the remote {@link Repository}
+     * @throws TransportException if any.
+     */
+    public InternalFetchConnection(PackTransport transport,
+                                   final UploadPackFactory<C> uploadPackFactory,
+                                   final C req, final Repository remote) throws TransportException {
+        super(transport);
 
-		final PipedInputStream in_r;
-		final PipedOutputStream in_w;
+        final PipedInputStream in_r;
+        final PipedOutputStream in_w;
 
-		final PipedInputStream out_r;
-		final PipedOutputStream out_w;
-		try {
-			in_r = new PipedInputStream();
-			in_w = new PipedOutputStream(in_r);
+        final PipedInputStream out_r;
+        final PipedOutputStream out_w;
+        try {
+            in_r = new PipedInputStream();
+            in_w = new PipedOutputStream(in_r);
 
-			out_r = new PipedInputStream() {
-				// The client (BasePackFetchConnection) can write
-				// a huge burst before it reads again. We need to
-				// force the buffer to be big enough, otherwise it
-				// will deadlock both threads.
-				{
-					buffer = new byte[MIN_CLIENT_BUFFER];
-				}
-			};
-			out_w = new PipedOutputStream(out_r);
-		} catch (IOException err) {
-			remote.close();
-			throw new TransportException(uri, JGitText.get().cannotConnectPipes, err);
-		}
+            out_r = new PipedInputStream() {
+                // The client (BasePackFetchConnection) can write
+                // a huge burst before it reads again. We need to
+                // force the buffer to be big enough, otherwise it
+                // will deadlock both threads.
+                {
+                    buffer = new byte[MIN_CLIENT_BUFFER];
+                }
+            };
+            out_w = new PipedOutputStream(out_r);
+        } catch (IOException err) {
+            remote.close();
+            throw new TransportException(uri, JGitText.get().cannotConnectPipes, err);
+        }
 
-		worker = new Thread("JGit-Upload-Pack") { //$NON-NLS-1$
-			@Override
-			@SuppressWarnings("CatchAndPrintStackTrace")
-			public void run() {
-				try {
-					final UploadPack rp = uploadPackFactory.create(req, remote);
-					rp.upload(out_r, in_w, null);
-				} catch (ServiceNotEnabledException
-						| ServiceNotAuthorizedException e) {
-					// Ignored. Client cannot use this repository.
-				} catch (IOException | RuntimeException err) {
-					// Client side of the pipes should report the problem.
-					err.printStackTrace();
-				} finally {
-					try {
-						out_r.close();
-					} catch (IOException e2) {
-						// Ignore close failure, we probably crashed above.
-					}
+        worker = new Thread("JGit-Upload-Pack") { //$NON-NLS-1$
+            @Override
+            @SuppressWarnings("CatchAndPrintStackTrace")
+            public void run() {
+                try {
+                    final UploadPack rp = uploadPackFactory.create(req, remote);
+                    rp.upload(out_r, in_w, null);
+                } catch (ServiceNotEnabledException
+                         | ServiceNotAuthorizedException e) {
+                    // Ignored. Client cannot use this repository.
+                } catch (IOException | RuntimeException err) {
+                    // Client side of the pipes should report the problem.
+                    err.printStackTrace();
+                } finally {
+                    try {
+                        out_r.close();
+                    } catch (IOException e2) {
+                        // Ignore close failure, we probably crashed above.
+                    }
 
-					try {
-						in_w.close();
-					} catch (IOException e2) {
-						// Ignore close failure, we probably crashed above.
-					}
+                    try {
+                        in_w.close();
+                    } catch (IOException e2) {
+                        // Ignore close failure, we probably crashed above.
+                    }
 
-					remote.close();
-				}
-			}
-		};
-		worker.start();
+                    remote.close();
+                }
+            }
+        };
+        worker.start();
 
-		init(in_r, out_w);
-		readAdvertisedRefs();
-	}
+        init(in_r, out_w);
+        readAdvertisedRefs();
+    }
 
-	@Override
-	public void close() {
-		super.close();
+    @Override
+    public void close() {
+        super.close();
 
-		try {
-			if (worker != null) {
-				worker.join();
-			}
-		} catch (InterruptedException ie) {
-			// Stop waiting and return anyway.
-		} finally {
-			worker = null;
-		}
-	}
+        try {
+            if (worker != null) {
+                worker.join();
+            }
+        } catch (InterruptedException ie) {
+            // Stop waiting and return anyway.
+        } finally {
+            worker = null;
+        }
+    }
 }

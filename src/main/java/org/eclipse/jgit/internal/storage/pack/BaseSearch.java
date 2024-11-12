@@ -31,147 +31,148 @@ import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 
 class BaseSearch {
-	private static final int M_BLOB = FileMode.REGULAR_FILE.getBits();
+    private static final int M_BLOB = FileMode.REGULAR_FILE.getBits();
 
-	private static final int M_TREE = FileMode.TREE.getBits();
+    private static final int M_TREE = FileMode.TREE.getBits();
 
-	private final ProgressMonitor progress;
+    private final ProgressMonitor progress;
 
-	private final ObjectReader reader;
+    private final ObjectReader reader;
 
-	private final ObjectId[] baseTrees;
+    private final ObjectId[] baseTrees;
 
-	private final ObjectIdOwnerMap<ObjectToPack> objectsMap;
+    private final ObjectIdOwnerMap<ObjectToPack> objectsMap;
 
-	private final List<ObjectToPack> edgeObjects;
+    private final List<ObjectToPack> edgeObjects;
 
-	private final IntSet alreadyProcessed;
+    private final IntSet alreadyProcessed;
 
-	private final ObjectIdOwnerMap<TreeWithData> treeCache;
+    private final ObjectIdOwnerMap<TreeWithData> treeCache;
 
-	private final CanonicalTreeParser parser;
+    private final CanonicalTreeParser parser;
 
-	private final MutableObjectId idBuf;
+    private final MutableObjectId idBuf;
 
-	BaseSearch(ProgressMonitor countingMonitor, Set<RevTree> bases,
-			ObjectIdOwnerMap<ObjectToPack> objects,
-			List<ObjectToPack> edges, ObjectReader or) {
-		progress = countingMonitor;
-		reader = or;
-		baseTrees = bases.toArray(new ObjectId[0]);
-		objectsMap = objects;
-		edgeObjects = edges;
+    BaseSearch(ProgressMonitor countingMonitor, Set<RevTree> bases,
+               ObjectIdOwnerMap<ObjectToPack> objects,
+               List<ObjectToPack> edges, ObjectReader or) {
+        progress = countingMonitor;
+        reader = or;
+        baseTrees = bases.toArray(new ObjectId[0]);
+        objectsMap = objects;
+        edgeObjects = edges;
 
-		alreadyProcessed = new IntSet();
-		treeCache = new ObjectIdOwnerMap<>();
-		parser = new CanonicalTreeParser();
-		idBuf = new MutableObjectId();
-	}
+        alreadyProcessed = new IntSet();
+        treeCache = new ObjectIdOwnerMap<>();
+        parser = new CanonicalTreeParser();
+        idBuf = new MutableObjectId();
+    }
 
-	void addBase(int objectType, byte[] pathBuf, int pathLen, int pathHash)
-			throws IOException {
-		final int tailMode = modeForType(objectType);
-		if (tailMode == 0)
-			return;
+    void addBase(int objectType, byte[] pathBuf, int pathLen, int pathHash)
+            throws IOException {
+        final int tailMode = modeForType(objectType);
+        if (tailMode == 0)
+            return;
 
-		if (!alreadyProcessed.add(pathHash))
-			return;
+        if (!alreadyProcessed.add(pathHash))
+            return;
 
-		if (pathLen == 0) {
-			for (ObjectId root : baseTrees)
-				add(root, OBJ_TREE, pathHash);
-			return;
-		}
+        if (pathLen == 0) {
+            for (ObjectId root : baseTrees)
+                add(root, OBJ_TREE, pathHash);
+            return;
+        }
 
-		final int firstSlash = nextSlash(pathBuf, 0, pathLen);
+        final int firstSlash = nextSlash(pathBuf, 0, pathLen);
 
-		CHECK_BASE: for (ObjectId root : baseTrees) {
-			int ptr = 0;
-			int end = firstSlash;
-			int mode = end != pathLen ? M_TREE : tailMode;
+        CHECK_BASE:
+        for (ObjectId root : baseTrees) {
+            int ptr = 0;
+            int end = firstSlash;
+            int mode = end != pathLen ? M_TREE : tailMode;
 
-			parser.reset(readTree(root));
-			while (!parser.eof()) {
-				int cmp = parser.pathCompare(pathBuf, ptr, end, mode);
+            parser.reset(readTree(root));
+            while (!parser.eof()) {
+                int cmp = parser.pathCompare(pathBuf, ptr, end, mode);
 
-				if (cmp < 0) {
-					parser.next();
-					continue;
-				}
+                if (cmp < 0) {
+                    parser.next();
+                    continue;
+                }
 
-				if (cmp > 0)
-					continue CHECK_BASE;
+                if (cmp > 0)
+                    continue CHECK_BASE;
 
-				if (end == pathLen) {
-					if (parser.getEntryFileMode().getObjectType() == objectType) {
-						idBuf.fromRaw(parser.idBuffer(), parser.idOffset());
-						add(idBuf, objectType, pathHash);
-					}
-					continue CHECK_BASE;
-				}
+                if (end == pathLen) {
+                    if (parser.getEntryFileMode().getObjectType() == objectType) {
+                        idBuf.fromRaw(parser.idBuffer(), parser.idOffset());
+                        add(idBuf, objectType, pathHash);
+                    }
+                    continue CHECK_BASE;
+                }
 
-				if (!FileMode.TREE.equals(parser.getEntryRawMode()))
-					continue CHECK_BASE;
+                if (!FileMode.TREE.equals(parser.getEntryRawMode()))
+                    continue CHECK_BASE;
 
-				ptr = end + 1;
-				end = nextSlash(pathBuf, ptr, pathLen);
-				mode = end != pathLen ? M_TREE : tailMode;
+                ptr = end + 1;
+                end = nextSlash(pathBuf, ptr, pathLen);
+                mode = end != pathLen ? M_TREE : tailMode;
 
-				idBuf.fromRaw(parser.idBuffer(), parser.idOffset());
-				parser.reset(readTree(idBuf));
-			}
-		}
-	}
+                idBuf.fromRaw(parser.idBuffer(), parser.idOffset());
+                parser.reset(readTree(idBuf));
+            }
+        }
+    }
 
-	private static int modeForType(int typeCode) {
-		switch (typeCode) {
-		case OBJ_TREE:
-			return M_TREE;
+    private static int modeForType(int typeCode) {
+        switch (typeCode) {
+            case OBJ_TREE:
+                return M_TREE;
 
-		case OBJ_BLOB:
-			return M_BLOB;
+            case OBJ_BLOB:
+                return M_BLOB;
 
-		default:
-			return 0;
-		}
-	}
+            default:
+                return 0;
+        }
+    }
 
-	private static int nextSlash(byte[] pathBuf, int ptr, int end) {
-		while (ptr < end && pathBuf[ptr] != '/')
-			ptr++;
-		return ptr;
-	}
+    private static int nextSlash(byte[] pathBuf, int ptr, int end) {
+        while (ptr < end && pathBuf[ptr] != '/')
+            ptr++;
+        return ptr;
+    }
 
-	@SuppressWarnings("ReferenceEquality")
-	private void add(AnyObjectId id, int objectType, int pathHash) {
-		ObjectToPack obj = new ObjectToPack(id, objectType);
-		obj.setEdge();
-		obj.setPathHash(pathHash);
+    @SuppressWarnings("ReferenceEquality")
+    private void add(AnyObjectId id, int objectType, int pathHash) {
+        ObjectToPack obj = new ObjectToPack(id, objectType);
+        obj.setEdge();
+        obj.setPathHash(pathHash);
 
-		if (objectsMap.addIfAbsent(obj) == obj) {
-			edgeObjects.add(obj);
-			progress.update(1);
-		}
-	}
+        if (objectsMap.addIfAbsent(obj) == obj) {
+            edgeObjects.add(obj);
+            progress.update(1);
+        }
+    }
 
-	private byte[] readTree(AnyObjectId id) throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		TreeWithData tree = treeCache.get(id);
-		if (tree != null)
-			return tree.buf;
+    private byte[] readTree(AnyObjectId id) throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        TreeWithData tree = treeCache.get(id);
+        if (tree != null)
+            return tree.buf;
 
-		ObjectLoader ldr = reader.open(id, OBJ_TREE);
-		byte[] buf = ldr.getCachedBytes(Integer.MAX_VALUE);
-		treeCache.add(new TreeWithData(id, buf));
-		return buf;
-	}
+        ObjectLoader ldr = reader.open(id, OBJ_TREE);
+        byte[] buf = ldr.getCachedBytes(Integer.MAX_VALUE);
+        treeCache.add(new TreeWithData(id, buf));
+        return buf;
+    }
 
-	private static class TreeWithData extends ObjectIdOwnerMap.Entry {
-		final byte[] buf;
+    private static class TreeWithData extends ObjectIdOwnerMap.Entry {
+        final byte[] buf;
 
-		TreeWithData(AnyObjectId id, byte[] buf) {
-			super(id);
-			this.buf = buf;
-		}
-	}
+        TreeWithData(AnyObjectId id, byte[] buf) {
+            super(id);
+            this.buf = buf;
+        }
+    }
 }

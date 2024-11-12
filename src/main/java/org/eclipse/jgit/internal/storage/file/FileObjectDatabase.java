@@ -29,49 +29,49 @@ import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.util.FS;
 
 abstract class FileObjectDatabase extends ObjectDatabase {
-	enum InsertLooseObjectResult {
-		INSERTED, EXISTS_PACKED, EXISTS_LOOSE, FAILURE;
-	}
+    enum InsertLooseObjectResult {
+        INSERTED, EXISTS_PACKED, EXISTS_LOOSE, FAILURE;
+    }
 
-	@Override
-	public ObjectReader newReader() {
-		return new WindowCursor(this);
-	}
+    @Override
+    public ObjectReader newReader() {
+        return new WindowCursor(this);
+    }
 
-	@Override
-	public ObjectDirectoryInserter newInserter() {
-		return new ObjectDirectoryInserter(this, getConfig());
-	}
+    @Override
+    public ObjectDirectoryInserter newInserter() {
+        return new ObjectDirectoryInserter(this, getConfig());
+    }
 
-	abstract void resolve(Set<ObjectId> matches, AbbreviatedObjectId id)
-			throws IOException;
+    abstract void resolve(Set<ObjectId> matches, AbbreviatedObjectId id)
+            throws IOException;
 
-	abstract Config getConfig();
+    abstract Config getConfig();
 
-	abstract FS getFS();
+    abstract FS getFS();
 
-	abstract void selectObjectRepresentation(PackWriter packer,
-			ObjectToPack otp, WindowCursor curs) throws IOException;
+    abstract void selectObjectRepresentation(PackWriter packer,
+                                             ObjectToPack otp, WindowCursor curs) throws IOException;
 
-	abstract File getDirectory();
+    abstract File getDirectory();
 
-	abstract File fileFor(AnyObjectId id);
+    abstract File fileFor(AnyObjectId id);
 
-	abstract ObjectLoader openObject(WindowCursor curs, AnyObjectId objectId)
-			throws IOException;
+    abstract ObjectLoader openObject(WindowCursor curs, AnyObjectId objectId)
+            throws IOException;
 
-	abstract long getObjectSize(WindowCursor curs, AnyObjectId objectId)
-			throws IOException;
+    abstract long getObjectSize(WindowCursor curs, AnyObjectId objectId)
+            throws IOException;
 
-	abstract ObjectLoader openLooseObject(WindowCursor curs, AnyObjectId id)
-			throws IOException;
+    abstract ObjectLoader openLooseObject(WindowCursor curs, AnyObjectId id)
+            throws IOException;
 
-	abstract InsertLooseObjectResult insertUnpackedObject(File tmp,
-			ObjectId id, boolean createDuplicate) throws IOException;
+    abstract InsertLooseObjectResult insertUnpackedObject(File tmp,
+                                                          ObjectId id, boolean createDuplicate) throws IOException;
 
-	abstract Pack openPack(File pack) throws IOException;
+    abstract Pack openPack(File pack) throws IOException;
 
-	abstract Collection<Pack> getPacks();
+    abstract Collection<Pack> getPacks();
 
-	abstract Optional<CommitGraph> getCommitGraph();
+    abstract Optional<CommitGraph> getCommitGraph();
 }

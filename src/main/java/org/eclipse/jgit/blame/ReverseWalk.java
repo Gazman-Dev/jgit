@@ -20,65 +20,65 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 final class ReverseWalk extends RevWalk {
-	ReverseWalk(Repository repo) {
-		super(repo);
-	}
+    ReverseWalk(Repository repo) {
+        super(repo);
+    }
 
-	@Override
-	public ReverseCommit next() throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		ReverseCommit c = (ReverseCommit) super.next();
-		if (c == null)
-			return null;
-		for (int pIdx = 0; pIdx < c.getParentCount(); pIdx++)
-			((ReverseCommit) c.getParent(pIdx)).addChild(c);
-		return c;
-	}
+    @Override
+    public ReverseCommit next() throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        ReverseCommit c = (ReverseCommit) super.next();
+        if (c == null)
+            return null;
+        for (int pIdx = 0; pIdx < c.getParentCount(); pIdx++)
+            ((ReverseCommit) c.getParent(pIdx)).addChild(c);
+        return c;
+    }
 
-	@Override
-	protected RevCommit createCommit(AnyObjectId id) {
-		return new ReverseCommit(id);
-	}
+    @Override
+    protected RevCommit createCommit(AnyObjectId id) {
+        return new ReverseCommit(id);
+    }
 
-	static final class ReverseCommit extends RevCommit {
-		private static final ReverseCommit[] NO_CHILDREN = {};
+    static final class ReverseCommit extends RevCommit {
+        private static final ReverseCommit[] NO_CHILDREN = {};
 
-		private ReverseCommit[] children = NO_CHILDREN;
+        private ReverseCommit[] children = NO_CHILDREN;
 
-		ReverseCommit(AnyObjectId id) {
-			super(id);
-		}
+        ReverseCommit(AnyObjectId id) {
+            super(id);
+        }
 
-		void addChild(ReverseCommit c) {
-			// Always put the most recent child onto the front of the list.
-			// This works correctly because our ReverseWalk parent (above)
-			// runs in COMMIT_TIME_DESC order. Older commits will be popped
-			// later and should go in front of the children list so they are
-			// visited first by BlameGenerator when considering candidates.
+        void addChild(ReverseCommit c) {
+            // Always put the most recent child onto the front of the list.
+            // This works correctly because our ReverseWalk parent (above)
+            // runs in COMMIT_TIME_DESC order. Older commits will be popped
+            // later and should go in front of the children list so they are
+            // visited first by BlameGenerator when considering candidates.
 
-			int cnt = children.length;
-			switch (cnt) {
-			case 0:
-				children = new ReverseCommit[] { c };
-				break;
-			case 1:
-				children = new ReverseCommit[] { c, children[0] };
-				break;
-			default:
-				ReverseCommit[] n = new ReverseCommit[1 + cnt];
-				n[0] = c;
-				System.arraycopy(children, 0, n, 1, cnt);
-				children = n;
-				break;
-			}
-		}
+            int cnt = children.length;
+            switch (cnt) {
+                case 0:
+                    children = new ReverseCommit[]{c};
+                    break;
+                case 1:
+                    children = new ReverseCommit[]{c, children[0]};
+                    break;
+                default:
+                    ReverseCommit[] n = new ReverseCommit[1 + cnt];
+                    n[0] = c;
+                    System.arraycopy(children, 0, n, 1, cnt);
+                    children = n;
+                    break;
+            }
+        }
 
-		int getChildCount() {
-			return children.length;
-		}
+        int getChildCount() {
+            return children.length;
+        }
 
-		ReverseCommit getChild(int nth) {
-			return children[nth];
-		}
-	}
+        ReverseCommit getChild(int nth) {
+            return children[nth];
+        }
+    }
 }

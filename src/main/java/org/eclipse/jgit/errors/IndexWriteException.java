@@ -46,32 +46,32 @@ import org.eclipse.jgit.internal.JGitText;
  * made aware of.
  */
 public class IndexWriteException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructs an IndexWriteException with the default message.
-	 */
-	public IndexWriteException() {
-		super(JGitText.get().indexWriteException);
-	}
+    /**
+     * Constructs an IndexWriteException with the default message.
+     */
+    public IndexWriteException() {
+        super(JGitText.get().indexWriteException);
+    }
 
-	/**
-	 * Constructs an IndexWriteException with the specified detail message.
-	 *
-	 * @param s message
-	 */
-	public IndexWriteException(String s) {
-		super(s);
-	}
+    /**
+     * Constructs an IndexWriteException with the specified detail message.
+     *
+     * @param s message
+     */
+    public IndexWriteException(String s) {
+        super(s);
+    }
 
-	/**
-	 * Constructs an IndexWriteException with the specified detail message.
-	 *
-	 * @param s message
-	 * @param cause root cause exception
-	 */
-	public IndexWriteException(String s, Throwable cause) {
-		super(s);
-		initCause(cause);
-	}
+    /**
+     * Constructs an IndexWriteException with the specified detail message.
+     *
+     * @param s     message
+     * @param cause root cause exception
+     */
+    public IndexWriteException(String s, Throwable cause) {
+        super(s);
+        initCause(cause);
+    }
 }

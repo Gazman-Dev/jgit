@@ -58,55 +58,50 @@ import org.eclipse.jgit.revwalk.RevWalk;
  * @since 2.0
  */
 public abstract class AbstractAdvertiseRefsHook implements AdvertiseRefsHook {
-	@Override
-	public void advertiseRefs(UploadPack uploadPack)
-			throws ServiceMayNotContinueException {
-		uploadPack.setAdvertisedRefs(getAdvertisedRefs(
-				uploadPack.getRepository(), uploadPack.getRevWalk()));
-	}
+    @Override
+    public void advertiseRefs(UploadPack uploadPack)
+            throws ServiceMayNotContinueException {
+        uploadPack.setAdvertisedRefs(getAdvertisedRefs(
+                uploadPack.getRepository(), uploadPack.getRevWalk()));
+    }
 
-	/**
-	 */
-	@Override
-	public void advertiseRefs(ReceivePack receivePack)
-			throws IOException {
-		Map<String, Ref> refs = getAdvertisedRefs(receivePack.getRepository(),
-				receivePack.getRevWalk());
-		Set<ObjectId> haves = getAdvertisedHaves(receivePack.getRepository(),
-				receivePack.getRevWalk());
-		receivePack.setAdvertisedRefs(refs, haves);
-	}
+    /**
+     *
+     */
+    @Override
+    public void advertiseRefs(ReceivePack receivePack)
+            throws IOException {
+        Map<String, Ref> refs = getAdvertisedRefs(receivePack.getRepository(),
+                receivePack.getRevWalk());
+        Set<ObjectId> haves = getAdvertisedHaves(receivePack.getRepository(),
+                receivePack.getRevWalk());
+        receivePack.setAdvertisedRefs(refs, haves);
+    }
 
-	/**
-	 * Get the refs to advertise.
-	 *
-	 * @param repository
-	 *            repository instance.
-	 * @param revWalk
-	 *            open rev walk on the repository.
-	 * @return set of refs to advertise.
-	 * @throws ServiceMayNotContinueException
-	 *             abort; the message will be sent to the user.
-	 */
-	protected abstract Map<String, Ref> getAdvertisedRefs(
-			Repository repository, RevWalk revWalk)
-			throws ServiceMayNotContinueException;
+    /**
+     * Get the refs to advertise.
+     *
+     * @param repository repository instance.
+     * @param revWalk    open rev walk on the repository.
+     * @return set of refs to advertise.
+     * @throws ServiceMayNotContinueException abort; the message will be sent to the user.
+     */
+    protected abstract Map<String, Ref> getAdvertisedRefs(
+            Repository repository, RevWalk revWalk)
+            throws ServiceMayNotContinueException;
 
-	/**
-	 * Get the additional haves to advertise.
-	 *
-	 * @param repository
-	 *            repository instance.
-	 * @param revWalk
-	 *            open rev walk on the repository.
-	 * @return set of additional haves; see
-	 *         {@link ReceivePack#getAdvertisedObjects()}.
-	 * @throws ServiceMayNotContinueException
-	 *             abort; the message will be sent to the user.
-	 */
-	protected Set<ObjectId> getAdvertisedHaves(
-			Repository repository, RevWalk revWalk)
-			throws ServiceMayNotContinueException {
-		return null;
-	}
+    /**
+     * Get the additional haves to advertise.
+     *
+     * @param repository repository instance.
+     * @param revWalk    open rev walk on the repository.
+     * @return set of additional haves; see
+     * {@link ReceivePack#getAdvertisedObjects()}.
+     * @throws ServiceMayNotContinueException abort; the message will be sent to the user.
+     */
+    protected Set<ObjectId> getAdvertisedHaves(
+            Repository repository, RevWalk revWalk)
+            throws ServiceMayNotContinueException {
+        return null;
+    }
 }

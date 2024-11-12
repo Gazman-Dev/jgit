@@ -13,16 +13,16 @@ package org.eclipse.jgit.lib.internal;
  * A boolean value that can also have an unset state.
  */
 public enum BooleanTriState {
-	/**
-	 * Value equivalent to {@code true}.
-	 */
-	TRUE,
-	/**
-	 * Value equivalent to {@code false}.
-	 */
-	FALSE,
-	/**
-	 * Value is not set.
-	 */
-	UNSET;
+    /**
+     * Value equivalent to {@code true}.
+     */
+    TRUE,
+    /**
+     * Value equivalent to {@code false}.
+     */
+    FALSE,
+    /**
+     * Value is not set.
+     */
+    UNSET;
 }

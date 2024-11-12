@@ -21,58 +21,52 @@ import org.eclipse.jgit.internal.JGitText;
  * found during merge.
  */
 public class NotesMergeConflictException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct a NotesMergeConflictException for the specified base, ours and
-	 * theirs note versions.
-	 *
-	 * @param base
-	 *            note version
-	 * @param ours
-	 *            note version
-	 * @param theirs
-	 *            note version
-	 */
-	public NotesMergeConflictException(Note base, Note ours, Note theirs) {
-		super(MessageFormat.format(JGitText.get().mergeConflictOnNotes,
-				noteOn(base, ours, theirs), noteData(base), noteData(ours),
-				noteData(theirs)));
-	}
+    /**
+     * Construct a NotesMergeConflictException for the specified base, ours and
+     * theirs note versions.
+     *
+     * @param base   note version
+     * @param ours   note version
+     * @param theirs note version
+     */
+    public NotesMergeConflictException(Note base, Note ours, Note theirs) {
+        super(MessageFormat.format(JGitText.get().mergeConflictOnNotes,
+                noteOn(base, ours, theirs), noteData(base), noteData(ours),
+                noteData(theirs)));
+    }
 
-	/**
-	 * Constructs a NotesMergeConflictException for the specified base, ours and
-	 * theirs versions of the root note tree.
-	 *
-	 * @param base
-	 *            version of the root note tree
-	 * @param ours
-	 *            version of the root note tree
-	 * @param theirs
-	 *            version of the root note tree
-	 */
-	public NotesMergeConflictException(NonNoteEntry base, NonNoteEntry ours,
-			NonNoteEntry theirs) {
-		super(MessageFormat.format(
-				JGitText.get().mergeConflictOnNonNoteEntries, name(base),
-				name(ours), name(theirs)));
-	}
+    /**
+     * Constructs a NotesMergeConflictException for the specified base, ours and
+     * theirs versions of the root note tree.
+     *
+     * @param base   version of the root note tree
+     * @param ours   version of the root note tree
+     * @param theirs version of the root note tree
+     */
+    public NotesMergeConflictException(NonNoteEntry base, NonNoteEntry ours,
+                                       NonNoteEntry theirs) {
+        super(MessageFormat.format(
+                JGitText.get().mergeConflictOnNonNoteEntries, name(base),
+                name(ours), name(theirs)));
+    }
 
-	private static String noteOn(Note base, Note ours, Note theirs) {
-		if (base != null)
-			return base.name();
-		if (ours != null)
-			return ours.name();
-		return theirs.name();
-	}
+    private static String noteOn(Note base, Note ours, Note theirs) {
+        if (base != null)
+            return base.name();
+        if (ours != null)
+            return ours.name();
+        return theirs.name();
+    }
 
-	private static String noteData(Note n) {
-		if (n != null)
-			return n.getData().name();
-		return ""; //$NON-NLS-1$
-	}
+    private static String noteData(Note n) {
+        if (n != null)
+            return n.getData().name();
+        return ""; //$NON-NLS-1$
+    }
 
-	private static String name(NonNoteEntry e) {
-		return e != null ? e.name() : ""; //$NON-NLS-1$
-	}
+    private static String name(NonNoteEntry e) {
+        return e != null ? e.name() : ""; //$NON-NLS-1$
+    }
 }

@@ -20,44 +20,44 @@ import org.eclipse.jgit.lib.ObjectId;
  */
 class CommitGraphV1 implements CommitGraph {
 
-	private final GraphObjectIndex idx;
+    private final GraphObjectIndex idx;
 
-	private final GraphCommitData commitData;
+    private final GraphCommitData commitData;
 
-	private final GraphChangedPathFilterData cpfData;
+    private final GraphChangedPathFilterData cpfData;
 
-	CommitGraphV1(GraphObjectIndex index, GraphCommitData commitData,
-			GraphChangedPathFilterData cpfData) {
-		this.idx = index;
-		this.commitData = commitData;
-		this.cpfData = cpfData;
-	}
+    CommitGraphV1(GraphObjectIndex index, GraphCommitData commitData,
+                  GraphChangedPathFilterData cpfData) {
+        this.idx = index;
+        this.commitData = commitData;
+        this.cpfData = cpfData;
+    }
 
-	@Override
-	public int findGraphPosition(AnyObjectId commit) {
-		return idx.findGraphPosition(commit);
-	}
+    @Override
+    public int findGraphPosition(AnyObjectId commit) {
+        return idx.findGraphPosition(commit);
+    }
 
-	@Override
-	public CommitData getCommitData(int graphPos) {
-		if (graphPos < 0 || graphPos >= getCommitCnt()) {
-			return null;
-		}
-		return commitData.getCommitData(graphPos);
-	}
+    @Override
+    public CommitData getCommitData(int graphPos) {
+        if (graphPos < 0 || graphPos >= getCommitCnt()) {
+            return null;
+        }
+        return commitData.getCommitData(graphPos);
+    }
 
-	@Override
-	public ObjectId getObjectId(int graphPos) {
-		return idx.getObjectId(graphPos);
-	}
+    @Override
+    public ObjectId getObjectId(int graphPos) {
+        return idx.getObjectId(graphPos);
+    }
 
-	@Override
-	public ChangedPathFilter getChangedPathFilter(int graphPos) {
-		return cpfData.getChangedPathFilter(graphPos);
-	}
+    @Override
+    public ChangedPathFilter getChangedPathFilter(int graphPos) {
+        return cpfData.getChangedPathFilter(graphPos);
+    }
 
-	@Override
-	public long getCommitCnt() {
-		return idx.getCommitCnt();
-	}
+    @Override
+    public long getCommitCnt() {
+        return idx.getCommitCnt();
+    }
 }

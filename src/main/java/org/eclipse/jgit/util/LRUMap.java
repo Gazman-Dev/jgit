@@ -16,35 +16,30 @@ import java.util.LinkedHashMap;
  * contains more than those n entries the least-recently used entry is removed
  * from the map.
  *
- * @param <K>
- *            the type of keys maintained by this map
- * @param <V>
- *            the type of mapped values
- *
+ * @param <K> the type of keys maintained by this map
+ * @param <V> the type of mapped values
  * @since 5.4
  */
 public class LRUMap<K, V> extends LinkedHashMap<K, V> {
 
-	private static final long serialVersionUID = 4329609127403759486L;
+    private static final long serialVersionUID = 4329609127403759486L;
 
-	private final int limit;
+    private final int limit;
 
-	/**
-	 * Constructs an empty map which may contain at most the given amount of
-	 * entries.
-	 *
-	 * @param initialCapacity
-	 *            the initial capacity
-	 * @param limit
-	 *            the number of entries the map should have at most
-	 */
-	public LRUMap(int initialCapacity, int limit) {
-		super(initialCapacity, 0.75f, true);
-		this.limit = limit;
-	}
+    /**
+     * Constructs an empty map which may contain at most the given amount of
+     * entries.
+     *
+     * @param initialCapacity the initial capacity
+     * @param limit           the number of entries the map should have at most
+     */
+    public LRUMap(int initialCapacity, int limit) {
+        super(initialCapacity, 0.75f, true);
+        this.limit = limit;
+    }
 
-	@Override
-	protected boolean removeEldestEntry(java.util.Map.Entry<K, V> eldest) {
-		return size() > limit;
-	}
+    @Override
+    protected boolean removeEldestEntry(java.util.Map.Entry<K, V> eldest) {
+        return size() > limit;
+    }
 }

@@ -17,148 +17,145 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Wrapper around the general {@link ProgressMonitor} to
  * make it thread safe.
- *
+ * <p>
  * Updates to the underlying ProgressMonitor are made only from the thread that
  * allocated this wrapper. Callers are responsible for ensuring the allocating
  * thread uses {@link #pollForUpdates()} or {@link #waitForCompletion()} to
  * update the underlying ProgressMonitor.
- *
+ * <p>
  * Only {@link #update(int)}, {@link #isCancelled()}, and {@link #endWorker()}
  * may be invoked from a worker thread. All other methods of the ProgressMonitor
  * interface can only be called from the thread that allocates this wrapper.
  */
 public class ThreadSafeProgressMonitor implements ProgressMonitor {
-	private final ProgressMonitor pm;
+    private final ProgressMonitor pm;
 
-	private final ReentrantLock lock;
+    private final ReentrantLock lock;
 
-	private final Thread mainThread;
+    private final Thread mainThread;
 
-	private final AtomicInteger workers;
+    private final AtomicInteger workers;
 
-	private final AtomicInteger pendingUpdates;
+    private final AtomicInteger pendingUpdates;
 
-	private final Semaphore process;
+    private final Semaphore process;
 
-	/**
-	 * Wrap a ProgressMonitor to be thread safe.
-	 *
-	 * @param pm
-	 *            the underlying monitor to receive events.
-	 */
-	public ThreadSafeProgressMonitor(ProgressMonitor pm) {
-		this.pm = pm;
-		this.lock = new ReentrantLock();
-		this.mainThread = Thread.currentThread();
-		this.workers = new AtomicInteger(0);
-		this.pendingUpdates = new AtomicInteger(0);
-		this.process = new Semaphore(0);
-	}
+    /**
+     * Wrap a ProgressMonitor to be thread safe.
+     *
+     * @param pm the underlying monitor to receive events.
+     */
+    public ThreadSafeProgressMonitor(ProgressMonitor pm) {
+        this.pm = pm;
+        this.lock = new ReentrantLock();
+        this.mainThread = Thread.currentThread();
+        this.workers = new AtomicInteger(0);
+        this.pendingUpdates = new AtomicInteger(0);
+        this.process = new Semaphore(0);
+    }
 
-	@Override
-	public void start(int totalTasks) {
-		if (!isMainThread())
-			throw new IllegalStateException();
-		pm.start(totalTasks);
-	}
+    @Override
+    public void start(int totalTasks) {
+        if (!isMainThread())
+            throw new IllegalStateException();
+        pm.start(totalTasks);
+    }
 
-	@Override
-	public void beginTask(String title, int totalWork) {
-		if (!isMainThread())
-			throw new IllegalStateException();
-		pm.beginTask(title, totalWork);
-	}
+    @Override
+    public void beginTask(String title, int totalWork) {
+        if (!isMainThread())
+            throw new IllegalStateException();
+        pm.beginTask(title, totalWork);
+    }
 
-	/**
-	 * Notify the monitor a worker is starting.
-	 */
-	public void startWorker() {
-		startWorkers(1);
-	}
+    /**
+     * Notify the monitor a worker is starting.
+     */
+    public void startWorker() {
+        startWorkers(1);
+    }
 
-	/**
-	 * Notify the monitor of workers starting.
-	 *
-	 * @param count
-	 *            the number of worker threads that are starting.
-	 */
-	public void startWorkers(int count) {
-		workers.addAndGet(count);
-	}
+    /**
+     * Notify the monitor of workers starting.
+     *
+     * @param count the number of worker threads that are starting.
+     */
+    public void startWorkers(int count) {
+        workers.addAndGet(count);
+    }
 
-	/**
-	 * Notify the monitor a worker is finished.
-	 */
-	public void endWorker() {
-		if (workers.decrementAndGet() == 0)
-			process.release();
-	}
+    /**
+     * Notify the monitor a worker is finished.
+     */
+    public void endWorker() {
+        if (workers.decrementAndGet() == 0)
+            process.release();
+    }
 
-	/**
-	 * Non-blocking poll for pending updates.
-	 *
-	 * This method can only be invoked by the same thread that allocated this
-	 * ThreadSafeProgressMonior.
-	 */
-	public void pollForUpdates() {
-		assert isMainThread();
-		doUpdates();
-	}
+    /**
+     * Non-blocking poll for pending updates.
+     * <p>
+     * This method can only be invoked by the same thread that allocated this
+     * ThreadSafeProgressMonior.
+     */
+    public void pollForUpdates() {
+        assert isMainThread();
+        doUpdates();
+    }
 
-	/**
-	 * Process pending updates and wait for workers to finish.
-	 *
-	 * This method can only be invoked by the same thread that allocated this
-	 * ThreadSafeProgressMonior.
-	 *
-	 * @throws InterruptedException
-	 *             if the main thread is interrupted while waiting for
-	 *             completion of workers.
-	 */
-	public void waitForCompletion() throws InterruptedException {
-		assert isMainThread();
-		while (0 < workers.get()) {
-			doUpdates();
-			process.acquire();
-		}
-		doUpdates();
-	}
+    /**
+     * Process pending updates and wait for workers to finish.
+     * <p>
+     * This method can only be invoked by the same thread that allocated this
+     * ThreadSafeProgressMonior.
+     *
+     * @throws InterruptedException if the main thread is interrupted while waiting for
+     *                              completion of workers.
+     */
+    public void waitForCompletion() throws InterruptedException {
+        assert isMainThread();
+        while (0 < workers.get()) {
+            doUpdates();
+            process.acquire();
+        }
+        doUpdates();
+    }
 
-	private void doUpdates() {
-		int cnt = pendingUpdates.getAndSet(0);
-		if (0 < cnt)
-			pm.update(cnt);
-	}
+    private void doUpdates() {
+        int cnt = pendingUpdates.getAndSet(0);
+        if (0 < cnt)
+            pm.update(cnt);
+    }
 
-	@Override
-	public void update(int completed) {
-		if (0 == pendingUpdates.getAndAdd(completed))
-			process.release();
-	}
+    @Override
+    public void update(int completed) {
+        if (0 == pendingUpdates.getAndAdd(completed))
+            process.release();
+    }
 
-	@Override
-	public boolean isCancelled() {
-		lock.lock();
-		try {
-			return pm.isCancelled();
-		} finally {
-			lock.unlock();
-		}
-	}
+    @Override
+    public boolean isCancelled() {
+        lock.lock();
+        try {
+            return pm.isCancelled();
+        } finally {
+            lock.unlock();
+        }
+    }
 
-	@Override
-	public void endTask() {
-		if (!isMainThread())
-			throw new IllegalStateException();
-		pm.endTask();
-	}
+    @Override
+    public void endTask() {
+        if (!isMainThread())
+            throw new IllegalStateException();
+        pm.endTask();
+    }
 
-	@Override
-	public void showDuration(boolean enabled) {
-		pm.showDuration(enabled);
-	}
+    @Override
+    public void showDuration(boolean enabled) {
+        pm.showDuration(enabled);
+    }
 
-	private boolean isMainThread() {
-		return Thread.currentThread() == mainThread;
-	}
+    private boolean isMainThread() {
+        return Thread.currentThread() == mainThread;
+    }
 }

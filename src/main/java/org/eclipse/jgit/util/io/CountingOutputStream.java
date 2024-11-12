@@ -17,47 +17,46 @@ import java.io.OutputStream;
  * Counts the number of bytes written.
  */
 public class CountingOutputStream extends OutputStream {
-	private final OutputStream out;
-	private long cnt;
+    private final OutputStream out;
+    private long cnt;
 
-	/**
-	 * Initialize a new counting stream.
-	 *
-	 * @param out
-	 *            stream to output all writes to.
-	 */
-	public CountingOutputStream(OutputStream out) {
-		this.out = out;
-	}
+    /**
+     * Initialize a new counting stream.
+     *
+     * @param out stream to output all writes to.
+     */
+    public CountingOutputStream(OutputStream out) {
+        this.out = out;
+    }
 
-	/**
-	 * Get current number of bytes written.
-	 *
-	 * @return current number of bytes written.
-	 */
-	public long getCount() {
-		return cnt;
-	}
+    /**
+     * Get current number of bytes written.
+     *
+     * @return current number of bytes written.
+     */
+    public long getCount() {
+        return cnt;
+    }
 
-	@Override
-	public void write(int val) throws IOException {
-		out.write(val);
-		cnt++;
-	}
+    @Override
+    public void write(int val) throws IOException {
+        out.write(val);
+        cnt++;
+    }
 
-	@Override
-	public void write(byte[] buf, int off, int len) throws IOException {
-		out.write(buf, off, len);
-		cnt += len;
-	}
+    @Override
+    public void write(byte[] buf, int off, int len) throws IOException {
+        out.write(buf, off, len);
+        cnt += len;
+    }
 
-	@Override
-	public void flush() throws IOException {
-		out.flush();
-	}
+    @Override
+    public void flush() throws IOException {
+        out.flush();
+    }
 
-	@Override
-	public void close() throws IOException {
-		out.close();
-	}
+    @Override
+    public void close() throws IOException {
+        out.close();
+    }
 }

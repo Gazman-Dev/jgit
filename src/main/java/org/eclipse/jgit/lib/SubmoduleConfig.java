@@ -19,42 +19,46 @@ import org.eclipse.jgit.util.StringUtils;
  */
 public class SubmoduleConfig {
 
-	/**
-	 * Config values for submodule.[name].fetchRecurseSubmodules.
-	 */
-	public enum FetchRecurseSubmodulesMode implements Config.ConfigEnum {
-		/** Unconditionally recurse into all populated submodules. */
-		YES("true"), //$NON-NLS-1$
+    /**
+     * Config values for submodule.[name].fetchRecurseSubmodules.
+     */
+    public enum FetchRecurseSubmodulesMode implements Config.ConfigEnum {
+        /**
+         * Unconditionally recurse into all populated submodules.
+         */
+        YES("true"), //$NON-NLS-1$
 
-		/**
-		 * Only recurse into a populated submodule when the superproject
-		 * retrieves a commit that updates the submodule's reference to a commit
-		 * that isn't already in the local submodule clone.
-		 */
-		ON_DEMAND("on-demand"), //$NON-NLS-1$
+        /**
+         * Only recurse into a populated submodule when the superproject
+         * retrieves a commit that updates the submodule's reference to a commit
+         * that isn't already in the local submodule clone.
+         */
+        ON_DEMAND("on-demand"), //$NON-NLS-1$
 
-		/** Completely disable recursion. */
-		NO("false"); //$NON-NLS-1$
+        /**
+         * Completely disable recursion.
+         */
+        NO("false"); //$NON-NLS-1$
 
-		private final String configValue;
+        private final String configValue;
 
-		private FetchRecurseSubmodulesMode(String configValue) {
-			this.configValue = configValue;
-		}
+        private FetchRecurseSubmodulesMode(String configValue) {
+            this.configValue = configValue;
+        }
 
-		@Override
-		public String toConfigValue() {
-			return configValue;
-		}
+        @Override
+        public String toConfigValue() {
+            return configValue;
+        }
 
-		@Override
-		public boolean matchConfigValue(String s) {
-			if (StringUtils.isEmptyOrNull(s)) {
-				return false;
-			}
-			s = s.replace('-', '_');
-			return name().equalsIgnoreCase(s)
-					|| configValue.equalsIgnoreCase(s);
-		}
-	}
+        @Override
+        public boolean matchConfigValue(String s) {
+            if (StringUtils.isEmptyOrNull(s)) {
+                return false;
+            }
+            s = s.replace('-', '_');
+            return name().equalsIgnoreCase(s)
+                    || configValue.equalsIgnoreCase(s);
+        }
+    }
 }

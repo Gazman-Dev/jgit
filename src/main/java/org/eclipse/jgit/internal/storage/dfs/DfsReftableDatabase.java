@@ -47,225 +47,223 @@ import org.eclipse.jgit.util.RefMap;
  * and one will fail.
  */
 public class DfsReftableDatabase extends DfsRefDatabase {
-	final ReftableDatabase reftableDatabase;
+    final ReftableDatabase reftableDatabase;
 
-	private DfsReader ctx;
-	private DfsReftableStack stack;
+    private DfsReader ctx;
+    private DfsReftableStack stack;
 
-	/**
-	 * Initialize the reference database for a repository.
-	 *
-	 * @param repo
-	 *            the repository this database instance manages references for.
-	 */
-	protected DfsReftableDatabase(DfsRepository repo) {
-		super(repo);
-		reftableDatabase = new ReftableDatabase() {
-			@Override
-			public MergedReftable openMergedReftable() throws IOException {
-				Lock l = DfsReftableDatabase.this.getLock();
-				l.lock();
-				try {
-					return new MergedReftable(stack().readers());
-				} finally {
-					l.unlock();
-				}
-			}
-		};
-		stack = null;
-	}
+    /**
+     * Initialize the reference database for a repository.
+     *
+     * @param repo the repository this database instance manages references for.
+     */
+    protected DfsReftableDatabase(DfsRepository repo) {
+        super(repo);
+        reftableDatabase = new ReftableDatabase() {
+            @Override
+            public MergedReftable openMergedReftable() throws IOException {
+                Lock l = DfsReftableDatabase.this.getLock();
+                l.lock();
+                try {
+                    return new MergedReftable(stack().readers());
+                } finally {
+                    l.unlock();
+                }
+            }
+        };
+        stack = null;
+    }
 
-	@Override
-	public boolean hasVersioning() {
-		return true;
-	}
+    @Override
+    public boolean hasVersioning() {
+        return true;
+    }
 
-	@Override
-	public boolean performsAtomicTransactions() {
-		return true;
-	}
+    @Override
+    public boolean performsAtomicTransactions() {
+        return true;
+    }
 
-	@Override
-	public BatchRefUpdate newBatchUpdate() {
-		DfsObjDatabase odb = getRepository().getObjectDatabase();
-		return new DfsReftableBatchRefUpdate(this, odb);
-	}
+    @Override
+    public BatchRefUpdate newBatchUpdate() {
+        DfsObjDatabase odb = getRepository().getObjectDatabase();
+        return new DfsReftableBatchRefUpdate(this, odb);
+    }
 
-	/**
-	 * Get configuration to write new reftables with.
-	 *
-	 * @return configuration to write new reftables with.
-	 */
-	public ReftableConfig getReftableConfig() {
-		return new ReftableConfig(getRepository());
-	}
+    /**
+     * Get configuration to write new reftables with.
+     *
+     * @return configuration to write new reftables with.
+     */
+    public ReftableConfig getReftableConfig() {
+        return new ReftableConfig(getRepository());
+    }
 
-	/**
-	 * Get the lock protecting this instance's state.
-	 *
-	 * @return the lock protecting this instance's state.
-	 */
-	protected ReentrantLock getLock() {
-		return reftableDatabase.getLock();
-	}
+    /**
+     * Get the lock protecting this instance's state.
+     *
+     * @return the lock protecting this instance's state.
+     */
+    protected ReentrantLock getLock() {
+        return reftableDatabase.getLock();
+    }
 
-	/**
-	 * Whether to compact reftable instead of extending the stack depth.
-	 *
-	 * @return {@code true} if commit of a new small reftable should try to
-	 *         replace a prior small reftable by performing a compaction,
-	 *         instead of extending the stack depth.
-	 */
-	protected boolean compactDuringCommit() {
-		return true;
-	}
+    /**
+     * Whether to compact reftable instead of extending the stack depth.
+     *
+     * @return {@code true} if commit of a new small reftable should try to
+     * replace a prior small reftable by performing a compaction,
+     * instead of extending the stack depth.
+     */
+    protected boolean compactDuringCommit() {
+        return true;
+    }
 
 
-	/**
-	 * Obtain a handle to the stack of reftables. Must hold lock.
-	 *
-	 * @return (possibly cached) handle to the stack.
-	 * @throws IOException
-	 *             if tables cannot be opened.
-	 */
-	protected DfsReftableStack stack() throws IOException {
-		if (!getLock().isLocked()) {
-			throw new IllegalStateException("most hold lock to access stack"); //$NON-NLS-1$
-		}
-		DfsObjDatabase odb = getRepository().getObjectDatabase();
+    /**
+     * Obtain a handle to the stack of reftables. Must hold lock.
+     *
+     * @return (possibly cached) handle to the stack.
+     * @throws IOException if tables cannot be opened.
+     */
+    protected DfsReftableStack stack() throws IOException {
+        if (!getLock().isLocked()) {
+            throw new IllegalStateException("most hold lock to access stack"); //$NON-NLS-1$
+        }
+        DfsObjDatabase odb = getRepository().getObjectDatabase();
 
-		if (ctx == null) {
-			ctx = odb.newReader();
-		}
-		if (stack == null) {
-			stack = DfsReftableStack.open(ctx, Arrays.asList(odb.getReftables()));
-		}
-		return stack;
-	}
+        if (ctx == null) {
+            ctx = odb.newReader();
+        }
+        if (stack == null) {
+            stack = DfsReftableStack.open(ctx, Arrays.asList(odb.getReftables()));
+        }
+        return stack;
+    }
 
-	@Override
-	public boolean isNameConflicting(String refName) throws IOException {
-		return reftableDatabase.isNameConflicting(refName, new TreeSet<>(), new HashSet<>());
-	}
+    @Override
+    public boolean isNameConflicting(String refName) throws IOException {
+        return reftableDatabase.isNameConflicting(refName, new TreeSet<>(), new HashSet<>());
+    }
 
-	@Override
-	public Ref exactRef(String name) throws IOException {
-		return reftableDatabase.exactRef(name);
-	}
+    @Override
+    public Ref exactRef(String name) throws IOException {
+        return reftableDatabase.exactRef(name);
+    }
 
-	@Override
-	public Map<String, Ref> getRefs(String prefix) throws IOException {
-		List<Ref> refs = reftableDatabase.getRefsByPrefix(prefix);
-		RefList.Builder<Ref> builder = new RefList.Builder<>(refs.size());
-		for (Ref r : refs) {
-			builder.add(r);
-		}
-		return new RefMap(prefix, builder.toRefList(), RefList.emptyList(),
-			RefList.emptyList());
-	}
+    @Override
+    public Map<String, Ref> getRefs(String prefix) throws IOException {
+        List<Ref> refs = reftableDatabase.getRefsByPrefix(prefix);
+        RefList.Builder<Ref> builder = new RefList.Builder<>(refs.size());
+        for (Ref r : refs) {
+            builder.add(r);
+        }
+        return new RefMap(prefix, builder.toRefList(), RefList.emptyList(),
+                RefList.emptyList());
+    }
 
-	@Override
-	public List<Ref> getRefsByPrefix(String prefix) throws IOException {
+    @Override
+    public List<Ref> getRefsByPrefix(String prefix) throws IOException {
 
-		return reftableDatabase.getRefsByPrefix(prefix);
-	}
+        return reftableDatabase.getRefsByPrefix(prefix);
+    }
 
-	@Override
-	public List<Ref> getRefsByPrefixWithExclusions(String include, Set<String> excludes)
-			throws IOException {
-		return reftableDatabase.getRefsByPrefixWithExclusions(include, excludes);
-	}
+    @Override
+    public List<Ref> getRefsByPrefixWithExclusions(String include, Set<String> excludes)
+            throws IOException {
+        return reftableDatabase.getRefsByPrefixWithExclusions(include, excludes);
+    }
 
-	@Override
-	public Set<Ref> getTipsWithSha1(ObjectId id) throws IOException {
-		if (!getReftableConfig().isIndexObjects()) {
-			return super.getTipsWithSha1(id);
-		}
-		return reftableDatabase.getTipsWithSha1(id);
-	}
+    @Override
+    public Set<Ref> getTipsWithSha1(ObjectId id) throws IOException {
+        if (!getReftableConfig().isIndexObjects()) {
+            return super.getTipsWithSha1(id);
+        }
+        return reftableDatabase.getTipsWithSha1(id);
+    }
 
-	@Override
-	public boolean hasFastTipsWithSha1() throws IOException {
-		return reftableDatabase.hasFastTipsWithSha1();
-	}
+    @Override
+    public boolean hasFastTipsWithSha1() throws IOException {
+        return reftableDatabase.hasFastTipsWithSha1();
+    }
 
-	@Override
-	public Ref peel(Ref ref) throws IOException {
-		Ref oldLeaf = ref.getLeaf();
-		if (oldLeaf.isPeeled() || oldLeaf.getObjectId() == null) {
-			return ref;
-		}
-		return recreate(ref, doPeel(oldLeaf), hasVersioning());
-	}
+    @Override
+    public Ref peel(Ref ref) throws IOException {
+        Ref oldLeaf = ref.getLeaf();
+        if (oldLeaf.isPeeled() || oldLeaf.getObjectId() == null) {
+            return ref;
+        }
+        return recreate(ref, doPeel(oldLeaf), hasVersioning());
+    }
 
-	@Override
-	boolean exists() throws IOException {
-		DfsObjDatabase odb = getRepository().getObjectDatabase();
-		return odb.getReftables().length > 0;
-	}
+    @Override
+    boolean exists() throws IOException {
+        DfsObjDatabase odb = getRepository().getObjectDatabase();
+        return odb.getReftables().length > 0;
+    }
 
-	@Override
-	void clearCache() {
-		ReentrantLock l = getLock();
-		l.lock();
-		try {
-			if (ctx != null) {
-				ctx.close();
-				ctx = null;
-			}
-			reftableDatabase.clearCache();
-			if (stack != null) {
-				stack.close();
-				stack = null;
-			}
-		} finally {
-			l.unlock();
-		}
-	}
+    @Override
+    void clearCache() {
+        ReentrantLock l = getLock();
+        l.lock();
+        try {
+            if (ctx != null) {
+                ctx.close();
+                ctx = null;
+            }
+            reftableDatabase.clearCache();
+            if (stack != null) {
+                stack.close();
+                stack = null;
+            }
+        } finally {
+            l.unlock();
+        }
+    }
 
-	@Override
-	protected boolean compareAndPut(Ref oldRef, @Nullable Ref newRef)
-			throws IOException {
-		ReceiveCommand cmd = ReftableDatabase.toCommand(oldRef, newRef);
-		try (RevWalk rw = new RevWalk(getRepository())) {
-			rw.setRetainBody(false);
-			newBatchUpdate().setAllowNonFastForwards(true).addCommand(cmd)
-					.execute(rw, NullProgressMonitor.INSTANCE);
-		}
-		switch (cmd.getResult()) {
-		case OK:
-			return true;
-		case REJECTED_OTHER_REASON:
-			throw new IOException(cmd.getMessage());
-		case LOCK_FAILURE:
-		default:
-			return false;
-		}
-	}
+    @Override
+    protected boolean compareAndPut(Ref oldRef, @Nullable Ref newRef)
+            throws IOException {
+        ReceiveCommand cmd = ReftableDatabase.toCommand(oldRef, newRef);
+        try (RevWalk rw = new RevWalk(getRepository())) {
+            rw.setRetainBody(false);
+            newBatchUpdate().setAllowNonFastForwards(true).addCommand(cmd)
+                    .execute(rw, NullProgressMonitor.INSTANCE);
+        }
+        switch (cmd.getResult()) {
+            case OK:
+                return true;
+            case REJECTED_OTHER_REASON:
+                throw new IOException(cmd.getMessage());
+            case LOCK_FAILURE:
+            default:
+                return false;
+        }
+    }
 
-	@Override
-	protected boolean compareAndRemove(Ref oldRef) throws IOException {
-		return compareAndPut(oldRef, null);
-	}
+    @Override
+    protected boolean compareAndRemove(Ref oldRef) throws IOException {
+        return compareAndPut(oldRef, null);
+    }
 
-	@Override
-	protected RefCache scanAllRefs() throws IOException {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    protected RefCache scanAllRefs() throws IOException {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	void stored(Ref ref) {
-		// Unnecessary; DfsReftableBatchRefUpdate calls clearCache().
-	}
+    @Override
+    void stored(Ref ref) {
+        // Unnecessary; DfsReftableBatchRefUpdate calls clearCache().
+    }
 
-	@Override
-	void removed(String refName) {
-		// Unnecessary; DfsReftableBatchRefUpdate calls clearCache().
-	}
+    @Override
+    void removed(String refName) {
+        // Unnecessary; DfsReftableBatchRefUpdate calls clearCache().
+    }
 
-	@Override
-	protected void cachePeeledState(Ref oldLeaf, Ref newLeaf) {
-		// Do not cache peeled state in reftable.
-	}
+    @Override
+    protected void cachePeeledState(Ref oldLeaf, Ref newLeaf) {
+        // Do not cache peeled state in reftable.
+    }
 
 }

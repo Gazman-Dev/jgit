@@ -16,15 +16,14 @@ import java.io.IOException;
  * UploadPack has already reported an error to the client.
  */
 public class UploadPackInternalServerErrorException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Initialize a new exception.
-	 *
-	 * @param why
-	 *            root cause.
-	 */
-	public UploadPackInternalServerErrorException(Throwable why) {
-		initCause(why);
-	}
+    /**
+     * Initialize a new exception.
+     *
+     * @param why root cause.
+     */
+    public UploadPackInternalServerErrorException(Throwable why) {
+        initCause(why);
+    }
 }

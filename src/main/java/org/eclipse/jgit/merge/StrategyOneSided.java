@@ -26,69 +26,67 @@ import org.eclipse.jgit.lib.Repository;
  * of the other inputs.
  */
 public class StrategyOneSided extends MergeStrategy {
-	private final String strategyName;
+    private final String strategyName;
 
-	private final int treeIndex;
+    private final int treeIndex;
 
-	/**
-	 * Create a new merge strategy to select a specific input tree.
-	 *
-	 * @param name
-	 *            name of this strategy.
-	 * @param index
-	 *            the position of the input tree to accept as the result.
-	 */
-	protected StrategyOneSided(String name, int index) {
-		strategyName = name;
-		treeIndex = index;
-	}
+    /**
+     * Create a new merge strategy to select a specific input tree.
+     *
+     * @param name  name of this strategy.
+     * @param index the position of the input tree to accept as the result.
+     */
+    protected StrategyOneSided(String name, int index) {
+        strategyName = name;
+        treeIndex = index;
+    }
 
-	@Override
-	public String getName() {
-		return strategyName;
-	}
+    @Override
+    public String getName() {
+        return strategyName;
+    }
 
-	@Override
-	public Merger newMerger(Repository db) {
-		return new OneSide(db, treeIndex);
-	}
+    @Override
+    public Merger newMerger(Repository db) {
+        return new OneSide(db, treeIndex);
+    }
 
-	@Override
-	public Merger newMerger(Repository db, boolean inCore) {
-		return new OneSide(db, treeIndex);
-	}
+    @Override
+    public Merger newMerger(Repository db, boolean inCore) {
+        return new OneSide(db, treeIndex);
+    }
 
-	@Override
-	public Merger newMerger(ObjectInserter inserter, Config config) {
-		return new OneSide(inserter, treeIndex);
-	}
+    @Override
+    public Merger newMerger(ObjectInserter inserter, Config config) {
+        return new OneSide(inserter, treeIndex);
+    }
 
-	static class OneSide extends Merger {
-		private final int treeIndex;
+    static class OneSide extends Merger {
+        private final int treeIndex;
 
-		protected OneSide(Repository local, int index) {
-			super(local);
-			treeIndex = index;
-		}
+        protected OneSide(Repository local, int index) {
+            super(local);
+            treeIndex = index;
+        }
 
-		protected OneSide(ObjectInserter inserter, int index) {
-			super(inserter);
-			treeIndex = index;
-		}
+        protected OneSide(ObjectInserter inserter, int index) {
+            super(inserter);
+            treeIndex = index;
+        }
 
-		@Override
-		protected boolean mergeImpl() throws IOException {
-			return treeIndex < sourceTrees.length;
-		}
+        @Override
+        protected boolean mergeImpl() throws IOException {
+            return treeIndex < sourceTrees.length;
+        }
 
-		@Override
-		public ObjectId getResultTreeId() {
-			return sourceTrees[treeIndex];
-		}
+        @Override
+        public ObjectId getResultTreeId() {
+            return sourceTrees[treeIndex];
+        }
 
-		@Override
-		public ObjectId getBaseCommitId() {
-			return null;
-		}
-	}
+        @Override
+        public ObjectId getBaseCommitId() {
+            return null;
+        }
+    }
 }

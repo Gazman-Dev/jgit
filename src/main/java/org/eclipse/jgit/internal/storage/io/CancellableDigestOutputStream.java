@@ -24,98 +24,98 @@ import java.security.MessageDigest;
  */
 public class CancellableDigestOutputStream extends OutputStream {
 
-	/** The OutputStream checks every this value for cancellation **/
-	public static final int BYTES_TO_WRITE_BEFORE_CANCEL_CHECK = 128 * 1024;
+    /**
+     * The OutputStream checks every this value for cancellation
+     **/
+    public static final int BYTES_TO_WRITE_BEFORE_CANCEL_CHECK = 128 * 1024;
 
-	private final ProgressMonitor writeMonitor;
+    private final ProgressMonitor writeMonitor;
 
-	private final OutputStream out;
+    private final OutputStream out;
 
-	private final MessageDigest md = Constants.newMessageDigest();
+    private final MessageDigest md = Constants.newMessageDigest();
 
-	private long count;
+    private long count;
 
-	private long checkCancelAt;
+    private long checkCancelAt;
 
-	/**
-	 * Initialize a CancellableDigestOutputStream.
-	 *
-	 * @param writeMonitor
-	 *            monitor to update on output progress and check cancel.
-	 * @param out
-	 *            target stream to receive all contents.
-	 */
-	public CancellableDigestOutputStream(ProgressMonitor writeMonitor,
-			OutputStream out) {
-		this.writeMonitor = writeMonitor;
-		this.out = out;
-		this.checkCancelAt = BYTES_TO_WRITE_BEFORE_CANCEL_CHECK;
-	}
+    /**
+     * Initialize a CancellableDigestOutputStream.
+     *
+     * @param writeMonitor monitor to update on output progress and check cancel.
+     * @param out          target stream to receive all contents.
+     */
+    public CancellableDigestOutputStream(ProgressMonitor writeMonitor,
+                                         OutputStream out) {
+        this.writeMonitor = writeMonitor;
+        this.out = out;
+        this.checkCancelAt = BYTES_TO_WRITE_BEFORE_CANCEL_CHECK;
+    }
 
-	/**
-	 * Get the monitor which is used to update on output progress and check
-	 * cancel.
-	 *
-	 * @return the monitor
-	 */
-	public final ProgressMonitor getWriteMonitor() {
-		return writeMonitor;
-	}
+    /**
+     * Get the monitor which is used to update on output progress and check
+     * cancel.
+     *
+     * @return the monitor
+     */
+    public final ProgressMonitor getWriteMonitor() {
+        return writeMonitor;
+    }
 
-	/**
-	 * Obtain the current SHA-1 digest.
-	 *
-	 * @return SHA-1 digest
-	 */
-	public final byte[] getDigest() {
-		return md.digest();
-	}
+    /**
+     * Obtain the current SHA-1 digest.
+     *
+     * @return SHA-1 digest
+     */
+    public final byte[] getDigest() {
+        return md.digest();
+    }
 
-	/**
-	 * Get total number of bytes written since stream start.
-	 *
-	 * @return total number of bytes written since stream start.
-	 */
-	public final long length() {
-		return count;
-	}
+    /**
+     * Get total number of bytes written since stream start.
+     *
+     * @return total number of bytes written since stream start.
+     */
+    public final long length() {
+        return count;
+    }
 
-	@Override
-	public final void write(int b) throws IOException {
-		if (checkCancelAt <= count) {
-			if (writeMonitor.isCancelled()) {
-				throw new InterruptedIOException();
-			}
-			checkCancelAt = count + BYTES_TO_WRITE_BEFORE_CANCEL_CHECK;
-		}
+    @Override
+    public final void write(int b) throws IOException {
+        if (checkCancelAt <= count) {
+            if (writeMonitor.isCancelled()) {
+                throw new InterruptedIOException();
+            }
+            checkCancelAt = count + BYTES_TO_WRITE_BEFORE_CANCEL_CHECK;
+        }
 
-		out.write(b);
-		md.update((byte) b);
-		count++;
-	}
+        out.write(b);
+        md.update((byte) b);
+        count++;
+    }
 
-	@Override
-	public final void write(byte[] b, int off, int len) throws IOException {
-		while (0 < len) {
-			if (checkCancelAt <= count) {
-				if (writeMonitor.isCancelled()) {
-					throw new InterruptedIOException();
-				}
-				checkCancelAt = count + BYTES_TO_WRITE_BEFORE_CANCEL_CHECK;
-			}
+    @Override
+    public final void write(byte[] b, int off, int len) throws IOException {
+        while (0 < len) {
+            if (checkCancelAt <= count) {
+                if (writeMonitor.isCancelled()) {
+                    throw new InterruptedIOException();
+                }
+                checkCancelAt = count + BYTES_TO_WRITE_BEFORE_CANCEL_CHECK;
+            }
 
-			int n = Math.min(len, BYTES_TO_WRITE_BEFORE_CANCEL_CHECK);
-			out.write(b, off, n);
-			md.update(b, off, n);
-			count += n;
+            int n = Math.min(len, BYTES_TO_WRITE_BEFORE_CANCEL_CHECK);
+            out.write(b, off, n);
+            md.update(b, off, n);
+            count += n;
 
-			off += n;
-			len -= n;
-		}
-	}
+            off += n;
+            len -= n;
+        }
+    }
 
-	@Override
-	public void flush() throws IOException {
-		out.flush();
-	}
+    @Override
+    public void flush() throws IOException {
+        out.flush();
+    }
 }

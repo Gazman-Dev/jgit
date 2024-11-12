@@ -16,71 +16,66 @@ import org.eclipse.jgit.errors.MissingObjectException;
 
 /**
  * Queue to open objects asynchronously.
- *
+ * <p>
  * A queue may perform background decompression of objects and supply them
  * (possibly out-of-order) to the application.
  *
- * @param <T>
- *            type of identifier supplied to the call that made the queue.
+ * @param <T> type of identifier supplied to the call that made the queue.
  */
 public interface AsyncObjectLoaderQueue<T extends ObjectId> extends
-		AsyncOperation {
+        AsyncOperation {
 
-	/**
-	 * Position this queue onto the next available result.
-	 *
-	 * Even if this method returns true, {@link #open()} may still throw
-	 * {@link MissingObjectException} if the underlying
-	 * object database was concurrently modified and the current object is no
-	 * longer available.
-	 *
-	 * @return true if there is a result available; false if the queue has
-	 *         finished its input iteration.
-	 * @throws MissingObjectException
-	 *             the object does not exist. If the implementation is retaining
-	 *             the application's objects {@link #getCurrent()} will be the
-	 *             current object that is missing. There may be more results
-	 *             still available, so the caller should continue invoking next
-	 *             to examine another result.
-	 * @throws IOException
-	 *             the object store cannot be accessed.
-	 */
-	boolean next() throws MissingObjectException, IOException;
+    /**
+     * Position this queue onto the next available result.
+     * <p>
+     * Even if this method returns true, {@link #open()} may still throw
+     * {@link MissingObjectException} if the underlying
+     * object database was concurrently modified and the current object is no
+     * longer available.
+     *
+     * @return true if there is a result available; false if the queue has
+     * finished its input iteration.
+     * @throws MissingObjectException the object does not exist. If the implementation is retaining
+     *                                the application's objects {@link #getCurrent()} will be the
+     *                                current object that is missing. There may be more results
+     *                                still available, so the caller should continue invoking next
+     *                                to examine another result.
+     * @throws IOException            the object store cannot be accessed.
+     */
+    boolean next() throws MissingObjectException, IOException;
 
-	/**
-	 * Get the current object, null if the implementation lost track.
-	 *
-	 * @return the current object, null if the implementation lost track.
-	 *         Implementations may for performance reasons discard the caller's
-	 *         ObjectId and provider their own through {@link #getObjectId()}.
-	 */
-	T getCurrent();
+    /**
+     * Get the current object, null if the implementation lost track.
+     *
+     * @return the current object, null if the implementation lost track.
+     * Implementations may for performance reasons discard the caller's
+     * ObjectId and provider their own through {@link #getObjectId()}.
+     */
+    T getCurrent();
 
-	/**
-	 * Get the ObjectId of the current object. Never null.
-	 *
-	 * @return the ObjectId of the current object. Never null.
-	 */
-	ObjectId getObjectId();
+    /**
+     * Get the ObjectId of the current object. Never null.
+     *
+     * @return the ObjectId of the current object. Never null.
+     */
+    ObjectId getObjectId();
 
-	/**
-	 * Obtain a loader to read the object.
-	 *
-	 * This method can only be invoked once per result
-	 *
-	 * Due to race conditions with a concurrent modification of the underlying
-	 * object database, an object may be unavailable when this method is
-	 * invoked, even though next returned successfully.
-	 *
-	 * @return the ObjectLoader to read this object. Never null.
-	 * @throws MissingObjectException
-	 *             the object does not exist. If the implementation is retaining
-	 *             the application's objects {@link #getCurrent()} will be the
-	 *             current object that is missing. There may be more results
-	 *             still available, so the caller should continue invoking next
-	 *             to examine another result.
-	 * @throws IOException
-	 *             the object store cannot be accessed.
-	 */
-	ObjectLoader open() throws IOException;
+    /**
+     * Obtain a loader to read the object.
+     * <p>
+     * This method can only be invoked once per result
+     * <p>
+     * Due to race conditions with a concurrent modification of the underlying
+     * object database, an object may be unavailable when this method is
+     * invoked, even though next returned successfully.
+     *
+     * @return the ObjectLoader to read this object. Never null.
+     * @throws MissingObjectException the object does not exist. If the implementation is retaining
+     *                                the application's objects {@link #getCurrent()} will be the
+     *                                current object that is missing. There may be more results
+     *                                still available, so the caller should continue invoking next
+     *                                to examine another result.
+     * @throws IOException            the object store cannot be accessed.
+     */
+    ObjectLoader open() throws IOException;
 }

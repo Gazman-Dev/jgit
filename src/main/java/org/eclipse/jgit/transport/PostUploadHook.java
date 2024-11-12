@@ -56,18 +56,19 @@ import org.eclipse.jgit.storage.pack.PackStatistics;
  * @since 4.1
  */
 public interface PostUploadHook {
-	/** A simple no-op hook. */
-	PostUploadHook NULL = (PackStatistics stats) -> {
-		// Do nothing.
-	};
+    /**
+     * A simple no-op hook.
+     */
+    PostUploadHook NULL = (PackStatistics stats) -> {
+        // Do nothing.
+    };
 
-	/**
-	 * Notifies the hook that a pack has been sent.
-	 *
-	 * @param stats
-	 *            the statistics gathered by
-	 *            {@link org.eclipse.jgit.internal.storage.pack.PackWriter} for
-	 *            the uploaded pack
-	 */
-	void onPostUpload(PackStatistics stats);
+    /**
+     * Notifies the hook that a pack has been sent.
+     *
+     * @param stats the statistics gathered by
+     *              {@link org.eclipse.jgit.internal.storage.pack.PackWriter} for
+     *              the uploaded pack
+     */
+    void onPostUpload(PackStatistics stats);
 }

@@ -16,52 +16,51 @@ package org.eclipse.jgit.util;
  * Characters are assumed to be 8-bit US-ASCII.
  */
 public final class RawCharSequence implements CharSequence {
-	/** A zero-length character sequence. */
-	public static final RawCharSequence EMPTY = new RawCharSequence(null, 0, 0);
+    /**
+     * A zero-length character sequence.
+     */
+    public static final RawCharSequence EMPTY = new RawCharSequence(null, 0, 0);
 
-	final byte[] buffer;
+    final byte[] buffer;
 
-	final int startPtr;
+    final int startPtr;
 
-	final int endPtr;
+    final int endPtr;
 
-	/**
-	 * Create a rough character sequence around the raw byte buffer.
-	 *
-	 * @param buf
-	 *            buffer to scan.
-	 * @param start
-	 *            starting position for the sequence.
-	 * @param end
-	 *            ending position for the sequence.
-	 */
-	public RawCharSequence(byte[] buf, int start, int end) {
-		buffer = buf;
-		startPtr = start;
-		endPtr = end;
-	}
+    /**
+     * Create a rough character sequence around the raw byte buffer.
+     *
+     * @param buf   buffer to scan.
+     * @param start starting position for the sequence.
+     * @param end   ending position for the sequence.
+     */
+    public RawCharSequence(byte[] buf, int start, int end) {
+        buffer = buf;
+        startPtr = start;
+        endPtr = end;
+    }
 
-	@Override
-	public char charAt(int index) {
-		return (char) (buffer[startPtr + index] & 0xff);
-	}
+    @Override
+    public char charAt(int index) {
+        return (char) (buffer[startPtr + index] & 0xff);
+    }
 
-	@Override
-	public int length() {
-		return endPtr - startPtr;
-	}
+    @Override
+    public int length() {
+        return endPtr - startPtr;
+    }
 
-	@Override
-	public CharSequence subSequence(int start, int end) {
-		return new RawCharSequence(buffer, startPtr + start, startPtr + end);
-	}
+    @Override
+    public CharSequence subSequence(int start, int end) {
+        return new RawCharSequence(buffer, startPtr + start, startPtr + end);
+    }
 
-	@Override
-	public String toString() {
-		final int n = length();
-		final StringBuilder b = new StringBuilder(n);
-		for (int i = 0; i < n; i++)
-			b.append(charAt(i));
-		return b.toString();
-	}
+    @Override
+    public String toString() {
+        final int n = length();
+        final StringBuilder b = new StringBuilder(n);
+        for (int i = 0; i < n; i++)
+            b.append(charAt(i));
+        return b.toString();
+    }
 }

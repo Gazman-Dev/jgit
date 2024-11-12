@@ -42,27 +42,24 @@ package org.eclipse.jgit.api.errors;
  * but couldn't find such a reference
  */
 public class NoHeadException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for NoHeadException
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public NoHeadException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for NoHeadException
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     */
+    public NoHeadException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for NoHeadException
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public NoHeadException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for NoHeadException
+     *
+     * @param message error message
+     */
+    public NoHeadException(String message) {
+        super(message);
+    }
 }

@@ -16,65 +16,57 @@ package org.eclipse.jgit.transport;
  * @since 5.1
  */
 public interface ProtocolV2Hook {
-	/**
-	 * The default hook implementation that does nothing.
-	 */
-	static ProtocolV2Hook DEFAULT = new ProtocolV2Hook() {
-		// No override.
-	};
+    /**
+     * The default hook implementation that does nothing.
+     */
+    static ProtocolV2Hook DEFAULT = new ProtocolV2Hook() {
+        // No override.
+    };
 
-	/**
-	 * Handle capabilities request
-	 *
-	 * @param req
-	 *            the capabilities request
-	 * @throws ServiceMayNotContinueException
-	 *             abort; the message will be sent to the user
-	 * @since 5.1
-	 */
-	default void onCapabilities(CapabilitiesV2Request req)
-			throws ServiceMayNotContinueException {
-		// Do nothing by default.
-	}
+    /**
+     * Handle capabilities request
+     *
+     * @param req the capabilities request
+     * @throws ServiceMayNotContinueException abort; the message will be sent to the user
+     * @since 5.1
+     */
+    default void onCapabilities(CapabilitiesV2Request req)
+            throws ServiceMayNotContinueException {
+        // Do nothing by default.
+    }
 
-	/**
-	 * Handle ls-refs request
-	 *
-	 * @param req
-	 *            the ls-refs request
-	 * @throws ServiceMayNotContinueException
-	 *             abort; the message will be sent to the user
-	 * @since 5.1
-	 */
-	default void onLsRefs(LsRefsV2Request req)
-			throws ServiceMayNotContinueException {
-		// Do nothing by default.
-	}
+    /**
+     * Handle ls-refs request
+     *
+     * @param req the ls-refs request
+     * @throws ServiceMayNotContinueException abort; the message will be sent to the user
+     * @since 5.1
+     */
+    default void onLsRefs(LsRefsV2Request req)
+            throws ServiceMayNotContinueException {
+        // Do nothing by default.
+    }
 
-	/**
-	 * Handle fetch request
-	 *
-	 * @param req
-	 *            the fetch request
-	 * @throws ServiceMayNotContinueException
-	 *             abort; the message will be sent to the user
-	 */
-	default void onFetch(FetchV2Request req)
-			throws ServiceMayNotContinueException {
-		// Do nothing by default
-	}
+    /**
+     * Handle fetch request
+     *
+     * @param req the fetch request
+     * @throws ServiceMayNotContinueException abort; the message will be sent to the user
+     */
+    default void onFetch(FetchV2Request req)
+            throws ServiceMayNotContinueException {
+        // Do nothing by default
+    }
 
-	/**
-	 * Handle object-info request
-	 *
-	 * @param req
-	 *            the object-info request
-	 * @throws ServiceMayNotContinueException
-	 *             abort; the message will be sent to the user
-	 * @since 5.13
-	 */
-	default void onObjectInfo(ObjectInfoRequest req)
-			throws ServiceMayNotContinueException {
-		// Do nothing by default
-	}
+    /**
+     * Handle object-info request
+     *
+     * @param req the object-info request
+     * @throws ServiceMayNotContinueException abort; the message will be sent to the user
+     * @since 5.13
+     */
+    default void onObjectInfo(ObjectInfoRequest req)
+            throws ServiceMayNotContinueException {
+        // Do nothing by default
+    }
 }

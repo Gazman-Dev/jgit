@@ -15,104 +15,106 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 
-/** Remembers objects that are currently unpacked. */
+/**
+ * Remembers objects that are currently unpacked.
+ */
 class UnpackedObjectCache {
-	private static final int INITIAL_BITS = 5; // size = 32
+    private static final int INITIAL_BITS = 5; // size = 32
 
-	private static final int MAX_BITS = 11; // size = 2048
+    private static final int MAX_BITS = 11; // size = 2048
 
-	private volatile Table table;
+    private volatile Table table;
 
-	UnpackedObjectCache() {
-		table = new Table(INITIAL_BITS);
-	}
+    UnpackedObjectCache() {
+        table = new Table(INITIAL_BITS);
+    }
 
-	boolean isUnpacked(AnyObjectId objectId) {
-		return table.contains(objectId);
-	}
+    boolean isUnpacked(AnyObjectId objectId) {
+        return table.contains(objectId);
+    }
 
-	void add(AnyObjectId objectId) {
-		Table t = table;
-		if (t.add(objectId)) {
-			// The object either already exists in the table, or was
-			// successfully added. Either way leave the table alone.
-			//
-		} else {
-			// The object won't fit into the table. Implement a crude
-			// cache removal by just dropping the table away, but double
-			// it in size for the next incarnation.
-			//
-			Table n = new Table(Math.min(t.bits + 1, MAX_BITS));
-			n.add(objectId);
-			table = n;
-		}
-	}
+    void add(AnyObjectId objectId) {
+        Table t = table;
+        if (t.add(objectId)) {
+            // The object either already exists in the table, or was
+            // successfully added. Either way leave the table alone.
+            //
+        } else {
+            // The object won't fit into the table. Implement a crude
+            // cache removal by just dropping the table away, but double
+            // it in size for the next incarnation.
+            //
+            Table n = new Table(Math.min(t.bits + 1, MAX_BITS));
+            n.add(objectId);
+            table = n;
+        }
+    }
 
-	void remove(AnyObjectId objectId) {
-		if (isUnpacked(objectId))
-			clear();
-	}
+    void remove(AnyObjectId objectId) {
+        if (isUnpacked(objectId))
+            clear();
+    }
 
-	void clear() {
-		table = new Table(INITIAL_BITS);
-	}
+    void clear() {
+        table = new Table(INITIAL_BITS);
+    }
 
-	private static class Table {
-		private static final int MAX_CHAIN = 8;
+    private static class Table {
+        private static final int MAX_CHAIN = 8;
 
-		private final AtomicReferenceArray<ObjectId> ids;
+        private final AtomicReferenceArray<ObjectId> ids;
 
-		private final int shift;
+        private final int shift;
 
-		final int bits;
+        final int bits;
 
-		Table(int bits) {
-			this.ids = new AtomicReferenceArray<>(1 << bits);
-			this.shift = 32 - bits;
-			this.bits = bits;
-		}
+        Table(int bits) {
+            this.ids = new AtomicReferenceArray<>(1 << bits);
+            this.shift = 32 - bits;
+            this.bits = bits;
+        }
 
-		boolean contains(AnyObjectId toFind) {
-			int i = index(toFind);
-			for (int n = 0; n < MAX_CHAIN; n++) {
-				ObjectId obj = ids.get(i);
-				if (obj == null)
-					break;
+        boolean contains(AnyObjectId toFind) {
+            int i = index(toFind);
+            for (int n = 0; n < MAX_CHAIN; n++) {
+                ObjectId obj = ids.get(i);
+                if (obj == null)
+                    break;
 
-				if (AnyObjectId.isEqual(obj, toFind))
-					return true;
+                if (AnyObjectId.isEqual(obj, toFind))
+                    return true;
 
-				if (++i == ids.length())
-					i = 0;
-			}
-			return false;
-		}
+                if (++i == ids.length())
+                    i = 0;
+            }
+            return false;
+        }
 
-		boolean add(AnyObjectId toAdd) {
-			int i = index(toAdd);
-			for (int n = 0; n < MAX_CHAIN;) {
-				ObjectId obj = ids.get(i);
-				if (obj == null) {
-					if (ids.compareAndSet(i, null, toAdd.copy())) {
-						return true;
-					}
-					continue;
-				}
+        boolean add(AnyObjectId toAdd) {
+            int i = index(toAdd);
+            for (int n = 0; n < MAX_CHAIN; ) {
+                ObjectId obj = ids.get(i);
+                if (obj == null) {
+                    if (ids.compareAndSet(i, null, toAdd.copy())) {
+                        return true;
+                    }
+                    continue;
+                }
 
-				if (AnyObjectId.isEqual(obj, toAdd)) {
-					return true;
-				}
+                if (AnyObjectId.isEqual(obj, toAdd)) {
+                    return true;
+                }
 
-				if (++i == ids.length()) {
-					i = 0;
-				}
-				n++;
-			}
-			return false;
-		}
+                if (++i == ids.length()) {
+                    i = 0;
+                }
+                n++;
+            }
+            return false;
+        }
 
-		private int index(AnyObjectId id) {
-			return id.hashCode() >>> shift;
-		}
-	}
+        private int index(AnyObjectId id) {
+            return id.hashCode() >>> shift;
+        }
+    }
 }

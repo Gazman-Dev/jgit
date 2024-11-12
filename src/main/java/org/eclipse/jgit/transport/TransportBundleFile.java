@@ -29,106 +29,104 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.util.FS;
 
 class TransportBundleFile extends Transport implements TransportBundle {
-	static final TransportProtocol PROTO_BUNDLE = new TransportProtocol() {
-		private final String[] schemeNames = { "bundle", "file" }; //$NON-NLS-1$ //$NON-NLS-2$
+    static final TransportProtocol PROTO_BUNDLE = new TransportProtocol() {
+        private final String[] schemeNames = {"bundle", "file"}; //$NON-NLS-1$ //$NON-NLS-2$
 
-		private final Set<String> schemeSet = Collections
-				.unmodifiableSet(new LinkedHashSet<>(Arrays
-						.asList(schemeNames)));
+        private final Set<String> schemeSet = Collections
+                .unmodifiableSet(new LinkedHashSet<>(Arrays
+                        .asList(schemeNames)));
 
-		@Override
-		public String getName() {
-			return JGitText.get().transportProtoBundleFile;
-		}
+        @Override
+        public String getName() {
+            return JGitText.get().transportProtoBundleFile;
+        }
 
-		@Override
-		public Set<String> getSchemes() {
-			return schemeSet;
-		}
+        @Override
+        public Set<String> getSchemes() {
+            return schemeSet;
+        }
 
-		@Override
-		public boolean canHandle(URIish uri, Repository local, String remoteName) {
-			if (uri.getPath() == null
-					|| uri.getPort() > 0
-					|| uri.getUser() != null
-					|| uri.getPass() != null
-					|| uri.getHost() != null
-					|| (uri.getScheme() != null && !getSchemes().contains(uri.getScheme())))
-				return false;
-			return true;
-		}
+        @Override
+        public boolean canHandle(URIish uri, Repository local, String remoteName) {
+            if (uri.getPath() == null
+                    || uri.getPort() > 0
+                    || uri.getUser() != null
+                    || uri.getPass() != null
+                    || uri.getHost() != null
+                    || (uri.getScheme() != null && !getSchemes().contains(uri.getScheme())))
+                return false;
+            return true;
+        }
 
-		@Override
-		public Transport open(URIish uri, Repository local, String remoteName)
-				throws NotSupportedException, TransportException {
-			if ("bundle".equals(uri.getScheme())) { //$NON-NLS-1$
-				File path = FS.DETECTED.resolve(new File("."), uri.getPath()); //$NON-NLS-1$
-				return new TransportBundleFile(local, uri, path);
-			}
+        @Override
+        public Transport open(URIish uri, Repository local, String remoteName)
+                throws NotSupportedException, TransportException {
+            if ("bundle".equals(uri.getScheme())) { //$NON-NLS-1$
+                File path = FS.DETECTED.resolve(new File("."), uri.getPath()); //$NON-NLS-1$
+                return new TransportBundleFile(local, uri, path);
+            }
 
-			// This is an ambiguous reference, it could be a bundle file
-			// or it could be a Git repository. Allow TransportLocal to
-			// resolve the path and figure out which type it is by testing
-			// the target.
-			//
-			return TransportLocal.PROTO_LOCAL.open(uri, local, remoteName);
-		}
+            // This is an ambiguous reference, it could be a bundle file
+            // or it could be a Git repository. Allow TransportLocal to
+            // resolve the path and figure out which type it is by testing
+            // the target.
+            //
+            return TransportLocal.PROTO_LOCAL.open(uri, local, remoteName);
+        }
 
-		@Override
-		public Transport open(URIish uri) throws NotSupportedException,
-				TransportException {
-			if ("bundle".equals(uri.getScheme())) { //$NON-NLS-1$
-				File path = FS.DETECTED.resolve(new File("."), uri.getPath()); //$NON-NLS-1$
-				return new TransportBundleFile(uri, path);
-			}
-			return TransportLocal.PROTO_LOCAL.open(uri);
-		}
-	};
+        @Override
+        public Transport open(URIish uri) throws NotSupportedException,
+                TransportException {
+            if ("bundle".equals(uri.getScheme())) { //$NON-NLS-1$
+                File path = FS.DETECTED.resolve(new File("."), uri.getPath()); //$NON-NLS-1$
+                return new TransportBundleFile(uri, path);
+            }
+            return TransportLocal.PROTO_LOCAL.open(uri);
+        }
+    };
 
-	private final File bundle;
+    private final File bundle;
 
-	TransportBundleFile(Repository local, URIish uri, File bundlePath) {
-		super(local, uri);
-		bundle = bundlePath;
-	}
+    TransportBundleFile(Repository local, URIish uri, File bundlePath) {
+        super(local, uri);
+        bundle = bundlePath;
+    }
 
-	/**
-	 * Constructor for TransportBundleFile.
-	 *
-	 * @param uri
-	 *            a {@link URIish} object.
-	 * @param bundlePath
-	 *            transport bundle path
-	 */
-	public TransportBundleFile(URIish uri, File bundlePath) {
-		super(uri);
-		bundle = bundlePath;
-	}
+    /**
+     * Constructor for TransportBundleFile.
+     *
+     * @param uri        a {@link URIish} object.
+     * @param bundlePath transport bundle path
+     */
+    public TransportBundleFile(URIish uri, File bundlePath) {
+        super(uri);
+        bundle = bundlePath;
+    }
 
-	@Override
-	public FetchConnection openFetch() throws NotSupportedException,
-			TransportException {
-		final InputStream src;
-		try {
-			src = new FileInputStream(bundle);
-		} catch (FileNotFoundException err) {
-			TransportException te = new TransportException(uri,
-					JGitText.get().notFound);
-			te.initCause(err);
-			throw te;
-		}
-		return new BundleFetchConnection(this, src);
-	}
+    @Override
+    public FetchConnection openFetch() throws NotSupportedException,
+            TransportException {
+        final InputStream src;
+        try {
+            src = new FileInputStream(bundle);
+        } catch (FileNotFoundException err) {
+            TransportException te = new TransportException(uri,
+                    JGitText.get().notFound);
+            te.initCause(err);
+            throw te;
+        }
+        return new BundleFetchConnection(this, src);
+    }
 
-	@Override
-	public PushConnection openPush() throws NotSupportedException {
-		throw new NotSupportedException(
-				JGitText.get().pushIsNotSupportedForBundleTransport);
-	}
+    @Override
+    public PushConnection openPush() throws NotSupportedException {
+        throw new NotSupportedException(
+                JGitText.get().pushIsNotSupportedForBundleTransport);
+    }
 
-	@Override
-	public void close() {
-		// Resources must be established per-connection.
-	}
+    @Override
+    public void close() {
+        // Resources must be established per-connection.
+    }
 
 }

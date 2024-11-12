@@ -21,55 +21,55 @@ import org.eclipse.jgit.lib.ObjectId;
  */
 class SHA1Native extends SHA1 {
 
-	private final MessageDigest md;
+    private final MessageDigest md;
 
-	SHA1Native() {
-		md = Constants.newMessageDigest();
-	}
+    SHA1Native() {
+        md = Constants.newMessageDigest();
+    }
 
-	@Override
-	public void update(byte b) {
-		md.update(b);
-	}
+    @Override
+    public void update(byte b) {
+        md.update(b);
+    }
 
-	@Override
-	public void update(byte[] in) {
-		md.update(in);
-	}
+    @Override
+    public void update(byte[] in) {
+        md.update(in);
+    }
 
-	@Override
-	public void update(byte[] in, int p, int len) {
-		md.update(in, p, len);
-	}
+    @Override
+    public void update(byte[] in, int p, int len) {
+        md.update(in, p, len);
+    }
 
-	@Override
-	public byte[] digest() throws Sha1CollisionException {
-		return md.digest();
-	}
+    @Override
+    public byte[] digest() throws Sha1CollisionException {
+        return md.digest();
+    }
 
-	@Override
-	public ObjectId toObjectId() throws Sha1CollisionException {
-		return ObjectId.fromRaw(md.digest());
-	}
+    @Override
+    public ObjectId toObjectId() throws Sha1CollisionException {
+        return ObjectId.fromRaw(md.digest());
+    }
 
-	@Override
-	public void digest(MutableObjectId id) throws Sha1CollisionException {
-		id.fromRaw(md.digest());
-	}
+    @Override
+    public void digest(MutableObjectId id) throws Sha1CollisionException {
+        id.fromRaw(md.digest());
+    }
 
-	@Override
-	public SHA1 reset() {
-		md.reset();
-		return this;
-	}
+    @Override
+    public SHA1 reset() {
+        md.reset();
+        return this;
+    }
 
-	@Override
-	public SHA1 setDetectCollision(boolean detect) {
-		return this;
-	}
+    @Override
+    public SHA1 setDetectCollision(boolean detect) {
+        return this;
+    }
 
-	@Override
-	public boolean hasCollision() {
-		return false;
-	}
+    @Override
+    public boolean hasCollision() {
+        return false;
+    }
 }

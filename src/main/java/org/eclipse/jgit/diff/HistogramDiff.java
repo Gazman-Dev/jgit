@@ -61,128 +61,130 @@ import java.util.List;
  * sequences with more than 268,435,456 (2^28) elements.
  */
 public class HistogramDiff extends LowLevelDiffAlgorithm {
-	/** Algorithm to use when there are too many element occurrences. */
-	DiffAlgorithm fallback = MyersDiff.INSTANCE;
+    /**
+     * Algorithm to use when there are too many element occurrences.
+     */
+    DiffAlgorithm fallback = MyersDiff.INSTANCE;
 
-	/**
-	 * Maximum number of positions to consider for a given element hash.
-	 *
-	 * All elements with the same hash are stored into a single chain. The chain
-	 * size is capped to ensure search is linear time at O(len_A + len_B) rather
-	 * than quadratic at O(len_A * len_B).
-	 */
-	int maxChainLength = 64;
+    /**
+     * Maximum number of positions to consider for a given element hash.
+     * <p>
+     * All elements with the same hash are stored into a single chain. The chain
+     * size is capped to ensure search is linear time at O(len_A + len_B) rather
+     * than quadratic at O(len_A * len_B).
+     */
+    int maxChainLength = 64;
 
-	/**
-	 * Set the algorithm used when there are too many element occurrences.
-	 *
-	 * @param alg
-	 *            the secondary algorithm. If null the region will be denoted as
-	 *            a single REPLACE block.
-	 */
-	public void setFallbackAlgorithm(DiffAlgorithm alg) {
-		fallback = alg;
-	}
+    /**
+     * Set the algorithm used when there are too many element occurrences.
+     *
+     * @param alg the secondary algorithm. If null the region will be denoted as
+     *            a single REPLACE block.
+     */
+    public void setFallbackAlgorithm(DiffAlgorithm alg) {
+        fallback = alg;
+    }
 
-	/**
-	 * Maximum number of positions to consider for a given element hash.
-	 *
-	 * All elements with the same hash are stored into a single chain. The chain
-	 * size is capped to ensure search is linear time at O(len_A + len_B) rather
-	 * than quadratic at O(len_A * len_B).
-	 *
-	 * @param maxLen
-	 *            new maximum length.
-	 */
-	public void setMaxChainLength(int maxLen) {
-		maxChainLength = maxLen;
-	}
+    /**
+     * Maximum number of positions to consider for a given element hash.
+     * <p>
+     * All elements with the same hash are stored into a single chain. The chain
+     * size is capped to ensure search is linear time at O(len_A + len_B) rather
+     * than quadratic at O(len_A * len_B).
+     *
+     * @param maxLen new maximum length.
+     */
+    public void setMaxChainLength(int maxLen) {
+        maxChainLength = maxLen;
+    }
 
-	@Override
-	public <S extends Sequence> void diffNonCommon(EditList edits,
-			HashedSequenceComparator<S> cmp, HashedSequence<S> a,
-			HashedSequence<S> b, Edit region) {
-		new State<>(edits, cmp, a, b).diffRegion(region);
-	}
+    @Override
+    public <S extends Sequence> void diffNonCommon(EditList edits,
+                                                   HashedSequenceComparator<S> cmp, HashedSequence<S> a,
+                                                   HashedSequence<S> b, Edit region) {
+        new State<>(edits, cmp, a, b).diffRegion(region);
+    }
 
-	private class State<S extends Sequence> {
-		private final HashedSequenceComparator<S> cmp;
-		private final HashedSequence<S> a;
-		private final HashedSequence<S> b;
-		private final List<Edit> queue = new ArrayList<>();
+    private class State<S extends Sequence> {
+        private final HashedSequenceComparator<S> cmp;
+        private final HashedSequence<S> a;
+        private final HashedSequence<S> b;
+        private final List<Edit> queue = new ArrayList<>();
 
-		/** Result edits we have determined that must be made to convert a to b. */
-		final EditList edits;
+        /**
+         * Result edits we have determined that must be made to convert a to b.
+         */
+        final EditList edits;
 
-		State(EditList edits, HashedSequenceComparator<S> cmp,
-				HashedSequence<S> a, HashedSequence<S> b) {
-			this.cmp = cmp;
-			this.a = a;
-			this.b = b;
-			this.edits = edits;
-		}
+        State(EditList edits, HashedSequenceComparator<S> cmp,
+              HashedSequence<S> a, HashedSequence<S> b) {
+            this.cmp = cmp;
+            this.a = a;
+            this.b = b;
+            this.edits = edits;
+        }
 
-		void diffRegion(Edit r) {
-			diffReplace(r);
-			while (!queue.isEmpty())
-				diff(queue.remove(queue.size() - 1));
-		}
+        void diffRegion(Edit r) {
+            diffReplace(r);
+            while (!queue.isEmpty())
+                diff(queue.remove(queue.size() - 1));
+        }
 
-		private void diffReplace(Edit r) {
-			Edit lcs = new HistogramDiffIndex<>(maxChainLength, cmp, a, b, r)
-					.findLongestCommonSequence();
-			if (lcs != null) {
-				// If we were given an edit, we can prove a result here.
-				//
-				if (lcs.isEmpty()) {
-					// An empty edit indicates there is nothing in common.
-					// Replace the entire region.
-					//
-					edits.add(r);
-				} else {
-					queue.add(r.after(lcs));
-					queue.add(r.before(lcs));
-				}
+        private void diffReplace(Edit r) {
+            Edit lcs = new HistogramDiffIndex<>(maxChainLength, cmp, a, b, r)
+                    .findLongestCommonSequence();
+            if (lcs != null) {
+                // If we were given an edit, we can prove a result here.
+                //
+                if (lcs.isEmpty()) {
+                    // An empty edit indicates there is nothing in common.
+                    // Replace the entire region.
+                    //
+                    edits.add(r);
+                } else {
+                    queue.add(r.after(lcs));
+                    queue.add(r.before(lcs));
+                }
 
-			} else if (fallback instanceof LowLevelDiffAlgorithm) {
-				LowLevelDiffAlgorithm fb = (LowLevelDiffAlgorithm) fallback;
-				fb.diffNonCommon(edits, cmp, a, b, r);
+            } else if (fallback instanceof LowLevelDiffAlgorithm) {
+                LowLevelDiffAlgorithm fb = (LowLevelDiffAlgorithm) fallback;
+                fb.diffNonCommon(edits, cmp, a, b, r);
 
-			} else if (fallback != null) {
-				SubsequenceComparator<HashedSequence<S>> cs = subcmp();
-				Subsequence<HashedSequence<S>> as = Subsequence.a(a, r);
-				Subsequence<HashedSequence<S>> bs = Subsequence.b(b, r);
+            } else if (fallback != null) {
+                SubsequenceComparator<HashedSequence<S>> cs = subcmp();
+                Subsequence<HashedSequence<S>> as = Subsequence.a(a, r);
+                Subsequence<HashedSequence<S>> bs = Subsequence.b(b, r);
 
-				EditList res = fallback.diffNonCommon(cs, as, bs);
-				edits.addAll(Subsequence.toBase(res, as, bs));
+                EditList res = fallback.diffNonCommon(cs, as, bs);
+                edits.addAll(Subsequence.toBase(res, as, bs));
 
-			} else {
-				edits.add(r);
-			}
-		}
+            } else {
+                edits.add(r);
+            }
+        }
 
-		private void diff(Edit r) {
-			switch (r.getType()) {
-			case INSERT:
-			case DELETE:
-				edits.add(r);
-				break;
+        private void diff(Edit r) {
+            switch (r.getType()) {
+                case INSERT:
+                case DELETE:
+                    edits.add(r);
+                    break;
 
-			case REPLACE:
-				if (r.getLengthA() == 1 && r.getLengthB() == 1)
-					edits.add(r);
-				else
-					diffReplace(r);
-				break;
+                case REPLACE:
+                    if (r.getLengthA() == 1 && r.getLengthB() == 1)
+                        edits.add(r);
+                    else
+                        diffReplace(r);
+                    break;
 
-			case EMPTY:
-			default:
-				throw new IllegalStateException();
-			}
-		}
+                case EMPTY:
+                default:
+                    throw new IllegalStateException();
+            }
+        }
 
-		private SubsequenceComparator<HashedSequence<S>> subcmp() {
-			return new SubsequenceComparator<>(cmp);
-		}
-	}
+        private SubsequenceComparator<HashedSequence<S>> subcmp() {
+            return new SubsequenceComparator<>(cmp);
+        }
+    }
 }

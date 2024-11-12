@@ -26,27 +26,27 @@ import org.eclipse.jgit.errors.MissingObjectException;
  * being detected in the commit objects.
  */
 final class FixUninterestingGenerator extends Generator {
-	private final Generator pending;
+    private final Generator pending;
 
-	FixUninterestingGenerator(Generator g) {
-		super(g.firstParent);
-		pending = g;
-	}
+    FixUninterestingGenerator(Generator g) {
+        super(g.firstParent);
+        pending = g;
+    }
 
-	@Override
-	int outputType() {
-		return pending.outputType();
-	}
+    @Override
+    int outputType() {
+        return pending.outputType();
+    }
 
-	@Override
-	RevCommit next() throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		for (;;) {
-			final RevCommit c = pending.next();
-			if (c == null)
-				return null;
-			if ((c.flags & RevWalk.UNINTERESTING) == 0)
-				return c;
-		}
-	}
+    @Override
+    RevCommit next() throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        for (; ; ) {
+            final RevCommit c = pending.next();
+            if (c == null)
+                return null;
+            if ((c.flags & RevWalk.UNINTERESTING) == 0)
+                return c;
+        }
+    }
 }

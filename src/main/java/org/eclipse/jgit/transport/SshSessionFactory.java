@@ -36,115 +36,107 @@ import org.eclipse.jgit.util.SystemReader;
  */
 public abstract class SshSessionFactory {
 
-	private static class DefaultFactory {
+    private static class DefaultFactory {
 
-		private static volatile SshSessionFactory INSTANCE = loadSshSessionFactory();
+        private static volatile SshSessionFactory INSTANCE = loadSshSessionFactory();
 
-		private static SshSessionFactory loadSshSessionFactory() {
-			ServiceLoader<SshSessionFactory> loader = ServiceLoader
-					.load(SshSessionFactory.class);
-			Iterator<SshSessionFactory> iter = loader.iterator();
-			if (iter.hasNext()) {
-				return iter.next();
-			}
-			return null;
-		}
+        private static SshSessionFactory loadSshSessionFactory() {
+            ServiceLoader<SshSessionFactory> loader = ServiceLoader
+                    .load(SshSessionFactory.class);
+            Iterator<SshSessionFactory> iter = loader.iterator();
+            if (iter.hasNext()) {
+                return iter.next();
+            }
+            return null;
+        }
 
-		private DefaultFactory() {
-			// No instantiation
-		}
+        private DefaultFactory() {
+            // No instantiation
+        }
 
-		public static SshSessionFactory getInstance() {
-			return INSTANCE;
-		}
+        public static SshSessionFactory getInstance() {
+            return INSTANCE;
+        }
 
-		public static void setInstance(SshSessionFactory newFactory) {
-			if (newFactory != null) {
-				INSTANCE = newFactory;
-			} else {
-				INSTANCE = loadSshSessionFactory();
-			}
-		}
-	}
+        public static void setInstance(SshSessionFactory newFactory) {
+            if (newFactory != null) {
+                INSTANCE = newFactory;
+            } else {
+                INSTANCE = loadSshSessionFactory();
+            }
+        }
+    }
 
-	/**
-	 * Gets the currently configured JVM-wide factory.
-	 * <p>
-	 * By default the factory will read from the user's {@code $HOME/.ssh} and
-	 * assume OpenSSH compatibility.
-	 * </p>
-	 *
-	 * @return factory the current factory for this JVM.
-	 */
-	public static SshSessionFactory getInstance() {
-		return DefaultFactory.getInstance();
-	}
+    /**
+     * Gets the currently configured JVM-wide factory.
+     * <p>
+     * By default the factory will read from the user's {@code $HOME/.ssh} and
+     * assume OpenSSH compatibility.
+     * </p>
+     *
+     * @return factory the current factory for this JVM.
+     */
+    public static SshSessionFactory getInstance() {
+        return DefaultFactory.getInstance();
+    }
 
-	/**
-	 * Changes the JVM-wide factory to a different implementation.
-	 *
-	 * @param newFactory
-	 *            factory for future sessions to be created through; if
-	 *            {@code null} the default factory will be restored.
-	 */
-	public static void setInstance(SshSessionFactory newFactory) {
-		DefaultFactory.setInstance(newFactory);
-	}
+    /**
+     * Changes the JVM-wide factory to a different implementation.
+     *
+     * @param newFactory factory for future sessions to be created through; if
+     *                   {@code null} the default factory will be restored.
+     */
+    public static void setInstance(SshSessionFactory newFactory) {
+        DefaultFactory.setInstance(newFactory);
+    }
 
-	/**
-	 * Retrieves the local user name as defined by the system property
-	 * "user.name".
-	 *
-	 * @return the user name
-	 * @since 5.2
-	 */
-	public static String getLocalUserName() {
-		return AccessController
-				.doPrivileged((PrivilegedAction<String>) () -> SystemReader
-						.getInstance().getProperty(Constants.OS_USER_NAME_KEY));
-	}
+    /**
+     * Retrieves the local user name as defined by the system property
+     * "user.name".
+     *
+     * @return the user name
+     * @since 5.2
+     */
+    public static String getLocalUserName() {
+        return AccessController
+                .doPrivileged((PrivilegedAction<String>) () -> SystemReader
+                        .getInstance().getProperty(Constants.OS_USER_NAME_KEY));
+    }
 
-	/**
-	 * Opens (or reuses) a session to a host. The returned session is connected
-	 * and authenticated and is ready for further use.
-	 *
-	 * @param uri
-	 *            URI of the remote host to connect to
-	 * @param credentialsProvider
-	 *            provider to support authentication, may be {@code null} if no
-	 *            user input for authentication is needed
-	 * @param fs
-	 *            the file system abstraction to use for certain file
-	 *            operations, such as reading configuration files
-	 * @param tms
-	 *            connection timeout for creating the session, in milliseconds
-	 * @return a connected and authenticated session for communicating with the
-	 *         remote host given by the {@code uri}
-	 * @throws TransportException
-	 *             if the session could not be created
-	 */
-	public abstract RemoteSession getSession(URIish uri,
-			CredentialsProvider credentialsProvider, FS fs, int tms)
-			throws TransportException;
+    /**
+     * Opens (or reuses) a session to a host. The returned session is connected
+     * and authenticated and is ready for further use.
+     *
+     * @param uri                 URI of the remote host to connect to
+     * @param credentialsProvider provider to support authentication, may be {@code null} if no
+     *                            user input for authentication is needed
+     * @param fs                  the file system abstraction to use for certain file
+     *                            operations, such as reading configuration files
+     * @param tms                 connection timeout for creating the session, in milliseconds
+     * @return a connected and authenticated session for communicating with the
+     * remote host given by the {@code uri}
+     * @throws TransportException if the session could not be created
+     */
+    public abstract RemoteSession getSession(URIish uri,
+                                             CredentialsProvider credentialsProvider, FS fs, int tms)
+            throws TransportException;
 
-	/**
-	 * The name of the type of session factory.
-	 *
-	 * @return the name of the type of session factory.
-	 *
-	 * @since 5.8
-	 */
-	public abstract String getType();
+    /**
+     * The name of the type of session factory.
+     *
+     * @return the name of the type of session factory.
+     * @since 5.8
+     */
+    public abstract String getType();
 
-	/**
-	 * Closes (or recycles) a session to a host.
-	 *
-	 * @param session
-	 *            a session previously obtained from this factory's
-	 *            {@link #getSession(URIish, CredentialsProvider, FS, int)}
-	 *            method.
-	 */
-	public void releaseSession(RemoteSession session) {
-		session.disconnect();
-	}
+    /**
+     * Closes (or recycles) a session to a host.
+     *
+     * @param session a session previously obtained from this factory's
+     *                {@link #getSession(URIish, CredentialsProvider, FS, int)}
+     *                method.
+     */
+    public void releaseSession(RemoteSession session) {
+        session.disconnect();
+    }
 }

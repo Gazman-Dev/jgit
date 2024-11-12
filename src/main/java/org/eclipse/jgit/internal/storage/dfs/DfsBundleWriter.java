@@ -18,35 +18,33 @@ import org.eclipse.jgit.internal.storage.pack.CachedPack;
 import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.transport.BundleWriter;
 
-/** Writes {@link DfsRepository} to a Git bundle. */
+/**
+ * Writes {@link DfsRepository} to a Git bundle.
+ */
 public class DfsBundleWriter {
-	/**
-	 * Writes the entire {@link DfsRepository} to a Git bundle.
-	 * <p>
-	 * This method try to avoid traversing the pack files as much as possible
-	 * and dumps all objects as-is to a Git bundle.
-	 *
-	 * @param pm
-	 *            progress monitor
-	 * @param os
-	 *            Git bundle output
-	 * @param db
-	 *            repository
-	 * @throws IOException
-	 *             thrown if the output stream throws one.
-	 */
-	public static void writeEntireRepositoryAsBundle(ProgressMonitor pm,
-			OutputStream os, DfsRepository db) throws IOException {
-		BundleWriter bw = new BundleWriter(db);
-		db.getRefDatabase().getRefs().forEach(bw::include);
-		List<CachedPack> packs = new ArrayList<>();
-		for (DfsPackFile p : db.getObjectDatabase().getPacks()) {
-			packs.add(new DfsCachedPack(p));
-		}
-		bw.addObjectsAsIs(packs);
-		bw.writeBundle(pm, os);
-	}
+    /**
+     * Writes the entire {@link DfsRepository} to a Git bundle.
+     * <p>
+     * This method try to avoid traversing the pack files as much as possible
+     * and dumps all objects as-is to a Git bundle.
+     *
+     * @param pm progress monitor
+     * @param os Git bundle output
+     * @param db repository
+     * @throws IOException thrown if the output stream throws one.
+     */
+    public static void writeEntireRepositoryAsBundle(ProgressMonitor pm,
+                                                     OutputStream os, DfsRepository db) throws IOException {
+        BundleWriter bw = new BundleWriter(db);
+        db.getRefDatabase().getRefs().forEach(bw::include);
+        List<CachedPack> packs = new ArrayList<>();
+        for (DfsPackFile p : db.getObjectDatabase().getPacks()) {
+            packs.add(new DfsCachedPack(p));
+        }
+        bw.addObjectsAsIs(packs);
+        bw.writeBundle(pm, os);
+    }
 
-	private DfsBundleWriter() {
-	}
+    private DfsBundleWriter() {
+    }
 }

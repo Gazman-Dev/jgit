@@ -20,27 +20,26 @@ import org.eclipse.jgit.internal.JGitText;
  * Indicates one or more paths in a DirCache have non-zero stages present.
  */
 public class UnmergedPathException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final DirCacheEntry entry;
+    private final DirCacheEntry entry;
 
-	/**
-	 * Create a new unmerged path exception.
-	 *
-	 * @param dce
-	 *            the first non-zero stage of the unmerged path.
-	 */
-	public UnmergedPathException(DirCacheEntry dce) {
-		super(MessageFormat.format(JGitText.get().unmergedPath, dce.getPathString()));
-		entry = dce;
-	}
+    /**
+     * Create a new unmerged path exception.
+     *
+     * @param dce the first non-zero stage of the unmerged path.
+     */
+    public UnmergedPathException(DirCacheEntry dce) {
+        super(MessageFormat.format(JGitText.get().unmergedPath, dce.getPathString()));
+        entry = dce;
+    }
 
-	/**
-	 * Get the first non-zero stage of the unmerged path
-	 *
-	 * @return the first non-zero stage of the unmerged path
-	 */
-	public DirCacheEntry getDirCacheEntry() {
-		return entry;
-	}
+    /**
+     * Get the first non-zero stage of the unmerged path
+     *
+     * @return the first non-zero stage of the unmerged path
+     */
+    public DirCacheEntry getDirCacheEntry() {
+        return entry;
+    }
 }

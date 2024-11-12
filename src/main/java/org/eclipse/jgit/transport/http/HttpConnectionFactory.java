@@ -20,30 +20,25 @@ import java.net.URL;
  * @since 3.3
  */
 public interface HttpConnectionFactory {
-	/**
-	 * Creates a new connection to a destination defined by a
-	 * {@link URL}
-	 *
-	 * @param url
-	 *            a {@link URL} object.
-	 * @return a {@link HttpConnection}
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	HttpConnection create(URL url) throws IOException;
+    /**
+     * Creates a new connection to a destination defined by a
+     * {@link URL}
+     *
+     * @param url a {@link URL} object.
+     * @return a {@link HttpConnection}
+     * @throws IOException if an IO error occurred
+     */
+    HttpConnection create(URL url) throws IOException;
 
-	/**
-	 * Creates a new connection to a destination defined by a
-	 * {@link URL} using a proxy
-	 *
-	 * @param url
-	 *            a {@link URL} object.
-	 * @param proxy
-	 *            the proxy to be used
-	 * @return a {@link HttpConnection}
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	HttpConnection create(URL url, Proxy proxy)
-			throws IOException;
+    /**
+     * Creates a new connection to a destination defined by a
+     * {@link URL} using a proxy
+     *
+     * @param url   a {@link URL} object.
+     * @param proxy the proxy to be used
+     * @return a {@link HttpConnection}
+     * @throws IOException if an IO error occurred
+     */
+    HttpConnection create(URL url, Proxy proxy)
+            throws IOException;
 }

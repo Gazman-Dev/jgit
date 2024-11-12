@@ -21,39 +21,36 @@ import org.eclipse.jgit.errors.CorruptObjectException;
  * @since 4.9
  */
 public interface BlobObjectChecker {
-	/** No-op implementation of {@link BlobObjectChecker}. */
-	BlobObjectChecker NULL_CHECKER =
-			new BlobObjectChecker() {
-				@Override
-				public void update(byte[] in, int p, int len) {
-					// Empty implementation.
-				}
+    /**
+     * No-op implementation of {@link BlobObjectChecker}.
+     */
+    BlobObjectChecker NULL_CHECKER =
+            new BlobObjectChecker() {
+                @Override
+                public void update(byte[] in, int p, int len) {
+                    // Empty implementation.
+                }
 
-				@Override
-				public void endBlob(AnyObjectId id) {
-					// Empty implementation.
-				}
-			};
+                @Override
+                public void endBlob(AnyObjectId id) {
+                    // Empty implementation.
+                }
+            };
 
-	/**
-	 * Check a new fragment of the blob.
-	 *
-	 * @param in
-	 *            input array of bytes.
-	 * @param offset
-	 *            offset to start at from {@code in}.
-	 * @param len
-	 *            length of the fragment to check.
-	 */
-	void update(byte[] in, int offset, int len);
+    /**
+     * Check a new fragment of the blob.
+     *
+     * @param in     input array of bytes.
+     * @param offset offset to start at from {@code in}.
+     * @param len    length of the fragment to check.
+     */
+    void update(byte[] in, int offset, int len);
 
-	/**
-	 * Finalize the blob checking.
-	 *
-	 * @param id
-	 *            identity of the object being checked.
-	 * @throws CorruptObjectException
-	 *             if any error was detected.
-	 */
-	void endBlob(AnyObjectId id) throws CorruptObjectException;
+    /**
+     * Finalize the blob checking.
+     *
+     * @param id identity of the object being checked.
+     * @throws CorruptObjectException if any error was detected.
+     */
+    void endBlob(AnyObjectId id) throws CorruptObjectException;
 }

@@ -66,260 +66,259 @@ import org.eclipse.jgit.util.FS;
  * @since 3.5
  */
 public class NetRC {
-	static final Pattern NETRC = Pattern.compile("(\\S+)"); //$NON-NLS-1$
+    static final Pattern NETRC = Pattern.compile("(\\S+)"); //$NON-NLS-1$
 
-	/**
-	 * 'default' netrc entry. This is the same as machine name except that
-	 * default matches any name. There can be only one default token, and it
-	 * must be after all machine tokens.
-	 */
-	static final String DEFAULT_ENTRY = "default"; //$NON-NLS-1$
+    /**
+     * 'default' netrc entry. This is the same as machine name except that
+     * default matches any name. There can be only one default token, and it
+     * must be after all machine tokens.
+     */
+    static final String DEFAULT_ENTRY = "default"; //$NON-NLS-1$
 
-	/**
-	 * .netrc file entry
-	 */
-	public static class NetRCEntry {
-		/**
-		 * login netrc entry
-		 */
-		public String login;
+    /**
+     * .netrc file entry
+     */
+    public static class NetRCEntry {
+        /**
+         * login netrc entry
+         */
+        public String login;
 
-		/**
-		 * password netrc entry
-		 */
-		public char[] password;
+        /**
+         * password netrc entry
+         */
+        public char[] password;
 
-		/**
-		 * machine netrc entry
-		 */
-		public String machine;
+        /**
+         * machine netrc entry
+         */
+        public String machine;
 
-		/**
-		 * account netrc entry
-		 */
-		public String account;
+        /**
+         * account netrc entry
+         */
+        public String account;
 
-		/**
-		 * macdef netrc entry. Defines a macro. This token functions like the
-		 * ftp macdef command functions. A macro is defined with the specified
-		 * name; its contents begins with the next .netrc line and continues
-		 * until a null line (consecutive new-line characters) is encountered.
-		 * If a macro named init is defined, it is automatically executed as the
-		 * last step in the auto-login process.
-		 */
-		public String macdef;
+        /**
+         * macdef netrc entry. Defines a macro. This token functions like the
+         * ftp macdef command functions. A macro is defined with the specified
+         * name; its contents begins with the next .netrc line and continues
+         * until a null line (consecutive new-line characters) is encountered.
+         * If a macro named init is defined, it is automatically executed as the
+         * last step in the auto-login process.
+         */
+        public String macdef;
 
-		/**
-		 * macro script body of macdef entry.
-		 */
-		public String macbody;
+        /**
+         * macro script body of macdef entry.
+         */
+        public String macbody;
 
-		/**
-		 * Default constructor
-		 */
-		public NetRCEntry() {
-		}
+        /**
+         * Default constructor
+         */
+        public NetRCEntry() {
+        }
 
-		boolean complete() {
-			return login != null && password != null && machine != null;
-		}
-	}
+        boolean complete() {
+            return login != null && password != null && machine != null;
+        }
+    }
 
-	private File netrc;
+    private File netrc;
 
-	private Instant lastModified;
+    private Instant lastModified;
 
-	private Map<String, NetRCEntry> hosts = new HashMap<>();
+    private Map<String, NetRCEntry> hosts = new HashMap<>();
 
-	private static final TreeMap<String, State> STATE = new TreeMap<>() {
-		private static final long serialVersionUID = -4285910831814853334L;
-		{
-			put("machine", State.MACHINE); //$NON-NLS-1$
-			put("login", State.LOGIN); //$NON-NLS-1$
-			put("password", State.PASSWORD); //$NON-NLS-1$
-			put(DEFAULT_ENTRY, State.DEFAULT);
-			put("account", State.ACCOUNT); //$NON-NLS-1$
-			put("macdef", State.MACDEF); //$NON-NLS-1$
-		}
-	};
+    private static final TreeMap<String, State> STATE = new TreeMap<>() {
+        private static final long serialVersionUID = -4285910831814853334L;
 
-	enum State {
-		COMMAND, MACHINE, LOGIN, PASSWORD, DEFAULT, ACCOUNT, MACDEF
-	}
+        {
+            put("machine", State.MACHINE); //$NON-NLS-1$
+            put("login", State.LOGIN); //$NON-NLS-1$
+            put("password", State.PASSWORD); //$NON-NLS-1$
+            put(DEFAULT_ENTRY, State.DEFAULT);
+            put("account", State.ACCOUNT); //$NON-NLS-1$
+            put("macdef", State.MACDEF); //$NON-NLS-1$
+        }
+    };
 
-	/**
-	 * <p>Constructor for NetRC.</p>
-	 */
-	public NetRC() {
-		netrc = getDefaultFile();
-		if (netrc != null)
-			parse();
-	}
+    enum State {
+        COMMAND, MACHINE, LOGIN, PASSWORD, DEFAULT, ACCOUNT, MACDEF
+    }
 
-	/**
-	 * <p>Constructor for NetRC.</p>
-	 *
-	 * @param netrc
-	 *            the .netrc file
-	 */
-	public NetRC(File netrc) {
-		this.netrc = netrc;
-		parse();
-	}
+    /**
+     * <p>Constructor for NetRC.</p>
+     */
+    public NetRC() {
+        netrc = getDefaultFile();
+        if (netrc != null)
+            parse();
+    }
 
-	private static File getDefaultFile() {
-		File home = FS.DETECTED.userHome();
-		File netrc = new File(home, ".netrc"); //$NON-NLS-1$
-		if (netrc.exists())
-			return netrc;
+    /**
+     * <p>Constructor for NetRC.</p>
+     *
+     * @param netrc the .netrc file
+     */
+    public NetRC(File netrc) {
+        this.netrc = netrc;
+        parse();
+    }
 
-		netrc = new File(home, "_netrc"); //$NON-NLS-1$
-		if (netrc.exists())
-			return netrc;
+    private static File getDefaultFile() {
+        File home = FS.DETECTED.userHome();
+        File netrc = new File(home, ".netrc"); //$NON-NLS-1$
+        if (netrc.exists())
+            return netrc;
 
-		return null;
-	}
+        netrc = new File(home, "_netrc"); //$NON-NLS-1$
+        if (netrc.exists())
+            return netrc;
 
-	/**
-	 * Get entry by host name
-	 *
-	 * @param host
-	 *            the host name
-	 * @return entry associated with host name or null
-	 */
-	public NetRCEntry getEntry(String host) {
-		if (netrc == null)
-			return null;
+        return null;
+    }
 
-		if (!this.lastModified
-				.equals(FS.DETECTED.lastModifiedInstant(this.netrc))) {
-			parse();
-		}
+    /**
+     * Get entry by host name
+     *
+     * @param host the host name
+     * @return entry associated with host name or null
+     */
+    public NetRCEntry getEntry(String host) {
+        if (netrc == null)
+            return null;
 
-		NetRCEntry entry = this.hosts.get(host);
+        if (!this.lastModified
+                .equals(FS.DETECTED.lastModifiedInstant(this.netrc))) {
+            parse();
+        }
 
-		if (entry == null)
-			entry = this.hosts.get(DEFAULT_ENTRY);
+        NetRCEntry entry = this.hosts.get(host);
 
-		return entry;
-	}
+        if (entry == null)
+            entry = this.hosts.get(DEFAULT_ENTRY);
 
-	/**
-	 * Get all entries collected from .netrc file
-	 *
-	 * @return all entries collected from .netrc file
-	 */
-	public Collection<NetRCEntry> getEntries() {
-		return hosts.values();
-	}
+        return entry;
+    }
 
-	private void parse() {
-		this.hosts.clear();
-		this.lastModified = FS.DETECTED.lastModifiedInstant(this.netrc);
+    /**
+     * Get all entries collected from .netrc file
+     *
+     * @return all entries collected from .netrc file
+     */
+    public Collection<NetRCEntry> getEntries() {
+        return hosts.values();
+    }
 
-		try (BufferedReader r = new BufferedReader(
-				new InputStreamReader(new FileInputStream(netrc), UTF_8))) {
-			String line = null;
+    private void parse() {
+        this.hosts.clear();
+        this.lastModified = FS.DETECTED.lastModifiedInstant(this.netrc);
 
-			NetRCEntry entry = new NetRCEntry();
+        try (BufferedReader r = new BufferedReader(
+                new InputStreamReader(new FileInputStream(netrc), UTF_8))) {
+            String line = null;
 
-			State state = State.COMMAND;
+            NetRCEntry entry = new NetRCEntry();
 
-			String macbody = ""; //$NON-NLS-1$
+            State state = State.COMMAND;
 
-			Matcher matcher = NETRC.matcher(""); //$NON-NLS-1$
-			while ((line = r.readLine()) != null) {
+            String macbody = ""; //$NON-NLS-1$
 
-				// reading macbody
-				if (entry.macdef != null && entry.macbody == null) {
-					if (line.length() == 0) {
-						entry.macbody = macbody;
-						macbody = ""; //$NON-NLS-1$
-						continue;
-					}
-					macbody += line + "\n"; //$NON-NLS-1$;
-					continue;
-				}
+            Matcher matcher = NETRC.matcher(""); //$NON-NLS-1$
+            while ((line = r.readLine()) != null) {
 
-				matcher.reset(line);
-				while (matcher.find()) {
-					String command = matcher.group().toLowerCase(Locale.ROOT);
-					if (command.startsWith("#")) { //$NON-NLS-1$
-						matcher.reset(""); //$NON-NLS-1$
-						continue;
-					}
-					state = STATE.get(command);
-					if (state == null)
-						state = State.COMMAND;
+                // reading macbody
+                if (entry.macdef != null && entry.macbody == null) {
+                    if (line.length() == 0) {
+                        entry.macbody = macbody;
+                        macbody = ""; //$NON-NLS-1$
+                        continue;
+                    }
+                    macbody += line + "\n"; //$NON-NLS-1$;
+                    continue;
+                }
 
-					switch (state) {
-					case COMMAND:
-						break;
-					case ACCOUNT:
-						if (entry.account != null && entry.complete()) {
-							hosts.put(entry.machine, entry);
-							entry = new NetRCEntry();
-						}
-						if (matcher.find())
-							entry.account = matcher.group();
-						state = State.COMMAND;
-						break;
-					case LOGIN:
-						if (entry.login != null && entry.complete()) {
-							hosts.put(entry.machine, entry);
-							entry = new NetRCEntry();
-						}
-						if (matcher.find())
-							entry.login = matcher.group();
-						state = State.COMMAND;
-						break;
-					case PASSWORD:
-						if (entry.password != null && entry.complete()) {
-							hosts.put(entry.machine, entry);
-							entry = new NetRCEntry();
-						}
-						if (matcher.find())
-							entry.password = matcher.group().toCharArray();
-						state = State.COMMAND;
-						break;
-					case DEFAULT:
-						if (entry.machine != null && entry.complete()) {
-							hosts.put(entry.machine, entry);
-							entry = new NetRCEntry();
-						}
-						entry.machine = DEFAULT_ENTRY;
-						state = State.COMMAND;
-						break;
-					case MACDEF:
-						if (entry.macdef != null && entry.complete()) {
-							hosts.put(entry.machine, entry);
-							entry = new NetRCEntry();
-						}
-						if (matcher.find())
-							entry.macdef = matcher.group();
-						state = State.COMMAND;
-						break;
-					case MACHINE:
-						if (entry.machine != null && entry.complete()) {
-							hosts.put(entry.machine, entry);
-							entry = new NetRCEntry();
-						}
-						if (matcher.find())
-							entry.machine = matcher.group();
-						state = State.COMMAND;
-						break;
-					}
-				}
-			}
+                matcher.reset(line);
+                while (matcher.find()) {
+                    String command = matcher.group().toLowerCase(Locale.ROOT);
+                    if (command.startsWith("#")) { //$NON-NLS-1$
+                        matcher.reset(""); //$NON-NLS-1$
+                        continue;
+                    }
+                    state = STATE.get(command);
+                    if (state == null)
+                        state = State.COMMAND;
 
-			// reading macbody on EOF
-			if (entry.macdef != null && entry.macbody == null)
-				entry.macbody = macbody;
+                    switch (state) {
+                        case COMMAND:
+                            break;
+                        case ACCOUNT:
+                            if (entry.account != null && entry.complete()) {
+                                hosts.put(entry.machine, entry);
+                                entry = new NetRCEntry();
+                            }
+                            if (matcher.find())
+                                entry.account = matcher.group();
+                            state = State.COMMAND;
+                            break;
+                        case LOGIN:
+                            if (entry.login != null && entry.complete()) {
+                                hosts.put(entry.machine, entry);
+                                entry = new NetRCEntry();
+                            }
+                            if (matcher.find())
+                                entry.login = matcher.group();
+                            state = State.COMMAND;
+                            break;
+                        case PASSWORD:
+                            if (entry.password != null && entry.complete()) {
+                                hosts.put(entry.machine, entry);
+                                entry = new NetRCEntry();
+                            }
+                            if (matcher.find())
+                                entry.password = matcher.group().toCharArray();
+                            state = State.COMMAND;
+                            break;
+                        case DEFAULT:
+                            if (entry.machine != null && entry.complete()) {
+                                hosts.put(entry.machine, entry);
+                                entry = new NetRCEntry();
+                            }
+                            entry.machine = DEFAULT_ENTRY;
+                            state = State.COMMAND;
+                            break;
+                        case MACDEF:
+                            if (entry.macdef != null && entry.complete()) {
+                                hosts.put(entry.machine, entry);
+                                entry = new NetRCEntry();
+                            }
+                            if (matcher.find())
+                                entry.macdef = matcher.group();
+                            state = State.COMMAND;
+                            break;
+                        case MACHINE:
+                            if (entry.machine != null && entry.complete()) {
+                                hosts.put(entry.machine, entry);
+                                entry = new NetRCEntry();
+                            }
+                            if (matcher.find())
+                                entry.machine = matcher.group();
+                            state = State.COMMAND;
+                            break;
+                    }
+                }
+            }
 
-			if (entry.complete())
-				hosts.put(entry.machine, entry);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+            // reading macbody on EOF
+            if (entry.macdef != null && entry.macbody == null)
+                entry.macbody = macbody;
+
+            if (entry.complete())
+                hosts.put(entry.machine, entry);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

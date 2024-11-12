@@ -26,89 +26,79 @@ import org.eclipse.jgit.lib.ObjectId;
  * Exception thrown when an object cannot be read from Git.
  */
 public class CorruptObjectException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private ObjectChecker.ErrorType errorType;
+    private ObjectChecker.ErrorType errorType;
 
-	/**
-	 * Report a specific error condition discovered in an object.
-	 *
-	 * @param type
-	 *            type of error
-	 * @param id
-	 *            identity of the bad object
-	 * @param why
-	 *            description of the error.
-	 * @since 4.2
-	 */
-	public CorruptObjectException(ObjectChecker.ErrorType type, AnyObjectId id,
-			String why) {
-		super(MessageFormat.format(JGitText.get().objectIsCorrupt3,
-				type.getMessageId(), id.name(), why));
-		this.errorType = type;
-	}
+    /**
+     * Report a specific error condition discovered in an object.
+     *
+     * @param type type of error
+     * @param id   identity of the bad object
+     * @param why  description of the error.
+     * @since 4.2
+     */
+    public CorruptObjectException(ObjectChecker.ErrorType type, AnyObjectId id,
+                                  String why) {
+        super(MessageFormat.format(JGitText.get().objectIsCorrupt3,
+                type.getMessageId(), id.name(), why));
+        this.errorType = type;
+    }
 
-	/**
-	 * Construct a CorruptObjectException for reporting a problem specified
-	 * object id
-	 *
-	 * @param id
-	 *            a {@link AnyObjectId}
-	 * @param why
-	 *            error message
-	 */
-	public CorruptObjectException(AnyObjectId id, String why) {
-		super(MessageFormat.format(JGitText.get().objectIsCorrupt, id.name(), why));
-	}
+    /**
+     * Construct a CorruptObjectException for reporting a problem specified
+     * object id
+     *
+     * @param id  a {@link AnyObjectId}
+     * @param why error message
+     */
+    public CorruptObjectException(AnyObjectId id, String why) {
+        super(MessageFormat.format(JGitText.get().objectIsCorrupt, id.name(), why));
+    }
 
-	/**
-	 * Construct a CorruptObjectException for reporting a problem specified
-	 * object id
-	 *
-	 * @param id
-	 *            a {@link ObjectId}
-	 * @param why
-	 *            error message
-	 */
-	public CorruptObjectException(ObjectId id, String why) {
-		super(MessageFormat.format(JGitText.get().objectIsCorrupt, id.name(), why));
-	}
+    /**
+     * Construct a CorruptObjectException for reporting a problem specified
+     * object id
+     *
+     * @param id  a {@link ObjectId}
+     * @param why error message
+     */
+    public CorruptObjectException(ObjectId id, String why) {
+        super(MessageFormat.format(JGitText.get().objectIsCorrupt, id.name(), why));
+    }
 
-	/**
-	 * Construct a CorruptObjectException for reporting a problem not associated
-	 * with a specific object id.
-	 *
-	 * @param why
-	 *            error message
-	 */
-	public CorruptObjectException(String why) {
-		super(why);
-	}
+    /**
+     * Construct a CorruptObjectException for reporting a problem not associated
+     * with a specific object id.
+     *
+     * @param why error message
+     */
+    public CorruptObjectException(String why) {
+        super(why);
+    }
 
-	/**
-	 * Construct a CorruptObjectException for reporting a problem not associated
-	 * with a specific object id.
-	 *
-	 * @param why
-	 *            message describing the corruption.
-	 * @param cause
-	 *            optional root cause exception
-	 * @since 3.4
-	 */
-	public CorruptObjectException(String why, Throwable cause) {
-		super(why);
-		initCause(cause);
-	}
+    /**
+     * Construct a CorruptObjectException for reporting a problem not associated
+     * with a specific object id.
+     *
+     * @param why   message describing the corruption.
+     * @param cause optional root cause exception
+     * @since 3.4
+     */
+    public CorruptObjectException(String why, Throwable cause) {
+        super(why);
+        initCause(cause);
+    }
 
-	/**
-	 * Specific error condition identified by
-	 * {@link ObjectChecker}.
-	 *
-	 * @return error condition or null.
-	 * @since 4.2
-	 */
-	@Nullable
-	public ObjectChecker.ErrorType getErrorType() {
-		return errorType;
-	}
+    /**
+     * Specific error condition identified by
+     * {@link ObjectChecker}.
+     *
+     * @return error condition or null.
+     * @since 4.2
+     */
+    @Nullable
+    public ObjectChecker.ErrorType getErrorType() {
+        return errorType;
+    }
 }

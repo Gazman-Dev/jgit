@@ -14,16 +14,15 @@ package org.eclipse.jgit.errors;
  */
 public class StoredObjectRepresentationNotAvailableException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Creates a new instance.
-	 *
-	 * @param cause
-	 *            {@link Throwable} that caused this exception
-	 * @since 6.0
-	 */
-	public StoredObjectRepresentationNotAvailableException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * Creates a new instance.
+     *
+     * @param cause {@link Throwable} that caused this exception
+     * @since 6.0
+     */
+    public StoredObjectRepresentationNotAvailableException(Throwable cause) {
+        super(cause);
+    }
 }

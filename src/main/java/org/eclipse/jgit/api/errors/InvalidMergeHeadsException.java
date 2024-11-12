@@ -44,15 +44,14 @@ package org.eclipse.jgit.api.errors;
  * case would be if a merge was called without including any head.
  */
 public class InvalidMergeHeadsException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for InvalidMergeHeadsException.
-	 *
-	 * @param msg
-	 *            error message
-	 */
-	public InvalidMergeHeadsException(String msg) {
-		super(msg);
-	}
+    /**
+     * Constructor for InvalidMergeHeadsException.
+     *
+     * @param msg error message
+     */
+    public InvalidMergeHeadsException(String msg) {
+        super(msg);
+    }
 }

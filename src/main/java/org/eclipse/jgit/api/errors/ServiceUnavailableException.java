@@ -16,27 +16,24 @@ package org.eclipse.jgit.api.errors;
  * @since 5.8
  */
 public class ServiceUnavailableException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for ServiceUnavailableException
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public ServiceUnavailableException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for ServiceUnavailableException
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     */
+    public ServiceUnavailableException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for ServiceUnavailableException
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public ServiceUnavailableException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for ServiceUnavailableException
+     *
+     * @param message error message
+     */
+    public ServiceUnavailableException(String message) {
+        super(message);
+    }
 }

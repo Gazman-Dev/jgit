@@ -16,23 +16,22 @@ package org.eclipse.jgit.transport;
  * @since 2.0
  */
 public class RequestNotYetReadException extends IllegalStateException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Initialize with no message.
-	 */
-	public RequestNotYetReadException() {
-		// Do not set a message.
-	}
+    /**
+     * Initialize with no message.
+     */
+    public RequestNotYetReadException() {
+        // Do not set a message.
+    }
 
-	/**
-	 * <p>Constructor for RequestNotYetReadException.</p>
-	 *
-	 * @param msg
-	 *            a message explaining the state. This message should not
-	 *            be shown to an end-user.
-	 */
-	public RequestNotYetReadException(String msg) {
-		super(msg);
-	}
+    /**
+     * <p>Constructor for RequestNotYetReadException.</p>
+     *
+     * @param msg a message explaining the state. This message should not
+     *            be shown to an end-user.
+     */
+    public RequestNotYetReadException(String msg) {
+        super(msg);
+    }
 }

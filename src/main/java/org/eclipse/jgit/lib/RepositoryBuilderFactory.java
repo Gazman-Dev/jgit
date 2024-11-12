@@ -22,6 +22,6 @@ import java.util.function.Supplier;
  * @since 5.6
  */
 public interface RepositoryBuilderFactory extends
-		Supplier<BaseRepositoryBuilder<? extends BaseRepositoryBuilder, ? extends Repository>> {
-	// Empty
+        Supplier<BaseRepositoryBuilder<? extends BaseRepositoryBuilder, ? extends Repository>> {
+    // Empty
 }

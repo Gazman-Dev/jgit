@@ -17,83 +17,82 @@ package org.eclipse.jgit.util;
  * @since 5.1.9
  */
 public class Stats {
-	private int n = 0;
+    private int n = 0;
 
-	private double avg = 0.0;
+    private double avg = 0.0;
 
-	private double min = 0.0;
+    private double min = 0.0;
 
-	private double max = 0.0;
+    private double max = 0.0;
 
-	private double sum = 0.0;
+    private double sum = 0.0;
 
-	/**
-	 * Add a value
-	 *
-	 * @param x
-	 *            value
-	 */
-	public void add(double x) {
-		n++;
-		min = n == 1 ? x : Math.min(min, x);
-		max = n == 1 ? x : Math.max(max, x);
-		double d = x - avg;
-		avg += d / n;
-		sum += d * d * (n - 1) / n;
-	}
+    /**
+     * Add a value
+     *
+     * @param x value
+     */
+    public void add(double x) {
+        n++;
+        min = n == 1 ? x : Math.min(min, x);
+        max = n == 1 ? x : Math.max(max, x);
+        double d = x - avg;
+        avg += d / n;
+        sum += d * d * (n - 1) / n;
+    }
 
-	/**
-	 * @return number of the added values
-	 */
-	public int count() {
-		return n;
-	}
+    /**
+     * @return number of the added values
+     */
+    public int count() {
+        return n;
+    }
 
-	/**
-	 * @return minimum of the added values
-	 */
-	public double min() {
-		if (n < 1) {
-			return Double.NaN;
-		}
-		return min;
-	}
+    /**
+     * @return minimum of the added values
+     */
+    public double min() {
+        if (n < 1) {
+            return Double.NaN;
+        }
+        return min;
+    }
 
-	/**
-	 * @return maximum of the added values
-	 */
-	public double max() {
-		if (n < 1) {
-			return Double.NaN;
-		}
-		return max;
-	}
+    /**
+     * @return maximum of the added values
+     */
+    public double max() {
+        if (n < 1) {
+            return Double.NaN;
+        }
+        return max;
+    }
 
-	/**
-	 * @return average of the added values
-	 */
+    /**
+     * @return average of the added values
+     */
 
-	public double avg() {
-		if (n < 1) {
-			return Double.NaN;
-		}
-		return avg;
-	}
+    public double avg() {
+        if (n < 1) {
+            return Double.NaN;
+        }
+        return avg;
+    }
 
-	/**
-	 * @return variance of the added values
-	 */
-	public double var() {
-		if (n < 2) {
-			return Double.NaN;
-		}
-		return sum / (n - 1);
-	}
+    /**
+     * @return variance of the added values
+     */
+    public double var() {
+        if (n < 2) {
+            return Double.NaN;
+        }
+        return sum / (n - 1);
+    }
 
-	/**
-	 * @return standard deviation of the added values
-	 */
-	public double stddev() {
-		return Math.sqrt(this.var());
-	}
+    /**
+     * @return standard deviation of the added values
+     */
+    public double stddev() {
+        return Math.sqrt(this.var());
+    }
 }

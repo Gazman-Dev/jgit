@@ -17,13 +17,11 @@ import java.io.IOException;
  * @since 5.7
  */
 public interface UnpackErrorHandler {
-	/**
-	 * Handle an exception thrown while unpacking the pack file.
-	 *
-	 * @param t
-	 *            exception thrown
-	 * @throws IOException
-	 *             thrown when failed to write an error back to the client.
-	 */
-	void handleUnpackException(Throwable t) throws IOException;
+    /**
+     * Handle an exception thrown while unpacking the pack file.
+     *
+     * @param t exception thrown
+     * @throws IOException thrown when failed to write an error back to the client.
+     */
+    void handleUnpackException(Throwable t) throws IOException;
 }

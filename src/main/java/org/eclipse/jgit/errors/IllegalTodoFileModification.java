@@ -15,15 +15,14 @@ package org.eclipse.jgit.errors;
  * @since 3.2
  */
 public class IllegalTodoFileModification extends Exception {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for IllegalTodoFileModification
-	 *
-	 * @param msg
-	 *            error message
-	 */
-	public IllegalTodoFileModification(String msg) {
-		super(msg);
-	}
+    /**
+     * Constructor for IllegalTodoFileModification
+     *
+     * @param msg error message
+     */
+    public IllegalTodoFileModification(String msg) {
+        super(msg);
+    }
 }

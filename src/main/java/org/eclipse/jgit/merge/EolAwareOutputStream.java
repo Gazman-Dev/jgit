@@ -49,51 +49,49 @@ import java.io.OutputStream;
  * line if not already in one.
  */
 class EolAwareOutputStream extends OutputStream {
-	private final OutputStream out;
+    private final OutputStream out;
 
-	private boolean bol = true;
+    private boolean bol = true;
 
-	/**
-	 * Initialize a new EOL aware stream.
-	 *
-	 * @param out
-	 *            stream to output all writes to.
-	 */
-	EolAwareOutputStream(OutputStream out) {
-		this.out = out;
-	}
+    /**
+     * Initialize a new EOL aware stream.
+     *
+     * @param out stream to output all writes to.
+     */
+    EolAwareOutputStream(OutputStream out) {
+        this.out = out;
+    }
 
-	/**
-	 * Begin a new line if not already in one.
-	 *
-	 * @exception IOException
-	 *                if an I/O error occurs.
-	 */
-	void beginln() throws IOException {
-		if (!bol)
-			write('\n');
-	}
+    /**
+     * Begin a new line if not already in one.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    void beginln() throws IOException {
+        if (!bol)
+            write('\n');
+    }
 
-	/**
-	 * Whether a new line has just begun
-	 *
-	 * @return true if a new line has just begun.
-	 */
-	boolean isBeginln() {
-		return bol;
-	}
+    /**
+     * Whether a new line has just begun
+     *
+     * @return true if a new line has just begun.
+     */
+    boolean isBeginln() {
+        return bol;
+    }
 
-	@Override
-	public void write(int val) throws IOException {
-		out.write(val);
-		bol = (val == '\n');
-	}
+    @Override
+    public void write(int val) throws IOException {
+        out.write(val);
+        bol = (val == '\n');
+    }
 
-	@Override
-	public void write(byte[] buf, int pos, int cnt) throws IOException {
-		if (cnt > 0) {
-			out.write(buf, pos, cnt);
-			bol = (buf[pos + (cnt - 1)] == '\n');
-		}
-	}
+    @Override
+    public void write(byte[] buf, int pos, int cnt) throws IOException {
+        if (cnt > 0) {
+            out.write(buf, pos, cnt);
+            bol = (buf[pos + (cnt - 1)] == '\n');
+        }
+    }
 }

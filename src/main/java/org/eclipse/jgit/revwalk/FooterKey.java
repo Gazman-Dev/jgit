@@ -18,42 +18,47 @@ import org.eclipse.jgit.lib.Constants;
  * Case insensitive key for a {@link FooterLine}.
  */
 public final class FooterKey {
-	/** Standard {@code Signed-off-by} */
-	public static final FooterKey SIGNED_OFF_BY = new FooterKey("Signed-off-by"); //$NON-NLS-1$
+    /**
+     * Standard {@code Signed-off-by}
+     */
+    public static final FooterKey SIGNED_OFF_BY = new FooterKey("Signed-off-by"); //$NON-NLS-1$
 
-	/** Standard {@code Acked-by} */
-	public static final FooterKey ACKED_BY = new FooterKey("Acked-by"); //$NON-NLS-1$
+    /**
+     * Standard {@code Acked-by}
+     */
+    public static final FooterKey ACKED_BY = new FooterKey("Acked-by"); //$NON-NLS-1$
 
-	/** Standard {@code CC} */
-	public static final FooterKey CC = new FooterKey("CC"); //$NON-NLS-1$
+    /**
+     * Standard {@code CC}
+     */
+    public static final FooterKey CC = new FooterKey("CC"); //$NON-NLS-1$
 
-	private final String name;
+    private final String name;
 
-	final byte[] raw;
+    final byte[] raw;
 
-	/**
-	 * Create a key for a specific footer line.
-	 *
-	 * @param keyName
-	 *            name of the footer line.
-	 */
-	public FooterKey(String keyName) {
-		name = keyName;
-		raw = Constants.encode(keyName.toLowerCase(Locale.ROOT));
-	}
+    /**
+     * Create a key for a specific footer line.
+     *
+     * @param keyName name of the footer line.
+     */
+    public FooterKey(String keyName) {
+        name = keyName;
+        raw = Constants.encode(keyName.toLowerCase(Locale.ROOT));
+    }
 
-	/**
-	 * Get name of this footer line.
-	 *
-	 * @return name of this footer line.
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * Get name of this footer line.
+     *
+     * @return name of this footer line.
+     */
+    public String getName() {
+        return name;
+    }
 
-	@SuppressWarnings("nls")
-	@Override
-	public String toString() {
-		return "FooterKey[" + name + "]";
-	}
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        return "FooterKey[" + name + "]";
+    }
 }

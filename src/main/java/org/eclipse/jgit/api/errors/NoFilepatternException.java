@@ -45,28 +45,25 @@ package org.eclipse.jgit.api.errors;
  */
 public class NoFilepatternException extends GitAPIException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for NoFilepatternException.
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public NoFilepatternException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for NoFilepatternException.
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     */
+    public NoFilepatternException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for NoFilepatternException.
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public NoFilepatternException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for NoFilepatternException.
+     *
+     * @param message error message
+     */
+    public NoFilepatternException(String message) {
+        super(message);
+    }
 
 }

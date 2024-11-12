@@ -22,78 +22,78 @@ import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.ObjectStream;
 
 final class LargePackedWholeObject extends ObjectLoader {
-	private final int type;
+    private final int type;
 
-	private final long size;
+    private final long size;
 
-	private final long objectOffset;
+    private final long objectOffset;
 
-	private final int headerLength;
+    private final int headerLength;
 
-	private final DfsPackFile pack;
+    private final DfsPackFile pack;
 
-	private final DfsObjDatabase db;
+    private final DfsObjDatabase db;
 
-	LargePackedWholeObject(int type, long size, long objectOffset,
-			int headerLength, DfsPackFile pack, DfsObjDatabase db) {
-		this.type = type;
-		this.size = size;
-		this.objectOffset = objectOffset;
-		this.headerLength = headerLength;
-		this.pack = pack;
-		this.db = db;
-	}
+    LargePackedWholeObject(int type, long size, long objectOffset,
+                           int headerLength, DfsPackFile pack, DfsObjDatabase db) {
+        this.type = type;
+        this.size = size;
+        this.objectOffset = objectOffset;
+        this.headerLength = headerLength;
+        this.pack = pack;
+        this.db = db;
+    }
 
-	@Override
-	public int getType() {
-		return type;
-	}
+    @Override
+    public int getType() {
+        return type;
+    }
 
-	@Override
-	public long getSize() {
-		return size;
-	}
+    @Override
+    public long getSize() {
+        return size;
+    }
 
-	@Override
-	public boolean isLarge() {
-		return true;
-	}
+    @Override
+    public boolean isLarge() {
+        return true;
+    }
 
-	@Override
-	public byte[] getCachedBytes() throws LargeObjectException {
-		throw new LargeObjectException();
-	}
+    @Override
+    public byte[] getCachedBytes() throws LargeObjectException {
+        throw new LargeObjectException();
+    }
 
-	@Override
-	public ObjectStream openStream() throws MissingObjectException, IOException {
-		PackInputStream packIn;
-		// ctx is closed by PackInputStream, or explicitly in the finally block
-		DfsReader ctx = db.newReader();
-		try {
-			try {
-				packIn = new PackInputStream(
-						pack, objectOffset + headerLength, ctx);
-				ctx = null; // owned by packIn
-			} catch (IOException packGone) {
-				// If the pack file cannot be pinned into the cursor, it
-				// probably was repacked recently. Go find the object
-				// again and open the stream from that location instead.
-				ObjectId obj = pack.getReverseIdx(ctx).findObject(objectOffset);
-				return ctx.open(obj, type).openStream();
-			}
-		} finally {
-			if (ctx != null) {
-				ctx.close();
-			}
-		}
+    @Override
+    public ObjectStream openStream() throws MissingObjectException, IOException {
+        PackInputStream packIn;
+        // ctx is closed by PackInputStream, or explicitly in the finally block
+        DfsReader ctx = db.newReader();
+        try {
+            try {
+                packIn = new PackInputStream(
+                        pack, objectOffset + headerLength, ctx);
+                ctx = null; // owned by packIn
+            } catch (IOException packGone) {
+                // If the pack file cannot be pinned into the cursor, it
+                // probably was repacked recently. Go find the object
+                // again and open the stream from that location instead.
+                ObjectId obj = pack.getReverseIdx(ctx).findObject(objectOffset);
+                return ctx.open(obj, type).openStream();
+            }
+        } finally {
+            if (ctx != null) {
+                ctx.close();
+            }
+        }
 
-		// Align buffer to inflater size, at a larger than default block.
-		// This reduces the number of context switches from the
-		// caller down into the pack stream inflation.
-		int bufsz = 8192;
-		InputStream in = new BufferedInputStream(
-				new InflaterInputStream(packIn, packIn.ctx.inflater(), bufsz),
-				bufsz);
-		return new ObjectStream.Filter(type, size, in);
-	}
+        // Align buffer to inflater size, at a larger than default block.
+        // This reduces the number of context switches from the
+        // caller down into the pack stream inflation.
+        int bufsz = 8192;
+        InputStream in = new BufferedInputStream(
+                new InflaterInputStream(packIn, packIn.ctx.inflater(), bufsz),
+                bufsz);
+        return new ObjectStream.Filter(type, size, in);
+    }
 }

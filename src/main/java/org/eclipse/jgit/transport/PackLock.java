@@ -21,11 +21,10 @@ import java.io.IOException;
  */
 public interface PackLock {
 
-	/**
-	 * Remove the {@code .keep} file that holds a pack in place.
-	 *
-	 * @throws IOException
-	 *             if deletion of the {@code .keep} file failed
-	 */
-	void unlock() throws IOException;
+    /**
+     * Remove the {@code .keep} file that holds a pack in place.
+     *
+     * @throws IOException if deletion of the {@code .keep} file failed
+     */
+    void unlock() throws IOException;
 }

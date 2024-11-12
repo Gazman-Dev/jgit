@@ -14,42 +14,50 @@ import org.eclipse.jgit.internal.storage.pack.ObjectToPack;
 import org.eclipse.jgit.internal.storage.pack.StoredObjectRepresentation;
 import org.eclipse.jgit.lib.AnyObjectId;
 
-/** {@link ObjectToPack} for {@link DfsObjDatabase}. */
+/**
+ * {@link ObjectToPack} for {@link DfsObjDatabase}.
+ */
 class DfsObjectToPack extends ObjectToPack {
-	private static final int FLAG_FOUND = 1 << 0;
+    private static final int FLAG_FOUND = 1 << 0;
 
-	/** Pack to reuse compressed data from, otherwise null. */
-	DfsPackFile pack;
+    /**
+     * Pack to reuse compressed data from, otherwise null.
+     */
+    DfsPackFile pack;
 
-	/** Offset of the object's header in {@link #pack}. */
-	long offset;
+    /**
+     * Offset of the object's header in {@link #pack}.
+     */
+    long offset;
 
-	/** Length of the data section of the object. */
-	long length;
+    /**
+     * Length of the data section of the object.
+     */
+    long length;
 
-	DfsObjectToPack(AnyObjectId src, int type) {
-		super(src, type);
-	}
+    DfsObjectToPack(AnyObjectId src, int type) {
+        super(src, type);
+    }
 
-	final boolean isFound() {
-		return isExtendedFlag(FLAG_FOUND);
-	}
+    final boolean isFound() {
+        return isExtendedFlag(FLAG_FOUND);
+    }
 
-	final void setFound() {
-		setExtendedFlag(FLAG_FOUND);
-	}
+    final void setFound() {
+        setExtendedFlag(FLAG_FOUND);
+    }
 
-	@Override
-	protected void clearReuseAsIs() {
-		super.clearReuseAsIs();
-		pack = null;
-	}
+    @Override
+    protected void clearReuseAsIs() {
+        super.clearReuseAsIs();
+        pack = null;
+    }
 
-	@Override
-	public void select(StoredObjectRepresentation ref) {
-		DfsObjectRepresentation ptr = (DfsObjectRepresentation) ref;
-		this.pack = ptr.pack;
-		this.offset = ptr.offset;
-		this.length = ptr.length;
-	}
+    @Override
+    public void select(StoredObjectRepresentation ref) {
+        DfsObjectRepresentation ptr = (DfsObjectRepresentation) ref;
+        this.pack = ptr.pack;
+        this.offset = ptr.offset;
+        this.length = ptr.length;
+    }
 }

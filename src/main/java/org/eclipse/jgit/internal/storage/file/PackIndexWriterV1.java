@@ -25,28 +25,28 @@ import org.eclipse.jgit.util.NB;
  * @see PackIndexV1
  */
 class PackIndexWriterV1 extends PackIndexWriter {
-	static boolean canStore(PackedObjectInfo oe) {
-		// We are limited to 4 GB per pack as offset is 32 bit unsigned int.
-		//
-		return oe.getOffset() >>> 1 < Integer.MAX_VALUE;
-	}
+    static boolean canStore(PackedObjectInfo oe) {
+        // We are limited to 4 GB per pack as offset is 32 bit unsigned int.
+        //
+        return oe.getOffset() >>> 1 < Integer.MAX_VALUE;
+    }
 
-	PackIndexWriterV1(final OutputStream dst) {
-		super(dst);
-	}
+    PackIndexWriterV1(final OutputStream dst) {
+        super(dst);
+    }
 
-	@Override
-	protected void writeImpl() throws IOException {
-		writeFanOutTable();
+    @Override
+    protected void writeImpl() throws IOException {
+        writeFanOutTable();
 
-		for (PackedObjectInfo oe : entries) {
-			if (!canStore(oe))
-				throw new IOException(JGitText.get().packTooLargeForIndexVersion1);
-			NB.encodeInt32(tmp, 0, (int) oe.getOffset());
-			oe.copyRawTo(tmp, 4);
-			out.write(tmp);
-		}
+        for (PackedObjectInfo oe : entries) {
+            if (!canStore(oe))
+                throw new IOException(JGitText.get().packTooLargeForIndexVersion1);
+            NB.encodeInt32(tmp, 0, (int) oe.getOffset());
+            oe.copyRawTo(tmp, 4);
+            out.write(tmp);
+        }
 
-		writeChecksumFooter();
-	}
+        writeChecksumFooter();
+    }
 }

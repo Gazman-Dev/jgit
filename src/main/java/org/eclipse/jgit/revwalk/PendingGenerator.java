@@ -29,130 +29,134 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  * of the commits and return them to the caller.
  */
 class PendingGenerator extends Generator {
-	private static final int PARSED = RevWalk.PARSED;
+    private static final int PARSED = RevWalk.PARSED;
 
-	private static final int SEEN = RevWalk.SEEN;
+    private static final int SEEN = RevWalk.SEEN;
 
-	private static final int UNINTERESTING = RevWalk.UNINTERESTING;
+    private static final int UNINTERESTING = RevWalk.UNINTERESTING;
 
-	/**
-	 * Number of additional commits to scan after we think we are done.
-	 * <p>
-	 * This small buffer of commits is scanned to ensure we didn't miss anything
-	 * as a result of clock skew when the commits were made. We need to set our
-	 * constant to 1 additional commit due to the use of a pre-increment
-	 * operator when accessing the value.
-	 */
-	static final int OVER_SCAN = 5 + 1;
+    /**
+     * Number of additional commits to scan after we think we are done.
+     * <p>
+     * This small buffer of commits is scanned to ensure we didn't miss anything
+     * as a result of clock skew when the commits were made. We need to set our
+     * constant to 1 additional commit due to the use of a pre-increment
+     * operator when accessing the value.
+     */
+    static final int OVER_SCAN = 5 + 1;
 
-	/** A commit near the end of time, to initialize {@link #last} with. */
-	private static final RevCommit INIT_LAST;
+    /**
+     * A commit near the end of time, to initialize {@link #last} with.
+     */
+    private static final RevCommit INIT_LAST;
 
-	static {
-		INIT_LAST = new RevCommit(ObjectId.zeroId());
-		INIT_LAST.commitTime = Integer.MAX_VALUE;
-	}
+    static {
+        INIT_LAST = new RevCommit(ObjectId.zeroId());
+        INIT_LAST.commitTime = Integer.MAX_VALUE;
+    }
 
-	private final RevWalk walker;
+    private final RevWalk walker;
 
-	private final DateRevQueue pending;
+    private final DateRevQueue pending;
 
-	private final RevFilter filter;
+    private final RevFilter filter;
 
-	private final int output;
+    private final int output;
 
-	/** Last commit produced to the caller from {@link #next()}. */
-	private RevCommit last = INIT_LAST;
+    /**
+     * Last commit produced to the caller from {@link #next()}.
+     */
+    private RevCommit last = INIT_LAST;
 
-	/**
-	 * Number of commits we have remaining in our over-scan allotment.
-	 * <p>
-	 * Only relevant if there are {@link #UNINTERESTING} commits in the
-	 * {@link #pending} queue.
-	 */
-	private int overScan = OVER_SCAN;
+    /**
+     * Number of commits we have remaining in our over-scan allotment.
+     * <p>
+     * Only relevant if there are {@link #UNINTERESTING} commits in the
+     * {@link #pending} queue.
+     */
+    private int overScan = OVER_SCAN;
 
-	boolean canDispose;
+    boolean canDispose;
 
-	PendingGenerator(final RevWalk w, final DateRevQueue p,
-			final RevFilter f, final int out) {
-		super(w.isFirstParent());
-		walker = w;
-		pending = p;
-		filter = f;
-		output = out;
-		canDispose = true;
-	}
+    PendingGenerator(final RevWalk w, final DateRevQueue p,
+                     final RevFilter f, final int out) {
+        super(w.isFirstParent());
+        walker = w;
+        pending = p;
+        filter = f;
+        output = out;
+        canDispose = true;
+    }
 
-	@Override
-	int outputType() {
-		return output | SORT_COMMIT_TIME_DESC;
-	}
+    @Override
+    int outputType() {
+        return output | SORT_COMMIT_TIME_DESC;
+    }
 
-	@Override
-	RevCommit next() throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		try {
-			for (;;) {
-				final RevCommit c = pending.next();
-				if (c == null) {
-					return null;
-				}
+    @Override
+    RevCommit next() throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        try {
+            for (; ; ) {
+                final RevCommit c = pending.next();
+                if (c == null) {
+                    return null;
+                }
 
-				final boolean produce;
-				if ((c.flags & UNINTERESTING) != 0)
-					produce = false;
-				else {
-					if (filter.requiresCommitBody())
-						c.parseBody(walker);
-					produce = filter.include(walker, c);
-				}
+                final boolean produce;
+                if ((c.flags & UNINTERESTING) != 0)
+                    produce = false;
+                else {
+                    if (filter.requiresCommitBody())
+                        c.parseBody(walker);
+                    produce = filter.include(walker, c);
+                }
 
-				int parentCount = c.getParentCount();
-				for (int i = 0; i < parentCount; i++) {
-					RevCommit p = c.getParent(i);
-					// If the commit is uninteresting, don't try to prune
-					// parents because we want the maximal uninteresting set.
-					if (firstParent && i > 0 && (c.flags & UNINTERESTING) == 0) {
-						continue;
-					}
-					if ((p.flags & SEEN) != 0)
-						continue;
-					if ((p.flags & PARSED) == 0)
-						p.parseHeaders(walker);
-					p.flags |= SEEN;
-					pending.add(p);
-				}
-				walker.carryFlagsImpl(c);
+                int parentCount = c.getParentCount();
+                for (int i = 0; i < parentCount; i++) {
+                    RevCommit p = c.getParent(i);
+                    // If the commit is uninteresting, don't try to prune
+                    // parents because we want the maximal uninteresting set.
+                    if (firstParent && i > 0 && (c.flags & UNINTERESTING) == 0) {
+                        continue;
+                    }
+                    if ((p.flags & SEEN) != 0)
+                        continue;
+                    if ((p.flags & PARSED) == 0)
+                        p.parseHeaders(walker);
+                    p.flags |= SEEN;
+                    pending.add(p);
+                }
+                walker.carryFlagsImpl(c);
 
-				if ((c.flags & UNINTERESTING) != 0) {
-					if (pending.everbodyHasFlag(UNINTERESTING)) {
-						final RevCommit n = pending.peek();
-						if (n != null && n.commitTime >= last.commitTime) {
-							// This is too close to call. The next commit we
-							// would pop is dated after the last one produced.
-							// We have to keep going to ensure that we carry
-							// flags as much as necessary.
-							//
-							overScan = OVER_SCAN;
-						} else if (--overScan == 0)
-							throw StopWalkException.INSTANCE;
-					} else {
-						overScan = OVER_SCAN;
-					}
-					if (canDispose)
-						c.disposeBody();
-					continue;
-				}
+                if ((c.flags & UNINTERESTING) != 0) {
+                    if (pending.everbodyHasFlag(UNINTERESTING)) {
+                        final RevCommit n = pending.peek();
+                        if (n != null && n.commitTime >= last.commitTime) {
+                            // This is too close to call. The next commit we
+                            // would pop is dated after the last one produced.
+                            // We have to keep going to ensure that we carry
+                            // flags as much as necessary.
+                            //
+                            overScan = OVER_SCAN;
+                        } else if (--overScan == 0)
+                            throw StopWalkException.INSTANCE;
+                    } else {
+                        overScan = OVER_SCAN;
+                    }
+                    if (canDispose)
+                        c.disposeBody();
+                    continue;
+                }
 
-				if (produce)
-					return last = c;
-				else if (canDispose)
-					c.disposeBody();
-			}
-		} catch (StopWalkException swe) {
-			pending.clear();
-			return null;
-		}
-	}
+                if (produce)
+                    return last = c;
+                else if (canDispose)
+                    c.disposeBody();
+            }
+        } catch (StopWalkException swe) {
+            pending.clear();
+            return null;
+        }
+    }
 }

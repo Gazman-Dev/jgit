@@ -22,44 +22,42 @@ import org.eclipse.jgit.lib.ObjectId;
  * An {@link AbbreviatedObjectId} cannot be extended.
  */
 public class AmbiguousObjectException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final AbbreviatedObjectId missing;
+    private final AbbreviatedObjectId missing;
 
-	private final Collection<ObjectId> candidates;
+    private final Collection<ObjectId> candidates;
 
-	/**
-	 * Construct a MissingObjectException for the specified object id. Expected
-	 * type is reported to simplify tracking down the problem.
-	 *
-	 * @param id
-	 *            SHA-1
-	 * @param candidates
-	 *            the candidate matches returned by the ObjectReader.
-	 */
-	public AmbiguousObjectException(final AbbreviatedObjectId id,
-			final Collection<ObjectId> candidates) {
-		super(MessageFormat.format(JGitText.get().ambiguousObjectAbbreviation,
-				id.name()));
-		this.missing = id;
-		this.candidates = candidates;
-	}
+    /**
+     * Construct a MissingObjectException for the specified object id. Expected
+     * type is reported to simplify tracking down the problem.
+     *
+     * @param id         SHA-1
+     * @param candidates the candidate matches returned by the ObjectReader.
+     */
+    public AmbiguousObjectException(final AbbreviatedObjectId id,
+                                    final Collection<ObjectId> candidates) {
+        super(MessageFormat.format(JGitText.get().ambiguousObjectAbbreviation,
+                id.name()));
+        this.missing = id;
+        this.candidates = candidates;
+    }
 
-	/**
-	 * Get the {@code AbbreviatedObjectId} that has more than one result
-	 *
-	 * @return the {@code AbbreviatedObjectId} that has more than one result
-	 */
-	public AbbreviatedObjectId getAbbreviatedObjectId() {
-		return missing;
-	}
+    /**
+     * Get the {@code AbbreviatedObjectId} that has more than one result
+     *
+     * @return the {@code AbbreviatedObjectId} that has more than one result
+     */
+    public AbbreviatedObjectId getAbbreviatedObjectId() {
+        return missing;
+    }
 
-	/**
-	 * Get the matching candidates (or at least a subset of them)
-	 *
-	 * @return the matching candidates (or at least a subset of them)
-	 */
-	public Collection<ObjectId> getCandidates() {
-		return candidates;
-	}
+    /**
+     * Get the matching candidates (or at least a subset of them)
+     *
+     * @return the matching candidates (or at least a subset of them)
+     */
+    public Collection<ObjectId> getCandidates() {
+        return candidates;
+    }
 }

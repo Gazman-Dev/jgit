@@ -27,104 +27,104 @@ import org.eclipse.jgit.internal.JGitText;
  */
 class CommitGraphBuilder {
 
-	private final int hashLength;
+    private final int hashLength;
 
-	private byte[] oidFanout;
+    private byte[] oidFanout;
 
-	private byte[] oidLookup;
+    private byte[] oidLookup;
 
-	private byte[] commitData;
+    private byte[] commitData;
 
-	private byte[] extraList;
+    private byte[] extraList;
 
-	private byte[] bloomFilterIndex;
+    private byte[] bloomFilterIndex;
 
-	private byte[] bloomFilterData;
+    private byte[] bloomFilterData;
 
-	/**
-	 * Create builder
-	 *
-	 * @return A builder of {@link CommitGraph}.
-	 */
-	static CommitGraphBuilder builder() {
-		return new CommitGraphBuilder(OBJECT_ID_LENGTH);
-	}
+    /**
+     * Create builder
+     *
+     * @return A builder of {@link CommitGraph}.
+     */
+    static CommitGraphBuilder builder() {
+        return new CommitGraphBuilder(OBJECT_ID_LENGTH);
+    }
 
-	private CommitGraphBuilder(int hashLength) {
-		this.hashLength = hashLength;
-	}
+    private CommitGraphBuilder(int hashLength) {
+        this.hashLength = hashLength;
+    }
 
-	CommitGraphBuilder addOidFanout(byte[] buffer)
-			throws CommitGraphFormatException {
-		assertChunkNotSeenYet(oidFanout, CHUNK_ID_OID_FANOUT);
-		oidFanout = buffer;
-		return this;
-	}
+    CommitGraphBuilder addOidFanout(byte[] buffer)
+            throws CommitGraphFormatException {
+        assertChunkNotSeenYet(oidFanout, CHUNK_ID_OID_FANOUT);
+        oidFanout = buffer;
+        return this;
+    }
 
-	CommitGraphBuilder addOidLookUp(byte[] buffer)
-			throws CommitGraphFormatException {
-		assertChunkNotSeenYet(oidLookup, CHUNK_ID_OID_LOOKUP);
-		oidLookup = buffer;
-		return this;
-	}
+    CommitGraphBuilder addOidLookUp(byte[] buffer)
+            throws CommitGraphFormatException {
+        assertChunkNotSeenYet(oidLookup, CHUNK_ID_OID_LOOKUP);
+        oidLookup = buffer;
+        return this;
+    }
 
-	CommitGraphBuilder addCommitData(byte[] buffer)
-			throws CommitGraphFormatException {
-		assertChunkNotSeenYet(commitData, CHUNK_ID_COMMIT_DATA);
-		commitData = buffer;
-		return this;
-	}
+    CommitGraphBuilder addCommitData(byte[] buffer)
+            throws CommitGraphFormatException {
+        assertChunkNotSeenYet(commitData, CHUNK_ID_COMMIT_DATA);
+        commitData = buffer;
+        return this;
+    }
 
-	CommitGraphBuilder addExtraList(byte[] buffer)
-			throws CommitGraphFormatException {
-		assertChunkNotSeenYet(extraList, CHUNK_ID_EXTRA_EDGE_LIST);
-		extraList = buffer;
-		return this;
-	}
+    CommitGraphBuilder addExtraList(byte[] buffer)
+            throws CommitGraphFormatException {
+        assertChunkNotSeenYet(extraList, CHUNK_ID_EXTRA_EDGE_LIST);
+        extraList = buffer;
+        return this;
+    }
 
-	CommitGraphBuilder addBloomFilterIndex(byte[] buffer)
-			throws CommitGraphFormatException {
-		assertChunkNotSeenYet(bloomFilterIndex, CHUNK_ID_BLOOM_FILTER_INDEX);
-		bloomFilterIndex = buffer;
-		return this;
-	}
+    CommitGraphBuilder addBloomFilterIndex(byte[] buffer)
+            throws CommitGraphFormatException {
+        assertChunkNotSeenYet(bloomFilterIndex, CHUNK_ID_BLOOM_FILTER_INDEX);
+        bloomFilterIndex = buffer;
+        return this;
+    }
 
-	CommitGraphBuilder addBloomFilterData(byte[] buffer)
-			throws CommitGraphFormatException {
-		assertChunkNotSeenYet(bloomFilterData, CHUNK_ID_BLOOM_FILTER_DATA);
-		bloomFilterData = buffer;
-		return this;
-	}
+    CommitGraphBuilder addBloomFilterData(byte[] buffer)
+            throws CommitGraphFormatException {
+        assertChunkNotSeenYet(bloomFilterData, CHUNK_ID_BLOOM_FILTER_DATA);
+        bloomFilterData = buffer;
+        return this;
+    }
 
-	CommitGraph build() throws CommitGraphFormatException {
-		assertChunkNotNull(oidFanout, CHUNK_ID_OID_FANOUT);
-		assertChunkNotNull(oidLookup, CHUNK_ID_OID_LOOKUP);
-		assertChunkNotNull(commitData, CHUNK_ID_COMMIT_DATA);
+    CommitGraph build() throws CommitGraphFormatException {
+        assertChunkNotNull(oidFanout, CHUNK_ID_OID_FANOUT);
+        assertChunkNotNull(oidLookup, CHUNK_ID_OID_LOOKUP);
+        assertChunkNotNull(commitData, CHUNK_ID_COMMIT_DATA);
 
-		GraphObjectIndex index = new GraphObjectIndex(hashLength, oidFanout,
-				oidLookup);
-		GraphCommitData commitDataChunk = new GraphCommitData(hashLength,
-				commitData, extraList);
-		GraphChangedPathFilterData cpfData = new GraphChangedPathFilterData(
-				bloomFilterIndex, bloomFilterData);
-		return new CommitGraphV1(index, commitDataChunk, cpfData);
-	}
+        GraphObjectIndex index = new GraphObjectIndex(hashLength, oidFanout,
+                oidLookup);
+        GraphCommitData commitDataChunk = new GraphCommitData(hashLength,
+                commitData, extraList);
+        GraphChangedPathFilterData cpfData = new GraphChangedPathFilterData(
+                bloomFilterIndex, bloomFilterData);
+        return new CommitGraphV1(index, commitDataChunk, cpfData);
+    }
 
-	private void assertChunkNotNull(Object object, int chunkId)
-			throws CommitGraphFormatException {
-		if (object == null) {
-			throw new CommitGraphFormatException(
-					MessageFormat.format(JGitText.get().commitGraphChunkNeeded,
-							Integer.toHexString(chunkId)));
-		}
-	}
+    private void assertChunkNotNull(Object object, int chunkId)
+            throws CommitGraphFormatException {
+        if (object == null) {
+            throw new CommitGraphFormatException(
+                    MessageFormat.format(JGitText.get().commitGraphChunkNeeded,
+                            Integer.toHexString(chunkId)));
+        }
+    }
 
-	private void assertChunkNotSeenYet(Object object, int chunkId)
-			throws CommitGraphFormatException {
-		if (object != null) {
-			throw new CommitGraphFormatException(MessageFormat.format(
-					JGitText.get().commitGraphChunkRepeated,
-					Integer.toHexString(chunkId)));
-		}
-	}
+    private void assertChunkNotSeenYet(Object object, int chunkId)
+            throws CommitGraphFormatException {
+        if (object != null) {
+            throw new CommitGraphFormatException(MessageFormat.format(
+                    JGitText.get().commitGraphChunkRepeated,
+                    Integer.toHexString(chunkId)));
+        }
+    }
 }

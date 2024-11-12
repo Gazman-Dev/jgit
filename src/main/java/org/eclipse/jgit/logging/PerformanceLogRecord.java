@@ -16,40 +16,42 @@ package org.eclipse.jgit.logging;
  * @since 5.10
  */
 public class PerformanceLogRecord {
-	/** Name of the recorded event. */
-	private String name;
+    /**
+     * Name of the recorded event.
+     */
+    private String name;
 
-	/** Duration of the recorded event in milliseconds. */
-	private long durationMs;
+    /**
+     * Duration of the recorded event in milliseconds.
+     */
+    private long durationMs;
 
-	/**
-	 * Create a new performance log record for an event.
-	 *
-	 * @param name
-	 *            name of the event.
-	 * @param durationMs
-	 *            duration in milliseconds of the event.
-	 */
-	public PerformanceLogRecord(String name, long durationMs) {
-		this.name = name;
-		this.durationMs = durationMs;
-	}
+    /**
+     * Create a new performance log record for an event.
+     *
+     * @param name       name of the event.
+     * @param durationMs duration in milliseconds of the event.
+     */
+    public PerformanceLogRecord(String name, long durationMs) {
+        this.name = name;
+        this.durationMs = durationMs;
+    }
 
-	/**
-	 * Get the name of the recorded event.
-	 *
-	 * @return name of the recorded event.
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * Get the name of the recorded event.
+     *
+     * @return name of the recorded event.
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Get the duration in milliseconds of the recorded event.
-	 *
-	 * @return duration in milliseconds of the recorded event.
-	 */
-	public long getDurationMs() {
-		return durationMs;
-	}
+    /**
+     * Get the duration in milliseconds of the recorded event.
+     *
+     * @return duration in milliseconds of the recorded event.
+     */
+    public long getDurationMs() {
+        return durationMs;
+    }
 }

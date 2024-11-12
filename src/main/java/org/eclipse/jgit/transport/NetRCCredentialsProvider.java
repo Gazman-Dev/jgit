@@ -52,66 +52,66 @@ import org.eclipse.jgit.transport.NetRC.NetRCEntry;
  */
 public class NetRCCredentialsProvider extends CredentialsProvider {
 
-	NetRC netrc = new NetRC();
+    NetRC netrc = new NetRC();
 
-	/**
-	 * <p>Constructor for NetRCCredentialsProvider.</p>
-	 */
-	public NetRCCredentialsProvider() {
-	}
+    /**
+     * <p>Constructor for NetRCCredentialsProvider.</p>
+     */
+    public NetRCCredentialsProvider() {
+    }
 
-	/**
-	 * Install default provider for the .netrc parser.
-	 */
-	public static void install() {
-		CredentialsProvider.setDefault(new NetRCCredentialsProvider());
-	}
+    /**
+     * Install default provider for the .netrc parser.
+     */
+    public static void install() {
+        CredentialsProvider.setDefault(new NetRCCredentialsProvider());
+    }
 
-	@Override
-	public boolean supports(CredentialItem... items) {
-		for (CredentialItem i : items) {
-			if (i instanceof CredentialItem.Username)
-				continue;
-			else if (i instanceof CredentialItem.Password)
-				continue;
-			else
-				return false;
-		}
-		return true;
-	}
+    @Override
+    public boolean supports(CredentialItem... items) {
+        for (CredentialItem i : items) {
+            if (i instanceof CredentialItem.Username)
+                continue;
+            else if (i instanceof CredentialItem.Password)
+                continue;
+            else
+                return false;
+        }
+        return true;
+    }
 
-	@Override
-	public boolean get(URIish uri, CredentialItem... items)
-			throws UnsupportedCredentialItem {
-		NetRCEntry cc = netrc.getEntry(uri.getHost());
+    @Override
+    public boolean get(URIish uri, CredentialItem... items)
+            throws UnsupportedCredentialItem {
+        NetRCEntry cc = netrc.getEntry(uri.getHost());
 
-		if (cc == null)
-			return false;
+        if (cc == null)
+            return false;
 
-		for (CredentialItem i : items) {
-			if (i instanceof CredentialItem.Username) {
-				((CredentialItem.Username) i).setValue(cc.login);
-				continue;
-			}
-			if (i instanceof CredentialItem.Password) {
-				((CredentialItem.Password) i).setValue(cc.password);
-				continue;
-			}
-			if (i instanceof CredentialItem.StringType) {
-				if (i.getPromptText().equals("Password: ")) { //$NON-NLS-1$
-					((CredentialItem.StringType) i).setValue(new String(
-							cc.password));
-					continue;
-				}
-			}
-			throw new UnsupportedCredentialItem(uri, i.getClass().getName()
-					+ ":" + i.getPromptText()); //$NON-NLS-1$
-		}
-		return !isAnyNull(items);
-	}
+        for (CredentialItem i : items) {
+            if (i instanceof CredentialItem.Username) {
+                ((CredentialItem.Username) i).setValue(cc.login);
+                continue;
+            }
+            if (i instanceof CredentialItem.Password) {
+                ((CredentialItem.Password) i).setValue(cc.password);
+                continue;
+            }
+            if (i instanceof CredentialItem.StringType) {
+                if (i.getPromptText().equals("Password: ")) { //$NON-NLS-1$
+                    ((CredentialItem.StringType) i).setValue(new String(
+                            cc.password));
+                    continue;
+                }
+            }
+            throw new UnsupportedCredentialItem(uri, i.getClass().getName()
+                    + ":" + i.getPromptText()); //$NON-NLS-1$
+        }
+        return !isAnyNull(items);
+    }
 
-	@Override
-	public boolean isInteractive() {
-		return false;
-	}
+    @Override
+    public boolean isInteractive() {
+        return false;
+    }
 }

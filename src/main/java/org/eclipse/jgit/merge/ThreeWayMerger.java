@@ -28,98 +28,89 @@ import org.eclipse.jgit.treewalk.EmptyTreeIterator;
  * A merge of 2 trees, using a common base ancestor tree.
  */
 public abstract class ThreeWayMerger extends Merger {
-	private RevTree baseTree;
+    private RevTree baseTree;
 
-	private ObjectId baseCommitId;
+    private ObjectId baseCommitId;
 
-	/**
-	 * Create a new merge instance for a repository.
-	 *
-	 * @param local
-	 *            the repository this merger will read and write data on.
-	 */
-	protected ThreeWayMerger(Repository local) {
-		super(local);
-	}
+    /**
+     * Create a new merge instance for a repository.
+     *
+     * @param local the repository this merger will read and write data on.
+     */
+    protected ThreeWayMerger(Repository local) {
+        super(local);
+    }
 
-	/**
-	 * Create a new merge instance for a repository.
-	 *
-	 * @param local
-	 *            the repository this merger will read and write data on.
-	 * @param inCore
-	 *            perform the merge in core with no working folder involved
-	 */
-	protected ThreeWayMerger(Repository local, boolean inCore) {
-		this(local);
-	}
+    /**
+     * Create a new merge instance for a repository.
+     *
+     * @param local  the repository this merger will read and write data on.
+     * @param inCore perform the merge in core with no working folder involved
+     */
+    protected ThreeWayMerger(Repository local, boolean inCore) {
+        this(local);
+    }
 
-	/**
-	 * Create a new in-core merge instance from an inserter.
-	 *
-	 * @param inserter
-	 *            the inserter to write objects to.
-	 * @since 4.8
-	 */
-	protected ThreeWayMerger(ObjectInserter inserter) {
-		super(inserter);
-	}
+    /**
+     * Create a new in-core merge instance from an inserter.
+     *
+     * @param inserter the inserter to write objects to.
+     * @since 4.8
+     */
+    protected ThreeWayMerger(ObjectInserter inserter) {
+        super(inserter);
+    }
 
-	/**
-	 * Set the common ancestor tree.
-	 *
-	 * @param id
-	 *            common base treeish; null to automatically compute the common
-	 *            base from the input commits during
-	 *            {@link #merge(AnyObjectId...)}.
-	 * @throws IncorrectObjectTypeException
-	 *             the object is not a treeish.
-	 * @throws MissingObjectException
-	 *             the object does not exist.
-	 * @throws IOException
-	 *             the object could not be read.
-	 */
-	public void setBase(AnyObjectId id) throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		if (id != null) {
-			baseTree = walk.parseTree(id);
-		} else {
-			baseTree = null;
-		}
-	}
+    /**
+     * Set the common ancestor tree.
+     *
+     * @param id common base treeish; null to automatically compute the common
+     *           base from the input commits during
+     *           {@link #merge(AnyObjectId...)}.
+     * @throws IncorrectObjectTypeException the object is not a treeish.
+     * @throws MissingObjectException       the object does not exist.
+     * @throws IOException                  the object could not be read.
+     */
+    public void setBase(AnyObjectId id) throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        if (id != null) {
+            baseTree = walk.parseTree(id);
+        } else {
+            baseTree = null;
+        }
+    }
 
-	@Override
-	public boolean merge(AnyObjectId... tips) throws IOException {
-		if (tips.length != 2)
-			return false;
-		return super.merge(tips);
-	}
+    @Override
+    public boolean merge(AnyObjectId... tips) throws IOException {
+        if (tips.length != 2)
+            return false;
+        return super.merge(tips);
+    }
 
-	@Override
-	public ObjectId getBaseCommitId() {
-		return baseCommitId;
-	}
+    @Override
+    public ObjectId getBaseCommitId() {
+        return baseCommitId;
+    }
 
-	/**
-	 * Create an iterator to walk the merge base.
-	 *
-	 * @return an iterator over the caller-specified merge base, or the natural
-	 *         merge base of the two input commits.
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	protected AbstractTreeIterator mergeBase() throws IOException {
-		if (baseTree != null) {
-			return openTree(baseTree);
-		}
-		RevCommit baseCommit = (baseCommitId != null) ? walk
-				.parseCommit(baseCommitId) : getBaseCommit(sourceCommits[0],
-				sourceCommits[1]);
-		if (baseCommit == null) {
-			baseCommitId = null;
-			return new EmptyTreeIterator();
-		}
-		baseCommitId = baseCommit.toObjectId();
-		return openTree(baseCommit.getTree());
-	}
+    /**
+     * Create an iterator to walk the merge base.
+     *
+     * @return an iterator over the caller-specified merge base, or the natural
+     * merge base of the two input commits.
+     * @throws IOException if an IO error occurred
+     */
+    protected AbstractTreeIterator mergeBase() throws IOException {
+        if (baseTree != null) {
+            return openTree(baseTree);
+        }
+        RevCommit baseCommit = (baseCommitId != null) ? walk
+                .parseCommit(baseCommitId) : getBaseCommit(sourceCommits[0],
+                sourceCommits[1]);
+        if (baseCommit == null) {
+            baseCommitId = null;
+            return new EmptyTreeIterator();
+        }
+        baseCommitId = baseCommit.toObjectId();
+        return openTree(baseCommit.getTree());
+    }
 }

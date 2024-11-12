@@ -43,35 +43,32 @@ import org.eclipse.jgit.internal.JGitText;
  * Thrown when branch deletion fails due to unmerged data
  */
 public class UnmergedPathsException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * The default constructor with a default message
-	 */
-	public UnmergedPathsException() {
-		this(null);
-	}
+    /**
+     * The default constructor with a default message
+     */
+    public UnmergedPathsException() {
+        this(null);
+    }
 
-	/**
-	 * The default constructor with a default message
-	 *
-	 * @param cause
-	 *            original exception
-	 */
-	public UnmergedPathsException(Throwable cause) {
-		super(JGitText.get().unmergedPaths, cause);
-	}
+    /**
+     * The default constructor with a default message
+     *
+     * @param cause original exception
+     */
+    public UnmergedPathsException(Throwable cause) {
+        super(JGitText.get().unmergedPaths, cause);
+    }
 
-	/**
-	 * Constructor for UnmergedPathsException
-	 *
-	 * @param message
-	 *            the message
-	 * @param cause
-	 *            a {@link Throwable}
-	 * @since 4.1
-	 */
-	public UnmergedPathsException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for UnmergedPathsException
+     *
+     * @param message the message
+     * @param cause   a {@link Throwable}
+     * @since 4.1
+     */
+    public UnmergedPathsException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

@@ -14,5 +14,5 @@ package org.eclipse.jgit.events;
  * A listener can register for event delivery.
  */
 public interface RepositoryListener {
-	// Empty marker interface; see extensions for actual methods.
+    // Empty marker interface; see extensions for actual methods.
 }

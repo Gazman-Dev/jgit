@@ -21,19 +21,18 @@ import org.eclipse.jgit.internal.JGitText;
  */
 public class InvalidPathException extends IllegalArgumentException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for InvalidPathException
-	 *
-	 * @param path
-	 *            the invalid path
-	 */
-	public InvalidPathException(String path) {
-		this(JGitText.get().invalidPath, path);
-	}
+    /**
+     * Constructor for InvalidPathException
+     *
+     * @param path the invalid path
+     */
+    public InvalidPathException(String path) {
+        this(JGitText.get().invalidPath, path);
+    }
 
-	InvalidPathException(String messagePattern, Object... arguments) {
-		super(MessageFormat.format(messagePattern, arguments));
-	}
+    InvalidPathException(String messagePattern, Object... arguments) {
+        super(MessageFormat.format(messagePattern, arguments));
+    }
 }

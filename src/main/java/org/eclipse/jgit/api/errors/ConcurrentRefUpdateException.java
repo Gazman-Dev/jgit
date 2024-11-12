@@ -50,66 +50,59 @@ import org.eclipse.jgit.lib.RefUpdate;
  * @see RefUpdate.Result#LOCK_FAILURE
  */
 public class ConcurrentRefUpdateException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
-	private RefUpdate.Result rc;
-	private Ref ref;
+    private static final long serialVersionUID = 1L;
+    private RefUpdate.Result rc;
+    private Ref ref;
 
-	/**
-	 * Constructor for ConcurrentRefUpdateException.
-	 *
-	 * @param message
-	 *            error message
-	 * @param ref
-	 *            a {@link Ref}
-	 * @param rc
-	 *            a {@link RefUpdate.Result}
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public ConcurrentRefUpdateException(String message, Ref ref,
-			RefUpdate.Result rc, Throwable cause) {
-		super((rc == null) ? message : message + ". " //$NON-NLS-1$
-				+ MessageFormat.format(JGitText.get().refUpdateReturnCodeWas, rc), cause);
-		this.rc = rc;
-		this.ref = ref;
-	}
+    /**
+     * Constructor for ConcurrentRefUpdateException.
+     *
+     * @param message error message
+     * @param ref     a {@link Ref}
+     * @param rc      a {@link RefUpdate.Result}
+     * @param cause   a {@link Throwable}
+     */
+    public ConcurrentRefUpdateException(String message, Ref ref,
+                                        RefUpdate.Result rc, Throwable cause) {
+        super((rc == null) ? message : message + ". " //$NON-NLS-1$
+                + MessageFormat.format(JGitText.get().refUpdateReturnCodeWas, rc), cause);
+        this.rc = rc;
+        this.ref = ref;
+    }
 
-	/**
-	 * Constructor for ConcurrentRefUpdateException.
-	 *
-	 * @param message
-	 *            error message
-	 * @param ref
-	 *            a {@link Ref}
-	 * @param rc
-	 *            a {@link RefUpdate.Result}
-	 */
-	public ConcurrentRefUpdateException(String message, Ref ref,
-			RefUpdate.Result rc) {
-		super((rc == null) ? message : message + ". " //$NON-NLS-1$
-				+ MessageFormat.format(JGitText.get().refUpdateReturnCodeWas, rc));
-		this.rc = rc;
-		this.ref = ref;
-	}
+    /**
+     * Constructor for ConcurrentRefUpdateException.
+     *
+     * @param message error message
+     * @param ref     a {@link Ref}
+     * @param rc      a {@link RefUpdate.Result}
+     */
+    public ConcurrentRefUpdateException(String message, Ref ref,
+                                        RefUpdate.Result rc) {
+        super((rc == null) ? message : message + ". " //$NON-NLS-1$
+                + MessageFormat.format(JGitText.get().refUpdateReturnCodeWas, rc));
+        this.rc = rc;
+        this.ref = ref;
+    }
 
-	/**
-	 * Get <code>Ref</code>
-	 *
-	 * @return the {@link Ref} which was tried to by
-	 *         updated
-	 */
-	public Ref getRef() {
-		return ref;
-	}
+    /**
+     * Get <code>Ref</code>
+     *
+     * @return the {@link Ref} which was tried to by
+     * updated
+     */
+    public Ref getRef() {
+        return ref;
+    }
 
-	/**
-	 * Get result
-	 *
-	 * @return the result which was returned by
-	 *         {@link RefUpdate#update()} and which caused
-	 *         this error
-	 */
-	public RefUpdate.Result getResult() {
-		return rc;
-	}
+    /**
+     * Get result
+     *
+     * @return the result which was returned by
+     * {@link RefUpdate#update()} and which caused
+     * this error
+     */
+    public RefUpdate.Result getResult() {
+        return rc;
+    }
 }

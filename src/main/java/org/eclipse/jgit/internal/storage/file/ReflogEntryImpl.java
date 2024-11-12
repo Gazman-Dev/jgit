@@ -25,85 +25,85 @@ import org.eclipse.jgit.util.RawParseUtils;
  * Parsed reflog entry
  */
 public class ReflogEntryImpl implements Serializable, ReflogEntry {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private ObjectId oldId;
+    private ObjectId oldId;
 
-	private ObjectId newId;
+    private ObjectId newId;
 
-	private PersonIdent who;
+    private PersonIdent who;
 
-	private String comment;
+    private String comment;
 
-	ReflogEntryImpl(byte[] raw, int pos) {
-		oldId = ObjectId.fromString(raw, pos);
-		pos += Constants.OBJECT_ID_STRING_LENGTH;
-		if (raw[pos++] != ' ')
-			throw new IllegalArgumentException(
-					JGitText.get().rawLogMessageDoesNotParseAsLogEntry);
-		newId = ObjectId.fromString(raw, pos);
-		pos += Constants.OBJECT_ID_STRING_LENGTH;
-		if (raw[pos++] != ' ') {
-			throw new IllegalArgumentException(
-					JGitText.get().rawLogMessageDoesNotParseAsLogEntry);
-		}
-		who = RawParseUtils.parsePersonIdentOnly(raw, pos);
-		int p0 = RawParseUtils.next(raw, pos, '\t');
-		if (p0 >= raw.length)
-			comment = ""; // personident has no \t, no comment present //$NON-NLS-1$
-		else {
-			int p1 = RawParseUtils.nextLF(raw, p0);
-			comment = p1 > p0 ? RawParseUtils.decode(raw, p0, p1 - 1) : ""; //$NON-NLS-1$
-		}
-	}
+    ReflogEntryImpl(byte[] raw, int pos) {
+        oldId = ObjectId.fromString(raw, pos);
+        pos += Constants.OBJECT_ID_STRING_LENGTH;
+        if (raw[pos++] != ' ')
+            throw new IllegalArgumentException(
+                    JGitText.get().rawLogMessageDoesNotParseAsLogEntry);
+        newId = ObjectId.fromString(raw, pos);
+        pos += Constants.OBJECT_ID_STRING_LENGTH;
+        if (raw[pos++] != ' ') {
+            throw new IllegalArgumentException(
+                    JGitText.get().rawLogMessageDoesNotParseAsLogEntry);
+        }
+        who = RawParseUtils.parsePersonIdentOnly(raw, pos);
+        int p0 = RawParseUtils.next(raw, pos, '\t');
+        if (p0 >= raw.length)
+            comment = ""; // personident has no \t, no comment present //$NON-NLS-1$
+        else {
+            int p1 = RawParseUtils.nextLF(raw, p0);
+            comment = p1 > p0 ? RawParseUtils.decode(raw, p0, p1 - 1) : ""; //$NON-NLS-1$
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jgit.internal.storage.file.ReflogEntry#getOldId()
-	 */
-	@Override
-	public ObjectId getOldId() {
-		return oldId;
-	}
+    /* (non-Javadoc)
+     * @see org.eclipse.jgit.internal.storage.file.ReflogEntry#getOldId()
+     */
+    @Override
+    public ObjectId getOldId() {
+        return oldId;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jgit.internal.storage.file.ReflogEntry#getNewId()
-	 */
-	@Override
-	public ObjectId getNewId() {
-		return newId;
-	}
+    /* (non-Javadoc)
+     * @see org.eclipse.jgit.internal.storage.file.ReflogEntry#getNewId()
+     */
+    @Override
+    public ObjectId getNewId() {
+        return newId;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jgit.internal.storage.file.ReflogEntry#getWho()
-	 */
-	@Override
-	public PersonIdent getWho() {
-		return who;
-	}
+    /* (non-Javadoc)
+     * @see org.eclipse.jgit.internal.storage.file.ReflogEntry#getWho()
+     */
+    @Override
+    public PersonIdent getWho() {
+        return who;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jgit.internal.storage.file.ReflogEntry#getComment()
-	 */
-	@Override
-	public String getComment() {
-		return comment;
-	}
+    /* (non-Javadoc)
+     * @see org.eclipse.jgit.internal.storage.file.ReflogEntry#getComment()
+     */
+    @Override
+    public String getComment() {
+        return comment;
+    }
 
-	@SuppressWarnings("nls")
-	@Override
-	public String toString() {
-		return "Entry[" + oldId.name() + ", " + newId.name() + ", " + getWho()
-				+ ", " + getComment() + "]";
-	}
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        return "Entry[" + oldId.name() + ", " + newId.name() + ", " + getWho()
+                + ", " + getComment() + "]";
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jgit.internal.storage.file.ReflogEntry#parseCheckout()
-	 */
-	@Override
-	public CheckoutEntry parseCheckout() {
-		if (getComment().startsWith(CheckoutEntryImpl.CHECKOUT_MOVING_FROM)) {
-			return new CheckoutEntryImpl(this);
-		}
-		return null;
-	}
+    /* (non-Javadoc)
+     * @see org.eclipse.jgit.internal.storage.file.ReflogEntry#parseCheckout()
+     */
+    @Override
+    public CheckoutEntry parseCheckout() {
+        if (getComment().startsWith(CheckoutEntryImpl.CHECKOUT_MOVING_FROM)) {
+            return new CheckoutEntryImpl(this);
+        }
+        return null;
+    }
 }

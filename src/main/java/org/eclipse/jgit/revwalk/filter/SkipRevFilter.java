@@ -23,39 +23,38 @@ import org.eclipse.jgit.revwalk.RevWalk;
  */
 public class SkipRevFilter extends RevFilter {
 
-	private final int skip;
+    private final int skip;
 
-	private int count;
+    private int count;
 
-	/**
-	 * Create a new skip filter.
-	 *
-	 * @param skip
-	 *            the number of commits to skip
-	 * @return a new filter
-	 */
-	public static RevFilter create(int skip) {
-		if (skip < 0)
-			throw new IllegalArgumentException(
-					JGitText.get().skipMustBeNonNegative);
-		return new SkipRevFilter(skip);
-	}
+    /**
+     * Create a new skip filter.
+     *
+     * @param skip the number of commits to skip
+     * @return a new filter
+     */
+    public static RevFilter create(int skip) {
+        if (skip < 0)
+            throw new IllegalArgumentException(
+                    JGitText.get().skipMustBeNonNegative);
+        return new SkipRevFilter(skip);
+    }
 
-	private SkipRevFilter(int skip) {
-		this.skip = skip;
-	}
+    private SkipRevFilter(int skip) {
+        this.skip = skip;
+    }
 
-	@Override
-	public boolean include(RevWalk walker, RevCommit cmit)
-			throws StopWalkException, MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		if (skip > count++)
-			return false;
-		return true;
-	}
+    @Override
+    public boolean include(RevWalk walker, RevCommit cmit)
+            throws StopWalkException, MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        if (skip > count++)
+            return false;
+        return true;
+    }
 
-	@Override
-	public RevFilter clone() {
-		return new SkipRevFilter(skip);
-	}
+    @Override
+    public RevFilter clone() {
+        return new SkipRevFilter(skip);
+    }
 }

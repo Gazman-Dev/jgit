@@ -19,12 +19,11 @@ package org.eclipse.jgit.events;
  */
 public interface WorkingTreeModifiedListener extends RepositoryListener {
 
-	/**
-	 * Respond to working tree modifications.
-	 *
-	 * @param event
-	 *            a {@link WorkingTreeModifiedEvent}
-	 *            object.
-	 */
-	void onWorkingTreeModified(WorkingTreeModifiedEvent event);
+    /**
+     * Respond to working tree modifications.
+     *
+     * @param event a {@link WorkingTreeModifiedEvent}
+     *              object.
+     */
+    void onWorkingTreeModified(WorkingTreeModifiedEvent event);
 }

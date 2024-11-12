@@ -9,9 +9,9 @@
  */
 package org.eclipse.jgit.api.errors;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.text.MessageFormat;
 
 /**
  * Exception thrown when a hook returns a process result with a value different
@@ -21,68 +21,65 @@ import org.eclipse.jgit.internal.JGitText;
  * @since 4.0
  */
 public class AbortedByHookException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * The hook that caused this exception.
-	 */
-	private final String hookName;
+    /**
+     * The hook that caused this exception.
+     */
+    private final String hookName;
 
-	/**
-	 * The process result.
-	 */
-	private final int returnCode;
+    /**
+     * The process result.
+     */
+    private final int returnCode;
 
-	/**
-	 * The stderr output of the hook.
-	 */
-	private final String hookStdErr;
+    /**
+     * The stderr output of the hook.
+     */
+    private final String hookStdErr;
 
-	/**
-	 * Constructor for AbortedByHookException
-	 *
-	 * @param hookStdErr
-	 *            The error details from the stderr output of the hook
-	 * @param hookName
-	 *            The name of the hook that interrupted the command, must not be
-	 *            null.
-	 * @param returnCode
-	 *            The return code of the hook process that has been run.
-	 */
-	public AbortedByHookException(String hookStdErr, String hookName,
-			int returnCode) {
-		super(MessageFormat.format(JGitText.get().commandRejectedByHook,
-				hookName, hookStdErr));
-		this.hookStdErr = hookStdErr;
-		this.hookName = hookName;
-		this.returnCode = returnCode;
-	}
+    /**
+     * Constructor for AbortedByHookException
+     *
+     * @param hookStdErr The error details from the stderr output of the hook
+     * @param hookName   The name of the hook that interrupted the command, must not be
+     *                   null.
+     * @param returnCode The return code of the hook process that has been run.
+     */
+    public AbortedByHookException(String hookStdErr, String hookName,
+                                  int returnCode) {
+        super(MessageFormat.format(JGitText.get().commandRejectedByHook,
+                hookName, hookStdErr));
+        this.hookStdErr = hookStdErr;
+        this.hookName = hookName;
+        this.returnCode = returnCode;
+    }
 
-	/**
-	 * Get hook name
-	 *
-	 * @return the type of the hook that interrupted the git command.
-	 */
-	public String getHookName() {
-		return hookName;
-	}
+    /**
+     * Get hook name
+     *
+     * @return the type of the hook that interrupted the git command.
+     */
+    public String getHookName() {
+        return hookName;
+    }
 
-	/**
-	 * Get return code
-	 *
-	 * @return the hook process result.
-	 */
-	public int getReturnCode() {
-		return returnCode;
-	}
+    /**
+     * Get return code
+     *
+     * @return the hook process result.
+     */
+    public int getReturnCode() {
+        return returnCode;
+    }
 
-	/**
-	 * Get the stderr output of the hook.
-	 *
-	 * @return A string containing the complete stderr output of the hook.
-	 * @since 5.6
-	 */
-	public String getHookStdErr() {
-		return hookStdErr;
-	}
+    /**
+     * Get the stderr output of the hook.
+     *
+     * @return A string containing the complete stderr output of the hook.
+     * @since 5.6
+     */
+    public String getHookStdErr() {
+        return hookStdErr;
+    }
 }

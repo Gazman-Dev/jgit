@@ -23,34 +23,33 @@ import org.eclipse.jgit.lib.Constants;
  * A reference to a tree of subtrees/files.
  */
 public class RevTree extends RevObject {
-	/**
-	 * Create a new tree reference.
-	 *
-	 * @param id
-	 *            object name for the tree.
-	 */
-	protected RevTree(AnyObjectId id) {
-		super(id);
-	}
+    /**
+     * Create a new tree reference.
+     *
+     * @param id object name for the tree.
+     */
+    protected RevTree(AnyObjectId id) {
+        super(id);
+    }
 
-	@Override
-	public final int getType() {
-		return Constants.OBJ_TREE;
-	}
+    @Override
+    public final int getType() {
+        return Constants.OBJ_TREE;
+    }
 
-	@Override
-	void parseHeaders(RevWalk walk) throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		if (walk.reader.has(this))
-			flags |= PARSED;
-		else
-			throw new MissingObjectException(this, getType());
-	}
+    @Override
+    void parseHeaders(RevWalk walk) throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        if (walk.reader.has(this))
+            flags |= PARSED;
+        else
+            throw new MissingObjectException(this, getType());
+    }
 
-	@Override
-	void parseBody(RevWalk walk) throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		if ((flags & PARSED) == 0)
-			parseHeaders(walk);
-	}
+    @Override
+    void parseBody(RevWalk walk) throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        if ((flags & PARSED) == 0)
+            parseHeaders(walk);
+    }
 }

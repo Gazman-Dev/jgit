@@ -42,111 +42,105 @@ import org.eclipse.jgit.util.BlockList;
  */
 public class GraphCommits implements Iterable<RevCommit> {
 
-	/**
-	 * Prepare and create the commits for
-	 * {@link CommitGraphWriter}
-	 * from the RevWalk.
-	 *
-	 * @param pm
-	 *            progress monitor.
-	 * @param wants
-	 *            the list of wanted objects, writer walks commits starting at
-	 *            these. Must not be {@code null}.
-	 * @param walk
-	 *            the RevWalk to use. Must not be {@code null}.
-	 * @return the commits' collection which are used by the commit-graph
-	 *         writer. Never null.
-	 * @throws IOException
-	 *             if an error occurred
-	 */
-	public static GraphCommits fromWalk(ProgressMonitor pm,
-			@NonNull Set<? extends ObjectId> wants, @NonNull RevWalk walk)
-			throws IOException {
-		walk.reset();
-		walk.sort(RevSort.NONE);
-		walk.setRetainBody(false);
-		for (ObjectId id : wants) {
-			RevObject o = walk.parseAny(id);
-			if (o instanceof RevCommit) {
-				walk.markStart((RevCommit) o);
-			}
-		}
-		List<RevCommit> commits = new BlockList<>();
-		RevCommit c;
-		pm.beginTask(JGitText.get().findingCommitsForCommitGraph,
-				ProgressMonitor.UNKNOWN);
-		while ((c = walk.next()) != null) {
-			pm.update(1);
-			commits.add(c);
-		}
-		pm.endTask();
-		return new GraphCommits(commits, walk.getObjectReader());
-	}
+    /**
+     * Prepare and create the commits for
+     * {@link CommitGraphWriter}
+     * from the RevWalk.
+     *
+     * @param pm    progress monitor.
+     * @param wants the list of wanted objects, writer walks commits starting at
+     *              these. Must not be {@code null}.
+     * @param walk  the RevWalk to use. Must not be {@code null}.
+     * @return the commits' collection which are used by the commit-graph
+     * writer. Never null.
+     * @throws IOException if an error occurred
+     */
+    public static GraphCommits fromWalk(ProgressMonitor pm,
+                                        @NonNull Set<? extends ObjectId> wants, @NonNull RevWalk walk)
+            throws IOException {
+        walk.reset();
+        walk.sort(RevSort.NONE);
+        walk.setRetainBody(false);
+        for (ObjectId id : wants) {
+            RevObject o = walk.parseAny(id);
+            if (o instanceof RevCommit) {
+                walk.markStart((RevCommit) o);
+            }
+        }
+        List<RevCommit> commits = new BlockList<>();
+        RevCommit c;
+        pm.beginTask(JGitText.get().findingCommitsForCommitGraph,
+                ProgressMonitor.UNKNOWN);
+        while ((c = walk.next()) != null) {
+            pm.update(1);
+            commits.add(c);
+        }
+        pm.endTask();
+        return new GraphCommits(commits, walk.getObjectReader());
+    }
 
-	private final List<RevCommit> sortedCommits;
+    private final List<RevCommit> sortedCommits;
 
-	private final ObjectIdOwnerMap<CommitWithPosition> commitPosMap;
+    private final ObjectIdOwnerMap<CommitWithPosition> commitPosMap;
 
-	private final int extraEdgeCnt;
+    private final int extraEdgeCnt;
 
-	private final ObjectReader objectReader;
+    private final ObjectReader objectReader;
 
-	/**
-	 * Initialize the GraphCommits.
-	 *
-	 * @param commits
-	 *            list of commits with their headers already parsed.
-	 * @param objectReader
-	 *            object reader
-	 */
-	private GraphCommits(List<RevCommit> commits, ObjectReader objectReader) {
-		Collections.sort(commits); // sorted by name
-		sortedCommits = commits;
-		commitPosMap = new ObjectIdOwnerMap<>();
-		int cnt = 0;
-		for (int i = 0; i < commits.size(); i++) {
-			RevCommit c = sortedCommits.get(i);
-			if (c.getParentCount() > 2) {
-				cnt += c.getParentCount() - 1;
-			}
-			commitPosMap.add(new CommitWithPosition(c, i));
-		}
-		this.extraEdgeCnt = cnt;
-		this.objectReader = objectReader;
-	}
+    /**
+     * Initialize the GraphCommits.
+     *
+     * @param commits      list of commits with their headers already parsed.
+     * @param objectReader object reader
+     */
+    private GraphCommits(List<RevCommit> commits, ObjectReader objectReader) {
+        Collections.sort(commits); // sorted by name
+        sortedCommits = commits;
+        commitPosMap = new ObjectIdOwnerMap<>();
+        int cnt = 0;
+        for (int i = 0; i < commits.size(); i++) {
+            RevCommit c = sortedCommits.get(i);
+            if (c.getParentCount() > 2) {
+                cnt += c.getParentCount() - 1;
+            }
+            commitPosMap.add(new CommitWithPosition(c, i));
+        }
+        this.extraEdgeCnt = cnt;
+        this.objectReader = objectReader;
+    }
 
-	int getOidPosition(RevCommit c) throws MissingObjectException {
-		CommitWithPosition commitWithPosition = commitPosMap.get(c);
-		if (commitWithPosition == null) {
-			throw new MissingObjectException(c, Constants.OBJ_COMMIT);
-		}
-		return commitWithPosition.position;
-	}
+    int getOidPosition(RevCommit c) throws MissingObjectException {
+        CommitWithPosition commitWithPosition = commitPosMap.get(c);
+        if (commitWithPosition == null) {
+            throw new MissingObjectException(c, Constants.OBJ_COMMIT);
+        }
+        return commitWithPosition.position;
+    }
 
-	int getExtraEdgeCnt() {
-		return extraEdgeCnt;
-	}
+    int getExtraEdgeCnt() {
+        return extraEdgeCnt;
+    }
 
-	int size() {
-		return sortedCommits.size();
-	}
+    int size() {
+        return sortedCommits.size();
+    }
 
-	ObjectReader getObjectReader() {
-		return objectReader;
-	}
+    ObjectReader getObjectReader() {
+        return objectReader;
+    }
 
-	@Override
-	public Iterator<RevCommit> iterator() {
-		return sortedCommits.iterator();
-	}
+    @Override
+    public Iterator<RevCommit> iterator() {
+        return sortedCommits.iterator();
+    }
 
-	private static class CommitWithPosition extends ObjectIdOwnerMap.Entry {
+    private static class CommitWithPosition extends ObjectIdOwnerMap.Entry {
 
-		final int position;
+        final int position;
 
-		CommitWithPosition(AnyObjectId id, int position) {
-			super(id);
-			this.position = position;
-		}
-	}
+        CommitWithPosition(AnyObjectId id, int position) {
+            super(id);
+            this.position = position;
+        }
+    }
 }

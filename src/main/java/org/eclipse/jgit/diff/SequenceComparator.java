@@ -20,81 +20,71 @@ package org.eclipse.jgit.diff;
  * <p>
  * Indexes within a sequence are zero-based.
  *
- * @param <S>
- *            type of sequence the comparator supports.
+ * @param <S> type of sequence the comparator supports.
  */
 public abstract class SequenceComparator<S extends Sequence> {
-	/**
-	 * Compare two items to determine if they are equivalent.
-	 *
-	 * It is permissible to compare sequence {@code a} with itself (by passing
-	 * {@code a} again in position {@code b}).
-	 *
-	 * @param a
-	 *            the first sequence.
-	 * @param ai
-	 *            item of {@code ai} to compare.
-	 * @param b
-	 *            the second sequence.
-	 * @param bi
-	 *            item of {@code bi} to compare.
-	 * @return true if the two items are identical according to this function's
-	 *         equivalence rule.
-	 */
-	public abstract boolean equals(S a, int ai, S b, int bi);
+    /**
+     * Compare two items to determine if they are equivalent.
+     * <p>
+     * It is permissible to compare sequence {@code a} with itself (by passing
+     * {@code a} again in position {@code b}).
+     *
+     * @param a  the first sequence.
+     * @param ai item of {@code ai} to compare.
+     * @param b  the second sequence.
+     * @param bi item of {@code bi} to compare.
+     * @return true if the two items are identical according to this function's
+     * equivalence rule.
+     */
+    public abstract boolean equals(S a, int ai, S b, int bi);
 
-	/**
-	 * Get a hash value for an item in a sequence.
-	 *
-	 * If two items are equal according to this comparator's
-	 * {@link #equals(Sequence, int, Sequence, int)} method, then this hash
-	 * method must produce the same integer result for both items.
-	 *
-	 * It is not required for two items to have different hash values if they
-	 * are unequal according to the {@code equals()} method.
-	 *
-	 * @param seq
-	 *            the sequence.
-	 * @param ptr
-	 *            the item to obtain the hash for.
-	 * @return hash the hash value.
-	 */
-	public abstract int hash(S seq, int ptr);
+    /**
+     * Get a hash value for an item in a sequence.
+     * <p>
+     * If two items are equal according to this comparator's
+     * {@link #equals(Sequence, int, Sequence, int)} method, then this hash
+     * method must produce the same integer result for both items.
+     * <p>
+     * It is not required for two items to have different hash values if they
+     * are unequal according to the {@code equals()} method.
+     *
+     * @param seq the sequence.
+     * @param ptr the item to obtain the hash for.
+     * @return hash the hash value.
+     */
+    public abstract int hash(S seq, int ptr);
 
-	/**
-	 * Modify the edit to remove common leading and trailing items.
-	 *
-	 * The supplied edit {@code e} is reduced in size by moving the beginning A
-	 * and B points so the edit does not cover any items that are in common
-	 * between the two sequences. The ending A and B points are also shifted to
-	 * remove common items from the end of the region.
-	 *
-	 * @param a
-	 *            the first sequence.
-	 * @param b
-	 *            the second sequence.
-	 * @param e
-	 *            the edit to start with and update.
-	 * @return {@code e} if it was updated in-place, otherwise a new edit
-	 *         containing the reduced region.
-	 */
-	public Edit reduceCommonStartEnd(S a, S b, Edit e) {
-		// Skip over items that are common at the start.
-		//
-		while (e.beginA < e.endA && e.beginB < e.endB
-				&& equals(a, e.beginA, b, e.beginB)) {
-			e.beginA++;
-			e.beginB++;
-		}
+    /**
+     * Modify the edit to remove common leading and trailing items.
+     * <p>
+     * The supplied edit {@code e} is reduced in size by moving the beginning A
+     * and B points so the edit does not cover any items that are in common
+     * between the two sequences. The ending A and B points are also shifted to
+     * remove common items from the end of the region.
+     *
+     * @param a the first sequence.
+     * @param b the second sequence.
+     * @param e the edit to start with and update.
+     * @return {@code e} if it was updated in-place, otherwise a new edit
+     * containing the reduced region.
+     */
+    public Edit reduceCommonStartEnd(S a, S b, Edit e) {
+        // Skip over items that are common at the start.
+        //
+        while (e.beginA < e.endA && e.beginB < e.endB
+                && equals(a, e.beginA, b, e.beginB)) {
+            e.beginA++;
+            e.beginB++;
+        }
 
-		// Skip over items that are common at the end.
-		//
-		while (e.beginA < e.endA && e.beginB < e.endB
-				&& equals(a, e.endA - 1, b, e.endB - 1)) {
-			e.endA--;
-			e.endB--;
-		}
+        // Skip over items that are common at the end.
+        //
+        while (e.beginA < e.endA && e.beginB < e.endB
+                && equals(a, e.endA - 1, b, e.endB - 1)) {
+            e.endA--;
+            e.endB--;
+        }
 
-		return e;
-	}
+        return e;
+    }
 }

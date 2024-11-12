@@ -24,50 +24,49 @@ import org.eclipse.jgit.util.GitDateFormatter.Format;
  */
 public class SquashMessageFormatter {
 
-	private GitDateFormatter dateFormatter;
+    private GitDateFormatter dateFormatter;
 
-	/**
-	 * Create a new squash message formatter.
-	 */
-	public SquashMessageFormatter() {
-		dateFormatter = new GitDateFormatter(Format.DEFAULT);
-	}
-	/**
-	 * Construct the squashed commit message.
-	 *
-	 * @param squashedCommits
-	 *            the squashed commits
-	 * @param target
-	 *            the target branch
-	 * @return squashed commit message
-	 */
-	public String format(List<RevCommit> squashedCommits, Ref target) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Squashed commit of the following:\n"); //$NON-NLS-1$
-		for (RevCommit c : squashedCommits) {
-			sb.append("\ncommit "); //$NON-NLS-1$
-			sb.append(c.getName());
-			sb.append("\n"); //$NON-NLS-1$
-			sb.append(toString(c.getAuthorIdent()));
-			sb.append("\n\t"); //$NON-NLS-1$
-			sb.append(c.getShortMessage());
-			sb.append("\n"); //$NON-NLS-1$
-		}
-		return sb.toString();
-	}
+    /**
+     * Create a new squash message formatter.
+     */
+    public SquashMessageFormatter() {
+        dateFormatter = new GitDateFormatter(Format.DEFAULT);
+    }
 
-	private String toString(PersonIdent author) {
-		final StringBuilder a = new StringBuilder();
+    /**
+     * Construct the squashed commit message.
+     *
+     * @param squashedCommits the squashed commits
+     * @param target          the target branch
+     * @return squashed commit message
+     */
+    public String format(List<RevCommit> squashedCommits, Ref target) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Squashed commit of the following:\n"); //$NON-NLS-1$
+        for (RevCommit c : squashedCommits) {
+            sb.append("\ncommit "); //$NON-NLS-1$
+            sb.append(c.getName());
+            sb.append("\n"); //$NON-NLS-1$
+            sb.append(toString(c.getAuthorIdent()));
+            sb.append("\n\t"); //$NON-NLS-1$
+            sb.append(c.getShortMessage());
+            sb.append("\n"); //$NON-NLS-1$
+        }
+        return sb.toString();
+    }
 
-		a.append("Author: "); //$NON-NLS-1$
-		a.append(author.getName());
-		a.append(" <"); //$NON-NLS-1$
-		a.append(author.getEmailAddress());
-		a.append(">\n"); //$NON-NLS-1$
-		a.append("Date:   "); //$NON-NLS-1$
-		a.append(dateFormatter.formatDate(author));
-		a.append("\n"); //$NON-NLS-1$
+    private String toString(PersonIdent author) {
+        final StringBuilder a = new StringBuilder();
 
-		return a.toString();
-	}
+        a.append("Author: "); //$NON-NLS-1$
+        a.append(author.getName());
+        a.append(" <"); //$NON-NLS-1$
+        a.append(author.getEmailAddress());
+        a.append(">\n"); //$NON-NLS-1$
+        a.append("Date:   "); //$NON-NLS-1$
+        a.append(dateFormatter.formatDate(author));
+        a.append("\n"); //$NON-NLS-1$
+
+        return a.toString();
+    }
 }

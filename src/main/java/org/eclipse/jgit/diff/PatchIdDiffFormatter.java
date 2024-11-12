@@ -23,35 +23,35 @@ import org.eclipse.jgit.util.io.NullOutputStream;
  */
 public class PatchIdDiffFormatter extends DiffFormatter {
 
-	private final MessageDigest digest;
+    private final MessageDigest digest;
 
-	/**
-	 * Initialize a formatter to compute a patch id.
-	 */
-	public PatchIdDiffFormatter() {
-		super(new DigestOutputStream(NullOutputStream.INSTANCE,
-				Constants.newMessageDigest()));
-		digest = ((DigestOutputStream) getOutputStream()).getMessageDigest();
-	}
+    /**
+     * Initialize a formatter to compute a patch id.
+     */
+    public PatchIdDiffFormatter() {
+        super(new DigestOutputStream(NullOutputStream.INSTANCE,
+                Constants.newMessageDigest()));
+        digest = ((DigestOutputStream) getOutputStream()).getMessageDigest();
+    }
 
-	/**
-	 * Should be called after having called one of the format methods
-	 *
-	 * @return the patch id calculated for the provided diff.
-	 */
-	public ObjectId getCalulatedPatchId() {
-		return ObjectId.fromRaw(digest.digest());
-	}
+    /**
+     * Should be called after having called one of the format methods
+     *
+     * @return the patch id calculated for the provided diff.
+     */
+    public ObjectId getCalulatedPatchId() {
+        return ObjectId.fromRaw(digest.digest());
+    }
 
-	@Override
-	protected void writeHunkHeader(int aStartLine, int aEndLine,
-			int bStartLine, int bEndLine) throws IOException {
-		// The hunk header is not taken into account for patch id calculation
-	}
+    @Override
+    protected void writeHunkHeader(int aStartLine, int aEndLine,
+                                   int bStartLine, int bEndLine) throws IOException {
+        // The hunk header is not taken into account for patch id calculation
+    }
 
-	@Override
-	protected void formatIndexLine(OutputStream o, DiffEntry ent)
-			throws IOException {
-		// The index line is not taken into account for patch id calculation
-	}
+    @Override
+    protected void formatIndexLine(OutputStream o, DiffEntry ent)
+            throws IOException {
+        // The index line is not taken into account for patch id calculation
+    }
 }

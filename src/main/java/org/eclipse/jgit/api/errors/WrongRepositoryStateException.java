@@ -43,27 +43,24 @@ package org.eclipse.jgit.api.errors;
  * repository with unresolved conflicts this exception will be thrown.
  */
 public class WrongRepositoryStateException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for WrongRepositoryStateException.
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public WrongRepositoryStateException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for WrongRepositoryStateException.
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     */
+    public WrongRepositoryStateException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for WrongRepositoryStateException.
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public WrongRepositoryStateException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for WrongRepositoryStateException.
+     *
+     * @param message error message
+     */
+    public WrongRepositoryStateException(String message) {
+        super(message);
+    }
 }

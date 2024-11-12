@@ -22,38 +22,35 @@ import java.io.IOException;
  */
 public interface RemoteSession {
 
-	/**
-	 * Creates a new remote {@link Process} to execute the given command. The
-	 * returned process's streams exist and are connected, and execution of the
-	 * process is already started.
-	 *
-	 * @param commandName
-	 *            command to execute
-	 * @param timeout
-	 *            timeout value, in seconds, for creating the remote process
-	 * @return a new remote process, already started
-	 * @throws IOException
-	 *             may be thrown in several cases. For example, on problems
-	 *             opening input or output streams or on problems connecting or
-	 *             communicating with the remote host. For the latter two cases,
-	 *             a TransportException may be thrown (a subclass of
-	 *             java.io.IOException).
-	 */
-	Process exec(String commandName, int timeout) throws IOException;
+    /**
+     * Creates a new remote {@link Process} to execute the given command. The
+     * returned process's streams exist and are connected, and execution of the
+     * process is already started.
+     *
+     * @param commandName command to execute
+     * @param timeout     timeout value, in seconds, for creating the remote process
+     * @return a new remote process, already started
+     * @throws IOException may be thrown in several cases. For example, on problems
+     *                     opening input or output streams or on problems connecting or
+     *                     communicating with the remote host. For the latter two cases,
+     *                     a TransportException may be thrown (a subclass of
+     *                     java.io.IOException).
+     */
+    Process exec(String commandName, int timeout) throws IOException;
 
-	/**
-	 * Obtains an {@link FtpChannel} for performing FTP operations over this
-	 * {@link RemoteSession}. The default implementation returns {@code null}.
-	 *
-	 * @return the {@link FtpChannel}
-	 * @since 5.2
-	 */
-	default FtpChannel getFtpChannel() {
-		return null;
-	}
+    /**
+     * Obtains an {@link FtpChannel} for performing FTP operations over this
+     * {@link RemoteSession}. The default implementation returns {@code null}.
+     *
+     * @return the {@link FtpChannel}
+     * @since 5.2
+     */
+    default FtpChannel getFtpChannel() {
+        return null;
+    }
 
-	/**
-	 * Disconnects the remote session.
-	 */
-	void disconnect();
+    /**
+     * Disconnects the remote session.
+     */
+    void disconnect();
 }

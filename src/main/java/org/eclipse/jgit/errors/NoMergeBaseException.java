@@ -22,74 +22,69 @@ import org.eclipse.jgit.merge.RecursiveMerger;
  * @since 3.0
  */
 public class NoMergeBaseException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private MergeBaseFailureReason reason;
+    private MergeBaseFailureReason reason;
 
-	/**
-	 * An enum listing the different reason why no merge base could be
-	 * determined.
-	 */
-	public enum MergeBaseFailureReason {
-		/**
-		 * Multiple merge bases have been found (e.g. the commits to be merged
-		 * have multiple common predecessors) but the merge strategy doesn't
-		 * support this (e.g. ResolveMerge)
-		 */
-		MULTIPLE_MERGE_BASES_NOT_SUPPORTED,
+    /**
+     * An enum listing the different reason why no merge base could be
+     * determined.
+     */
+    public enum MergeBaseFailureReason {
+        /**
+         * Multiple merge bases have been found (e.g. the commits to be merged
+         * have multiple common predecessors) but the merge strategy doesn't
+         * support this (e.g. ResolveMerge)
+         */
+        MULTIPLE_MERGE_BASES_NOT_SUPPORTED,
 
-		/**
-		 * The number of merge bases exceeds {@link RecursiveMerger#MAX_BASES}
-		 */
-		TOO_MANY_MERGE_BASES,
+        /**
+         * The number of merge bases exceeds {@link RecursiveMerger#MAX_BASES}
+         */
+        TOO_MANY_MERGE_BASES,
 
-		/**
-		 * In order to find a single merge base it may required to merge
-		 * together multiple common predecessors. If during these merges
-		 * conflicts occur the merge fails with this reason
-		 */
-		CONFLICTS_DURING_MERGE_BASE_CALCULATION
-	}
+        /**
+         * In order to find a single merge base it may required to merge
+         * together multiple common predecessors. If during these merges
+         * conflicts occur the merge fails with this reason
+         */
+        CONFLICTS_DURING_MERGE_BASE_CALCULATION
+    }
 
 
-	/**
-	 * Construct a NoMergeBase exception
-	 *
-	 * @param reason
-	 *            the reason why no merge base could be found
-	 * @param message
-	 *            a text describing the problem
-	 */
-	public NoMergeBaseException(MergeBaseFailureReason reason, String message) {
-		super(MessageFormat.format(JGitText.get().noMergeBase,
-				reason.toString(), message));
-		this.reason = reason;
-	}
+    /**
+     * Construct a NoMergeBase exception
+     *
+     * @param reason  the reason why no merge base could be found
+     * @param message a text describing the problem
+     */
+    public NoMergeBaseException(MergeBaseFailureReason reason, String message) {
+        super(MessageFormat.format(JGitText.get().noMergeBase,
+                reason.toString(), message));
+        this.reason = reason;
+    }
 
-	/**
-	 * Construct a NoMergeBase exception
-	 *
-	 * @param reason
-	 *            the reason why no merge base could be found
-	 * @param message
-	 *            a text describing the problem
-	 * @param why
-	 *            an exception causing this error
-	 */
-	public NoMergeBaseException(MergeBaseFailureReason reason, String message,
-			Throwable why) {
-		super(MessageFormat.format(JGitText.get().noMergeBase,
-				reason.toString(), message));
-		this.reason = reason;
-		initCause(why);
-	}
+    /**
+     * Construct a NoMergeBase exception
+     *
+     * @param reason  the reason why no merge base could be found
+     * @param message a text describing the problem
+     * @param why     an exception causing this error
+     */
+    public NoMergeBaseException(MergeBaseFailureReason reason, String message,
+                                Throwable why) {
+        super(MessageFormat.format(JGitText.get().noMergeBase,
+                reason.toString(), message));
+        this.reason = reason;
+        initCause(why);
+    }
 
-	/**
-	 * Get the reason why no merge base could be found
-	 *
-	 * @return the reason why no merge base could be found
-	 */
-	public MergeBaseFailureReason getReason() {
-		return reason;
-	}
+    /**
+     * Get the reason why no merge base could be found
+     *
+     * @return the reason why no merge base could be found
+     */
+    public MergeBaseFailureReason getReason() {
+        return reason;
+    }
 }

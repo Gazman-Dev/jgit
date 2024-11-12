@@ -16,39 +16,37 @@ import java.io.IOException;
  * Thrown when a Pack no longer matches the PackIndex.
  */
 public class PackMismatchException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private boolean permanent;
+    private boolean permanent;
 
-	/**
-	 * Construct a pack modification error.
-	 *
-	 * @param why
-	 *            description of the type of error.
-	 */
-	public PackMismatchException(String why) {
-		super(why);
-	}
+    /**
+     * Construct a pack modification error.
+     *
+     * @param why description of the type of error.
+     */
+    public PackMismatchException(String why) {
+        super(why);
+    }
 
-	/**
-	 * Set the type of the exception
-	 *
-	 * @param permanent
-	 *            whether the exception is considered permanent
-	 * @since 5.9.1
-	 */
-	public void setPermanent(boolean permanent) {
-		this.permanent = permanent;
-	}
+    /**
+     * Set the type of the exception
+     *
+     * @param permanent whether the exception is considered permanent
+     * @since 5.9.1
+     */
+    public void setPermanent(boolean permanent) {
+        this.permanent = permanent;
+    }
 
-	/**
-	 * Check if this is a permanent problem
-	 *
-	 * @return if this is a permanent problem and repeatedly scanning the
-	 *         packlist couldn't fix it
-	 * @since 5.9.1
-	 */
-	public boolean isPermanent() {
-		return permanent;
-	}
+    /**
+     * Check if this is a permanent problem
+     *
+     * @return if this is a permanent problem and repeatedly scanning the
+     * packlist couldn't fix it
+     * @since 5.9.1
+     */
+    public boolean isPermanent() {
+        return permanent;
+    }
 }

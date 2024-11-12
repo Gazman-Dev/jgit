@@ -21,53 +21,53 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  * an attempt to commit.
  */
 public final class InterIndexDiffFilter extends TreeFilter {
-	private static final int baseTree = 0;
+    private static final int baseTree = 0;
 
-	/**
-	 * Predefined InterIndexDiffFilter for finding changes between two dircaches
-	 */
-	public static final TreeFilter INSTANCE = new InterIndexDiffFilter();
+    /**
+     * Predefined InterIndexDiffFilter for finding changes between two dircaches
+     */
+    public static final TreeFilter INSTANCE = new InterIndexDiffFilter();
 
-	@Override
-	public boolean include(TreeWalk walker) {
-		final int n = walker.getTreeCount();
-		if (n == 1) // Assume they meant difference to empty tree.
-			return true;
+    @Override
+    public boolean include(TreeWalk walker) {
+        final int n = walker.getTreeCount();
+        if (n == 1) // Assume they meant difference to empty tree.
+            return true;
 
-		final int m = walker.getRawMode(baseTree);
-		for (int i = 1; i < n; i++) {
-			DirCacheIterator baseDirCache = walker.getTree(baseTree,
-					DirCacheIterator.class);
-			DirCacheIterator newDirCache = walker.getTree(i,
-					DirCacheIterator.class);
-			if (baseDirCache != null && newDirCache != null) {
-				DirCacheEntry baseDci = baseDirCache.getDirCacheEntry();
-				DirCacheEntry newDci = newDirCache.getDirCacheEntry();
-				if (baseDci != null && newDci != null) {
-					if (baseDci.isAssumeValid() != newDci.isAssumeValid())
-						return true;
-					if (baseDci.isAssumeValid()) // && newDci.isAssumeValid()
-						return false;
-				}
-			}
-			if (walker.getRawMode(i) != m || !walker.idEqual(i, baseTree))
-				return true;
-		}
-		return false;
-	}
+        final int m = walker.getRawMode(baseTree);
+        for (int i = 1; i < n; i++) {
+            DirCacheIterator baseDirCache = walker.getTree(baseTree,
+                    DirCacheIterator.class);
+            DirCacheIterator newDirCache = walker.getTree(i,
+                    DirCacheIterator.class);
+            if (baseDirCache != null && newDirCache != null) {
+                DirCacheEntry baseDci = baseDirCache.getDirCacheEntry();
+                DirCacheEntry newDci = newDirCache.getDirCacheEntry();
+                if (baseDci != null && newDci != null) {
+                    if (baseDci.isAssumeValid() != newDci.isAssumeValid())
+                        return true;
+                    if (baseDci.isAssumeValid()) // && newDci.isAssumeValid()
+                        return false;
+                }
+            }
+            if (walker.getRawMode(i) != m || !walker.idEqual(i, baseTree))
+                return true;
+        }
+        return false;
+    }
 
-	@Override
-	public boolean shouldBeRecursive() {
-		return false;
-	}
+    @Override
+    public boolean shouldBeRecursive() {
+        return false;
+    }
 
-	@Override
-	public TreeFilter clone() {
-		return this;
-	}
+    @Override
+    public TreeFilter clone() {
+        return this;
+    }
 
-	@Override
-	public String toString() {
-		return "INTERINDEX_DIFF"; //$NON-NLS-1$
-	}
+    @Override
+    public String toString() {
+        return "INTERINDEX_DIFF"; //$NON-NLS-1$
+    }
 }

@@ -23,41 +23,40 @@ import org.eclipse.jgit.revwalk.RevWalk;
  */
 public class MaxCountRevFilter extends RevFilter {
 
-	private int maxCount;
+    private int maxCount;
 
-	private int count;
+    private int count;
 
-	/**
-	 * Create a new max count filter.
-	 *
-	 * @param maxCount
-	 *            the limit
-	 * @return a new filter
-	 */
-	public static RevFilter create(int maxCount) {
-		if (maxCount < 0)
-			throw new IllegalArgumentException(
-					JGitText.get().maxCountMustBeNonNegative);
-		return new MaxCountRevFilter(maxCount);
-	}
+    /**
+     * Create a new max count filter.
+     *
+     * @param maxCount the limit
+     * @return a new filter
+     */
+    public static RevFilter create(int maxCount) {
+        if (maxCount < 0)
+            throw new IllegalArgumentException(
+                    JGitText.get().maxCountMustBeNonNegative);
+        return new MaxCountRevFilter(maxCount);
+    }
 
-	private MaxCountRevFilter(int maxCount) {
-		this.count = 0;
-		this.maxCount = maxCount;
-	}
+    private MaxCountRevFilter(int maxCount) {
+        this.count = 0;
+        this.maxCount = maxCount;
+    }
 
-	@Override
-	public boolean include(RevWalk walker, RevCommit cmit)
-			throws StopWalkException, MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		count++;
-		if (count > maxCount)
-			throw StopWalkException.INSTANCE;
-		return true;
-	}
+    @Override
+    public boolean include(RevWalk walker, RevCommit cmit)
+            throws StopWalkException, MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        count++;
+        if (count > maxCount)
+            throw StopWalkException.INSTANCE;
+        return true;
+    }
 
-	@Override
-	public RevFilter clone() {
-		return new MaxCountRevFilter(maxCount);
-	}
+    @Override
+    public RevFilter clone() {
+        return new MaxCountRevFilter(maxCount);
+    }
 }

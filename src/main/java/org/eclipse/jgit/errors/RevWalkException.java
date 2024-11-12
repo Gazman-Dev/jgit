@@ -24,15 +24,14 @@ import org.eclipse.jgit.internal.JGitText;
  * back to the application for handling and recovery.
  */
 public class RevWalkException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Create a new walk exception an original cause.
-	 *
-	 * @param cause
-	 *            the checked exception that describes why the walk failed.
-	 */
-	public RevWalkException(Throwable cause) {
-		super(JGitText.get().walkFailure, cause);
-	}
+    /**
+     * Create a new walk exception an original cause.
+     *
+     * @param cause the checked exception that describes why the walk failed.
+     */
+    public RevWalkException(Throwable cause) {
+        super(JGitText.get().walkFailure, cause);
+    }
 }

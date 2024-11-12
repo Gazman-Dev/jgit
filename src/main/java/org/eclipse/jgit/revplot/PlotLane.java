@@ -18,16 +18,16 @@ import java.io.Serializable;
  * Commits are strung onto a lane. For many UIs a lane represents a column.
  */
 public class PlotLane implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	int position;
+    int position;
 
-	/**
-	 * Logical location of this lane within the graphing plane.
-	 *
-	 * @return location of this lane, 0 through the maximum number of lanes.
-	 */
-	public int getPosition() {
-		return position;
-	}
+    /**
+     * Logical location of this lane within the graphing plane.
+     *
+     * @return location of this lane, 0 through the maximum number of lanes.
+     */
+    public int getPosition() {
+        return position;
+    }
 }

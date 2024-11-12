@@ -30,147 +30,143 @@ import org.eclipse.jgit.revwalk.RevWalk;
  * reject a result earlier in the list.
  */
 public abstract class AndRevFilter extends RevFilter {
-	/**
-	 * Create a filter with two filters, both of which must match.
-	 *
-	 * @param a
-	 *            first filter to test.
-	 * @param b
-	 *            second filter to test.
-	 * @return a filter that must match both input filters.
-	 */
-	public static RevFilter create(RevFilter a, RevFilter b) {
-		if (a == ALL)
-			return b;
-		if (b == ALL)
-			return a;
-		return new Binary(a, b);
-	}
+    /**
+     * Create a filter with two filters, both of which must match.
+     *
+     * @param a first filter to test.
+     * @param b second filter to test.
+     * @return a filter that must match both input filters.
+     */
+    public static RevFilter create(RevFilter a, RevFilter b) {
+        if (a == ALL)
+            return b;
+        if (b == ALL)
+            return a;
+        return new Binary(a, b);
+    }
 
-	/**
-	 * Create a filter around many filters, all of which must match.
-	 *
-	 * @param list
-	 *            list of filters to match against. Must contain at least 2
-	 *            filters.
-	 * @return a filter that must match all input filters.
-	 */
-	public static RevFilter create(RevFilter[] list) {
-		if (list.length == 2)
-			return create(list[0], list[1]);
-		if (list.length < 2)
-			throw new IllegalArgumentException(JGitText.get().atLeastTwoFiltersNeeded);
-		final RevFilter[] subfilters = new RevFilter[list.length];
-		System.arraycopy(list, 0, subfilters, 0, list.length);
-		return new List(subfilters);
-	}
+    /**
+     * Create a filter around many filters, all of which must match.
+     *
+     * @param list list of filters to match against. Must contain at least 2
+     *             filters.
+     * @return a filter that must match all input filters.
+     */
+    public static RevFilter create(RevFilter[] list) {
+        if (list.length == 2)
+            return create(list[0], list[1]);
+        if (list.length < 2)
+            throw new IllegalArgumentException(JGitText.get().atLeastTwoFiltersNeeded);
+        final RevFilter[] subfilters = new RevFilter[list.length];
+        System.arraycopy(list, 0, subfilters, 0, list.length);
+        return new List(subfilters);
+    }
 
-	/**
-	 * Create a filter around many filters, all of which must match.
-	 *
-	 * @param list
-	 *            list of filters to match against. Must contain at least 2
-	 *            filters.
-	 * @return a filter that must match all input filters.
-	 */
-	public static RevFilter create(Collection<RevFilter> list) {
-		if (list.size() < 2)
-			throw new IllegalArgumentException(JGitText.get().atLeastTwoFiltersNeeded);
-		final RevFilter[] subfilters = new RevFilter[list.size()];
-		list.toArray(subfilters);
-		if (subfilters.length == 2)
-			return create(subfilters[0], subfilters[1]);
-		return new List(subfilters);
-	}
+    /**
+     * Create a filter around many filters, all of which must match.
+     *
+     * @param list list of filters to match against. Must contain at least 2
+     *             filters.
+     * @return a filter that must match all input filters.
+     */
+    public static RevFilter create(Collection<RevFilter> list) {
+        if (list.size() < 2)
+            throw new IllegalArgumentException(JGitText.get().atLeastTwoFiltersNeeded);
+        final RevFilter[] subfilters = new RevFilter[list.size()];
+        list.toArray(subfilters);
+        if (subfilters.length == 2)
+            return create(subfilters[0], subfilters[1]);
+        return new List(subfilters);
+    }
 
-	private static class Binary extends AndRevFilter {
-		private final RevFilter a;
+    private static class Binary extends AndRevFilter {
+        private final RevFilter a;
 
-		private final RevFilter b;
+        private final RevFilter b;
 
-		private final boolean requiresCommitBody;
+        private final boolean requiresCommitBody;
 
-		Binary(RevFilter one, RevFilter two) {
-			a = one;
-			b = two;
-			requiresCommitBody = a.requiresCommitBody()
-					|| b.requiresCommitBody();
-		}
+        Binary(RevFilter one, RevFilter two) {
+            a = one;
+            b = two;
+            requiresCommitBody = a.requiresCommitBody()
+                    || b.requiresCommitBody();
+        }
 
-		@Override
-		public boolean include(RevWalk walker, RevCommit c)
-				throws MissingObjectException, IncorrectObjectTypeException,
-				IOException {
-			return a.include(walker, c) && b.include(walker, c);
-		}
+        @Override
+        public boolean include(RevWalk walker, RevCommit c)
+                throws MissingObjectException, IncorrectObjectTypeException,
+                IOException {
+            return a.include(walker, c) && b.include(walker, c);
+        }
 
-		@Override
-		public boolean requiresCommitBody() {
-			return requiresCommitBody;
-		}
+        @Override
+        public boolean requiresCommitBody() {
+            return requiresCommitBody;
+        }
 
-		@Override
-		public RevFilter clone() {
-			return new Binary(a.clone(), b.clone());
-		}
+        @Override
+        public RevFilter clone() {
+            return new Binary(a.clone(), b.clone());
+        }
 
-		@SuppressWarnings("nls")
-		@Override
-		public String toString() {
-			return "(" + a.toString() + " AND " + b.toString() + ")"; //$NON-NLS-1$
-		}
-	}
+        @SuppressWarnings("nls")
+        @Override
+        public String toString() {
+            return "(" + a.toString() + " AND " + b.toString() + ")"; //$NON-NLS-1$
+        }
+    }
 
-	private static class List extends AndRevFilter {
-		private final RevFilter[] subfilters;
+    private static class List extends AndRevFilter {
+        private final RevFilter[] subfilters;
 
-		private final boolean requiresCommitBody;
+        private final boolean requiresCommitBody;
 
-		List(RevFilter[] list) {
-			subfilters = list;
+        List(RevFilter[] list) {
+            subfilters = list;
 
-			boolean rcb = false;
-			for (RevFilter filter : subfilters)
-				rcb |= filter.requiresCommitBody();
-			requiresCommitBody = rcb;
-		}
+            boolean rcb = false;
+            for (RevFilter filter : subfilters)
+                rcb |= filter.requiresCommitBody();
+            requiresCommitBody = rcb;
+        }
 
-		@Override
-		public boolean include(RevWalk walker, RevCommit c)
-				throws MissingObjectException, IncorrectObjectTypeException,
-				IOException {
-			for (RevFilter f : subfilters) {
-				if (!f.include(walker, c))
-					return false;
-			}
-			return true;
-		}
+        @Override
+        public boolean include(RevWalk walker, RevCommit c)
+                throws MissingObjectException, IncorrectObjectTypeException,
+                IOException {
+            for (RevFilter f : subfilters) {
+                if (!f.include(walker, c))
+                    return false;
+            }
+            return true;
+        }
 
-		@Override
-		public boolean requiresCommitBody() {
-			return requiresCommitBody;
-		}
+        @Override
+        public boolean requiresCommitBody() {
+            return requiresCommitBody;
+        }
 
-		@Override
-		public RevFilter clone() {
-			final RevFilter[] s = new RevFilter[subfilters.length];
-			for (int i = 0; i < s.length; i++)
-				s[i] = subfilters[i].clone();
-			return new List(s);
-		}
+        @Override
+        public RevFilter clone() {
+            final RevFilter[] s = new RevFilter[subfilters.length];
+            for (int i = 0; i < s.length; i++)
+                s[i] = subfilters[i].clone();
+            return new List(s);
+        }
 
-		@SuppressWarnings("nls")
-		@Override
-		public String toString() {
-			final StringBuilder r = new StringBuilder();
-			r.append("(");
-			for (int i = 0; i < subfilters.length; i++) {
-				if (i > 0)
-					r.append(" AND ");
-				r.append(subfilters[i].toString());
-			}
-			r.append(")");
-			return r.toString();
-		}
-	}
+        @SuppressWarnings("nls")
+        @Override
+        public String toString() {
+            final StringBuilder r = new StringBuilder();
+            r.append("(");
+            for (int i = 0; i < subfilters.length; i++) {
+                if (i > 0)
+                    r.append(" AND ");
+                r.append(subfilters[i].toString());
+            }
+            r.append(")");
+            return r.toString();
+        }
+    }
 }

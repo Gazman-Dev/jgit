@@ -28,85 +28,83 @@ import org.eclipse.jgit.util.RawParseUtils;
  * Utility for reading reflog entries
  */
 class ReflogReaderImpl implements ReflogReader {
-	private File logName;
+    private File logName;
 
-	/**
-	 * @param db
-	 *            repository to read reflogs from
-	 * @param refname
-	 *            {@code Ref} name
-	 */
-	ReflogReaderImpl(Repository db, String refname) {
-		logName = new File(db.getDirectory(), Constants.LOGS + '/' + refname);
-	}
+    /**
+     * @param db      repository to read reflogs from
+     * @param refname {@code Ref} name
+     */
+    ReflogReaderImpl(Repository db, String refname) {
+        logName = new File(db.getDirectory(), Constants.LOGS + '/' + refname);
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jgit.internal.storage.file.ReflogReaader#getLastEntry()
-	 */
-	@Override
-	public ReflogEntry getLastEntry() throws IOException {
-		return getReverseEntry(0);
-	}
+    /* (non-Javadoc)
+     * @see org.eclipse.jgit.internal.storage.file.ReflogReaader#getLastEntry()
+     */
+    @Override
+    public ReflogEntry getLastEntry() throws IOException {
+        return getReverseEntry(0);
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jgit.internal.storage.file.ReflogReaader#getReverseEntries()
-	 */
-	@Override
-	public List<ReflogEntry> getReverseEntries() throws IOException {
-		return getReverseEntries(Integer.MAX_VALUE);
-	}
+    /* (non-Javadoc)
+     * @see org.eclipse.jgit.internal.storage.file.ReflogReaader#getReverseEntries()
+     */
+    @Override
+    public List<ReflogEntry> getReverseEntries() throws IOException {
+        return getReverseEntries(Integer.MAX_VALUE);
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jgit.internal.storage.file.ReflogReaader#getReverseEntry(int)
-	 */
-	@Override
-	public ReflogEntry getReverseEntry(int number) throws IOException {
-		if (number < 0)
-			throw new IllegalArgumentException();
+    /* (non-Javadoc)
+     * @see org.eclipse.jgit.internal.storage.file.ReflogReaader#getReverseEntry(int)
+     */
+    @Override
+    public ReflogEntry getReverseEntry(int number) throws IOException {
+        if (number < 0)
+            throw new IllegalArgumentException();
 
-		final byte[] log;
-		try {
-			log = IO.readFully(logName);
-		} catch (FileNotFoundException e) {
-			if (logName.exists()) {
-				throw e;
-			}
-			return null;
-		}
+        final byte[] log;
+        try {
+            log = IO.readFully(logName);
+        } catch (FileNotFoundException e) {
+            if (logName.exists()) {
+                throw e;
+            }
+            return null;
+        }
 
-		int rs = RawParseUtils.prevLF(log, log.length);
-		int current = 0;
-		while (rs >= 0) {
-			rs = RawParseUtils.prevLF(log, rs);
-			if (number == current)
-				return new ReflogEntryImpl(log, rs < 0 ? 0 : rs + 2);
-			current++;
-		}
-		return null;
-	}
+        int rs = RawParseUtils.prevLF(log, log.length);
+        int current = 0;
+        while (rs >= 0) {
+            rs = RawParseUtils.prevLF(log, rs);
+            if (number == current)
+                return new ReflogEntryImpl(log, rs < 0 ? 0 : rs + 2);
+            current++;
+        }
+        return null;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jgit.internal.storage.file.ReflogReaader#getReverseEntries(int)
-	 */
-	@Override
-	public List<ReflogEntry> getReverseEntries(int max) throws IOException {
-		final byte[] log;
-		try {
-			log = IO.readFully(logName);
-		} catch (FileNotFoundException e) {
-			if (logName.exists()) {
-				throw e;
-			}
-			return Collections.emptyList();
-		}
+    /* (non-Javadoc)
+     * @see org.eclipse.jgit.internal.storage.file.ReflogReaader#getReverseEntries(int)
+     */
+    @Override
+    public List<ReflogEntry> getReverseEntries(int max) throws IOException {
+        final byte[] log;
+        try {
+            log = IO.readFully(logName);
+        } catch (FileNotFoundException e) {
+            if (logName.exists()) {
+                throw e;
+            }
+            return Collections.emptyList();
+        }
 
-		int rs = RawParseUtils.prevLF(log, log.length);
-		List<ReflogEntry> ret = new ArrayList<>();
-		while (rs >= 0 && max-- > 0) {
-			rs = RawParseUtils.prevLF(log, rs);
-			ReflogEntry entry = new ReflogEntryImpl(log, rs < 0 ? 0 : rs + 2);
-			ret.add(entry);
-		}
-		return ret;
-	}
+        int rs = RawParseUtils.prevLF(log, log.length);
+        List<ReflogEntry> ret = new ArrayList<>();
+        while (rs >= 0 && max-- > 0) {
+            rs = RawParseUtils.prevLF(log, rs);
+            ReflogEntry entry = new ReflogEntryImpl(log, rs < 0 ? 0 : rs + 2);
+            ret.add(entry);
+        }
+        return ret;
+    }
 }

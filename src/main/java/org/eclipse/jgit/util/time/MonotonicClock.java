@@ -39,23 +39,23 @@ import java.time.Duration;
  * @since 4.6
  */
 public interface MonotonicClock {
-	/**
-	 * Obtain a timestamp close to "now".
-	 * <p>
-	 * Proposed times are close to "now", but may not yet be certainly in the
-	 * past. This allows the calling thread to interleave other useful work
-	 * while waiting for the clock instance to create an assurance it will never
-	 * in the future propose a time earlier than the returned time.
-	 * <p>
-	 * A hypothetical implementation could read the local system clock (managed
-	 * by NTP) and return that proposal, concurrently sending network messages
-	 * to closely collaborating peers in the same cluster to also ensure their
-	 * system clocks are ahead of this time. In such an implementation the
-	 * {@link ProposedTimestamp#blockUntil(Duration)}
-	 * method would wait for replies from the peers indicating their own system
-	 * clocks have moved past the proposed time.
-	 *
-	 * @return a {@link ProposedTimestamp} object.
-	 */
-	ProposedTimestamp propose();
+    /**
+     * Obtain a timestamp close to "now".
+     * <p>
+     * Proposed times are close to "now", but may not yet be certainly in the
+     * past. This allows the calling thread to interleave other useful work
+     * while waiting for the clock instance to create an assurance it will never
+     * in the future propose a time earlier than the returned time.
+     * <p>
+     * A hypothetical implementation could read the local system clock (managed
+     * by NTP) and return that proposal, concurrently sending network messages
+     * to closely collaborating peers in the same cluster to also ensure their
+     * system clocks are ahead of this time. In such an implementation the
+     * {@link ProposedTimestamp#blockUntil(Duration)}
+     * method would wait for replies from the peers indicating their own system
+     * clocks have moved past the proposed time.
+     *
+     * @return a {@link ProposedTimestamp} object.
+     */
+    ProposedTimestamp propose();
 }

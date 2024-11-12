@@ -57,37 +57,36 @@ import org.eclipse.jgit.storage.pack.PackStatistics;
  * @since 4.1
  */
 public class PostUploadHookChain implements PostUploadHook {
-	private final List<PostUploadHook> hooks;
+    private final List<PostUploadHook> hooks;
 
-	/**
-	 * Create a new hook chaining the given hooks together.
-	 *
-	 * @param hooks
-	 *            hooks to execute, in order.
-	 * @return a new chain of the given hooks.
-	 */
-	public static PostUploadHook newChain(List<PostUploadHook> hooks) {
-		List<PostUploadHook> newHooks = hooks.stream()
-				.filter(hook -> !hook.equals(PostUploadHook.NULL))
-				.collect(Collectors.toList());
+    /**
+     * Create a new hook chaining the given hooks together.
+     *
+     * @param hooks hooks to execute, in order.
+     * @return a new chain of the given hooks.
+     */
+    public static PostUploadHook newChain(List<PostUploadHook> hooks) {
+        List<PostUploadHook> newHooks = hooks.stream()
+                .filter(hook -> !hook.equals(PostUploadHook.NULL))
+                .collect(Collectors.toList());
 
-		if (newHooks.isEmpty()) {
-			return PostUploadHook.NULL;
-		} else if (newHooks.size() == 1) {
-			return newHooks.get(0);
-		} else {
-			return new PostUploadHookChain(newHooks);
-		}
-	}
+        if (newHooks.isEmpty()) {
+            return PostUploadHook.NULL;
+        } else if (newHooks.size() == 1) {
+            return newHooks.get(0);
+        } else {
+            return new PostUploadHookChain(newHooks);
+        }
+    }
 
-	@Override
-	public void onPostUpload(PackStatistics stats) {
-		for (PostUploadHook hook : hooks) {
-			hook.onPostUpload(stats);
-		}
-	}
+    @Override
+    public void onPostUpload(PackStatistics stats) {
+        for (PostUploadHook hook : hooks) {
+            hook.onPostUpload(stats);
+        }
+    }
 
-	private PostUploadHookChain(List<PostUploadHook> hooks) {
-		this.hooks = Collections.unmodifiableList(hooks);
-	}
+    private PostUploadHookChain(List<PostUploadHook> hooks) {
+        this.hooks = Collections.unmodifiableList(hooks);
+    }
 }

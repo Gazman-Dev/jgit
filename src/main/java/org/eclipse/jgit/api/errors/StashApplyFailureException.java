@@ -5,29 +5,26 @@ package org.eclipse.jgit.api.errors;
  */
 public class StashApplyFailureException extends GitAPIException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for StashApplyFailureException
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 * @since 4.1
-	 */
-	public StashApplyFailureException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for StashApplyFailureException
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     * @since 4.1
+     */
+    public StashApplyFailureException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Create a StashApplyFailedException
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public StashApplyFailureException(String message) {
-		super(message);
-	}
+    /**
+     * Create a StashApplyFailedException
+     *
+     * @param message error message
+     */
+    public StashApplyFailureException(String message) {
+        super(message);
+    }
 
 }

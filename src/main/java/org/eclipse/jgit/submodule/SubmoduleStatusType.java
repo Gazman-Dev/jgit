@@ -14,18 +14,24 @@ package org.eclipse.jgit.submodule;
  */
 public enum SubmoduleStatusType {
 
-	/** Submodule's configuration is missing */
-	MISSING,
+    /**
+     * Submodule's configuration is missing
+     */
+    MISSING,
 
-	/** Submodule's Git repository is not initialized */
-	UNINITIALIZED,
+    /**
+     * Submodule's Git repository is not initialized
+     */
+    UNINITIALIZED,
 
-	/** Submodule's Git repository is initialized */
-	INITIALIZED,
+    /**
+     * Submodule's Git repository is initialized
+     */
+    INITIALIZED,
 
-	/**
-	 * Submodule commit checked out is different than the commit referenced in
-	 * the index tree
-	 */
-	REV_CHECKED_OUT;
+    /**
+     * Submodule commit checked out is different than the commit referenced in
+     * the index tree
+     */
+    REV_CHECKED_OUT;
 }

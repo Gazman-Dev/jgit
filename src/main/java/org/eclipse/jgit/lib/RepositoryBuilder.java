@@ -34,6 +34,6 @@ import java.io.File;
  * @see org.eclipse.jgit.storage.file.FileRepositoryBuilder
  */
 public class RepositoryBuilder extends
-		BaseRepositoryBuilder<RepositoryBuilder, Repository> {
-	// Empty implementation, everything is inherited.
+        BaseRepositoryBuilder<RepositoryBuilder, Repository> {
+    // Empty implementation, everything is inherited.
 }

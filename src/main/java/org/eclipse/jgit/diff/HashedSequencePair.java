@@ -17,72 +17,68 @@ package org.eclipse.jgit.diff;
  * This pair wraps two sequences that contain cached hash codes for the input
  * sequences.
  *
- * @param <S>
- *            the base sequence type.
+ * @param <S> the base sequence type.
  */
 public class HashedSequencePair<S extends Sequence> {
-	private final SequenceComparator<? super S> cmp;
+    private final SequenceComparator<? super S> cmp;
 
-	private final S baseA;
+    private final S baseA;
 
-	private final S baseB;
+    private final S baseB;
 
-	private HashedSequence<S> cachedA;
+    private HashedSequence<S> cachedA;
 
-	private HashedSequence<S> cachedB;
+    private HashedSequence<S> cachedB;
 
-	/**
-	 * Construct a pair to provide fast hash codes.
-	 *
-	 * @param cmp
-	 *            the base comparator for the sequence elements.
-	 * @param a
-	 *            the A sequence.
-	 * @param b
-	 *            the B sequence.
-	 */
-	public HashedSequencePair(SequenceComparator<? super S> cmp, S a, S b) {
-		this.cmp = cmp;
-		this.baseA = a;
-		this.baseB = b;
-	}
+    /**
+     * Construct a pair to provide fast hash codes.
+     *
+     * @param cmp the base comparator for the sequence elements.
+     * @param a   the A sequence.
+     * @param b   the B sequence.
+     */
+    public HashedSequencePair(SequenceComparator<? super S> cmp, S a, S b) {
+        this.cmp = cmp;
+        this.baseA = a;
+        this.baseB = b;
+    }
 
-	/**
-	 * Get comparator
-	 *
-	 * @return obtain a comparator that uses the cached hash codes
-	 */
-	public HashedSequenceComparator<S> getComparator() {
-		return new HashedSequenceComparator<>(cmp);
-	}
+    /**
+     * Get comparator
+     *
+     * @return obtain a comparator that uses the cached hash codes
+     */
+    public HashedSequenceComparator<S> getComparator() {
+        return new HashedSequenceComparator<>(cmp);
+    }
 
-	/**
-	 * Get A
-	 *
-	 * @return wrapper around A that includes cached hash codes
-	 */
-	public HashedSequence<S> getA() {
-		if (cachedA == null)
-			cachedA = wrap(baseA);
-		return cachedA;
-	}
+    /**
+     * Get A
+     *
+     * @return wrapper around A that includes cached hash codes
+     */
+    public HashedSequence<S> getA() {
+        if (cachedA == null)
+            cachedA = wrap(baseA);
+        return cachedA;
+    }
 
-	/**
-	 * Get B
-	 *
-	 * @return wrapper around B that includes cached hash codes
-	 */
-	public HashedSequence<S> getB() {
-		if (cachedB == null)
-			cachedB = wrap(baseB);
-		return cachedB;
-	}
+    /**
+     * Get B
+     *
+     * @return wrapper around B that includes cached hash codes
+     */
+    public HashedSequence<S> getB() {
+        if (cachedB == null)
+            cachedB = wrap(baseB);
+        return cachedB;
+    }
 
-	private HashedSequence<S> wrap(S base) {
-		final int end = base.size();
-		final int[] hashes = new int[end];
-		for (int ptr = 0; ptr < end; ptr++)
-			hashes[ptr] = cmp.hash(base, ptr);
-		return new HashedSequence<>(base, hashes);
-	}
+    private HashedSequence<S> wrap(S base) {
+        final int end = base.size();
+        final int[] hashes = new int[end];
+        for (int ptr = 0; ptr < end; ptr++)
+            hashes[ptr] = cmp.hash(base, ptr);
+        return new HashedSequence<>(base, hashes);
+    }
 }

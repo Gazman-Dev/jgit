@@ -17,20 +17,20 @@ import java.io.IOException;
  * cannot fit a reference.
  */
 public class BlockSizeTooSmallException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final int minBlockSize;
+    private final int minBlockSize;
 
-	BlockSizeTooSmallException(int b) {
-		minBlockSize = b;
-	}
+    BlockSizeTooSmallException(int b) {
+        minBlockSize = b;
+    }
 
-	/**
-	 * Get minimum block size in bytes reftable requires to write a ref.
-	 *
-	 * @return minimum block size in bytes reftable requires to write a ref.
-	 */
-	public int getMinimumBlockSize() {
-		return minBlockSize;
-	}
+    /**
+     * Get minimum block size in bytes reftable requires to write a ref.
+     *
+     * @return minimum block size in bytes reftable requires to write a ref.
+     */
+    public int getMinimumBlockSize() {
+        return minBlockSize;
+    }
 }

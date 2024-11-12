@@ -21,44 +21,45 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  */
 public class SkipWorkTreeFilter extends TreeFilter {
 
-	/** Index of DirCacheIterator to work on. */
-	private final int treeIdx;
+    /**
+     * Index of DirCacheIterator to work on.
+     */
+    private final int treeIdx;
 
-	/**
-	 * Create a filter to work on the specified DirCacheIterator.
-	 *
-	 * @param treeIdx
-	 *            index of DirCacheIterator to work on. If the index does not
-	 *            refer to a DirCacheIterator, the filter will include all
-	 *            entries.
-	 */
-	public SkipWorkTreeFilter(int treeIdx) {
-		this.treeIdx = treeIdx;
-	}
+    /**
+     * Create a filter to work on the specified DirCacheIterator.
+     *
+     * @param treeIdx index of DirCacheIterator to work on. If the index does not
+     *                refer to a DirCacheIterator, the filter will include all
+     *                entries.
+     */
+    public SkipWorkTreeFilter(int treeIdx) {
+        this.treeIdx = treeIdx;
+    }
 
-	@Override
-	public boolean include(TreeWalk walker) {
-		DirCacheIterator i = walker.getTree(treeIdx, DirCacheIterator.class);
-		if (i == null)
-			return true;
+    @Override
+    public boolean include(TreeWalk walker) {
+        DirCacheIterator i = walker.getTree(treeIdx, DirCacheIterator.class);
+        if (i == null)
+            return true;
 
-		DirCacheEntry e = i.getDirCacheEntry();
-		return e == null || !e.isSkipWorkTree();
-	}
+        DirCacheEntry e = i.getDirCacheEntry();
+        return e == null || !e.isSkipWorkTree();
+    }
 
-	@Override
-	public boolean shouldBeRecursive() {
-		return false;
-	}
+    @Override
+    public boolean shouldBeRecursive() {
+        return false;
+    }
 
-	@Override
-	public TreeFilter clone() {
-		return this;
-	}
+    @Override
+    public TreeFilter clone() {
+        return this;
+    }
 
-	@SuppressWarnings("nls")
-	@Override
-	public String toString() {
-		return "SkipWorkTree(" + treeIdx + ")";
-	}
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        return "SkipWorkTree(" + treeIdx + ")";
+    }
 }

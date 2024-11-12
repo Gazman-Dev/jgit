@@ -16,45 +16,40 @@ package org.eclipse.jgit.errors;
  */
 public class CommandFailedException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private int returnCode;
+    private int returnCode;
 
-	/**
-	 * Constructor for CommandFailedException
-	 *
-	 * @param returnCode
-	 *            return code returned by the command
-	 * @param message
-	 *            error message
-	 */
-	public CommandFailedException(int returnCode, String message) {
-		super(message);
-		this.returnCode = returnCode;
-	}
+    /**
+     * Constructor for CommandFailedException
+     *
+     * @param returnCode return code returned by the command
+     * @param message    error message
+     */
+    public CommandFailedException(int returnCode, String message) {
+        super(message);
+        this.returnCode = returnCode;
+    }
 
-	/**
-	 * Constructor for CommandFailedException
-	 *
-	 * @param returnCode
-	 *            return code returned by the command
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            exception causing this exception
-	 */
-	public CommandFailedException(int returnCode, String message,
-			Throwable cause) {
-		super(message, cause);
-		this.returnCode = returnCode;
-	}
+    /**
+     * Constructor for CommandFailedException
+     *
+     * @param returnCode return code returned by the command
+     * @param message    error message
+     * @param cause      exception causing this exception
+     */
+    public CommandFailedException(int returnCode, String message,
+                                  Throwable cause) {
+        super(message, cause);
+        this.returnCode = returnCode;
+    }
 
-	/**
-	 * Get return code returned by the command
-	 *
-	 * @return return code returned by the command
-	 */
-	public int getReturnCode() {
-		return returnCode;
-	}
+    /**
+     * Get return code returned by the command
+     *
+     * @return return code returned by the command
+     */
+    public int getReturnCode() {
+        return returnCode;
+    }
 }

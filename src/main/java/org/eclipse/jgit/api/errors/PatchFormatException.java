@@ -9,11 +9,11 @@
  */
 package org.eclipse.jgit.api.errors;
 
-import java.text.MessageFormat;
-import java.util.List;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.patch.FormatError;
+
+import java.text.MessageFormat;
+import java.util.List;
 
 /**
  * Exception thrown when applying a patch fails due to an invalid format
@@ -21,28 +21,27 @@ import org.eclipse.jgit.patch.FormatError;
  * @since 2.0
  */
 public class PatchFormatException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private List<FormatError> errors;
+    private List<FormatError> errors;
 
-	/**
-	 * Constructor for PatchFormatException
-	 *
-	 * @param errors
-	 *            a {@link List} of {@link FormatError}s
-	 */
-	public PatchFormatException(List<FormatError> errors) {
-		super(MessageFormat.format(JGitText.get().patchFormatException, errors));
-		this.errors = errors;
-	}
+    /**
+     * Constructor for PatchFormatException
+     *
+     * @param errors a {@link List} of {@link FormatError}s
+     */
+    public PatchFormatException(List<FormatError> errors) {
+        super(MessageFormat.format(JGitText.get().patchFormatException, errors));
+        this.errors = errors;
+    }
 
-	/**
-	 * Get list of errors
-	 *
-	 * @return all the errors where unresolved conflicts have been detected
-	 */
-	public List<FormatError> getErrors() {
-		return errors;
-	}
+    /**
+     * Get list of errors
+     *
+     * @return all the errors where unresolved conflicts have been detected
+     */
+    public List<FormatError> getErrors() {
+        return errors;
+    }
 
 }

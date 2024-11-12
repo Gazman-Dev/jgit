@@ -23,99 +23,96 @@ import org.eclipse.jgit.lib.ObjectReader;
  * Iterator over an empty tree (a directory with no files).
  */
 public class EmptyTreeIterator extends AbstractTreeIterator {
-	/**
-	 * Create a new iterator with no parent.
-	 */
-	public EmptyTreeIterator() {
-		// Create a root empty tree.
-	}
+    /**
+     * Create a new iterator with no parent.
+     */
+    public EmptyTreeIterator() {
+        // Create a root empty tree.
+    }
 
-	EmptyTreeIterator(AbstractTreeIterator p) {
-		super(p);
-		pathLen = pathOffset;
-	}
+    EmptyTreeIterator(AbstractTreeIterator p) {
+        super(p);
+        pathLen = pathOffset;
+    }
 
-	/**
-	 * Create an iterator for a subtree of an existing iterator.
-	 * <p>
-	 * The caller is responsible for setting up the path of the child iterator.
-	 *
-	 * @param p
-	 *            parent tree iterator.
-	 * @param childPath
-	 *            path array to be used by the child iterator. This path must
-	 *            contain the path from the top of the walk to the first child
-	 *            and must end with a '/'.
-	 * @param childPathOffset
-	 *            position within <code>childPath</code> where the child can
-	 *            insert its data. The value at
-	 *            <code>childPath[childPathOffset-1]</code> must be '/'.
-	 */
-	public EmptyTreeIterator(final AbstractTreeIterator p,
-			final byte[] childPath, final int childPathOffset) {
-		super(p, childPath, childPathOffset);
-		pathLen = childPathOffset - 1;
-	}
+    /**
+     * Create an iterator for a subtree of an existing iterator.
+     * <p>
+     * The caller is responsible for setting up the path of the child iterator.
+     *
+     * @param p               parent tree iterator.
+     * @param childPath       path array to be used by the child iterator. This path must
+     *                        contain the path from the top of the walk to the first child
+     *                        and must end with a '/'.
+     * @param childPathOffset position within <code>childPath</code> where the child can
+     *                        insert its data. The value at
+     *                        <code>childPath[childPathOffset-1]</code> must be '/'.
+     */
+    public EmptyTreeIterator(final AbstractTreeIterator p,
+                             final byte[] childPath, final int childPathOffset) {
+        super(p, childPath, childPathOffset);
+        pathLen = childPathOffset - 1;
+    }
 
-	@Override
-	public AbstractTreeIterator createSubtreeIterator(ObjectReader reader)
-			throws IncorrectObjectTypeException, IOException {
-		return new EmptyTreeIterator(this);
-	}
+    @Override
+    public AbstractTreeIterator createSubtreeIterator(ObjectReader reader)
+            throws IncorrectObjectTypeException, IOException {
+        return new EmptyTreeIterator(this);
+    }
 
-	@Override
-	public boolean hasId() {
-		return false;
-	}
+    @Override
+    public boolean hasId() {
+        return false;
+    }
 
-	@Override
-	public ObjectId getEntryObjectId() {
-		return ObjectId.zeroId();
-	}
+    @Override
+    public ObjectId getEntryObjectId() {
+        return ObjectId.zeroId();
+    }
 
-	@Override
-	public byte[] idBuffer() {
-		return zeroid;
-	}
+    @Override
+    public byte[] idBuffer() {
+        return zeroid;
+    }
 
-	@Override
-	public int idOffset() {
-		return 0;
-	}
+    @Override
+    public int idOffset() {
+        return 0;
+    }
 
-	@Override
-	public void reset() {
-		// Do nothing.
-	}
+    @Override
+    public void reset() {
+        // Do nothing.
+    }
 
-	@Override
-	public boolean first() {
-		return true;
-	}
+    @Override
+    public boolean first() {
+        return true;
+    }
 
-	@Override
-	public boolean eof() {
-		return true;
-	}
+    @Override
+    public boolean eof() {
+        return true;
+    }
 
-	@Override
-	public void next(int delta) throws CorruptObjectException {
-		// Do nothing.
-	}
+    @Override
+    public void next(int delta) throws CorruptObjectException {
+        // Do nothing.
+    }
 
-	@Override
-	public void back(int delta) throws CorruptObjectException {
-		// Do nothing.
-	}
+    @Override
+    public void back(int delta) throws CorruptObjectException {
+        // Do nothing.
+    }
 
-	@Override
-	public void stopWalk() {
-		if (parent != null)
-			parent.stopWalk();
-	}
+    @Override
+    public void stopWalk() {
+        if (parent != null)
+            parent.stopWalk();
+    }
 
-	@Override
-	protected boolean needsStopWalk() {
-		return parent != null && parent.needsStopWalk();
-	}
+    @Override
+    protected boolean needsStopWalk() {
+        return parent != null && parent.needsStopWalk();
+    }
 }

@@ -62,297 +62,292 @@ import org.eclipse.jgit.util.io.StreamCopyThread;
  * system pipe to transfer data.
  */
 class TransportLocal extends Transport implements PackTransport {
-	static final TransportProtocol PROTO_LOCAL = new TransportProtocol() {
-		@Override
-		public String getName() {
-			return JGitText.get().transportProtoLocal;
-		}
+    static final TransportProtocol PROTO_LOCAL = new TransportProtocol() {
+        @Override
+        public String getName() {
+            return JGitText.get().transportProtoLocal;
+        }
 
-		@Override
-		public Set<String> getSchemes() {
-			return Collections.singleton("file"); //$NON-NLS-1$
-		}
+        @Override
+        public Set<String> getSchemes() {
+            return Collections.singleton("file"); //$NON-NLS-1$
+        }
 
-		@Override
-		public boolean canHandle(URIish uri, Repository local, String remoteName) {
-			if (uri.getPath() == null
-					|| uri.getPort() > 0
-					|| uri.getUser() != null
-					|| uri.getPass() != null
-					|| uri.getHost() != null
-					|| (uri.getScheme() != null && !getSchemes().contains(uri.getScheme())))
-				return false;
-			return true;
-		}
+        @Override
+        public boolean canHandle(URIish uri, Repository local, String remoteName) {
+            if (uri.getPath() == null
+                    || uri.getPort() > 0
+                    || uri.getUser() != null
+                    || uri.getPass() != null
+                    || uri.getHost() != null
+                    || (uri.getScheme() != null && !getSchemes().contains(uri.getScheme())))
+                return false;
+            return true;
+        }
 
-		@Override
-		public Transport open(URIish uri, Repository local, String remoteName)
-				throws NoRemoteRepositoryException {
-			File localPath = local.isBare() ? local.getDirectory() : local.getWorkTree();
-			File path = local.getFS().resolve(localPath, uri.getPath());
-			// If the reference is to a local file, C Git behavior says
-			// assume this is a bundle, since repositories are directories.
-			if (path.isFile())
-				return new TransportBundleFile(local, uri, path);
+        @Override
+        public Transport open(URIish uri, Repository local, String remoteName)
+                throws NoRemoteRepositoryException {
+            File localPath = local.isBare() ? local.getDirectory() : local.getWorkTree();
+            File path = local.getFS().resolve(localPath, uri.getPath());
+            // If the reference is to a local file, C Git behavior says
+            // assume this is a bundle, since repositories are directories.
+            if (path.isFile())
+                return new TransportBundleFile(local, uri, path);
 
-			File gitDir = RepositoryCache.FileKey.resolve(path, local.getFS());
-			if (gitDir == null)
-				throw new NoRemoteRepositoryException(uri, JGitText.get().notFound);
-			return new TransportLocal(local, uri, gitDir);
-		}
+            File gitDir = RepositoryCache.FileKey.resolve(path, local.getFS());
+            if (gitDir == null)
+                throw new NoRemoteRepositoryException(uri, JGitText.get().notFound);
+            return new TransportLocal(local, uri, gitDir);
+        }
 
-		@Override
-		public Transport open(URIish uri) throws NotSupportedException,
-				TransportException {
-			File path = FS.DETECTED.resolve(new File("."), uri.getPath()); //$NON-NLS-1$
-			// If the reference is to a local file, C Git behavior says
-			// assume this is a bundle, since repositories are directories.
-			if (path.isFile())
-				return new TransportBundleFile(uri, path);
+        @Override
+        public Transport open(URIish uri) throws NotSupportedException,
+                TransportException {
+            File path = FS.DETECTED.resolve(new File("."), uri.getPath()); //$NON-NLS-1$
+            // If the reference is to a local file, C Git behavior says
+            // assume this is a bundle, since repositories are directories.
+            if (path.isFile())
+                return new TransportBundleFile(uri, path);
 
-			File gitDir = RepositoryCache.FileKey.resolve(path, FS.DETECTED);
-			if (gitDir == null)
-				throw new NoRemoteRepositoryException(uri,
-						JGitText.get().notFound);
-			return new TransportLocal(uri, gitDir);
-		}
-	};
+            File gitDir = RepositoryCache.FileKey.resolve(path, FS.DETECTED);
+            if (gitDir == null)
+                throw new NoRemoteRepositoryException(uri,
+                        JGitText.get().notFound);
+            return new TransportLocal(uri, gitDir);
+        }
+    };
 
-	private final File remoteGitDir;
+    private final File remoteGitDir;
 
-	TransportLocal(Repository local, URIish uri, File gitDir) {
-		super(local, uri);
-		remoteGitDir = gitDir;
-	}
+    TransportLocal(Repository local, URIish uri, File gitDir) {
+        super(local, uri);
+        remoteGitDir = gitDir;
+    }
 
-	TransportLocal(URIish uri, File gitDir) {
-		super(uri);
-		remoteGitDir = gitDir;
-	}
+    TransportLocal(URIish uri, File gitDir) {
+        super(uri);
+        remoteGitDir = gitDir;
+    }
 
-	UploadPack createUploadPack(Repository dst) {
-		return new UploadPack(dst);
-	}
+    UploadPack createUploadPack(Repository dst) {
+        return new UploadPack(dst);
+    }
 
-	ReceivePack createReceivePack(Repository dst) {
-		return new ReceivePack(dst);
-	}
+    ReceivePack createReceivePack(Repository dst) {
+        return new ReceivePack(dst);
+    }
 
-	private Repository openRepo() throws TransportException {
-		try {
-			return new RepositoryBuilder()
-					.setFS(local != null ? local.getFS() : FS.DETECTED)
-					.setGitDir(remoteGitDir).build();
-		} catch (IOException err) {
-			TransportException te = new TransportException(uri,
-					JGitText.get().notAGitDirectory);
-			te.initCause(err);
-			throw te;
-		}
-	}
+    private Repository openRepo() throws TransportException {
+        try {
+            return new RepositoryBuilder()
+                    .setFS(local != null ? local.getFS() : FS.DETECTED)
+                    .setGitDir(remoteGitDir).build();
+        } catch (IOException err) {
+            TransportException te = new TransportException(uri,
+                    JGitText.get().notAGitDirectory);
+            te.initCause(err);
+            throw te;
+        }
+    }
 
-	@Override
-	public FetchConnection openFetch() throws TransportException {
-		return openFetch(Collections.emptyList());
-	}
+    @Override
+    public FetchConnection openFetch() throws TransportException {
+        return openFetch(Collections.emptyList());
+    }
 
-	@Override
-	public FetchConnection openFetch(Collection<RefSpec> refSpecs,
-			String... additionalPatterns) throws TransportException {
-		final String up = getOptionUploadPack();
-		if (!"git-upload-pack".equals(up) //$NON-NLS-1$
-				&& !"git upload-pack".equals(up)) {//$NON-NLS-1$
-			return new ForkLocalFetchConnection(refSpecs, additionalPatterns);
-		}
-		UploadPackFactory<Void> upf = (Void req,
-				Repository db) -> createUploadPack(db);
-		return new InternalFetchConnection<>(this, upf, null, openRepo());
-	}
+    @Override
+    public FetchConnection openFetch(Collection<RefSpec> refSpecs,
+                                     String... additionalPatterns) throws TransportException {
+        final String up = getOptionUploadPack();
+        if (!"git-upload-pack".equals(up) //$NON-NLS-1$
+                && !"git upload-pack".equals(up)) {//$NON-NLS-1$
+            return new ForkLocalFetchConnection(refSpecs, additionalPatterns);
+        }
+        UploadPackFactory<Void> upf = (Void req,
+                                       Repository db) -> createUploadPack(db);
+        return new InternalFetchConnection<>(this, upf, null, openRepo());
+    }
 
-	@Override
-	public PushConnection openPush() throws TransportException {
-		final String rp = getOptionReceivePack();
-		if (!"git-receive-pack".equals(rp) //$NON-NLS-1$
-				&& !"git receive-pack".equals(rp)) //$NON-NLS-1$
-			return new ForkLocalPushConnection();
+    @Override
+    public PushConnection openPush() throws TransportException {
+        final String rp = getOptionReceivePack();
+        if (!"git-receive-pack".equals(rp) //$NON-NLS-1$
+                && !"git receive-pack".equals(rp)) //$NON-NLS-1$
+            return new ForkLocalPushConnection();
 
-		ReceivePackFactory<Void> rpf = (Void req,
-				Repository db) -> createReceivePack(db);
-		return new InternalPushConnection<>(this, rpf, null, openRepo());
-	}
+        ReceivePackFactory<Void> rpf = (Void req,
+                                        Repository db) -> createReceivePack(db);
+        return new InternalPushConnection<>(this, rpf, null, openRepo());
+    }
 
-	@Override
-	public void close() {
-		// Resources must be established per-connection.
-	}
+    @Override
+    public void close() {
+        // Resources must be established per-connection.
+    }
 
-	/**
-	 * Spawn process
-	 *
-	 * @param cmd
-	 *            command
-	 * @return a {@link Process} object.
-	 * @throws TransportException
-	 *             if any.
-	 */
-	protected Process spawn(String cmd)
-			throws TransportException {
-		return spawn(cmd, null);
-	}
+    /**
+     * Spawn process
+     *
+     * @param cmd command
+     * @return a {@link Process} object.
+     * @throws TransportException if any.
+     */
+    protected Process spawn(String cmd)
+            throws TransportException {
+        return spawn(cmd, null);
+    }
 
-	/**
-	 * Spawn process
-	 *
-	 * @param cmd
-	 *            command
-	 * @param protocolVersion
-	 *            to use
-	 * @return a {@link Process} object.
-	 * @throws TransportException
-	 *             if any.
-	 */
-	private Process spawn(String cmd,
-			TransferConfig.ProtocolVersion protocolVersion)
-			throws TransportException {
-		try {
-			String[] args = { "." }; //$NON-NLS-1$
-			ProcessBuilder proc = local.getFS().runInShell(cmd, args);
-			proc.directory(remoteGitDir);
+    /**
+     * Spawn process
+     *
+     * @param cmd             command
+     * @param protocolVersion to use
+     * @return a {@link Process} object.
+     * @throws TransportException if any.
+     */
+    private Process spawn(String cmd,
+                          TransferConfig.ProtocolVersion protocolVersion)
+            throws TransportException {
+        try {
+            String[] args = {"."}; //$NON-NLS-1$
+            ProcessBuilder proc = local.getFS().runInShell(cmd, args);
+            proc.directory(remoteGitDir);
 
-			// Remove the same variables CGit does.
-			Map<String, String> env = proc.environment();
-			env.remove("GIT_ALTERNATE_OBJECT_DIRECTORIES"); //$NON-NLS-1$
-			env.remove("GIT_CONFIG"); //$NON-NLS-1$
-			env.remove("GIT_CONFIG_PARAMETERS"); //$NON-NLS-1$
-			env.remove("GIT_DIR"); //$NON-NLS-1$
-			env.remove("GIT_WORK_TREE"); //$NON-NLS-1$
-			env.remove("GIT_GRAFT_FILE"); //$NON-NLS-1$
-			env.remove("GIT_INDEX_FILE"); //$NON-NLS-1$
-			env.remove("GIT_NO_REPLACE_OBJECTS"); //$NON-NLS-1$
-			if (TransferConfig.ProtocolVersion.V2.equals(protocolVersion)) {
-				env.put(GitProtocolConstants.PROTOCOL_ENVIRONMENT_VARIABLE,
-						GitProtocolConstants.VERSION_2_REQUEST);
-			}
-			return proc.start();
-		} catch (IOException err) {
-			throw new TransportException(uri, err.getMessage(), err);
-		}
-	}
+            // Remove the same variables CGit does.
+            Map<String, String> env = proc.environment();
+            env.remove("GIT_ALTERNATE_OBJECT_DIRECTORIES"); //$NON-NLS-1$
+            env.remove("GIT_CONFIG"); //$NON-NLS-1$
+            env.remove("GIT_CONFIG_PARAMETERS"); //$NON-NLS-1$
+            env.remove("GIT_DIR"); //$NON-NLS-1$
+            env.remove("GIT_WORK_TREE"); //$NON-NLS-1$
+            env.remove("GIT_GRAFT_FILE"); //$NON-NLS-1$
+            env.remove("GIT_INDEX_FILE"); //$NON-NLS-1$
+            env.remove("GIT_NO_REPLACE_OBJECTS"); //$NON-NLS-1$
+            if (TransferConfig.ProtocolVersion.V2.equals(protocolVersion)) {
+                env.put(GitProtocolConstants.PROTOCOL_ENVIRONMENT_VARIABLE,
+                        GitProtocolConstants.VERSION_2_REQUEST);
+            }
+            return proc.start();
+        } catch (IOException err) {
+            throw new TransportException(uri, err.getMessage(), err);
+        }
+    }
 
-	class ForkLocalFetchConnection extends BasePackFetchConnection {
-		private Process uploadPack;
+    class ForkLocalFetchConnection extends BasePackFetchConnection {
+        private Process uploadPack;
 
-		private Thread errorReaderThread;
+        private Thread errorReaderThread;
 
-		ForkLocalFetchConnection() throws TransportException {
-			this(Collections.emptyList());
-		}
+        ForkLocalFetchConnection() throws TransportException {
+            this(Collections.emptyList());
+        }
 
-		ForkLocalFetchConnection(Collection<RefSpec> refSpecs,
-				String... additionalPatterns) throws TransportException {
-			super(TransportLocal.this);
+        ForkLocalFetchConnection(Collection<RefSpec> refSpecs,
+                                 String... additionalPatterns) throws TransportException {
+            super(TransportLocal.this);
 
-			final MessageWriter msg = new MessageWriter();
-			setMessageWriter(msg);
+            final MessageWriter msg = new MessageWriter();
+            setMessageWriter(msg);
 
-			TransferConfig.ProtocolVersion gitProtocol = protocol;
-			if (gitProtocol == null) {
-				gitProtocol = TransferConfig.ProtocolVersion.V2;
-			}
-			uploadPack = spawn(getOptionUploadPack(), gitProtocol);
+            TransferConfig.ProtocolVersion gitProtocol = protocol;
+            if (gitProtocol == null) {
+                gitProtocol = TransferConfig.ProtocolVersion.V2;
+            }
+            uploadPack = spawn(getOptionUploadPack(), gitProtocol);
 
-			final InputStream upErr = uploadPack.getErrorStream();
-			errorReaderThread = new StreamCopyThread(upErr, msg.getRawStream());
-			errorReaderThread.start();
+            final InputStream upErr = uploadPack.getErrorStream();
+            errorReaderThread = new StreamCopyThread(upErr, msg.getRawStream());
+            errorReaderThread.start();
 
-			InputStream upIn = uploadPack.getInputStream();
-			OutputStream upOut = uploadPack.getOutputStream();
+            InputStream upIn = uploadPack.getInputStream();
+            OutputStream upOut = uploadPack.getOutputStream();
 
-			upIn = new BufferedInputStream(upIn);
-			upOut = new BufferedOutputStream(upOut);
+            upIn = new BufferedInputStream(upIn);
+            upOut = new BufferedOutputStream(upOut);
 
-			init(upIn, upOut);
-			if (!readAdvertisedRefs()) {
-				lsRefs(refSpecs, additionalPatterns);
-			}
-		}
+            init(upIn, upOut);
+            if (!readAdvertisedRefs()) {
+                lsRefs(refSpecs, additionalPatterns);
+            }
+        }
 
-		@Override
-		public void close() {
-			super.close();
+        @Override
+        public void close() {
+            super.close();
 
-			if (uploadPack != null) {
-				try {
-					uploadPack.waitFor();
-				} catch (InterruptedException ie) {
-					// Stop waiting and return anyway.
-				} finally {
-					uploadPack = null;
-				}
-			}
+            if (uploadPack != null) {
+                try {
+                    uploadPack.waitFor();
+                } catch (InterruptedException ie) {
+                    // Stop waiting and return anyway.
+                } finally {
+                    uploadPack = null;
+                }
+            }
 
-			if (errorReaderThread != null) {
-				try {
-					errorReaderThread.join();
-				} catch (InterruptedException e) {
-					// Stop waiting and return anyway.
-				} finally {
-					errorReaderThread = null;
-				}
-			}
-		}
-	}
+            if (errorReaderThread != null) {
+                try {
+                    errorReaderThread.join();
+                } catch (InterruptedException e) {
+                    // Stop waiting and return anyway.
+                } finally {
+                    errorReaderThread = null;
+                }
+            }
+        }
+    }
 
-	class ForkLocalPushConnection extends BasePackPushConnection {
-		private Process receivePack;
+    class ForkLocalPushConnection extends BasePackPushConnection {
+        private Process receivePack;
 
-		private Thread errorReaderThread;
+        private Thread errorReaderThread;
 
-		ForkLocalPushConnection() throws TransportException {
-			super(TransportLocal.this);
+        ForkLocalPushConnection() throws TransportException {
+            super(TransportLocal.this);
 
-			final MessageWriter msg = new MessageWriter();
-			setMessageWriter(msg);
+            final MessageWriter msg = new MessageWriter();
+            setMessageWriter(msg);
 
-			receivePack = spawn(getOptionReceivePack());
+            receivePack = spawn(getOptionReceivePack());
 
-			final InputStream rpErr = receivePack.getErrorStream();
-			errorReaderThread = new StreamCopyThread(rpErr, msg.getRawStream());
-			errorReaderThread.start();
+            final InputStream rpErr = receivePack.getErrorStream();
+            errorReaderThread = new StreamCopyThread(rpErr, msg.getRawStream());
+            errorReaderThread.start();
 
-			InputStream rpIn = receivePack.getInputStream();
-			OutputStream rpOut = receivePack.getOutputStream();
+            InputStream rpIn = receivePack.getInputStream();
+            OutputStream rpOut = receivePack.getOutputStream();
 
-			rpIn = new BufferedInputStream(rpIn);
-			rpOut = new BufferedOutputStream(rpOut);
+            rpIn = new BufferedInputStream(rpIn);
+            rpOut = new BufferedOutputStream(rpOut);
 
-			init(rpIn, rpOut);
-			readAdvertisedRefs();
-		}
+            init(rpIn, rpOut);
+            readAdvertisedRefs();
+        }
 
-		@Override
-		public void close() {
-			super.close();
+        @Override
+        public void close() {
+            super.close();
 
-			if (receivePack != null) {
-				try {
-					receivePack.waitFor();
-				} catch (InterruptedException ie) {
-					// Stop waiting and return anyway.
-				} finally {
-					receivePack = null;
-				}
-			}
+            if (receivePack != null) {
+                try {
+                    receivePack.waitFor();
+                } catch (InterruptedException ie) {
+                    // Stop waiting and return anyway.
+                } finally {
+                    receivePack = null;
+                }
+            }
 
-			if (errorReaderThread != null) {
-				try {
-					errorReaderThread.join();
-				} catch (InterruptedException e) {
-					// Stop waiting and return anyway.
-				} finally {
-					errorReaderThread = null;
-				}
-			}
-		}
-	}
+            if (errorReaderThread != null) {
+                try {
+                    errorReaderThread.join();
+                } catch (InterruptedException e) {
+                    // Stop waiting and return anyway.
+                } finally {
+                    errorReaderThread = null;
+                }
+            }
+        }
+    }
 }

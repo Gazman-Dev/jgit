@@ -27,11 +27,11 @@ package org.eclipse.jgit.diff;
  * {@link SequenceComparator} must also be supplied.
  */
 public abstract class Sequence {
-	/** @return total number of items in the sequence. */
-	/**
-	 * Get size
-	 *
-	 * @return size
-	 */
-	public abstract int size();
+    /** @return total number of items in the sequence. */
+    /**
+     * Get size
+     *
+     * @return size
+     */
+    public abstract int size();
 }

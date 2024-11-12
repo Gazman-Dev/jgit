@@ -22,67 +22,67 @@ import java.util.concurrent.locks.Lock;
  * Implement the ReflogReader interface for a reflog stored in reftable.
  */
 public class ReftableReflogReader implements ReflogReader {
-	private final Lock lock;
+    private final Lock lock;
 
-	private final Reftable reftable;
+    private final Reftable reftable;
 
-	private final String refname;
+    private final String refname;
 
-	ReftableReflogReader(Lock lock, Reftable merged, String refname) {
-		this.lock = lock;
-		this.reftable = merged;
-		this.refname = refname;
-	}
+    ReftableReflogReader(Lock lock, Reftable merged, String refname) {
+        this.lock = lock;
+        this.reftable = merged;
+        this.refname = refname;
+    }
 
-	@Override
-	public ReflogEntry getLastEntry() throws IOException {
-		lock.lock();
-		try {
-			LogCursor cursor = reftable.seekLog(refname);
-			return cursor.next() ? cursor.getReflogEntry() : null;
-		} finally {
-			lock.unlock();
-		}
-	}
+    @Override
+    public ReflogEntry getLastEntry() throws IOException {
+        lock.lock();
+        try {
+            LogCursor cursor = reftable.seekLog(refname);
+            return cursor.next() ? cursor.getReflogEntry() : null;
+        } finally {
+            lock.unlock();
+        }
+    }
 
-	@Override
-	public List<ReflogEntry> getReverseEntries() throws IOException {
-		return getReverseEntries(Integer.MAX_VALUE);
-	}
+    @Override
+    public List<ReflogEntry> getReverseEntries() throws IOException {
+        return getReverseEntries(Integer.MAX_VALUE);
+    }
 
-	@Override
-	public ReflogEntry getReverseEntry(int number) throws IOException {
-		lock.lock();
-		try {
-			LogCursor cursor = reftable.seekLog(refname);
-			while (true) {
-				if (!cursor.next() || number < 0) {
-					return null;
-				}
-				if (number == 0) {
-					return cursor.getReflogEntry();
-				}
-				number--;
-			}
-		} finally {
-			lock.unlock();
-		}
-	}
+    @Override
+    public ReflogEntry getReverseEntry(int number) throws IOException {
+        lock.lock();
+        try {
+            LogCursor cursor = reftable.seekLog(refname);
+            while (true) {
+                if (!cursor.next() || number < 0) {
+                    return null;
+                }
+                if (number == 0) {
+                    return cursor.getReflogEntry();
+                }
+                number--;
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
 
-	@Override
-	public List<ReflogEntry> getReverseEntries(int max) throws IOException {
-		lock.lock();
-		try {
-			LogCursor cursor = reftable.seekLog(refname);
+    @Override
+    public List<ReflogEntry> getReverseEntries(int max) throws IOException {
+        lock.lock();
+        try {
+            LogCursor cursor = reftable.seekLog(refname);
 
-			List<ReflogEntry> result = new ArrayList<>();
-			while (cursor.next() && result.size() < max) {
-				result.add(cursor.getReflogEntry());
-			}
+            List<ReflogEntry> result = new ArrayList<>();
+            while (cursor.next() && result.size() < max) {
+                result.add(cursor.getReflogEntry());
+            }
 
-			return result;
-		} finally {
-			lock.unlock();
-		}
-	}
+            return result;
+        } finally {
+            lock.unlock();
+        }
+    }
 }

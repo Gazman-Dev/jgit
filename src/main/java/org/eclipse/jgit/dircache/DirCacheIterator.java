@@ -42,259 +42,276 @@ import org.eclipse.jgit.util.RawParseUtils;
  * @see org.eclipse.jgit.treewalk.TreeWalk
  */
 public class DirCacheIterator extends AbstractTreeIterator {
-	/** Byte array holding ".gitattributes" string */
-	private static final byte[] DOT_GIT_ATTRIBUTES_BYTES = Constants.DOT_GIT_ATTRIBUTES
-			.getBytes(UTF_8);
+    /**
+     * Byte array holding ".gitattributes" string
+     */
+    private static final byte[] DOT_GIT_ATTRIBUTES_BYTES = Constants.DOT_GIT_ATTRIBUTES
+            .getBytes(UTF_8);
 
-	/** The cache this iterator was created to walk. */
-	protected final DirCache cache;
+    /**
+     * The cache this iterator was created to walk.
+     */
+    protected final DirCache cache;
 
-	/** The tree this iterator is walking. */
-	private final DirCacheTree tree;
+    /**
+     * The tree this iterator is walking.
+     */
+    private final DirCacheTree tree;
 
-	/** First position in this tree. */
-	private final int treeStart;
+    /**
+     * First position in this tree.
+     */
+    private final int treeStart;
 
-	/** Last position in this tree. */
-	private final int treeEnd;
+    /**
+     * Last position in this tree.
+     */
+    private final int treeEnd;
 
-	/** Special buffer to hold the ObjectId of {@link #currentSubtree}. */
-	private final byte[] subtreeId;
+    /**
+     * Special buffer to hold the ObjectId of {@link #currentSubtree}.
+     */
+    private final byte[] subtreeId;
 
-	/** Index of entry within {@link #cache}. */
-	protected int ptr;
+    /**
+     * Index of entry within {@link #cache}.
+     */
+    protected int ptr;
 
-	/** Next subtree to consider within {@link #tree}. */
-	private int nextSubtreePos;
+    /**
+     * Next subtree to consider within {@link #tree}.
+     */
+    private int nextSubtreePos;
 
-	/** The current file entry from {@link #cache}. */
-	protected DirCacheEntry currentEntry;
+    /**
+     * The current file entry from {@link #cache}.
+     */
+    protected DirCacheEntry currentEntry;
 
-	/** The subtree containing {@link #currentEntry} if this is first entry. */
-	protected DirCacheTree currentSubtree;
+    /**
+     * The subtree containing {@link #currentEntry} if this is first entry.
+     */
+    protected DirCacheTree currentSubtree;
 
-	/**
-	 * Create a new iterator for an already loaded DirCache instance.
-	 * <p>
-	 * The iterator implementation may copy part of the cache's data during
-	 * construction, so the cache must be read in prior to creating the
-	 * iterator.
-	 *
-	 * @param dc
-	 *            the cache to walk. It must be already loaded into memory.
-	 */
-	public DirCacheIterator(DirCache dc) {
-		cache = dc;
-		tree = dc.getCacheTree(true);
-		treeStart = 0;
-		treeEnd = tree.getEntrySpan();
-		subtreeId = new byte[Constants.OBJECT_ID_LENGTH];
-		if (!eof())
-			parseEntry();
-	}
+    /**
+     * Create a new iterator for an already loaded DirCache instance.
+     * <p>
+     * The iterator implementation may copy part of the cache's data during
+     * construction, so the cache must be read in prior to creating the
+     * iterator.
+     *
+     * @param dc the cache to walk. It must be already loaded into memory.
+     */
+    public DirCacheIterator(DirCache dc) {
+        cache = dc;
+        tree = dc.getCacheTree(true);
+        treeStart = 0;
+        treeEnd = tree.getEntrySpan();
+        subtreeId = new byte[Constants.OBJECT_ID_LENGTH];
+        if (!eof())
+            parseEntry();
+    }
 
-	DirCacheIterator(DirCacheIterator p, DirCacheTree dct) {
-		super(p, p.path, p.pathLen + 1);
-		cache = p.cache;
-		tree = dct;
-		treeStart = p.ptr;
-		treeEnd = treeStart + tree.getEntrySpan();
-		subtreeId = p.subtreeId;
-		ptr = p.ptr;
-		parseEntry();
-	}
+    DirCacheIterator(DirCacheIterator p, DirCacheTree dct) {
+        super(p, p.path, p.pathLen + 1);
+        cache = p.cache;
+        tree = dct;
+        treeStart = p.ptr;
+        treeEnd = treeStart + tree.getEntrySpan();
+        subtreeId = p.subtreeId;
+        ptr = p.ptr;
+        parseEntry();
+    }
 
-	@Override
-	public AbstractTreeIterator createSubtreeIterator(ObjectReader reader)
-			throws IncorrectObjectTypeException, IOException {
-		if (currentSubtree == null)
-			throw new IncorrectObjectTypeException(getEntryObjectId(),
-					Constants.TYPE_TREE);
-		return new DirCacheIterator(this, currentSubtree);
-	}
+    @Override
+    public AbstractTreeIterator createSubtreeIterator(ObjectReader reader)
+            throws IncorrectObjectTypeException, IOException {
+        if (currentSubtree == null)
+            throw new IncorrectObjectTypeException(getEntryObjectId(),
+                    Constants.TYPE_TREE);
+        return new DirCacheIterator(this, currentSubtree);
+    }
 
-	@Override
-	public EmptyTreeIterator createEmptyTreeIterator() {
-		final byte[] n = new byte[Math.max(pathLen + 1, DEFAULT_PATH_SIZE)];
-		System.arraycopy(path, 0, n, 0, pathLen);
-		n[pathLen] = '/';
-		return new EmptyTreeIterator(this, n, pathLen + 1);
-	}
+    @Override
+    public EmptyTreeIterator createEmptyTreeIterator() {
+        final byte[] n = new byte[Math.max(pathLen + 1, DEFAULT_PATH_SIZE)];
+        System.arraycopy(path, 0, n, 0, pathLen);
+        n[pathLen] = '/';
+        return new EmptyTreeIterator(this, n, pathLen + 1);
+    }
 
-	@Override
-	public boolean hasId() {
-		if (currentSubtree != null)
-			return currentSubtree.isValid();
-		return currentEntry != null;
-	}
+    @Override
+    public boolean hasId() {
+        if (currentSubtree != null)
+            return currentSubtree.isValid();
+        return currentEntry != null;
+    }
 
-	@Override
-	public byte[] idBuffer() {
-		if (currentSubtree != null)
-			return currentSubtree.isValid() ? subtreeId : zeroid;
-		if (currentEntry != null)
-			return currentEntry.idBuffer();
-		return zeroid;
-	}
+    @Override
+    public byte[] idBuffer() {
+        if (currentSubtree != null)
+            return currentSubtree.isValid() ? subtreeId : zeroid;
+        if (currentEntry != null)
+            return currentEntry.idBuffer();
+        return zeroid;
+    }
 
-	@Override
-	public int idOffset() {
-		if (currentSubtree != null)
-			return 0;
-		if (currentEntry != null)
-			return currentEntry.idOffset();
-		return 0;
-	}
+    @Override
+    public int idOffset() {
+        if (currentSubtree != null)
+            return 0;
+        if (currentEntry != null)
+            return currentEntry.idOffset();
+        return 0;
+    }
 
-	@Override
-	public void reset() {
-		if (!first()) {
-			ptr = treeStart;
-			nextSubtreePos = 0;
-			currentEntry = null;
-			currentSubtree = null;
-			if (!eof())
-				parseEntry();
-		}
-	}
+    @Override
+    public void reset() {
+        if (!first()) {
+            ptr = treeStart;
+            nextSubtreePos = 0;
+            currentEntry = null;
+            currentSubtree = null;
+            if (!eof())
+                parseEntry();
+        }
+    }
 
-	@Override
-	public boolean first() {
-		return ptr == treeStart;
-	}
+    @Override
+    public boolean first() {
+        return ptr == treeStart;
+    }
 
-	@Override
-	public boolean eof() {
-		return ptr == treeEnd;
-	}
+    @Override
+    public boolean eof() {
+        return ptr == treeEnd;
+    }
 
-	@Override
-	public void next(int delta) {
-		while (--delta >= 0) {
-			if (currentSubtree != null)
-				ptr += currentSubtree.getEntrySpan();
-			else
-				ptr++;
-			if (eof())
-				break;
-			parseEntry();
-		}
-	}
+    @Override
+    public void next(int delta) {
+        while (--delta >= 0) {
+            if (currentSubtree != null)
+                ptr += currentSubtree.getEntrySpan();
+            else
+                ptr++;
+            if (eof())
+                break;
+            parseEntry();
+        }
+    }
 
-	@Override
-	public void back(int delta) {
-		while (--delta >= 0) {
-			if (currentSubtree != null)
-				nextSubtreePos--;
-			ptr--;
-			parseEntry(false);
-			if (currentSubtree != null)
-				ptr -= currentSubtree.getEntrySpan() - 1;
-		}
-	}
+    @Override
+    public void back(int delta) {
+        while (--delta >= 0) {
+            if (currentSubtree != null)
+                nextSubtreePos--;
+            ptr--;
+            parseEntry(false);
+            if (currentSubtree != null)
+                ptr -= currentSubtree.getEntrySpan() - 1;
+        }
+    }
 
-	private void parseEntry() {
-		parseEntry(true);
-	}
+    private void parseEntry() {
+        parseEntry(true);
+    }
 
-	private void parseEntry(boolean forward) {
-		currentEntry = cache.getEntry(ptr);
-		final byte[] cep = currentEntry.path;
+    private void parseEntry(boolean forward) {
+        currentEntry = cache.getEntry(ptr);
+        final byte[] cep = currentEntry.path;
 
-		if (!forward) {
-			if (nextSubtreePos > 0) {
-				final DirCacheTree p = tree.getChild(nextSubtreePos - 1);
-				if (p.contains(cep, pathOffset, cep.length)) {
-					nextSubtreePos--;
-					currentSubtree = p;
-				}
-			}
-		}
-		if (nextSubtreePos != tree.getChildCount()) {
-			final DirCacheTree s = tree.getChild(nextSubtreePos);
-			if (s.contains(cep, pathOffset, cep.length)) {
-				// The current position is the first file of this subtree.
-				// Use the subtree instead as the current position.
-				//
-				currentSubtree = s;
-				nextSubtreePos++;
+        if (!forward) {
+            if (nextSubtreePos > 0) {
+                final DirCacheTree p = tree.getChild(nextSubtreePos - 1);
+                if (p.contains(cep, pathOffset, cep.length)) {
+                    nextSubtreePos--;
+                    currentSubtree = p;
+                }
+            }
+        }
+        if (nextSubtreePos != tree.getChildCount()) {
+            final DirCacheTree s = tree.getChild(nextSubtreePos);
+            if (s.contains(cep, pathOffset, cep.length)) {
+                // The current position is the first file of this subtree.
+                // Use the subtree instead as the current position.
+                //
+                currentSubtree = s;
+                nextSubtreePos++;
 
-				if (s.isValid())
-					s.getObjectId().copyRawTo(subtreeId, 0);
-				mode = FileMode.TREE.getBits();
-				path = cep;
-				pathLen = pathOffset + s.nameLength();
-				return;
-			}
-		}
+                if (s.isValid())
+                    s.getObjectId().copyRawTo(subtreeId, 0);
+                mode = FileMode.TREE.getBits();
+                path = cep;
+                pathLen = pathOffset + s.nameLength();
+                return;
+            }
+        }
 
-		// The current position is a file/symlink/gitlink so we
-		// do not have a subtree located here.
-		//
-		mode = currentEntry.getRawMode();
-		path = cep;
-		pathLen = cep.length;
-		currentSubtree = null;
-		// Checks if this entry is a .gitattributes file
-		if (RawParseUtils.match(path, pathOffset, DOT_GIT_ATTRIBUTES_BYTES) == path.length)
-			attributesNode = new LazyLoadingAttributesNode(
-					currentEntry.getObjectId());
-	}
+        // The current position is a file/symlink/gitlink so we
+        // do not have a subtree located here.
+        //
+        mode = currentEntry.getRawMode();
+        path = cep;
+        pathLen = cep.length;
+        currentSubtree = null;
+        // Checks if this entry is a .gitattributes file
+        if (RawParseUtils.match(path, pathOffset, DOT_GIT_ATTRIBUTES_BYTES) == path.length)
+            attributesNode = new LazyLoadingAttributesNode(
+                    currentEntry.getObjectId());
+    }
 
-	/**
-	 * Get the DirCacheEntry for the current file.
-	 *
-	 * @return the current cache entry, if this iterator is positioned on a
-	 *         non-tree.
-	 */
-	public DirCacheEntry getDirCacheEntry() {
-		return currentSubtree == null ? currentEntry : null;
-	}
+    /**
+     * Get the DirCacheEntry for the current file.
+     *
+     * @return the current cache entry, if this iterator is positioned on a
+     * non-tree.
+     */
+    public DirCacheEntry getDirCacheEntry() {
+        return currentSubtree == null ? currentEntry : null;
+    }
 
-	/**
-	 * Retrieves the {@link AttributesNode} for the
-	 * current entry.
-	 *
-	 * @param reader
-	 *            {@link ObjectReader} used to parse the
-	 *            .gitattributes entry.
-	 * @return {@link AttributesNode} for the
-	 *         current entry.
-	 * @throws IOException
-	 *             if an IO error occurred
-	 * @since 3.7
-	 */
-	public AttributesNode getEntryAttributesNode(ObjectReader reader)
-			throws IOException {
-		if (attributesNode instanceof LazyLoadingAttributesNode)
-			attributesNode = ((LazyLoadingAttributesNode) attributesNode)
-					.load(reader);
-		return attributesNode;
-	}
+    /**
+     * Retrieves the {@link AttributesNode} for the
+     * current entry.
+     *
+     * @param reader {@link ObjectReader} used to parse the
+     *               .gitattributes entry.
+     * @return {@link AttributesNode} for the
+     * current entry.
+     * @throws IOException if an IO error occurred
+     * @since 3.7
+     */
+    public AttributesNode getEntryAttributesNode(ObjectReader reader)
+            throws IOException {
+        if (attributesNode instanceof LazyLoadingAttributesNode)
+            attributesNode = ((LazyLoadingAttributesNode) attributesNode)
+                    .load(reader);
+        return attributesNode;
+    }
 
-	/**
-	 * {@link AttributesNode} implementation that provides lazy loading
-	 * facilities.
-	 */
-	private static class LazyLoadingAttributesNode extends AttributesNode {
-		final ObjectId objectId;
+    /**
+     * {@link AttributesNode} implementation that provides lazy loading
+     * facilities.
+     */
+    private static class LazyLoadingAttributesNode extends AttributesNode {
+        final ObjectId objectId;
 
-		LazyLoadingAttributesNode(ObjectId objectId) {
-			super(Collections.<AttributesRule> emptyList());
-			this.objectId = objectId;
+        LazyLoadingAttributesNode(ObjectId objectId) {
+            super(Collections.<AttributesRule>emptyList());
+            this.objectId = objectId;
 
-		}
+        }
 
-		AttributesNode load(ObjectReader reader) throws IOException {
-			AttributesNode r = new AttributesNode();
-			ObjectLoader loader = reader.open(objectId);
-			if (loader != null) {
-				try (InputStream in = loader.openStream()) {
-					r.parse(in);
-				}
-			}
-			return r.getRules().isEmpty() ? null : r;
-		}
-	}
+        AttributesNode load(ObjectReader reader) throws IOException {
+            AttributesNode r = new AttributesNode();
+            ObjectLoader loader = reader.open(objectId);
+            if (loader != null) {
+                try (InputStream in = loader.openStream()) {
+                    r.parse(in);
+                }
+            }
+            return r.getRules().isEmpty() ? null : r;
+        }
+    }
 
 }

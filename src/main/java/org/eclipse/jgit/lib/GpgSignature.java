@@ -22,43 +22,42 @@ import org.eclipse.jgit.annotations.NonNull;
  */
 public class GpgSignature implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private byte[] signature;
+    private byte[] signature;
 
-	/**
-	 * Creates a new instance with the specified signature
-	 *
-	 * @param signature
-	 *            the signature
-	 */
-	public GpgSignature(@NonNull byte[] signature) {
-		this.signature = signature;
-	}
+    /**
+     * Creates a new instance with the specified signature
+     *
+     * @param signature the signature
+     */
+    public GpgSignature(@NonNull byte[] signature) {
+        this.signature = signature;
+    }
 
-	/**
-	 * Format for Git storage.
-	 * <p>
-	 * This returns the ASCII Armor as per
-	 * https://tools.ietf.org/html/rfc4880#section-6.2.
-	 * </p>
-	 *
-	 * @return a string of the signature ready to be embedded in a Git object
-	 */
-	public String toExternalString() {
-		return new String(signature, US_ASCII);
-	}
+    /**
+     * Format for Git storage.
+     * <p>
+     * This returns the ASCII Armor as per
+     * https://tools.ietf.org/html/rfc4880#section-6.2.
+     * </p>
+     *
+     * @return a string of the signature ready to be embedded in a Git object
+     */
+    public String toExternalString() {
+        return new String(signature, US_ASCII);
+    }
 
-	@Override
-	@SuppressWarnings("nls")
-	public String toString() {
-		final StringBuilder r = new StringBuilder();
+    @Override
+    @SuppressWarnings("nls")
+    public String toString() {
+        final StringBuilder r = new StringBuilder();
 
-		r.append("GpgSignature[");
-		r.append(
-				this.signature != null ? "length " + signature.length : "null");
-		r.append("]");
+        r.append("GpgSignature[");
+        r.append(
+                this.signature != null ? "length " + signature.length : "null");
+        r.append("]");
 
-		return r.toString();
-	}
+        return r.toString();
+    }
 }

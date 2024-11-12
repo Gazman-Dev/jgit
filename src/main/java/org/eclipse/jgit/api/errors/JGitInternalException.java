@@ -57,27 +57,24 @@ package org.eclipse.jgit.api.errors;
  * available) by calling {@code #getCause()}.
  */
 public class JGitInternalException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct an exception for low-level internal exceptions
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public JGitInternalException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Construct an exception for low-level internal exceptions
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     */
+    public JGitInternalException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Construct an exception for low-level internal exceptions
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public JGitInternalException(String message) {
-		super(message);
-	}
+    /**
+     * Construct an exception for low-level internal exceptions
+     *
+     * @param message error message
+     */
+    public JGitInternalException(String message) {
+        super(message);
+    }
 }

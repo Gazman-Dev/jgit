@@ -41,27 +41,24 @@ package org.eclipse.jgit.api.errors;
  * Exception thrown when a fetch command was called with an invalid remote
  */
 public class InvalidRemoteException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for InvalidRemoteException
-	 *
-	 * @param msg
-	 *            message describing the invalid remote.
-	 */
-	public InvalidRemoteException(String msg) {
-		super(msg);
-	}
+    /**
+     * Constructor for InvalidRemoteException
+     *
+     * @param msg message describing the invalid remote.
+     */
+    public InvalidRemoteException(String msg) {
+        super(msg);
+    }
 
-	/**
-	 * Constructor for InvalidRemoteException
-	 *
-	 * @param msg
-	 *            message describing the invalid remote.
-	 * @param cause
-	 *            why the remote is invalid.
-	 */
-	public InvalidRemoteException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
+    /**
+     * Constructor for InvalidRemoteException
+     *
+     * @param msg   message describing the invalid remote.
+     * @param cause why the remote is invalid.
+     */
+    public InvalidRemoteException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

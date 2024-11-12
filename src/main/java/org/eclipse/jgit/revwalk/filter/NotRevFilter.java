@@ -21,47 +21,46 @@ import org.eclipse.jgit.revwalk.RevWalk;
  * Includes a commit only if the subfilter does not include the commit.
  */
 public class NotRevFilter extends RevFilter {
-	/**
-	 * Create a filter that negates the result of another filter.
-	 *
-	 * @param a
-	 *            filter to negate.
-	 * @return a filter that does the reverse of <code>a</code>.
-	 */
-	public static RevFilter create(RevFilter a) {
-		return new NotRevFilter(a);
-	}
+    /**
+     * Create a filter that negates the result of another filter.
+     *
+     * @param a filter to negate.
+     * @return a filter that does the reverse of <code>a</code>.
+     */
+    public static RevFilter create(RevFilter a) {
+        return new NotRevFilter(a);
+    }
 
-	private final RevFilter a;
+    private final RevFilter a;
 
-	private NotRevFilter(RevFilter one) {
-		a = one;
-	}
+    private NotRevFilter(RevFilter one) {
+        a = one;
+    }
 
-	@Override
-	public RevFilter negate() {
-		return a;
-	}
+    @Override
+    public RevFilter negate() {
+        return a;
+    }
 
-	@Override
-	public boolean include(RevWalk walker, RevCommit c)
-			throws MissingObjectException, IncorrectObjectTypeException,
-			IOException {
-		return !a.include(walker, c);
-	}
+    @Override
+    public boolean include(RevWalk walker, RevCommit c)
+            throws MissingObjectException, IncorrectObjectTypeException,
+            IOException {
+        return !a.include(walker, c);
+    }
 
-	@Override
-	public boolean requiresCommitBody() {
-		return a.requiresCommitBody();
-	}
+    @Override
+    public boolean requiresCommitBody() {
+        return a.requiresCommitBody();
+    }
 
-	@Override
-	public RevFilter clone() {
-		return new NotRevFilter(a.clone());
-	}
+    @Override
+    public RevFilter clone() {
+        return new NotRevFilter(a.clone());
+    }
 
-	@Override
-	public String toString() {
-		return "NOT " + a.toString(); //$NON-NLS-1$
-	}
+    @Override
+    public String toString() {
+        return "NOT " + a.toString(); //$NON-NLS-1$
+    }
 }

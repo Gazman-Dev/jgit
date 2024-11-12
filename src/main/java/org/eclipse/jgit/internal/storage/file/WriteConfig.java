@@ -15,30 +15,32 @@ import org.eclipse.jgit.lib.Config.SectionParser;
 import org.eclipse.jgit.lib.CoreConfig;
 
 class WriteConfig {
-	/** Key for {@link Config#get(SectionParser)}. */
-	static final SectionParser<WriteConfig> KEY = WriteConfig::new;
+    /**
+     * Key for {@link Config#get(SectionParser)}.
+     */
+    static final SectionParser<WriteConfig> KEY = WriteConfig::new;
 
-	private final int compression;
+    private final int compression;
 
-	private final boolean fsyncObjectFiles;
+    private final boolean fsyncObjectFiles;
 
-	private final boolean fsyncRefFiles;
+    private final boolean fsyncRefFiles;
 
-	private WriteConfig(Config rc) {
-		compression = rc.get(CoreConfig.KEY).getCompression();
-		fsyncObjectFiles = rc.getBoolean("core", "fsyncobjectfiles", false); //$NON-NLS-1$ //$NON-NLS-2$
-		fsyncRefFiles = rc.getBoolean("core", "fsyncreffiles", false); //$NON-NLS-1$ //$NON-NLS-2$
-	}
+    private WriteConfig(Config rc) {
+        compression = rc.get(CoreConfig.KEY).getCompression();
+        fsyncObjectFiles = rc.getBoolean("core", "fsyncobjectfiles", false); //$NON-NLS-1$ //$NON-NLS-2$
+        fsyncRefFiles = rc.getBoolean("core", "fsyncreffiles", false); //$NON-NLS-1$ //$NON-NLS-2$
+    }
 
-	int getCompression() {
-		return compression;
-	}
+    int getCompression() {
+        return compression;
+    }
 
-	boolean getFSyncObjectFiles() {
-		return fsyncObjectFiles;
-	}
+    boolean getFSyncObjectFiles() {
+        return fsyncObjectFiles;
+    }
 
-	boolean getFSyncRefFiles() {
-		return fsyncRefFiles;
-	}
+    boolean getFSyncRefFiles() {
+        return fsyncRefFiles;
+    }
 }

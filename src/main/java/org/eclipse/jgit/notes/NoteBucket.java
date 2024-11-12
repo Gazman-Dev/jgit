@@ -25,19 +25,19 @@ import org.eclipse.jgit.lib.ObjectReader;
  * @see LeafBucket
  */
 abstract class NoteBucket {
-	abstract Note getNote(AnyObjectId objId, ObjectReader reader)
-			throws IOException;
+    abstract Note getNote(AnyObjectId objId, ObjectReader reader)
+            throws IOException;
 
-	abstract Iterator<Note> iterator(AnyObjectId objId, ObjectReader reader)
-			throws IOException;
+    abstract Iterator<Note> iterator(AnyObjectId objId, ObjectReader reader)
+            throws IOException;
 
-	abstract int estimateSize(AnyObjectId noteOn, ObjectReader or)
-			throws IOException;
+    abstract int estimateSize(AnyObjectId noteOn, ObjectReader or)
+            throws IOException;
 
-	abstract InMemoryNoteBucket set(AnyObjectId noteOn, AnyObjectId noteData,
-			ObjectReader reader) throws IOException;
+    abstract InMemoryNoteBucket set(AnyObjectId noteOn, AnyObjectId noteData,
+                                    ObjectReader reader) throws IOException;
 
-	abstract ObjectId writeTree(ObjectInserter inserter) throws IOException;
+    abstract ObjectId writeTree(ObjectInserter inserter) throws IOException;
 
-	abstract ObjectId getTreeId();
+    abstract ObjectId getTreeId();
 }

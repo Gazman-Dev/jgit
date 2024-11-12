@@ -29,44 +29,44 @@ import org.eclipse.jgit.revwalk.RevFlag;
  * there is good bitmap coverage.
  */
 public class AddToBitmapFilter extends RevFilter {
-	private final BitmapBuilder bitmap;
+    private final BitmapBuilder bitmap;
 
-	/**
-	 * Create a filter that adds visited commits to the given bitmap.
-	 *
-	 * @param bitmap bitmap to write visited commits to
-	 */
-	public AddToBitmapFilter(BitmapBuilder bitmap) {
-		this.bitmap = bitmap;
-	}
+    /**
+     * Create a filter that adds visited commits to the given bitmap.
+     *
+     * @param bitmap bitmap to write visited commits to
+     */
+    public AddToBitmapFilter(BitmapBuilder bitmap) {
+        this.bitmap = bitmap;
+    }
 
-	@Override
-	public final boolean include(RevWalk walker, RevCommit cmit) {
-		Bitmap visitedBitmap;
+    @Override
+    public final boolean include(RevWalk walker, RevCommit cmit) {
+        Bitmap visitedBitmap;
 
-		if (bitmap.contains(cmit)) {
-			// already included
-		} else if ((visitedBitmap = bitmap.getBitmapIndex()
-				.getBitmap(cmit)) != null) {
-			bitmap.or(visitedBitmap);
-		} else {
-			bitmap.addObject(cmit, Constants.OBJ_COMMIT);
-			return true;
-		}
+        if (bitmap.contains(cmit)) {
+            // already included
+        } else if ((visitedBitmap = bitmap.getBitmapIndex()
+                .getBitmap(cmit)) != null) {
+            bitmap.or(visitedBitmap);
+        } else {
+            bitmap.addObject(cmit, Constants.OBJ_COMMIT);
+            return true;
+        }
 
-		for (RevCommit p : cmit.getParents()) {
-			p.add(RevFlag.SEEN);
-		}
-		return false;
-	}
+        for (RevCommit p : cmit.getParents()) {
+            p.add(RevFlag.SEEN);
+        }
+        return false;
+    }
 
-	@Override
-	public final RevFilter clone() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public final RevFilter clone() {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public final boolean requiresCommitBody() {
-		return false;
-	}
+    @Override
+    public final boolean requiresCommitBody() {
+        return false;
+    }
 }

@@ -22,21 +22,20 @@ import java.time.Duration;
  * @since 5.13
  */
 public class SearchForReuseTimeout extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct a search for reuse timeout error.
-	 *
-	 * @param timeout
-	 *            time exceeded during the search for reuse phase.
-	 */
-	public SearchForReuseTimeout(Duration timeout) {
-		super(MessageFormat.format(JGitText.get().searchForReuseTimeout,
-				Long.valueOf(timeout.getSeconds())));
-	}
+    /**
+     * Construct a search for reuse timeout error.
+     *
+     * @param timeout time exceeded during the search for reuse phase.
+     */
+    public SearchForReuseTimeout(Duration timeout) {
+        super(MessageFormat.format(JGitText.get().searchForReuseTimeout,
+                Long.valueOf(timeout.getSeconds())));
+    }
 
-	@Override
-	public synchronized Throwable fillInStackTrace() {
-		return this;
-	}
+    @Override
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }

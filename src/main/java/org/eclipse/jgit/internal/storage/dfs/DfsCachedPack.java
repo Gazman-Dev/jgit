@@ -21,46 +21,46 @@ import org.eclipse.jgit.internal.storage.pack.StoredObjectRepresentation;
  * A DfsPackFile available for reuse as-is.
  */
 public class DfsCachedPack extends CachedPack {
-	private final DfsPackFile pack;
+    private final DfsPackFile pack;
 
-	DfsCachedPack(DfsPackFile pack) {
-		this.pack = pack;
-	}
+    DfsCachedPack(DfsPackFile pack) {
+        this.pack = pack;
+    }
 
-	/**
-	 * Get pack file
-	 *
-	 * @return the pack passed to the constructor
-	 */
-	public DfsPackFile getPackFile() {
-		return pack;
-	}
+    /**
+     * Get pack file
+     *
+     * @return the pack passed to the constructor
+     */
+    public DfsPackFile getPackFile() {
+        return pack;
+    }
 
-	/**
-	 * Get the description of the pack.
-	 *
-	 * @return the description of the pack.
-	 */
-	public DfsPackDescription getPackDescription() {
-		return pack.getPackDescription();
-	}
+    /**
+     * Get the description of the pack.
+     *
+     * @return the description of the pack.
+     */
+    public DfsPackDescription getPackDescription() {
+        return pack.getPackDescription();
+    }
 
-	@Override
-	public long getObjectCount() throws IOException {
-		return getPackDescription().getObjectCount();
-	}
+    @Override
+    public long getObjectCount() throws IOException {
+        return getPackDescription().getObjectCount();
+    }
 
-	@Override
-	public long getDeltaCount() throws IOException {
-		return getPackDescription().getDeltaCount();
-	}
+    @Override
+    public long getDeltaCount() throws IOException {
+        return getPackDescription().getDeltaCount();
+    }
 
-	@Override
-	public boolean hasObject(ObjectToPack obj, StoredObjectRepresentation rep) {
-		return ((DfsObjectRepresentation) rep).pack == pack;
-	}
+    @Override
+    public boolean hasObject(ObjectToPack obj, StoredObjectRepresentation rep) {
+        return ((DfsObjectRepresentation) rep).pack == pack;
+    }
 
-	void copyAsIs(PackOutputStream out, DfsReader ctx) throws IOException {
-		pack.copyPackAsIs(out, ctx);
-	}
+    void copyAsIs(PackOutputStream out, DfsReader ctx) throws IOException {
+        pack.copyPackAsIs(out, ctx);
+    }
 }

@@ -63,73 +63,71 @@ import org.eclipse.jgit.lib.Repository;
  * {@link #checkCallable()}) before setting of properties and inside
  * {@link #call()}.
  *
- * @param <T>
- *            the return type which is expected from {@link #call()}
+ * @param <T> the return type which is expected from {@link #call()}
  */
 public abstract class GitCommand<T> implements Callable<T> {
-	/** The repository this command is working with */
-	final protected Repository repo;
+    /**
+     * The repository this command is working with
+     */
+    final protected Repository repo;
 
-	/**
-	 * a state which tells whether it is allowed to call {@link #call()} on this
-	 * instance.
-	 */
-	private AtomicBoolean callable = new AtomicBoolean(true);
+    /**
+     * a state which tells whether it is allowed to call {@link #call()} on this
+     * instance.
+     */
+    private AtomicBoolean callable = new AtomicBoolean(true);
 
-	/**
-	 * Creates a new command which interacts with a single repository
-	 *
-	 * @param repo
-	 *            the {@link Repository} this command
-	 *            should interact with
-	 */
-	protected GitCommand(Repository repo) {
-		this.repo = repo;
-	}
+    /**
+     * Creates a new command which interacts with a single repository
+     *
+     * @param repo the {@link Repository} this command
+     *             should interact with
+     */
+    protected GitCommand(Repository repo) {
+        this.repo = repo;
+    }
 
-	/**
-	 * Get repository this command is working on
-	 *
-	 * @return the {@link Repository} this command is
-	 *         interacting with
-	 */
-	public Repository getRepository() {
-		return repo;
-	}
+    /**
+     * Get repository this command is working on
+     *
+     * @return the {@link Repository} this command is
+     * interacting with
+     */
+    public Repository getRepository() {
+        return repo;
+    }
 
-	/**
-	 * Set's the state which tells whether it is allowed to call {@link #call()}
-	 * on this instance. {@link #checkCallable()} will throw an exception when
-	 * called and this property is set to {@code false}
-	 *
-	 * @param callable
-	 *            if <code>true</code> it is allowed to call {@link #call()} on
-	 *            this instance.
-	 */
-	protected void setCallable(boolean callable) {
-		this.callable.set(callable);
-	}
+    /**
+     * Set's the state which tells whether it is allowed to call {@link #call()}
+     * on this instance. {@link #checkCallable()} will throw an exception when
+     * called and this property is set to {@code false}
+     *
+     * @param callable if <code>true</code> it is allowed to call {@link #call()} on
+     *                 this instance.
+     */
+    protected void setCallable(boolean callable) {
+        this.callable.set(callable);
+    }
 
-	/**
-	 * Checks that the property {@link #callable} is {@code true}. If not then
-	 * an {@link IllegalStateException} is thrown
-	 *
-	 * @throws IllegalStateException
-	 *             when this method is called and the property {@link #callable}
-	 *             is {@code false}
-	 */
-	protected void checkCallable() {
-		if (!callable.get())
-			throw new IllegalStateException(MessageFormat.format(
-					JGitText.get().commandWasCalledInTheWrongState
-					, this.getClass().getName()));
-	}
+    /**
+     * Checks that the property {@link #callable} is {@code true}. If not then
+     * an {@link IllegalStateException} is thrown
+     *
+     * @throws IllegalStateException when this method is called and the property {@link #callable}
+     *                               is {@code false}
+     */
+    protected void checkCallable() {
+        if (!callable.get())
+            throw new IllegalStateException(MessageFormat.format(
+                    JGitText.get().commandWasCalledInTheWrongState
+                    , this.getClass().getName()));
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * Execute the command
-	 */
-	@Override
-	public abstract T call() throws GitAPIException;
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Execute the command
+     */
+    @Override
+    public abstract T call() throws GitAPIException;
 }

@@ -22,34 +22,34 @@ import org.eclipse.jgit.lib.ObjectId;
 
 /**
  * An inconsistency with respect to handling different object types.
- *
+ * <p>
  * This most likely signals a programming error rather than a corrupt
  * object database.
  */
 public class IncorrectObjectTypeException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct an IncorrectObjectTypeException for the specified object id.
-	 *
-	 * Provide the type to make it easier to track down the problem.
-	 *
-	 * @param id SHA-1
-	 * @param type object type
-	 */
-	public IncorrectObjectTypeException(ObjectId id, String type) {
-		super(MessageFormat.format(JGitText.get().objectIsNotA, id.name(), type));
-	}
+    /**
+     * Construct an IncorrectObjectTypeException for the specified object id.
+     * <p>
+     * Provide the type to make it easier to track down the problem.
+     *
+     * @param id   SHA-1
+     * @param type object type
+     */
+    public IncorrectObjectTypeException(ObjectId id, String type) {
+        super(MessageFormat.format(JGitText.get().objectIsNotA, id.name(), type));
+    }
 
-	/**
-	 * Construct an IncorrectObjectTypeException for the specified object id.
-	 *
-	 * Provide the type to make it easier to track down the problem.
-	 *
-	 * @param id SHA-1
-	 * @param type object type
-	 */
-	public IncorrectObjectTypeException(ObjectId id, int type) {
-		this(id, Constants.typeString(type));
-	}
+    /**
+     * Construct an IncorrectObjectTypeException for the specified object id.
+     * <p>
+     * Provide the type to make it easier to track down the problem.
+     *
+     * @param id   SHA-1
+     * @param type object type
+     */
+    public IncorrectObjectTypeException(ObjectId id, int type) {
+        this(id, Constants.typeString(type));
+    }
 }

@@ -15,33 +15,33 @@ package org.eclipse.jgit.internal.diffmergetool;
  */
 public interface ExternalDiffTool {
 
-	/**
-	 * Get tool name
-	 *
-	 * @return the tool name
-	 */
-	String getName();
+    /**
+     * Get tool name
+     *
+     * @return the tool name
+     */
+    String getName();
 
-	/**
-	 * Get tool path
-	 *
-	 * @return the tool path
-	 */
-	String getPath();
+    /**
+     * Get tool path
+     *
+     * @return the tool path
+     */
+    String getPath();
 
-	/**
-	 * Get tool command
-	 *
-	 * @return the tool command
-	 */
-	String getCommand();
+    /**
+     * Get tool command
+     *
+     * @return the tool command
+     */
+    String getCommand();
 
-	/**
-	 * Whether tool is available
-	 *
-	 * @return availability of the tool: true if tool can be executed and false
-	 *         if not
-	 */
-	boolean isAvailable();
+    /**
+     * Whether tool is available
+     *
+     * @return availability of the tool: true if tool can be executed and false
+     * if not
+     */
+    boolean isAvailable();
 
 }

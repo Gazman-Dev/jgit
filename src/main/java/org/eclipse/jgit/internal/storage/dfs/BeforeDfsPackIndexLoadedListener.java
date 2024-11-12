@@ -17,11 +17,10 @@ import org.eclipse.jgit.events.RepositoryListener;
  * {@link BeforeDfsPackIndexLoadedEvent}s.
  */
 public interface BeforeDfsPackIndexLoadedListener extends RepositoryListener {
-	/**
-	 * Invoked just before a pack index is loaded from the block cache.
-	 *
-	 * @param event
-	 *            information about the packs.
-	 */
-	void onBeforeDfsPackIndexLoaded(BeforeDfsPackIndexLoadedEvent event);
+    /**
+     * Invoked just before a pack index is loaded from the block cache.
+     *
+     * @param event information about the packs.
+     */
+    void onBeforeDfsPackIndexLoaded(BeforeDfsPackIndexLoadedEvent event);
 }

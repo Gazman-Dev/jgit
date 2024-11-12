@@ -20,41 +20,40 @@ import java.util.List;
  * Hooks are run in the order passed to the constructor.
  */
 public class PreReceiveHookChain implements PreReceiveHook {
-	private final PreReceiveHook[] hooks;
-	private final int count;
+    private final PreReceiveHook[] hooks;
+    private final int count;
 
-	/**
-	 * Create a new hook chaining the given hooks together.
-	 *
-	 * @param hooks
-	 *            hooks to execute, in order.
-	 * @return a new hook chain of the given hooks.
-	 */
-	public static PreReceiveHook newChain(List<? extends PreReceiveHook> hooks) {
-		PreReceiveHook[] newHooks = new PreReceiveHook[hooks.size()];
-		int i = 0;
-		for (PreReceiveHook hook : hooks)
-			if (hook != PreReceiveHook.NULL)
-				newHooks[i++] = hook;
-		switch (i) {
-		case 0:
-			return PreReceiveHook.NULL;
-		case 1:
-			return newHooks[0];
-		default:
-			return new PreReceiveHookChain(newHooks, i);
-		}
-	}
+    /**
+     * Create a new hook chaining the given hooks together.
+     *
+     * @param hooks hooks to execute, in order.
+     * @return a new hook chain of the given hooks.
+     */
+    public static PreReceiveHook newChain(List<? extends PreReceiveHook> hooks) {
+        PreReceiveHook[] newHooks = new PreReceiveHook[hooks.size()];
+        int i = 0;
+        for (PreReceiveHook hook : hooks)
+            if (hook != PreReceiveHook.NULL)
+                newHooks[i++] = hook;
+        switch (i) {
+            case 0:
+                return PreReceiveHook.NULL;
+            case 1:
+                return newHooks[0];
+            default:
+                return new PreReceiveHookChain(newHooks, i);
+        }
+    }
 
-	@Override
-	public void onPreReceive(ReceivePack rp,
-			Collection<ReceiveCommand> commands) {
-		for (int i = 0; i < count; i++)
-			hooks[i].onPreReceive(rp, commands);
-	}
+    @Override
+    public void onPreReceive(ReceivePack rp,
+                             Collection<ReceiveCommand> commands) {
+        for (int i = 0; i < count; i++)
+            hooks[i].onPreReceive(rp, commands);
+    }
 
-	private PreReceiveHookChain(PreReceiveHook[] hooks, int count) {
-		this.hooks = hooks;
-		this.count = count;
-	}
+    private PreReceiveHookChain(PreReceiveHook[] hooks, int count) {
+        this.hooks = hooks;
+        this.count = count;
+    }
 }

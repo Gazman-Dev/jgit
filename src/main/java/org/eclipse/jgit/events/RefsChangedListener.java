@@ -14,11 +14,10 @@ package org.eclipse.jgit.events;
  * Receives {@link RefsChangedEvent}s.
  */
 public interface RefsChangedListener extends RepositoryListener {
-	/**
-	 * Invoked when any reference changes.
-	 *
-	 * @param event
-	 *            information about the changes.
-	 */
-	void onRefsChanged(RefsChangedEvent event);
+    /**
+     * Invoked when any reference changes.
+     *
+     * @param event information about the changes.
+     */
+    void onRefsChanged(RefsChangedEvent event);
 }

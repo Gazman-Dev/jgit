@@ -20,18 +20,16 @@ import org.eclipse.jgit.transport.URIish;
  * thrown to the caller of the transport operation.
  */
 public class RemoteRepositoryException extends TransportException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructs a RemoteRepositoryException for a message.
-	 *
-	 * @param uri
-	 *            URI used for transport
-	 * @param message
-	 *            message, exactly as supplied by the remote repository. May
-	 *            contain LFs (newlines) if the remote formatted it that way.
-	 */
-	public RemoteRepositoryException(URIish uri, String message) {
-		super(uri, message);
-	}
+    /**
+     * Constructs a RemoteRepositoryException for a message.
+     *
+     * @param uri     URI used for transport
+     * @param message message, exactly as supplied by the remote repository. May
+     *                contain LFs (newlines) if the remote formatted it that way.
+     */
+    public RemoteRepositoryException(URIish uri, String message) {
+        super(uri, message);
+    }
 }

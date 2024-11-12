@@ -27,87 +27,87 @@ import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
  * Active network client of {@link Daemon}.
  */
 public class DaemonClient {
-	private final Daemon daemon;
+    private final Daemon daemon;
 
-	private InetAddress peer;
+    private InetAddress peer;
 
-	private InputStream rawIn;
+    private InputStream rawIn;
 
-	private OutputStream rawOut;
+    private OutputStream rawOut;
 
-	DaemonClient(Daemon d) {
-		daemon = d;
-	}
+    DaemonClient(Daemon d) {
+        daemon = d;
+    }
 
-	void setRemoteAddress(InetAddress ia) {
-		peer = ia;
-	}
+    void setRemoteAddress(InetAddress ia) {
+        peer = ia;
+    }
 
-	/**
-	 * Get the daemon which spawned this client.
-	 *
-	 * @return the daemon which spawned this client.
-	 */
-	public Daemon getDaemon() {
-		return daemon;
-	}
+    /**
+     * Get the daemon which spawned this client.
+     *
+     * @return the daemon which spawned this client.
+     */
+    public Daemon getDaemon() {
+        return daemon;
+    }
 
-	/**
-	 * Get Internet address of the remote client.
-	 *
-	 * @return Internet address of the remote client.
-	 */
-	public InetAddress getRemoteAddress() {
-		return peer;
-	}
+    /**
+     * Get Internet address of the remote client.
+     *
+     * @return Internet address of the remote client.
+     */
+    public InetAddress getRemoteAddress() {
+        return peer;
+    }
 
-	/**
-	 * Get input stream to read from the connected client.
-	 *
-	 * @return input stream to read from the connected client.
-	 */
-	public InputStream getInputStream() {
-		return rawIn;
-	}
+    /**
+     * Get input stream to read from the connected client.
+     *
+     * @return input stream to read from the connected client.
+     */
+    public InputStream getInputStream() {
+        return rawIn;
+    }
 
-	/**
-	 * Get output stream to send data to the connected client.
-	 *
-	 * @return output stream to send data to the connected client.
-	 */
-	public OutputStream getOutputStream() {
-		return rawOut;
-	}
+    /**
+     * Get output stream to send data to the connected client.
+     *
+     * @return output stream to send data to the connected client.
+     */
+    public OutputStream getOutputStream() {
+        return rawOut;
+    }
 
-	void execute(Socket sock) throws IOException,
-			ServiceNotEnabledException, ServiceNotAuthorizedException {
-		rawIn = new BufferedInputStream(sock.getInputStream());
-		rawOut = new BufferedOutputStream(sock.getOutputStream());
+    void execute(Socket sock) throws IOException,
+            ServiceNotEnabledException, ServiceNotAuthorizedException {
+        rawIn = new BufferedInputStream(sock.getInputStream());
+        rawOut = new BufferedOutputStream(sock.getOutputStream());
 
-		if (0 < daemon.getTimeout())
-			sock.setSoTimeout(daemon.getTimeout() * 1000);
-		String cmd = new PacketLineIn(rawIn).readStringRaw();
+        if (0 < daemon.getTimeout())
+            sock.setSoTimeout(daemon.getTimeout() * 1000);
+        String cmd = new PacketLineIn(rawIn).readStringRaw();
 
-		Collection<String> extraParameters = null;
+        Collection<String> extraParameters = null;
 
-		int nulnul = cmd.indexOf("\0\0"); //$NON-NLS-1$
-		if (nulnul != -1) {
-			extraParameters = Arrays.asList(cmd.substring(nulnul + 2).split("\0")); //$NON-NLS-1$
-		}
+        int nulnul = cmd.indexOf("\0\0"); //$NON-NLS-1$
+        if (nulnul != -1) {
+            extraParameters = Arrays.asList(cmd.substring(nulnul + 2).split("\0")); //$NON-NLS-1$
+        }
 
-		final int nul = cmd.indexOf('\0');
-		if (nul >= 0) {
-			// Newer clients hide a "host" header behind this byte.
-			// Currently we don't use it for anything, so we ignore
-			// this portion of the command.
-			//
-			cmd = cmd.substring(0, nul);
-		}
+        final int nul = cmd.indexOf('\0');
+        if (nul >= 0) {
+            // Newer clients hide a "host" header behind this byte.
+            // Currently we don't use it for anything, so we ignore
+            // this portion of the command.
+            //
+            cmd = cmd.substring(0, nul);
+        }
 
-		final DaemonService srv = getDaemon().matchService(cmd);
-		if (srv == null)
-			return;
-		sock.setSoTimeout(0);
-		srv.execute(this, cmd, extraParameters);
-	}
+        final DaemonService srv = getDaemon().matchService(cmd);
+        if (srv == null)
+            return;
+        sock.setSoTimeout(0);
+        srv.execute(this, cmd, extraParameters);
+    }
 }

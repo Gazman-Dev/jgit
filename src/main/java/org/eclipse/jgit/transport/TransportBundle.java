@@ -22,8 +22,8 @@ package org.eclipse.jgit.transport;
  * supported by the bundle transport.
  */
 public interface TransportBundle extends PackTransport {
-	/**
-	 * Bundle signature
-	 */
-	String V2_BUNDLE_SIGNATURE = "# v2 git bundle"; //$NON-NLS-1$
+    /**
+     * Bundle signature
+     */
+    String V2_BUNDLE_SIGNATURE = "# v2 git bundle"; //$NON-NLS-1$
 }

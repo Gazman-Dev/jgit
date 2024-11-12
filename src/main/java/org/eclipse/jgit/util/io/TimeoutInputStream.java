@@ -22,101 +22,98 @@ import org.eclipse.jgit.internal.JGitText;
  * InputStream with a configurable timeout.
  */
 public class TimeoutInputStream extends FilterInputStream {
-	private final InterruptTimer myTimer;
+    private final InterruptTimer myTimer;
 
-	private int timeout;
+    private int timeout;
 
-	/**
-	 * Wrap an input stream with a timeout on all read operations.
-	 *
-	 * @param src
-	 *            base input stream (to read from). The stream must be
-	 *            interruptible (most socket streams are).
-	 * @param timer
-	 *            timer to manage the timeouts during reads.
-	 */
-	public TimeoutInputStream(final InputStream src,
-			final InterruptTimer timer) {
-		super(src);
-		myTimer = timer;
-	}
+    /**
+     * Wrap an input stream with a timeout on all read operations.
+     *
+     * @param src   base input stream (to read from). The stream must be
+     *              interruptible (most socket streams are).
+     * @param timer timer to manage the timeouts during reads.
+     */
+    public TimeoutInputStream(final InputStream src,
+                              final InterruptTimer timer) {
+        super(src);
+        myTimer = timer;
+    }
 
-	/**
-	 * Get number of milliseconds before aborting a read.
-	 *
-	 * @return number of milliseconds before aborting a read.
-	 */
-	public int getTimeout() {
-		return timeout;
-	}
+    /**
+     * Get number of milliseconds before aborting a read.
+     *
+     * @return number of milliseconds before aborting a read.
+     */
+    public int getTimeout() {
+        return timeout;
+    }
 
-	/**
-	 * Set number of milliseconds before aborting a read.
-	 *
-	 * @param millis
-	 *            number of milliseconds before aborting a read. Must be &gt; 0.
-	 */
-	public void setTimeout(int millis) {
-		if (millis < 0)
-			throw new IllegalArgumentException(MessageFormat.format(
-					JGitText.get().invalidTimeout, Integer.valueOf(millis)));
-		timeout = millis;
-	}
+    /**
+     * Set number of milliseconds before aborting a read.
+     *
+     * @param millis number of milliseconds before aborting a read. Must be &gt; 0.
+     */
+    public void setTimeout(int millis) {
+        if (millis < 0)
+            throw new IllegalArgumentException(MessageFormat.format(
+                    JGitText.get().invalidTimeout, Integer.valueOf(millis)));
+        timeout = millis;
+    }
 
-	@Override
-	public int read() throws IOException {
-		try {
-			beginRead();
-			return super.read();
-		} catch (InterruptedIOException e) {
-			throw readTimedOut(e);
-		} finally {
-			endRead();
-		}
-	}
+    @Override
+    public int read() throws IOException {
+        try {
+            beginRead();
+            return super.read();
+        } catch (InterruptedIOException e) {
+            throw readTimedOut(e);
+        } finally {
+            endRead();
+        }
+    }
 
-	@Override
-	public int read(byte[] buf) throws IOException {
-		return read(buf, 0, buf.length);
-	}
+    @Override
+    public int read(byte[] buf) throws IOException {
+        return read(buf, 0, buf.length);
+    }
 
-	@Override
-	public int read(byte[] buf, int off, int cnt) throws IOException {
-		try {
-			beginRead();
-			return super.read(buf, off, cnt);
-		} catch (InterruptedIOException e) {
-			throw readTimedOut(e);
-		} finally {
-			endRead();
-		}
-	}
+    @Override
+    public int read(byte[] buf, int off, int cnt) throws IOException {
+        try {
+            beginRead();
+            return super.read(buf, off, cnt);
+        } catch (InterruptedIOException e) {
+            throw readTimedOut(e);
+        } finally {
+            endRead();
+        }
+    }
 
-	@Override
-	public long skip(long cnt) throws IOException {
-		try {
-			beginRead();
-			return super.skip(cnt);
-		} catch (InterruptedIOException e) {
-			throw readTimedOut(e);
-		} finally {
-			endRead();
-		}
-	}
+    @Override
+    public long skip(long cnt) throws IOException {
+        try {
+            beginRead();
+            return super.skip(cnt);
+        } catch (InterruptedIOException e) {
+            throw readTimedOut(e);
+        } finally {
+            endRead();
+        }
+    }
 
-	private void beginRead() {
-		myTimer.begin(timeout);
-	}
+    private void beginRead() {
+        myTimer.begin(timeout);
+    }
 
-	private void endRead() {
-		myTimer.end();
-	}
+    private void endRead() {
+        myTimer.end();
+    }
 
-	private InterruptedIOException readTimedOut(InterruptedIOException e) {
-		InterruptedIOException interrupted = new InterruptedIOException(
-				MessageFormat.format(JGitText.get().readTimedOut,
-						Integer.valueOf(timeout)));
-		interrupted.initCause(e);
-		return interrupted;
-	}
+    private InterruptedIOException readTimedOut(InterruptedIOException e) {
+        InterruptedIOException interrupted = new InterruptedIOException(
+                MessageFormat.format(JGitText.get().readTimedOut,
+                        Integer.valueOf(timeout)));
+        interrupted.initCause(e);
+        return interrupted;
+    }
 }

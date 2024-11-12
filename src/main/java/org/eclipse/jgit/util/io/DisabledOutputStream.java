@@ -19,19 +19,21 @@ import org.eclipse.jgit.internal.JGitText;
  * An OutputStream which always throws IllegalStateExeption during write.
  */
 public final class DisabledOutputStream extends OutputStream {
-	/** The canonical instance which always throws IllegalStateException. */
-	public static final DisabledOutputStream INSTANCE = new DisabledOutputStream();
+    /**
+     * The canonical instance which always throws IllegalStateException.
+     */
+    public static final DisabledOutputStream INSTANCE = new DisabledOutputStream();
 
-	private DisabledOutputStream() {
-		// Do nothing, but we want to hide our constructor to prevent
-		// more than one instance from being created.
-	}
+    private DisabledOutputStream() {
+        // Do nothing, but we want to hide our constructor to prevent
+        // more than one instance from being created.
+    }
 
-	@Override
-	public void write(int b) throws IOException {
-		// We shouldn't be writing output at this stage, there
-		// is nobody listening to us.
-		//
-		throw new IllegalStateException(JGitText.get().writingNotPermitted);
-	}
+    @Override
+    public void write(int b) throws IOException {
+        // We shouldn't be writing output at this stage, there
+        // is nobody listening to us.
+        //
+        throw new IllegalStateException(JGitText.get().writingNotPermitted);
+    }
 }

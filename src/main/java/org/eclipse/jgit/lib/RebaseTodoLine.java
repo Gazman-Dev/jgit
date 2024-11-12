@@ -21,245 +21,246 @@ import org.eclipse.jgit.internal.JGitText;
  * @since 3.2
  */
 public class RebaseTodoLine {
-	/**
-	 * Describes rebase actions
-	 */
-	@SuppressWarnings("nls")
-	public enum Action {
-		/** Use commit */
-		PICK("pick", "p"),
+    /**
+     * Describes rebase actions
+     */
+    @SuppressWarnings("nls")
+    public enum Action {
+        /**
+         * Use commit
+         */
+        PICK("pick", "p"),
 
-		/** Use commit, but edit the commit message */
-		REWORD("reword", "r"),
+        /**
+         * Use commit, but edit the commit message
+         */
+        REWORD("reword", "r"),
 
-		/** Use commit, but stop for amending */
-		EDIT("edit", "e"),
+        /**
+         * Use commit, but stop for amending
+         */
+        EDIT("edit", "e"),
 
-		/** Use commit, but meld into previous commit */
-		SQUASH("squash", "s"),
+        /**
+         * Use commit, but meld into previous commit
+         */
+        SQUASH("squash", "s"),
 
-		/** like "squash", but discard this commit's log message */
-		FIXUP("fixup", "f"),
+        /**
+         * like "squash", but discard this commit's log message
+         */
+        FIXUP("fixup", "f"),
 
-		/**
-		 * A comment in the file. Also blank lines (or lines containing only
-		 * whitespaces) are reported as comments
-		 */
-		COMMENT("comment", "#");
+        /**
+         * A comment in the file. Also blank lines (or lines containing only
+         * whitespaces) are reported as comments
+         */
+        COMMENT("comment", "#");
 
-		private final String token;
+        private final String token;
 
-		private final String shortToken;
+        private final String shortToken;
 
-		private Action(String token, String shortToken) {
-			this.token = token;
-			this.shortToken = shortToken;
-		}
+        private Action(String token, String shortToken) {
+            this.token = token;
+            this.shortToken = shortToken;
+        }
 
-		/**
-		 * Get full action token name
-		 *
-		 * @return full action token name
-		 */
-		public String toToken() {
-			return this.token;
-		}
+        /**
+         * Get full action token name
+         *
+         * @return full action token name
+         */
+        public String toToken() {
+            return this.token;
+        }
 
-		@Override
-		public String toString() {
-			return "Action[" + token + "]";
-		}
+        @Override
+        public String toString() {
+            return "Action[" + token + "]";
+        }
 
-		/**
-		 * Parse a token
-		 *
-		 * @param token
-		 *            token to parse
-		 * @return the Action
-		 */
-		public static Action parse(String token) {
-			for (Action action : Action.values()) {
-				if (action.token.equals(token)
-						|| action.shortToken.equals(token))
-					return action;
-			}
-			throw new IllegalArgumentException(MessageFormat.format(
-					JGitText.get().unknownOrUnsupportedCommand, token,
-					Action.values()));
-		}
-	}
+        /**
+         * Parse a token
+         *
+         * @param token token to parse
+         * @return the Action
+         */
+        public static Action parse(String token) {
+            for (Action action : Action.values()) {
+                if (action.token.equals(token)
+                        || action.shortToken.equals(token))
+                    return action;
+            }
+            throw new IllegalArgumentException(MessageFormat.format(
+                    JGitText.get().unknownOrUnsupportedCommand, token,
+                    Action.values()));
+        }
+    }
 
-	Action action;
+    Action action;
 
-	final AbbreviatedObjectId commit;
+    final AbbreviatedObjectId commit;
 
-	String shortMessage;
+    String shortMessage;
 
-	String comment;
+    String comment;
 
-	/**
-	 * Create a new comment line
-	 *
-	 * @param newComment
-	 *            the new comment
-	 */
-	public RebaseTodoLine(String newComment) {
-		this.action = Action.COMMENT;
-		setComment(newComment);
-		this.commit = null;
-		this.shortMessage = null;
-	}
+    /**
+     * Create a new comment line
+     *
+     * @param newComment the new comment
+     */
+    public RebaseTodoLine(String newComment) {
+        this.action = Action.COMMENT;
+        setComment(newComment);
+        this.commit = null;
+        this.shortMessage = null;
+    }
 
-	/**
-	 * Create a new non-comment line
-	 *
-	 * @param action
-	 *            a {@link Action} object.
-	 * @param commit
-	 *            a {@link AbbreviatedObjectId} object.
-	 * @param shortMessage
-	 *            a {@link String} object.
-	 */
-	public RebaseTodoLine(Action action, AbbreviatedObjectId commit,
-			String shortMessage) {
-		this.action = action;
-		this.commit = commit;
-		this.shortMessage = shortMessage;
-		this.comment = null;
-	}
+    /**
+     * Create a new non-comment line
+     *
+     * @param action       a {@link Action} object.
+     * @param commit       a {@link AbbreviatedObjectId} object.
+     * @param shortMessage a {@link String} object.
+     */
+    public RebaseTodoLine(Action action, AbbreviatedObjectId commit,
+                          String shortMessage) {
+        this.action = action;
+        this.commit = commit;
+        this.shortMessage = shortMessage;
+        this.comment = null;
+    }
 
-	/**
-	 * Get rebase action type
-	 *
-	 * @return rebase action type
-	 */
-	public Action getAction() {
-		return action;
-	}
+    /**
+     * Get rebase action type
+     *
+     * @return rebase action type
+     */
+    public Action getAction() {
+        return action;
+    }
 
-	/**
-	 * Set the action. It's not allowed to set a non-comment action on a line
-	 * which was a comment line before. But you are allowed to set the comment
-	 * action on a non-comment line and afterwards change the action back to
-	 * non-comment.
-	 *
-	 * @param newAction
-	 *            a {@link Action} object.
-	 * @throws IllegalTodoFileModification
-	 *             on attempt to set a non-comment action on a line which was a
-	 *             comment line before.
-	 */
-	public void setAction(Action newAction) throws IllegalTodoFileModification {
-		if (!Action.COMMENT.equals(action) && Action.COMMENT.equals(newAction)) {
-			// transforming from non-comment to comment
-			if (comment == null)
-				// no comment was explicitly set. Take the old line as comment
-				// text
-				comment = "# " + action.token + " " //$NON-NLS-1$ //$NON-NLS-2$
-						+ ((commit == null) ? "null" : commit.name()) + " " //$NON-NLS-1$ //$NON-NLS-2$
-						+ ((shortMessage == null) ? "null" : shortMessage); //$NON-NLS-1$
-		} else if (Action.COMMENT.equals(action) && !Action.COMMENT.equals(newAction)) {
-			// transforming from comment to non-comment
-			if (commit == null)
-				throw new IllegalTodoFileModification(MessageFormat.format(
-						JGitText.get().cannotChangeActionOnComment, action,
-						newAction));
-		}
-		this.action = newAction;
-	}
+    /**
+     * Set the action. It's not allowed to set a non-comment action on a line
+     * which was a comment line before. But you are allowed to set the comment
+     * action on a non-comment line and afterwards change the action back to
+     * non-comment.
+     *
+     * @param newAction a {@link Action} object.
+     * @throws IllegalTodoFileModification on attempt to set a non-comment action on a line which was a
+     *                                     comment line before.
+     */
+    public void setAction(Action newAction) throws IllegalTodoFileModification {
+        if (!Action.COMMENT.equals(action) && Action.COMMENT.equals(newAction)) {
+            // transforming from non-comment to comment
+            if (comment == null)
+                // no comment was explicitly set. Take the old line as comment
+                // text
+                comment = "# " + action.token + " " //$NON-NLS-1$ //$NON-NLS-2$
+                        + ((commit == null) ? "null" : commit.name()) + " " //$NON-NLS-1$ //$NON-NLS-2$
+                        + ((shortMessage == null) ? "null" : shortMessage); //$NON-NLS-1$
+        } else if (Action.COMMENT.equals(action) && !Action.COMMENT.equals(newAction)) {
+            // transforming from comment to non-comment
+            if (commit == null)
+                throw new IllegalTodoFileModification(MessageFormat.format(
+                        JGitText.get().cannotChangeActionOnComment, action,
+                        newAction));
+        }
+        this.action = newAction;
+    }
 
-	/**
-	 * <p>
-	 * Set a comment for this line that is used if this line's
-	 * {@link RebaseTodoLine#action} is a {@link Action#COMMENT}
-	 * </p>
-	 * It's allowed to unset the comment by calling
-	 * <code>setComment(null)</code> <br>
-	 * A valid comment either starts with a hash (i.e. <code>'#'</code>), is an
-	 * empty string, or consists of only spaces and tabs.<br>
-	 * If the argument <code>newComment</code> doesn't match these requirements
-	 * an Exception is thrown.
-	 *
-	 * @param newComment
-	 *            the comment
-	 */
-	public void setComment(String newComment) {
-		if (newComment == null) {
-			this.comment = null;
-			return;
-		}
+    /**
+     * <p>
+     * Set a comment for this line that is used if this line's
+     * {@link RebaseTodoLine#action} is a {@link Action#COMMENT}
+     * </p>
+     * It's allowed to unset the comment by calling
+     * <code>setComment(null)</code> <br>
+     * A valid comment either starts with a hash (i.e. <code>'#'</code>), is an
+     * empty string, or consists of only spaces and tabs.<br>
+     * If the argument <code>newComment</code> doesn't match these requirements
+     * an Exception is thrown.
+     *
+     * @param newComment the comment
+     */
+    public void setComment(String newComment) {
+        if (newComment == null) {
+            this.comment = null;
+            return;
+        }
 
-		if (newComment.contains("\n") || newComment.contains("\r")) //$NON-NLS-1$ //$NON-NLS-2$
-			throw createInvalidCommentException(newComment);
+        if (newComment.contains("\n") || newComment.contains("\r")) //$NON-NLS-1$ //$NON-NLS-2$
+            throw createInvalidCommentException(newComment);
 
-		if (newComment.trim().length() == 0 || newComment.startsWith("#")) { //$NON-NLS-1$
-			this.comment = newComment;
-			return;
-		}
+        if (newComment.trim().length() == 0 || newComment.startsWith("#")) { //$NON-NLS-1$
+            this.comment = newComment;
+            return;
+        }
 
-		throw createInvalidCommentException(newComment);
-	}
+        throw createInvalidCommentException(newComment);
+    }
 
-	private static IllegalArgumentException createInvalidCommentException(
-			String newComment) {
-		return new IllegalArgumentException(
-				MessageFormat.format(
-				JGitText.get().argumentIsNotAValidCommentString, newComment));
-	}
+    private static IllegalArgumentException createInvalidCommentException(
+            String newComment) {
+        return new IllegalArgumentException(
+                MessageFormat.format(
+                        JGitText.get().argumentIsNotAValidCommentString, newComment));
+    }
 
-	/**
-	 * Get abbreviated commit SHA-1 of commit that action will be performed on
-	 *
-	 * @return abbreviated commit SHA-1 of commit that action will be performed
-	 *         on
-	 */
-	public AbbreviatedObjectId getCommit() {
-		return commit;
-	}
+    /**
+     * Get abbreviated commit SHA-1 of commit that action will be performed on
+     *
+     * @return abbreviated commit SHA-1 of commit that action will be performed
+     * on
+     */
+    public AbbreviatedObjectId getCommit() {
+        return commit;
+    }
 
-	/**
-	 * Get the first line of the commit message of the commit the action will be
-	 * performed on.
-	 *
-	 * @return the first line of the commit message of the commit the action
-	 *         will be performed on.
-	 */
-	public String getShortMessage() {
-		return shortMessage;
-	}
+    /**
+     * Get the first line of the commit message of the commit the action will be
+     * performed on.
+     *
+     * @return the first line of the commit message of the commit the action
+     * will be performed on.
+     */
+    public String getShortMessage() {
+        return shortMessage;
+    }
 
-	/**
-	 * Set short message
-	 *
-	 * @param shortMessage
-	 *            a short message.
-	 */
-	public void setShortMessage(String shortMessage) {
-		this.shortMessage = shortMessage;
-	}
+    /**
+     * Set short message
+     *
+     * @param shortMessage a short message.
+     */
+    public void setShortMessage(String shortMessage) {
+        this.shortMessage = shortMessage;
+    }
 
-	/**
-	 * Get a comment
-	 *
-	 * @return a comment. If the line is a comment line then the comment is
-	 *         returned. Lines starting with # or blank lines or lines
-	 *         containing only spaces and tabs are considered as comment lines.
-	 *         The complete line is returned (e.g. including the '#')
-	 */
-	public String getComment() {
-		return comment;
-	}
+    /**
+     * Get a comment
+     *
+     * @return a comment. If the line is a comment line then the comment is
+     * returned. Lines starting with # or blank lines or lines
+     * containing only spaces and tabs are considered as comment lines.
+     * The complete line is returned (e.g. including the '#')
+     */
+    public String getComment() {
+        return comment;
+    }
 
-	@SuppressWarnings("nls")
-	@Override
-	public String toString() {
-		return "Step["
-				+ action
-				+ ", "
-				+ ((commit == null) ? "null" : commit)
-				+ ", "
-				+ ((shortMessage == null) ? "null" : shortMessage)
-				+ ", "
-				+ ((comment == null) ? "" : comment) + "]";
-	}
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        return "Step["
+                + action
+                + ", "
+                + ((commit == null) ? "null" : commit)
+                + ", "
+                + ((shortMessage == null) ? "null" : shortMessage)
+                + ", "
+                + ((comment == null) ? "" : comment) + "]";
+    }
 }

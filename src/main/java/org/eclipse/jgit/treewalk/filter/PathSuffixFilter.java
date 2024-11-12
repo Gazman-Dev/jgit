@@ -31,58 +31,56 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  */
 public class PathSuffixFilter extends TreeFilter {
 
-	/**
-	 * Create a new tree filter for a user supplied path suffix.
-	 * <p>
-	 * Path strings use '/' to delimit directories on all platforms.
-	 *
-	 * @param path
-	 *            the path suffix to filter on. Must not be the empty string.
-	 * @return a new filter for the requested path.
-	 * @throws IllegalArgumentException
-	 *             the path supplied was the empty string.
-	 */
-	public static PathSuffixFilter create(String path) {
-		if (path.length() == 0)
-			throw new IllegalArgumentException(JGitText.get().emptyPathNotPermitted);
-		return new PathSuffixFilter(path);
-	}
+    /**
+     * Create a new tree filter for a user supplied path suffix.
+     * <p>
+     * Path strings use '/' to delimit directories on all platforms.
+     *
+     * @param path the path suffix to filter on. Must not be the empty string.
+     * @return a new filter for the requested path.
+     * @throws IllegalArgumentException the path supplied was the empty string.
+     */
+    public static PathSuffixFilter create(String path) {
+        if (path.length() == 0)
+            throw new IllegalArgumentException(JGitText.get().emptyPathNotPermitted);
+        return new PathSuffixFilter(path);
+    }
 
-	final String pathStr;
-	final byte[] pathRaw;
+    final String pathStr;
+    final byte[] pathRaw;
 
-	private PathSuffixFilter(String s) {
-		pathStr = s;
-		pathRaw = Constants.encode(pathStr);
-	}
+    private PathSuffixFilter(String s) {
+        pathStr = s;
+        pathRaw = Constants.encode(pathStr);
+    }
 
-	@Override
-	public TreeFilter clone() {
-		return this;
-	}
+    @Override
+    public TreeFilter clone() {
+        return this;
+    }
 
-	@Override
-	public boolean include(TreeWalk walker) throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		if (walker.isSubtree()) {
-			return true;
-		}
-		return walker.isPathSuffix(pathRaw, pathRaw.length);
+    @Override
+    public boolean include(TreeWalk walker) throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        if (walker.isSubtree()) {
+            return true;
+        }
+        return walker.isPathSuffix(pathRaw, pathRaw.length);
 
-	}
+    }
 
-	@Override
-	public int matchFilter(TreeWalk walker) throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		if (walker.isSubtree()) {
-			return -1;
-		}
-		return super.matchFilter(walker);
-	}
+    @Override
+    public int matchFilter(TreeWalk walker) throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        if (walker.isSubtree()) {
+            return -1;
+        }
+        return super.matchFilter(walker);
+    }
 
-	@Override
-	public boolean shouldBeRecursive() {
-		return true;
-	}
+    @Override
+    public boolean shouldBeRecursive() {
+        return true;
+    }
 
 }

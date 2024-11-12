@@ -17,12 +17,11 @@ import java.util.List;
  * no tool has been configured and one of the default tools will be used.
  */
 public interface InformNoToolHandler {
-	/**
-	 * Inform the user, that no tool is configured and that one of the given
-	 * tools is used.
-	 *
-	 * @param toolNames
-	 *            The tools which are tried
-	 */
-	void inform(List<String> toolNames);
+    /**
+     * Inform the user, that no tool is configured and that one of the given
+     * tools is used.
+     *
+     * @param toolNames The tools which are tried
+     */
+    void inform(List<String> toolNames);
 }

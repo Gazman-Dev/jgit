@@ -67,290 +67,294 @@ import org.eclipse.jgit.lib.SymbolicRef;
  * @see WalkPushConnection
  */
 public class TransportAmazonS3 extends HttpTransport implements WalkTransport {
-	static final String S3_SCHEME = "amazon-s3"; //$NON-NLS-1$
+    static final String S3_SCHEME = "amazon-s3"; //$NON-NLS-1$
 
-	static final TransportProtocol PROTO_S3 = new TransportProtocol() {
-		@Override
-		public String getName() {
-			return "Amazon S3"; //$NON-NLS-1$
-		}
+    static final TransportProtocol PROTO_S3 = new TransportProtocol() {
+        @Override
+        public String getName() {
+            return "Amazon S3"; //$NON-NLS-1$
+        }
 
-		@Override
-		public Set<String> getSchemes() {
-			return Collections.singleton(S3_SCHEME);
-		}
+        @Override
+        public Set<String> getSchemes() {
+            return Collections.singleton(S3_SCHEME);
+        }
 
-		@Override
-		public Set<URIishField> getRequiredFields() {
-			return Collections.unmodifiableSet(EnumSet.of(URIishField.USER,
-					URIishField.HOST, URIishField.PATH));
-		}
+        @Override
+        public Set<URIishField> getRequiredFields() {
+            return Collections.unmodifiableSet(EnumSet.of(URIishField.USER,
+                    URIishField.HOST, URIishField.PATH));
+        }
 
-		@Override
-		public Set<URIishField> getOptionalFields() {
-			return Collections.unmodifiableSet(EnumSet.of(URIishField.PASS));
-		}
+        @Override
+        public Set<URIishField> getOptionalFields() {
+            return Collections.unmodifiableSet(EnumSet.of(URIishField.PASS));
+        }
 
-		@Override
-		public Transport open(URIish uri, Repository local, String remoteName)
-				throws NotSupportedException {
-			return new TransportAmazonS3(local, uri);
-		}
-	};
+        @Override
+        public Transport open(URIish uri, Repository local, String remoteName)
+                throws NotSupportedException {
+            return new TransportAmazonS3(local, uri);
+        }
+    };
 
-	/** User information necessary to connect to S3. */
-	final AmazonS3 s3;
+    /**
+     * User information necessary to connect to S3.
+     */
+    final AmazonS3 s3;
 
-	/** Bucket the remote repository is stored in. */
-	final String bucket;
+    /**
+     * Bucket the remote repository is stored in.
+     */
+    final String bucket;
 
-	/**
-	 * Key prefix which all objects related to the repository start with.
-	 * <p>
-	 * The prefix does not start with "/".
-	 * <p>
-	 * The prefix does not end with "/". The trailing slash is stripped during
-	 * the constructor if a trailing slash was supplied in the URIish.
-	 * <p>
-	 * All files within the remote repository start with
-	 * <code>keyPrefix + "/"</code>.
-	 */
-	private final String keyPrefix;
+    /**
+     * Key prefix which all objects related to the repository start with.
+     * <p>
+     * The prefix does not start with "/".
+     * <p>
+     * The prefix does not end with "/". The trailing slash is stripped during
+     * the constructor if a trailing slash was supplied in the URIish.
+     * <p>
+     * All files within the remote repository start with
+     * <code>keyPrefix + "/"</code>.
+     */
+    private final String keyPrefix;
 
-	TransportAmazonS3(final Repository local, final URIish uri)
-			throws NotSupportedException {
-		super(local, uri);
+    TransportAmazonS3(final Repository local, final URIish uri)
+            throws NotSupportedException {
+        super(local, uri);
 
-		Properties props = loadProperties();
-		File directory = local.getDirectory();
-		if (!props.containsKey("tmpdir") && directory != null) //$NON-NLS-1$
-			props.put("tmpdir", directory.getPath()); //$NON-NLS-1$
+        Properties props = loadProperties();
+        File directory = local.getDirectory();
+        if (!props.containsKey("tmpdir") && directory != null) //$NON-NLS-1$
+            props.put("tmpdir", directory.getPath()); //$NON-NLS-1$
 
-		s3 = new AmazonS3(props);
-		bucket = uri.getHost();
+        s3 = new AmazonS3(props);
+        bucket = uri.getHost();
 
-		String p = uri.getPath();
-		if (p.startsWith("/")) //$NON-NLS-1$
-			p = p.substring(1);
-		if (p.endsWith("/")) //$NON-NLS-1$
-			p = p.substring(0, p.length() - 1);
-		keyPrefix = p;
-	}
+        String p = uri.getPath();
+        if (p.startsWith("/")) //$NON-NLS-1$
+            p = p.substring(1);
+        if (p.endsWith("/")) //$NON-NLS-1$
+            p = p.substring(0, p.length() - 1);
+        keyPrefix = p;
+    }
 
-	private Properties loadProperties() throws NotSupportedException {
-		if (local.getDirectory() != null) {
-			File propsFile = new File(local.getDirectory(), uri.getUser());
-			if (propsFile.isFile())
-				return loadPropertiesFile(propsFile);
-		}
+    private Properties loadProperties() throws NotSupportedException {
+        if (local.getDirectory() != null) {
+            File propsFile = new File(local.getDirectory(), uri.getUser());
+            if (propsFile.isFile())
+                return loadPropertiesFile(propsFile);
+        }
 
-		File propsFile = new File(local.getFS().userHome(), uri.getUser());
-		if (propsFile.isFile())
-			return loadPropertiesFile(propsFile);
+        File propsFile = new File(local.getFS().userHome(), uri.getUser());
+        if (propsFile.isFile())
+            return loadPropertiesFile(propsFile);
 
-		Properties props = new Properties();
-		String user = uri.getUser();
-		String pass = uri.getPass();
-		if (user != null && pass != null) {
-		        props.setProperty("accesskey", user); //$NON-NLS-1$
-		        props.setProperty("secretkey", pass); //$NON-NLS-1$
-		} else
-			throw new NotSupportedException(MessageFormat.format(
-					JGitText.get().cannotReadFile, propsFile));
-		return props;
-	}
+        Properties props = new Properties();
+        String user = uri.getUser();
+        String pass = uri.getPass();
+        if (user != null && pass != null) {
+            props.setProperty("accesskey", user); //$NON-NLS-1$
+            props.setProperty("secretkey", pass); //$NON-NLS-1$
+        } else
+            throw new NotSupportedException(MessageFormat.format(
+                    JGitText.get().cannotReadFile, propsFile));
+        return props;
+    }
 
-	private static Properties loadPropertiesFile(File propsFile)
-			throws NotSupportedException {
-		try {
-			return AmazonS3.properties(propsFile);
-		} catch (IOException e) {
-			throw new NotSupportedException(MessageFormat.format(
-					JGitText.get().cannotReadFile, propsFile), e);
-		}
-	}
+    private static Properties loadPropertiesFile(File propsFile)
+            throws NotSupportedException {
+        try {
+            return AmazonS3.properties(propsFile);
+        } catch (IOException e) {
+            throw new NotSupportedException(MessageFormat.format(
+                    JGitText.get().cannotReadFile, propsFile), e);
+        }
+    }
 
-	@Override
-	public FetchConnection openFetch() throws TransportException {
-		final DatabaseS3 c = new DatabaseS3(bucket, keyPrefix + "/objects"); //$NON-NLS-1$
-		final WalkFetchConnection r = new WalkFetchConnection(this, c);
-		r.available(c.readAdvertisedRefs());
-		return r;
-	}
+    @Override
+    public FetchConnection openFetch() throws TransportException {
+        final DatabaseS3 c = new DatabaseS3(bucket, keyPrefix + "/objects"); //$NON-NLS-1$
+        final WalkFetchConnection r = new WalkFetchConnection(this, c);
+        r.available(c.readAdvertisedRefs());
+        return r;
+    }
 
-	@Override
-	public PushConnection openPush() throws TransportException {
-		final DatabaseS3 c = new DatabaseS3(bucket, keyPrefix + "/objects"); //$NON-NLS-1$
-		final WalkPushConnection r = new WalkPushConnection(this, c);
-		r.available(c.readAdvertisedRefs());
-		return r;
-	}
+    @Override
+    public PushConnection openPush() throws TransportException {
+        final DatabaseS3 c = new DatabaseS3(bucket, keyPrefix + "/objects"); //$NON-NLS-1$
+        final WalkPushConnection r = new WalkPushConnection(this, c);
+        r.available(c.readAdvertisedRefs());
+        return r;
+    }
 
-	@Override
-	public void close() {
-		// No explicit connections are maintained.
-	}
+    @Override
+    public void close() {
+        // No explicit connections are maintained.
+    }
 
-	class DatabaseS3 extends WalkRemoteObjectDatabase {
-		private final String bucketName;
+    class DatabaseS3 extends WalkRemoteObjectDatabase {
+        private final String bucketName;
 
-		private final String objectsKey;
+        private final String objectsKey;
 
-		DatabaseS3(final String b, final String o) {
-			bucketName = b;
-			objectsKey = o;
-		}
+        DatabaseS3(final String b, final String o) {
+            bucketName = b;
+            objectsKey = o;
+        }
 
-		private String resolveKey(String subpath) {
-			if (subpath.endsWith("/")) //$NON-NLS-1$
-				subpath = subpath.substring(0, subpath.length() - 1);
-			String k = objectsKey;
-			while (subpath.startsWith(ROOT_DIR)) {
-				k = k.substring(0, k.lastIndexOf('/'));
-				subpath = subpath.substring(3);
-			}
-			return k + "/" + subpath; //$NON-NLS-1$
-		}
+        private String resolveKey(String subpath) {
+            if (subpath.endsWith("/")) //$NON-NLS-1$
+                subpath = subpath.substring(0, subpath.length() - 1);
+            String k = objectsKey;
+            while (subpath.startsWith(ROOT_DIR)) {
+                k = k.substring(0, k.lastIndexOf('/'));
+                subpath = subpath.substring(3);
+            }
+            return k + "/" + subpath; //$NON-NLS-1$
+        }
 
-		@Override
-		URIish getURI() {
-			URIish u = new URIish();
-			u = u.setScheme(S3_SCHEME);
-			u = u.setHost(bucketName);
-			u = u.setPath("/" + objectsKey); //$NON-NLS-1$
-			return u;
-		}
+        @Override
+        URIish getURI() {
+            URIish u = new URIish();
+            u = u.setScheme(S3_SCHEME);
+            u = u.setHost(bucketName);
+            u = u.setPath("/" + objectsKey); //$NON-NLS-1$
+            return u;
+        }
 
-		@Override
-		Collection<WalkRemoteObjectDatabase> getAlternates() throws IOException {
-			try {
-				return readAlternates(Constants.INFO_ALTERNATES);
-			} catch (FileNotFoundException err) {
-				// Fall through.
-			}
-			return null;
-		}
+        @Override
+        Collection<WalkRemoteObjectDatabase> getAlternates() throws IOException {
+            try {
+                return readAlternates(Constants.INFO_ALTERNATES);
+            } catch (FileNotFoundException err) {
+                // Fall through.
+            }
+            return null;
+        }
 
-		@Override
-		WalkRemoteObjectDatabase openAlternate(String location)
-				throws IOException {
-			return new DatabaseS3(bucketName, resolveKey(location));
-		}
+        @Override
+        WalkRemoteObjectDatabase openAlternate(String location)
+                throws IOException {
+            return new DatabaseS3(bucketName, resolveKey(location));
+        }
 
-		@Override
-		Collection<String> getPackNames() throws IOException {
-			// s3.list returns most recently modified packs first.
-			// These are the packs most likely to contain missing refs.
-			final List<String> packList = s3.list(bucket, resolveKey("pack")); //$NON-NLS-1$
-			final HashSet<String> have = new HashSet<>();
-			have.addAll(packList);
+        @Override
+        Collection<String> getPackNames() throws IOException {
+            // s3.list returns most recently modified packs first.
+            // These are the packs most likely to contain missing refs.
+            final List<String> packList = s3.list(bucket, resolveKey("pack")); //$NON-NLS-1$
+            final HashSet<String> have = new HashSet<>();
+            have.addAll(packList);
 
-			final Collection<String> packs = new ArrayList<>();
-			for (String n : packList) {
-				if (!n.startsWith("pack-") || !n.endsWith(".pack")) //$NON-NLS-1$ //$NON-NLS-2$
-					continue;
+            final Collection<String> packs = new ArrayList<>();
+            for (String n : packList) {
+                if (!n.startsWith("pack-") || !n.endsWith(".pack")) //$NON-NLS-1$ //$NON-NLS-2$
+                    continue;
 
-				final String in = n.substring(0, n.length() - 5) + ".idx"; //$NON-NLS-1$
-				if (have.contains(in))
-					packs.add(n);
-			}
-			return packs;
-		}
+                final String in = n.substring(0, n.length() - 5) + ".idx"; //$NON-NLS-1$
+                if (have.contains(in))
+                    packs.add(n);
+            }
+            return packs;
+        }
 
-		@Override
-		FileStream open(String path) throws IOException {
-			final URLConnection c = s3.get(bucket, resolveKey(path));
-			final InputStream raw = c.getInputStream();
-			final InputStream in = s3.decrypt(c);
-			final int len = c.getContentLength();
-			return new FileStream(in, raw == in ? len : -1);
-		}
+        @Override
+        FileStream open(String path) throws IOException {
+            final URLConnection c = s3.get(bucket, resolveKey(path));
+            final InputStream raw = c.getInputStream();
+            final InputStream in = s3.decrypt(c);
+            final int len = c.getContentLength();
+            return new FileStream(in, raw == in ? len : -1);
+        }
 
-		@Override
-		void deleteFile(String path) throws IOException {
-			s3.delete(bucket, resolveKey(path));
-		}
+        @Override
+        void deleteFile(String path) throws IOException {
+            s3.delete(bucket, resolveKey(path));
+        }
 
-		@Override
-		OutputStream writeFile(final String path,
-				final ProgressMonitor monitor, final String monitorTask)
-				throws IOException {
-			return s3.beginPut(bucket, resolveKey(path), monitor, monitorTask);
-		}
+        @Override
+        OutputStream writeFile(final String path,
+                               final ProgressMonitor monitor, final String monitorTask)
+                throws IOException {
+            return s3.beginPut(bucket, resolveKey(path), monitor, monitorTask);
+        }
 
-		@Override
-		void writeFile(String path, byte[] data) throws IOException {
-			s3.put(bucket, resolveKey(path), data);
-		}
+        @Override
+        void writeFile(String path, byte[] data) throws IOException {
+            s3.put(bucket, resolveKey(path), data);
+        }
 
-		Map<String, Ref> readAdvertisedRefs() throws TransportException {
-			final TreeMap<String, Ref> avail = new TreeMap<>();
-			readPackedRefs(avail);
-			readLooseRefs(avail);
-			readRef(avail, Constants.HEAD);
-			return avail;
-		}
+        Map<String, Ref> readAdvertisedRefs() throws TransportException {
+            final TreeMap<String, Ref> avail = new TreeMap<>();
+            readPackedRefs(avail);
+            readLooseRefs(avail);
+            readRef(avail, Constants.HEAD);
+            return avail;
+        }
 
-		private void readLooseRefs(TreeMap<String, Ref> avail)
-				throws TransportException {
-			try {
-				for (final String n : s3.list(bucket, resolveKey(ROOT_DIR
-						+ "refs"))) //$NON-NLS-1$
-					readRef(avail, "refs/" + n); //$NON-NLS-1$
-			} catch (IOException e) {
-				throw new TransportException(getURI(), JGitText.get().cannotListRefs, e);
-			}
-		}
+        private void readLooseRefs(TreeMap<String, Ref> avail)
+                throws TransportException {
+            try {
+                for (final String n : s3.list(bucket, resolveKey(ROOT_DIR
+                        + "refs"))) //$NON-NLS-1$
+                    readRef(avail, "refs/" + n); //$NON-NLS-1$
+            } catch (IOException e) {
+                throw new TransportException(getURI(), JGitText.get().cannotListRefs, e);
+            }
+        }
 
-		private Ref readRef(TreeMap<String, Ref> avail, String rn)
-				throws TransportException {
-			final String s;
-			String ref = ROOT_DIR + rn;
-			try {
-				try (BufferedReader br = openReader(ref)) {
-					s = br.readLine();
-				}
-			} catch (FileNotFoundException noRef) {
-				return null;
-			} catch (IOException err) {
-				throw new TransportException(getURI(), MessageFormat.format(
-						JGitText.get().transportExceptionReadRef, ref), err);
-			}
+        private Ref readRef(TreeMap<String, Ref> avail, String rn)
+                throws TransportException {
+            final String s;
+            String ref = ROOT_DIR + rn;
+            try {
+                try (BufferedReader br = openReader(ref)) {
+                    s = br.readLine();
+                }
+            } catch (FileNotFoundException noRef) {
+                return null;
+            } catch (IOException err) {
+                throw new TransportException(getURI(), MessageFormat.format(
+                        JGitText.get().transportExceptionReadRef, ref), err);
+            }
 
-			if (s == null)
-				throw new TransportException(getURI(), MessageFormat.format(JGitText.get().transportExceptionEmptyRef, rn));
+            if (s == null)
+                throw new TransportException(getURI(), MessageFormat.format(JGitText.get().transportExceptionEmptyRef, rn));
 
-			if (s.startsWith("ref: ")) { //$NON-NLS-1$
-				final String target = s.substring("ref: ".length()); //$NON-NLS-1$
-				Ref r = avail.get(target);
-				if (r == null)
-					r = readRef(avail, target);
-				if (r == null)
-					r = new ObjectIdRef.Unpeeled(Storage.NEW, target, null);
-				r = new SymbolicRef(rn, r);
-				avail.put(r.getName(), r);
-				return r;
-			}
+            if (s.startsWith("ref: ")) { //$NON-NLS-1$
+                final String target = s.substring("ref: ".length()); //$NON-NLS-1$
+                Ref r = avail.get(target);
+                if (r == null)
+                    r = readRef(avail, target);
+                if (r == null)
+                    r = new ObjectIdRef.Unpeeled(Storage.NEW, target, null);
+                r = new SymbolicRef(rn, r);
+                avail.put(r.getName(), r);
+                return r;
+            }
 
-			if (ObjectId.isId(s)) {
-				final Ref r = new ObjectIdRef.Unpeeled(loose(avail.get(rn)),
-						rn, ObjectId.fromString(s));
-				avail.put(r.getName(), r);
-				return r;
-			}
+            if (ObjectId.isId(s)) {
+                final Ref r = new ObjectIdRef.Unpeeled(loose(avail.get(rn)),
+                        rn, ObjectId.fromString(s));
+                avail.put(r.getName(), r);
+                return r;
+            }
 
-			throw new TransportException(getURI(), MessageFormat.format(JGitText.get().transportExceptionBadRef, rn, s));
-		}
+            throw new TransportException(getURI(), MessageFormat.format(JGitText.get().transportExceptionBadRef, rn, s));
+        }
 
-		private Storage loose(Ref r) {
-			if (r != null && r.getStorage() == Storage.PACKED)
-				return Storage.LOOSE_PACKED;
-			return Storage.LOOSE;
-		}
+        private Storage loose(Ref r) {
+            if (r != null && r.getStorage() == Storage.PACKED)
+                return Storage.LOOSE_PACKED;
+            return Storage.LOOSE;
+        }
 
-		@Override
-		void close() {
-			// We do not maintain persistent connections.
-		}
-	}
+        @Override
+        void close() {
+            // We do not maintain persistent connections.
+        }
+    }
 }

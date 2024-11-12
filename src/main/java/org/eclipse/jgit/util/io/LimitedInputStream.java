@@ -20,7 +20,7 @@ import org.eclipse.jgit.internal.JGitText;
 /**
  * Wraps a {@link InputStream}, limiting the number of bytes which can
  * be read.
- *
+ * <p>
  * This class was copied and modifed from the Google Guava 16.0. Differently
  * from the original Guava code, when a caller tries to read from this stream
  * past the given limit and the wrapped stream hasn't yet reached its EOF this
@@ -30,97 +30,98 @@ import org.eclipse.jgit.internal.JGitText;
  */
 public abstract class LimitedInputStream extends FilterInputStream {
 
-	private long left;
-	/** Max number of bytes to be read from the wrapped stream */
-	protected final long limit;
-	private long mark = -1;
+    private long left;
+    /**
+     * Max number of bytes to be read from the wrapped stream
+     */
+    protected final long limit;
+    private long mark = -1;
 
-	/**
-	 * Create a new LimitedInputStream
-	 *
-	 * @param in an InputStream
-	 * @param limit max number of bytes to read from the InputStream
-	 */
-	protected LimitedInputStream(InputStream in, long limit) {
-		super(in);
-		left = limit;
-		this.limit = limit;
-	}
+    /**
+     * Create a new LimitedInputStream
+     *
+     * @param in    an InputStream
+     * @param limit max number of bytes to read from the InputStream
+     */
+    protected LimitedInputStream(InputStream in, long limit) {
+        super(in);
+        left = limit;
+        this.limit = limit;
+    }
 
-	@Override
-	public int available() throws IOException {
-		return (int) Math.min(in.available(), left);
-	}
+    @Override
+    public int available() throws IOException {
+        return (int) Math.min(in.available(), left);
+    }
 
-	// it's okay to mark even if mark isn't supported, as reset won't work
-	@Override
-	public synchronized void mark(int readLimit) {
-		in.mark(readLimit);
-		mark = left;
-	}
+    // it's okay to mark even if mark isn't supported, as reset won't work
+    @Override
+    public synchronized void mark(int readLimit) {
+        in.mark(readLimit);
+        mark = left;
+    }
 
-	@Override
-	public int read() throws IOException {
-		if (left == 0) {
-			if (in.available() == 0) {
-				return -1;
-			}
-			limitExceeded();
-		}
+    @Override
+    public int read() throws IOException {
+        if (left == 0) {
+            if (in.available() == 0) {
+                return -1;
+            }
+            limitExceeded();
+        }
 
-		int result = in.read();
-		if (result != -1) {
-			--left;
-		}
-		return result;
-	}
+        int result = in.read();
+        if (result != -1) {
+            --left;
+        }
+        return result;
+    }
 
-	@Override
-	public int read(byte[] b, int off, int len) throws IOException {
-		if (left == 0) {
-			if (in.available() == 0) {
-				return -1;
-			}
-			limitExceeded();
-		}
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+        if (left == 0) {
+            if (in.available() == 0) {
+                return -1;
+            }
+            limitExceeded();
+        }
 
-		len = (int) Math.min(len, left);
-		int result = in.read(b, off, len);
-		if (result != -1) {
-			left -= result;
-		}
-		return result;
-	}
+        len = (int) Math.min(len, left);
+        int result = in.read(b, off, len);
+        if (result != -1) {
+            left -= result;
+        }
+        return result;
+    }
 
-	@Override
-	public synchronized void reset() throws IOException {
-		if (!in.markSupported())
-			throw new IOException(JGitText.get().unsupportedMark);
+    @Override
+    public synchronized void reset() throws IOException {
+        if (!in.markSupported())
+            throw new IOException(JGitText.get().unsupportedMark);
 
-		if (mark == -1)
-			throw new IOException(JGitText.get().unsetMark);
+        if (mark == -1)
+            throw new IOException(JGitText.get().unsetMark);
 
-		in.reset();
-		left = mark;
-	}
+        in.reset();
+        left = mark;
+    }
 
-	@Override
-	public long skip(long n) throws IOException {
-		n = Math.min(n, left);
-		long skipped = in.skip(n);
-		left -= skipped;
-		return skipped;
-	}
+    @Override
+    public long skip(long n) throws IOException {
+        n = Math.min(n, left);
+        long skipped = in.skip(n);
+        left -= skipped;
+        return skipped;
+    }
 
-	/**
-	 * Called when trying to read past the given {@link #limit} and the wrapped
-	 * InputStream {@link #in} hasn't yet reached its EOF
-	 *
-	 * @throws IOException
-	 *             subclasses can throw an {@link IOException} when the
-	 *             limit is exceeded. The throws java.io.IOException will be
-	 *             forwarded back to the caller of the read method which read
-	 *             the stream past the limit.
-	 */
-	protected abstract void limitExceeded() throws IOException;
+    /**
+     * Called when trying to read past the given {@link #limit} and the wrapped
+     * InputStream {@link #in} hasn't yet reached its EOF
+     *
+     * @throws IOException subclasses can throw an {@link IOException} when the
+     *                     limit is exceeded. The throws java.io.IOException will be
+     *                     forwarded back to the caller of the read method which read
+     *                     the stream past the limit.
+     */
+    protected abstract void limitExceeded() throws IOException;
 }

@@ -28,61 +28,58 @@ import org.eclipse.jgit.revwalk.RevFlag;
  * short if there is good bitmap coverage.
  */
 public class AddToBitmapWithCacheFilter extends RevFilter {
-	private final AnyObjectId cachedCommit;
+    private final AnyObjectId cachedCommit;
 
-	private final Bitmap cachedBitmap;
+    private final Bitmap cachedBitmap;
 
-	private final BitmapBuilder bitmap;
+    private final BitmapBuilder bitmap;
 
-	/**
-	 * Create a filter with a cached BitmapCommit that adds visited commits to
-	 * the given bitmap.
-	 *
-	 * @param cachedCommit
-	 *            the cached commit
-	 * @param cachedBitmap
-	 *            the bitmap corresponds to {@code cachedCommit}}
-	 * @param bitmap
-	 *            bitmap to write visited commits to
-	 */
-	public AddToBitmapWithCacheFilter(AnyObjectId cachedCommit,
-			Bitmap cachedBitmap,
-			BitmapBuilder bitmap) {
-		this.cachedCommit = cachedCommit;
-		this.cachedBitmap = cachedBitmap;
-		this.bitmap = bitmap;
-	}
+    /**
+     * Create a filter with a cached BitmapCommit that adds visited commits to
+     * the given bitmap.
+     *
+     * @param cachedCommit the cached commit
+     * @param cachedBitmap the bitmap corresponds to {@code cachedCommit}}
+     * @param bitmap       bitmap to write visited commits to
+     */
+    public AddToBitmapWithCacheFilter(AnyObjectId cachedCommit,
+                                      Bitmap cachedBitmap,
+                                      BitmapBuilder bitmap) {
+        this.cachedCommit = cachedCommit;
+        this.cachedBitmap = cachedBitmap;
+        this.bitmap = bitmap;
+    }
 
-	@Override
-	public final boolean include(RevWalk rw, RevCommit c) {
-		Bitmap visitedBitmap;
+    @Override
+    public final boolean include(RevWalk rw, RevCommit c) {
+        Bitmap visitedBitmap;
 
-		if (bitmap.contains(c)) {
-			// already included
-		} else if ((visitedBitmap = bitmap.getBitmapIndex()
-				.getBitmap(c)) != null) {
-			bitmap.or(visitedBitmap);
-		} else if (cachedCommit.equals(c)) {
-			bitmap.or(cachedBitmap);
-		} else {
-			bitmap.addObject(c, Constants.OBJ_COMMIT);
-			return true;
-		}
+        if (bitmap.contains(c)) {
+            // already included
+        } else if ((visitedBitmap = bitmap.getBitmapIndex()
+                .getBitmap(c)) != null) {
+            bitmap.or(visitedBitmap);
+        } else if (cachedCommit.equals(c)) {
+            bitmap.or(cachedBitmap);
+        } else {
+            bitmap.addObject(c, Constants.OBJ_COMMIT);
+            return true;
+        }
 
-		for (RevCommit p : c.getParents()) {
-			p.add(RevFlag.SEEN);
-		}
-		return false;
-	}
+        for (RevCommit p : c.getParents()) {
+            p.add(RevFlag.SEEN);
+        }
+        return false;
+    }
 
-	@Override
-	public final RevFilter clone() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public final RevFilter clone() {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public final boolean requiresCommitBody() {
-		return false;
-	}
+    @Override
+    public final boolean requiresCommitBody() {
+        return false;
+    }
 }
 

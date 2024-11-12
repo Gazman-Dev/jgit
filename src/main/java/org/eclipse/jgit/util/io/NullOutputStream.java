@@ -16,29 +16,37 @@ import java.io.OutputStream;
  */
 public class NullOutputStream extends OutputStream {
 
-	/** The canonical instance. */
-	public static final NullOutputStream INSTANCE = new NullOutputStream();
+    /**
+     * The canonical instance.
+     */
+    public static final NullOutputStream INSTANCE = new NullOutputStream();
 
-	private NullOutputStream() {
-		// Do nothing, but we want to hide our constructor to prevent
-		// more than one instance from being created.
-	}
+    private NullOutputStream() {
+        // Do nothing, but we want to hide our constructor to prevent
+        // more than one instance from being created.
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void write(int b) {
-		// Discard.
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void write(int b) {
+        // Discard.
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void write(byte[] buf) {
-		// Discard.
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void write(byte[] buf) {
+        // Discard.
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void write(byte[] buf, int pos, int cnt) {
-		// Discard.
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void write(byte[] buf, int pos, int cnt) {
+        // Discard.
+    }
 }

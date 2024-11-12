@@ -41,15 +41,14 @@ package org.eclipse.jgit.api.errors;
  * Thrown when trying to delete a branch which is currently checked out
  */
 public class CannotDeleteCurrentBranchException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for CannotDeleteCurrentBranchException
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public CannotDeleteCurrentBranchException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for CannotDeleteCurrentBranchException
+     *
+     * @param message error message
+     */
+    public CannotDeleteCurrentBranchException(String message) {
+        super(message);
+    }
 }

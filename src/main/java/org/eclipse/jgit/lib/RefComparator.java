@@ -24,50 +24,47 @@ import java.util.List;
  */
 public class RefComparator implements Comparator<Ref> {
 
-	/** Singleton instance of RefComparator */
-	public static final RefComparator INSTANCE = new RefComparator();
+    /**
+     * Singleton instance of RefComparator
+     */
+    public static final RefComparator INSTANCE = new RefComparator();
 
-	@Override
-	public int compare(Ref o1, Ref o2) {
-		return compareTo(o1, o2);
-	}
+    @Override
+    public int compare(Ref o1, Ref o2) {
+        return compareTo(o1, o2);
+    }
 
-	/**
-	 * Sorts the collection of refs, returning a new collection.
-	 *
-	 * @param refs
-	 *            collection to be sorted
-	 * @return sorted collection of refs
-	 */
-	public static Collection<Ref> sort(Collection<Ref> refs) {
-		final List<Ref> r = new ArrayList<>(refs);
-		Collections.sort(r, INSTANCE);
-		return r;
-	}
+    /**
+     * Sorts the collection of refs, returning a new collection.
+     *
+     * @param refs collection to be sorted
+     * @return sorted collection of refs
+     */
+    public static Collection<Ref> sort(Collection<Ref> refs) {
+        final List<Ref> r = new ArrayList<>(refs);
+        Collections.sort(r, INSTANCE);
+        return r;
+    }
 
-	/**
-	 * Compare a reference to a name.
-	 *
-	 * @param o1
-	 *            the reference instance.
-	 * @param o2
-	 *            the name to compare to.
-	 * @return standard Comparator result of &lt; 0, 0, &gt; 0.
-	 */
-	public static int compareTo(Ref o1, String o2) {
-		return o1.getName().compareTo(o2);
-	}
+    /**
+     * Compare a reference to a name.
+     *
+     * @param o1 the reference instance.
+     * @param o2 the name to compare to.
+     * @return standard Comparator result of &lt; 0, 0, &gt; 0.
+     */
+    public static int compareTo(Ref o1, String o2) {
+        return o1.getName().compareTo(o2);
+    }
 
-	/**
-	 * Compare two references by name.
-	 *
-	 * @param o1
-	 *            the reference instance.
-	 * @param o2
-	 *            the other reference instance.
-	 * @return standard Comparator result of &lt; 0, 0, &gt; 0.
-	 */
-	public static int compareTo(Ref o1, Ref o2) {
-		return o1.getName().compareTo(o2.getName());
-	}
+    /**
+     * Compare two references by name.
+     *
+     * @param o1 the reference instance.
+     * @param o2 the other reference instance.
+     * @return standard Comparator result of &lt; 0, 0, &gt; 0.
+     */
+    public static int compareTo(Ref o1, Ref o2) {
+        return o1.getName().compareTo(o2.getName());
+    }
 }

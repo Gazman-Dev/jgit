@@ -18,14 +18,14 @@ import java.io.IOException;
  * handled.
  */
 public class SymlinksNotSupportedException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct a SymlinksNotSupportedException for the specified link
-	 *
-	 * @param s name of link in tree or workdir
-	 */
-	public SymlinksNotSupportedException(String s) {
-		super(s);
-	}
+    /**
+     * Construct a SymlinksNotSupportedException for the specified link
+     *
+     * @param s name of link in tree or workdir
+     */
+    public SymlinksNotSupportedException(String s) {
+        super(s);
+    }
 }

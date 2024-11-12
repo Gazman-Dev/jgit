@@ -42,27 +42,24 @@ package org.eclipse.jgit.api.errors;
  * Exception thrown when a command fails due to an invalid configuration
  */
 public class InvalidConfigurationException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for InvalidConfigurationException
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public InvalidConfigurationException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for InvalidConfigurationException
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     */
+    public InvalidConfigurationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for InvalidConfigurationException.
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public InvalidConfigurationException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for InvalidConfigurationException.
+     *
+     * @param message error message
+     */
+    public InvalidConfigurationException(String message) {
+        super(message);
+    }
 }

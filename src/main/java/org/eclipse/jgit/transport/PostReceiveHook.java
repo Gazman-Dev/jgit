@@ -29,22 +29,22 @@ import java.util.Collection;
  * completing the connection.
  */
 public interface PostReceiveHook {
-	/** A simple no-op hook. */
-	PostReceiveHook NULL = (final ReceivePack rp,
-			final Collection<ReceiveCommand> commands) -> {
-		// Do nothing.
-	};
+    /**
+     * A simple no-op hook.
+     */
+    PostReceiveHook NULL = (final ReceivePack rp,
+                            final Collection<ReceiveCommand> commands) -> {
+        // Do nothing.
+    };
 
-	/**
-	 * Invoked after all commands are executed and status has been returned.
-	 *
-	 * @param rp
-	 *            the process handling the current receive. Hooks may obtain
-	 *            details about the destination repository through this handle.
-	 * @param commands
-	 *            unmodifiable set of successfully completed commands. May be
-	 *            the empty set.
-	 */
-	void onPostReceive(ReceivePack rp,
-			Collection<ReceiveCommand> commands);
+    /**
+     * Invoked after all commands are executed and status has been returned.
+     *
+     * @param rp       the process handling the current receive. Hooks may obtain
+     *                 details about the destination repository through this handle.
+     * @param commands unmodifiable set of successfully completed commands. May be
+     *                 the empty set.
+     */
+    void onPostReceive(ReceivePack rp,
+                       Collection<ReceiveCommand> commands);
 }

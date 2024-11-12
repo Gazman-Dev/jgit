@@ -24,5 +24,5 @@ package org.eclipse.jgit.transport;
  * @see BasePackPushConnection
  */
 public interface PackTransport {
-	// no methods in marker interface
+    // no methods in marker interface
 }

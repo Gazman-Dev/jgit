@@ -45,62 +45,59 @@ import java.util.List;
  * conflicts.
  */
 public class CheckoutConflictException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
-	private List<String> conflictingPaths;
+    private static final long serialVersionUID = 1L;
+    private List<String> conflictingPaths;
 
-	/**
-	 * Translate internal exception to API exception
-	 *
-	 * @param conflictingPaths
-	 *            list of conflicting paths
-	 * @param e
-	 *            a {@link org.eclipse.jgit.errors.CheckoutConflictException}
-	 *            exception
-	 */
-	public CheckoutConflictException(List<String> conflictingPaths,
-			org.eclipse.jgit.errors.CheckoutConflictException e) {
-		super(e.getMessage(), e);
-		this.conflictingPaths = conflictingPaths;
-	}
+    /**
+     * Translate internal exception to API exception
+     *
+     * @param conflictingPaths list of conflicting paths
+     * @param e                a {@link org.eclipse.jgit.errors.CheckoutConflictException}
+     *                         exception
+     */
+    public CheckoutConflictException(List<String> conflictingPaths,
+                                     org.eclipse.jgit.errors.CheckoutConflictException e) {
+        super(e.getMessage(), e);
+        this.conflictingPaths = conflictingPaths;
+    }
 
-	CheckoutConflictException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    CheckoutConflictException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	CheckoutConflictException(String message, List<String> conflictingPaths, Throwable cause) {
-		super(message, cause);
-		this.conflictingPaths = conflictingPaths;
-	}
+    CheckoutConflictException(String message, List<String> conflictingPaths, Throwable cause) {
+        super(message, cause);
+        this.conflictingPaths = conflictingPaths;
+    }
 
-	CheckoutConflictException(String message) {
-		super(message);
-	}
+    CheckoutConflictException(String message) {
+        super(message);
+    }
 
-	CheckoutConflictException(String message, List<String> conflictingPaths) {
-		super(message);
-		this.conflictingPaths = conflictingPaths;
-	}
+    CheckoutConflictException(String message, List<String> conflictingPaths) {
+        super(message);
+        this.conflictingPaths = conflictingPaths;
+    }
 
-	/**
-	 * Get conflicting paths
-	 *
-	 * @return all the paths where unresolved conflicts have been detected
-	 */
-	public List<String> getConflictingPaths() {
-		return conflictingPaths;
-	}
+    /**
+     * Get conflicting paths
+     *
+     * @return all the paths where unresolved conflicts have been detected
+     */
+    public List<String> getConflictingPaths() {
+        return conflictingPaths;
+    }
 
-	/**
-	 * Adds a new conflicting path
-	 *
-	 * @param conflictingPath
-	 *            the new conflicting path
-	 * @return {@code this}
-	 */
-	CheckoutConflictException addConflictingPath(String conflictingPath) {
-		if (conflictingPaths == null)
-			conflictingPaths = new LinkedList<>();
-		conflictingPaths.add(conflictingPath);
-		return this;
-	}
+    /**
+     * Adds a new conflicting path
+     *
+     * @param conflictingPath the new conflicting path
+     * @return {@code this}
+     */
+    CheckoutConflictException addConflictingPath(String conflictingPath) {
+        if (conflictingPaths == null)
+            conflictingPaths = new LinkedList<>();
+        conflictingPaths.add(conflictingPath);
+        return this;
+    }
 }

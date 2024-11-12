@@ -39,212 +39,201 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
  * @see DirCacheEditor
  */
 public class DirCacheBuilder extends BaseDirCacheEditor {
-	private boolean sorted;
+    private boolean sorted;
 
-	/**
-	 * Construct a new builder.
-	 *
-	 * @param dc
-	 *            the cache this builder will eventually update.
-	 * @param ecnt
-	 *            estimated number of entries the builder will have upon
-	 *            completion. This sizes the initial entry table.
-	 */
-	protected DirCacheBuilder(DirCache dc, int ecnt) {
-		super(dc, ecnt);
-	}
+    /**
+     * Construct a new builder.
+     *
+     * @param dc   the cache this builder will eventually update.
+     * @param ecnt estimated number of entries the builder will have upon
+     *             completion. This sizes the initial entry table.
+     */
+    protected DirCacheBuilder(DirCache dc, int ecnt) {
+        super(dc, ecnt);
+    }
 
-	/**
-	 * Append one entry into the resulting entry list.
-	 * <p>
-	 * The entry is placed at the end of the entry list. If the entry causes the
-	 * list to now be incorrectly sorted a final sorting phase will be
-	 * automatically enabled within {@link #finish()}.
-	 * <p>
-	 * The internal entry table is automatically expanded if there is
-	 * insufficient space for the new addition.
-	 *
-	 * @param newEntry
-	 *            the new entry to add.
-	 * @throws IllegalArgumentException
-	 *             If the FileMode of the entry was not set by the caller.
-	 */
-	public void add(DirCacheEntry newEntry) {
-		if (newEntry.getRawMode() == 0)
-			throw new IllegalArgumentException(MessageFormat.format(
-					JGitText.get().fileModeNotSetForPath,
-					newEntry.getPathString()));
-		beforeAdd(newEntry);
-		fastAdd(newEntry);
-	}
+    /**
+     * Append one entry into the resulting entry list.
+     * <p>
+     * The entry is placed at the end of the entry list. If the entry causes the
+     * list to now be incorrectly sorted a final sorting phase will be
+     * automatically enabled within {@link #finish()}.
+     * <p>
+     * The internal entry table is automatically expanded if there is
+     * insufficient space for the new addition.
+     *
+     * @param newEntry the new entry to add.
+     * @throws IllegalArgumentException If the FileMode of the entry was not set by the caller.
+     */
+    public void add(DirCacheEntry newEntry) {
+        if (newEntry.getRawMode() == 0)
+            throw new IllegalArgumentException(MessageFormat.format(
+                    JGitText.get().fileModeNotSetForPath,
+                    newEntry.getPathString()));
+        beforeAdd(newEntry);
+        fastAdd(newEntry);
+    }
 
-	/**
-	 * Add a range of existing entries from the destination cache.
-	 * <p>
-	 * The entries are placed at the end of the entry list. If any of the
-	 * entries causes the list to now be incorrectly sorted a final sorting
-	 * phase will be automatically enabled within {@link #finish()}.
-	 * <p>
-	 * This method copies from the destination cache, which has not yet been
-	 * updated with this editor's new table. So all offsets into the destination
-	 * cache are not affected by any updates that may be currently taking place
-	 * in this editor.
-	 * <p>
-	 * The internal entry table is automatically expanded if there is
-	 * insufficient space for the new additions.
-	 *
-	 * @param pos
-	 *            first entry to copy from the destination cache.
-	 * @param cnt
-	 *            number of entries to copy.
-	 */
-	public void keep(int pos, int cnt) {
-		beforeAdd(cache.getEntry(pos));
-		fastKeep(pos, cnt);
-	}
+    /**
+     * Add a range of existing entries from the destination cache.
+     * <p>
+     * The entries are placed at the end of the entry list. If any of the
+     * entries causes the list to now be incorrectly sorted a final sorting
+     * phase will be automatically enabled within {@link #finish()}.
+     * <p>
+     * This method copies from the destination cache, which has not yet been
+     * updated with this editor's new table. So all offsets into the destination
+     * cache are not affected by any updates that may be currently taking place
+     * in this editor.
+     * <p>
+     * The internal entry table is automatically expanded if there is
+     * insufficient space for the new additions.
+     *
+     * @param pos first entry to copy from the destination cache.
+     * @param cnt number of entries to copy.
+     */
+    public void keep(int pos, int cnt) {
+        beforeAdd(cache.getEntry(pos));
+        fastKeep(pos, cnt);
+    }
 
-	/**
-	 * Recursively add an entire tree into this builder.
-	 * <p>
-	 * If pathPrefix is "a/b" and the tree contains file "c" then the resulting
-	 * DirCacheEntry will have the path "a/b/c".
-	 * <p>
-	 * All entries are inserted at stage 0, therefore assuming that the
-	 * application will not insert any other paths with the same pathPrefix.
-	 *
-	 * @param pathPrefix
-	 *            UTF-8 encoded prefix to mount the tree's entries at. If the
-	 *            path does not end with '/' one will be automatically inserted
-	 *            as necessary.
-	 * @param stage
-	 *            stage of the entries when adding them.
-	 * @param reader
-	 *            reader the tree(s) will be read from during recursive
-	 *            traversal. This must be the same repository that the resulting
-	 *            DirCache would be written out to (or used in) otherwise the
-	 *            caller is simply asking for deferred MissingObjectExceptions.
-	 *            Caller is responsible for releasing this reader when done.
-	 * @param tree
-	 *            the tree to recursively add. This tree's contents will appear
-	 *            under <code>pathPrefix</code>. The ObjectId must be that of a
-	 *            tree; the caller is responsible for dereferencing a tag or
-	 *            commit (if necessary).
-	 * @throws IOException
-	 *             a tree cannot be read to iterate through its entries.
-	 */
-	public void addTree(byte[] pathPrefix, int stage, ObjectReader reader,
-			AnyObjectId tree) throws IOException {
-		CanonicalTreeParser p = createTreeParser(pathPrefix, reader, tree);
-		while (!p.eof()) {
-			if (isTree(p)) {
-				p = enterTree(p, reader);
-				continue;
-			}
+    /**
+     * Recursively add an entire tree into this builder.
+     * <p>
+     * If pathPrefix is "a/b" and the tree contains file "c" then the resulting
+     * DirCacheEntry will have the path "a/b/c".
+     * <p>
+     * All entries are inserted at stage 0, therefore assuming that the
+     * application will not insert any other paths with the same pathPrefix.
+     *
+     * @param pathPrefix UTF-8 encoded prefix to mount the tree's entries at. If the
+     *                   path does not end with '/' one will be automatically inserted
+     *                   as necessary.
+     * @param stage      stage of the entries when adding them.
+     * @param reader     reader the tree(s) will be read from during recursive
+     *                   traversal. This must be the same repository that the resulting
+     *                   DirCache would be written out to (or used in) otherwise the
+     *                   caller is simply asking for deferred MissingObjectExceptions.
+     *                   Caller is responsible for releasing this reader when done.
+     * @param tree       the tree to recursively add. This tree's contents will appear
+     *                   under <code>pathPrefix</code>. The ObjectId must be that of a
+     *                   tree; the caller is responsible for dereferencing a tag or
+     *                   commit (if necessary).
+     * @throws IOException a tree cannot be read to iterate through its entries.
+     */
+    public void addTree(byte[] pathPrefix, int stage, ObjectReader reader,
+                        AnyObjectId tree) throws IOException {
+        CanonicalTreeParser p = createTreeParser(pathPrefix, reader, tree);
+        while (!p.eof()) {
+            if (isTree(p)) {
+                p = enterTree(p, reader);
+                continue;
+            }
 
-			DirCacheEntry first = toEntry(stage, p);
-			beforeAdd(first);
-			fastAdd(first);
-			p = p.next();
-			break;
-		}
+            DirCacheEntry first = toEntry(stage, p);
+            beforeAdd(first);
+            fastAdd(first);
+            p = p.next();
+            break;
+        }
 
-		// Rest of tree entries are correctly sorted; use fastAdd().
-		while (!p.eof()) {
-			if (isTree(p)) {
-				p = enterTree(p, reader);
-			} else {
-				fastAdd(toEntry(stage, p));
-				p = p.next();
-			}
-		}
-	}
+        // Rest of tree entries are correctly sorted; use fastAdd().
+        while (!p.eof()) {
+            if (isTree(p)) {
+                p = enterTree(p, reader);
+            } else {
+                fastAdd(toEntry(stage, p));
+                p = p.next();
+            }
+        }
+    }
 
-	private static CanonicalTreeParser createTreeParser(byte[] pathPrefix,
-			ObjectReader reader, AnyObjectId tree) throws IOException {
-		return new CanonicalTreeParser(pathPrefix, reader, tree);
-	}
+    private static CanonicalTreeParser createTreeParser(byte[] pathPrefix,
+                                                        ObjectReader reader, AnyObjectId tree) throws IOException {
+        return new CanonicalTreeParser(pathPrefix, reader, tree);
+    }
 
-	private static boolean isTree(CanonicalTreeParser p) {
-		return (p.getEntryRawMode() & TYPE_MASK) == TYPE_TREE;
-	}
+    private static boolean isTree(CanonicalTreeParser p) {
+        return (p.getEntryRawMode() & TYPE_MASK) == TYPE_TREE;
+    }
 
-	private static CanonicalTreeParser enterTree(CanonicalTreeParser p,
-			ObjectReader reader) throws IOException {
-		p = p.createSubtreeIterator(reader);
-		return p.eof() ? p.next() : p;
-	}
+    private static CanonicalTreeParser enterTree(CanonicalTreeParser p,
+                                                 ObjectReader reader) throws IOException {
+        p = p.createSubtreeIterator(reader);
+        return p.eof() ? p.next() : p;
+    }
 
-	private static DirCacheEntry toEntry(int stage, CanonicalTreeParser i) {
-		byte[] buf = i.getEntryPathBuffer();
-		int len = i.getEntryPathLength();
-		byte[] path = new byte[len];
-		System.arraycopy(buf, 0, path, 0, len);
+    private static DirCacheEntry toEntry(int stage, CanonicalTreeParser i) {
+        byte[] buf = i.getEntryPathBuffer();
+        int len = i.getEntryPathLength();
+        byte[] path = new byte[len];
+        System.arraycopy(buf, 0, path, 0, len);
 
-		DirCacheEntry e = new DirCacheEntry(path, stage);
-		e.setFileMode(i.getEntryRawMode());
-		e.setObjectIdFromRaw(i.idBuffer(), i.idOffset());
-		return e;
-	}
+        DirCacheEntry e = new DirCacheEntry(path, stage);
+        e.setFileMode(i.getEntryRawMode());
+        e.setObjectIdFromRaw(i.idBuffer(), i.idOffset());
+        return e;
+    }
 
-	@Override
-	public void finish() {
-		if (!sorted)
-			resort();
-		replace();
-	}
+    @Override
+    public void finish() {
+        if (!sorted)
+            resort();
+        replace();
+    }
 
-	private void beforeAdd(DirCacheEntry newEntry) {
-		if (sorted && entryCnt > 0) {
-			final DirCacheEntry lastEntry = entries[entryCnt - 1];
-			final int cr = DirCache.cmp(lastEntry, newEntry);
-			if (cr > 0) {
-				// The new entry sorts before the old entry; we are
-				// no longer sorted correctly. We'll need to redo
-				// the sorting before we can close out the build.
-				//
-				sorted = false;
-			} else if (cr == 0) {
-				// Same file path; we can only insert this if the
-				// stages won't be violated.
-				//
-				final int peStage = lastEntry.getStage();
-				final int dceStage = newEntry.getStage();
-				if (peStage == dceStage)
-					throw bad(newEntry, JGitText.get().duplicateStagesNotAllowed);
-				if (peStage == 0 || dceStage == 0)
-					throw bad(newEntry, JGitText.get().mixedStagesNotAllowed);
-				if (peStage > dceStage)
-					sorted = false;
-			}
-		}
-	}
+    private void beforeAdd(DirCacheEntry newEntry) {
+        if (sorted && entryCnt > 0) {
+            final DirCacheEntry lastEntry = entries[entryCnt - 1];
+            final int cr = DirCache.cmp(lastEntry, newEntry);
+            if (cr > 0) {
+                // The new entry sorts before the old entry; we are
+                // no longer sorted correctly. We'll need to redo
+                // the sorting before we can close out the build.
+                //
+                sorted = false;
+            } else if (cr == 0) {
+                // Same file path; we can only insert this if the
+                // stages won't be violated.
+                //
+                final int peStage = lastEntry.getStage();
+                final int dceStage = newEntry.getStage();
+                if (peStage == dceStage)
+                    throw bad(newEntry, JGitText.get().duplicateStagesNotAllowed);
+                if (peStage == 0 || dceStage == 0)
+                    throw bad(newEntry, JGitText.get().mixedStagesNotAllowed);
+                if (peStage > dceStage)
+                    sorted = false;
+            }
+        }
+    }
 
-	private void resort() {
-		Arrays.sort(entries, 0, entryCnt, DirCache.ENT_CMP);
+    private void resort() {
+        Arrays.sort(entries, 0, entryCnt, DirCache.ENT_CMP);
 
-		for (int entryIdx = 1; entryIdx < entryCnt; entryIdx++) {
-			final DirCacheEntry pe = entries[entryIdx - 1];
-			final DirCacheEntry ce = entries[entryIdx];
-			final int cr = DirCache.cmp(pe, ce);
-			if (cr == 0) {
-				// Same file path; we can only allow this if the stages
-				// are 1-3 and no 0 exists.
-				//
-				final int peStage = pe.getStage();
-				final int ceStage = ce.getStage();
-				if (peStage == ceStage)
-					throw bad(ce, JGitText.get().duplicateStagesNotAllowed);
-				if (peStage == 0 || ceStage == 0)
-					throw bad(ce, JGitText.get().mixedStagesNotAllowed);
-			}
-		}
+        for (int entryIdx = 1; entryIdx < entryCnt; entryIdx++) {
+            final DirCacheEntry pe = entries[entryIdx - 1];
+            final DirCacheEntry ce = entries[entryIdx];
+            final int cr = DirCache.cmp(pe, ce);
+            if (cr == 0) {
+                // Same file path; we can only allow this if the stages
+                // are 1-3 and no 0 exists.
+                //
+                final int peStage = pe.getStage();
+                final int ceStage = ce.getStage();
+                if (peStage == ceStage)
+                    throw bad(ce, JGitText.get().duplicateStagesNotAllowed);
+                if (peStage == 0 || ceStage == 0)
+                    throw bad(ce, JGitText.get().mixedStagesNotAllowed);
+            }
+        }
 
-		sorted = true;
-	}
+        sorted = true;
+    }
 
-	private static IllegalStateException bad(DirCacheEntry a, String msg) {
-		return new IllegalStateException(String.format(
-				"%s: %d %s", //$NON-NLS-1$
-				msg, Integer.valueOf(a.getStage()), a.getPathString()));
-	}
+    private static IllegalStateException bad(DirCacheEntry a, String msg) {
+        return new IllegalStateException(String.format(
+                "%s: %d %s", //$NON-NLS-1$
+                msg, Integer.valueOf(a.getStage()), a.getPathString()));
+    }
 }

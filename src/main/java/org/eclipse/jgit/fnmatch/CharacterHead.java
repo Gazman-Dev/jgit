@@ -11,27 +11,26 @@
 package org.eclipse.jgit.fnmatch;
 
 final class CharacterHead extends AbstractHead {
-	private final char expectedCharacter;
+    private final char expectedCharacter;
 
-	/**
-	 * Constructor for CharacterHead
-	 *
-	 * @param expectedCharacter
-	 *            expected {@code char}
-	 */
-	CharacterHead(char expectedCharacter) {
-		super(false);
-		this.expectedCharacter = expectedCharacter;
-	}
+    /**
+     * Constructor for CharacterHead
+     *
+     * @param expectedCharacter expected {@code char}
+     */
+    CharacterHead(char expectedCharacter) {
+        super(false);
+        this.expectedCharacter = expectedCharacter;
+    }
 
-	@Override
-	protected final boolean matches(char c) {
-		return c == expectedCharacter;
-	}
+    @Override
+    protected final boolean matches(char c) {
+        return c == expectedCharacter;
+    }
 
-	@Override
-	public String toString() {
-		return String.valueOf(expectedCharacter);
-	}
+    @Override
+    public String toString() {
+        return String.valueOf(expectedCharacter);
+    }
 
 }

@@ -18,15 +18,14 @@ import java.io.IOException;
  * @since 4.5
  */
 public class NoPackSignatureException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct an exception.
-	 *
-	 * @param why
-	 *            description of the type of error.
-	 */
-	public NoPackSignatureException(String why) {
-		super(why);
-	}
+    /**
+     * Construct an exception.
+     *
+     * @param why description of the type of error.
+     */
+    public NoPackSignatureException(String why) {
+        super(why);
+    }
 }

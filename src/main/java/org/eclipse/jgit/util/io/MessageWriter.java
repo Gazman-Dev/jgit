@@ -39,50 +39,52 @@ import org.eclipse.jgit.util.RawParseUtils;
  * for the raw data.
  */
 public class MessageWriter extends Writer {
-	private final ByteArrayOutputStream buf;
+    private final ByteArrayOutputStream buf;
 
-	private final OutputStreamWriter enc;
+    private final OutputStreamWriter enc;
 
-	/**
-	 * Create an empty writer.
-	 */
-	public MessageWriter() {
-		buf = new ByteArrayOutputStream();
-		enc = new OutputStreamWriter(getRawStream(), UTF_8);
-	}
+    /**
+     * Create an empty writer.
+     */
+    public MessageWriter() {
+        buf = new ByteArrayOutputStream();
+        enc = new OutputStreamWriter(getRawStream(), UTF_8);
+    }
 
-	@Override
-	public void write(char[] cbuf, int off, int len) throws IOException {
-		synchronized (buf) {
-			enc.write(cbuf, off, len);
-			enc.flush();
-		}
-	}
+    @Override
+    public void write(char[] cbuf, int off, int len) throws IOException {
+        synchronized (buf) {
+            enc.write(cbuf, off, len);
+            enc.flush();
+        }
+    }
 
-	/**
-	 * Get the underlying byte stream that character writes to this writer drop
-	 * into.
-	 *
-	 * @return the underlying byte stream that character writes to this writer
-	 *         drop into. Writes to this stream should should be in UTF-8.
-	 */
-	public OutputStream getRawStream() {
-		return buf;
-	}
+    /**
+     * Get the underlying byte stream that character writes to this writer drop
+     * into.
+     *
+     * @return the underlying byte stream that character writes to this writer
+     * drop into. Writes to this stream should should be in UTF-8.
+     */
+    public OutputStream getRawStream() {
+        return buf;
+    }
 
-	@Override
-	public void close() throws IOException {
-		// Do nothing, we are buffered with no resources.
-	}
+    @Override
+    public void close() throws IOException {
+        // Do nothing, we are buffered with no resources.
+    }
 
-	@Override
-	public void flush() throws IOException {
-		// Do nothing, we are buffered with no resources.
-	}
+    @Override
+    public void flush() throws IOException {
+        // Do nothing, we are buffered with no resources.
+    }
 
-	/** @return string version of all buffered data. */
-	@Override
-	public String toString() {
-		return RawParseUtils.decode(buf.toByteArray());
-	}
+    /**
+     * @return string version of all buffered data.
+     */
+    @Override
+    public String toString() {
+        return RawParseUtils.decode(buf.toByteArray());
+    }
 }

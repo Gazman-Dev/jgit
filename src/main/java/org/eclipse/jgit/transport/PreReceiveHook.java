@@ -45,23 +45,23 @@ import java.util.Collection;
  * messages may simply be discarded. These messages should be advisory only.
  */
 public interface PreReceiveHook {
-	/** A simple no-op hook. */
-	PreReceiveHook NULL = (final ReceivePack rp,
-			final Collection<ReceiveCommand> commands) -> {
-		// Do nothing.
-	};
+    /**
+     * A simple no-op hook.
+     */
+    PreReceiveHook NULL = (final ReceivePack rp,
+                           final Collection<ReceiveCommand> commands) -> {
+        // Do nothing.
+    };
 
-	/**
-	 * Invoked just before commands are executed.
-	 * <p>
-	 * See the class description for how this method can impact execution.
-	 *
-	 * @param rp
-	 *            the process handling the current receive. Hooks may obtain
-	 *            details about the destination repository through this handle.
-	 * @param commands
-	 *            unmodifiable set of valid commands still pending execution.
-	 *            May be the empty set.
-	 */
-	void onPreReceive(ReceivePack rp, Collection<ReceiveCommand> commands);
+    /**
+     * Invoked just before commands are executed.
+     * <p>
+     * See the class description for how this method can impact execution.
+     *
+     * @param rp       the process handling the current receive. Hooks may obtain
+     *                 details about the destination repository through this handle.
+     * @param commands unmodifiable set of valid commands still pending execution.
+     *                 May be the empty set.
+     */
+    void onPreReceive(ReceivePack rp, Collection<ReceiveCommand> commands);
 }

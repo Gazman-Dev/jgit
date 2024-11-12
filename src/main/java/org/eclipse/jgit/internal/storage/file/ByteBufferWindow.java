@@ -25,45 +25,45 @@ import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
  * @see ByteWindow
  */
 final class ByteBufferWindow extends ByteWindow {
-	private final ByteBuffer buffer;
+    private final ByteBuffer buffer;
 
-	ByteBufferWindow(Pack pack, long o, ByteBuffer b) {
-		super(pack, o, b.capacity());
-		buffer = b;
-	}
+    ByteBufferWindow(Pack pack, long o, ByteBuffer b) {
+        super(pack, o, b.capacity());
+        buffer = b;
+    }
 
-	@Override
-	protected int copy(int p, byte[] b, int o, int n) {
-		final ByteBuffer s = buffer.slice();
-		s.position(p);
-		n = Math.min(s.remaining(), n);
-		s.get(b, o, n);
-		return n;
-	}
+    @Override
+    protected int copy(int p, byte[] b, int o, int n) {
+        final ByteBuffer s = buffer.slice();
+        s.position(p);
+        n = Math.min(s.remaining(), n);
+        s.get(b, o, n);
+        return n;
+    }
 
-	@Override
-	void write(PackOutputStream out, long pos, int cnt)
-			throws IOException {
-		final ByteBuffer s = buffer.slice();
-		s.position((int) (pos - start));
+    @Override
+    void write(PackOutputStream out, long pos, int cnt)
+            throws IOException {
+        final ByteBuffer s = buffer.slice();
+        s.position((int) (pos - start));
 
-		while (0 < cnt) {
-			byte[] buf = out.getCopyBuffer();
-			int n = Math.min(cnt, buf.length);
-			s.get(buf, 0, n);
-			out.write(buf, 0, n);
-			cnt -= n;
-		}
-	}
+        while (0 < cnt) {
+            byte[] buf = out.getCopyBuffer();
+            int n = Math.min(cnt, buf.length);
+            s.get(buf, 0, n);
+            out.write(buf, 0, n);
+            cnt -= n;
+        }
+    }
 
-	@Override
-	protected int setInput(int pos, Inflater inf)
-			throws DataFormatException {
-		final ByteBuffer s = buffer.slice();
-		s.position(pos);
-		final byte[] tmp = new byte[Math.min(s.remaining(), 512)];
-		s.get(tmp, 0, tmp.length);
-		inf.setInput(tmp, 0, tmp.length);
-		return tmp.length;
-	}
+    @Override
+    protected int setInput(int pos, Inflater inf)
+            throws DataFormatException {
+        final ByteBuffer s = buffer.slice();
+        s.position(pos);
+        final byte[] tmp = new byte[Math.min(s.remaining(), 512)];
+        s.get(tmp, 0, tmp.length);
+        inf.setInput(tmp, 0, tmp.length);
+        return tmp.length;
+    }
 }

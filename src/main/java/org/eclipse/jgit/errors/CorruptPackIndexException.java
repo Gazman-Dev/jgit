@@ -18,44 +18,54 @@ import org.eclipse.jgit.annotations.Nullable;
  * @since 4.9
  */
 public class CorruptPackIndexException extends Exception {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/** The error type of a corrupt index file. */
-	public enum ErrorType {
-		/** Offset does not match index in pack file. */
-		MISMATCH_OFFSET,
-		/** CRC does not match CRC of the object data in pack file. */
-		MISMATCH_CRC,
-		/** CRC is not present in index file. */
-		MISSING_CRC,
-		/** Object in pack is not present in index file. */
-		MISSING_OBJ,
-		/** Object in index file is not present in pack file. */
-		UNKNOWN_OBJ,
-	}
+    /**
+     * The error type of a corrupt index file.
+     */
+    public enum ErrorType {
+        /**
+         * Offset does not match index in pack file.
+         */
+        MISMATCH_OFFSET,
+        /**
+         * CRC does not match CRC of the object data in pack file.
+         */
+        MISMATCH_CRC,
+        /**
+         * CRC is not present in index file.
+         */
+        MISSING_CRC,
+        /**
+         * Object in pack is not present in index file.
+         */
+        MISSING_OBJ,
+        /**
+         * Object in index file is not present in pack file.
+         */
+        UNKNOWN_OBJ,
+    }
 
-	private ErrorType errorType;
+    private ErrorType errorType;
 
-	/**
-	 * Report a specific error condition discovered in an index file.
-	 *
-	 * @param message
-	 *            the error message.
-	 * @param errorType
-	 *            the error type of corruption.
-	 */
-	public CorruptPackIndexException(String message, ErrorType errorType) {
-		super(message);
-		this.errorType = errorType;
-	}
+    /**
+     * Report a specific error condition discovered in an index file.
+     *
+     * @param message   the error message.
+     * @param errorType the error type of corruption.
+     */
+    public CorruptPackIndexException(String message, ErrorType errorType) {
+        super(message);
+        this.errorType = errorType;
+    }
 
-	/**
-	 * Specific the reason of the corrupt index file.
-	 *
-	 * @return error condition or null.
-	 */
-	@Nullable
-	public ErrorType getErrorType() {
-		return errorType;
-	}
+    /**
+     * Specific the reason of the corrupt index file.
+     *
+     * @return error condition or null.
+     */
+    @Nullable
+    public ErrorType getErrorType() {
+        return errorType;
+    }
 }

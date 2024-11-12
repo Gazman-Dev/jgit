@@ -16,74 +16,74 @@ package org.eclipse.jgit.lib;
  */
 public interface ReflogEntry {
 
-	/**
-	 * Prefix used in reflog messages when the ref was first created.
-	 * <p>
-	 * Does not have a corresponding constant in C git, but is untranslated like
-	 * the other constants.
-	 *
-	 * @since 4.9
-	 */
-	String PREFIX_CREATED = "created"; //$NON-NLS-1$
+    /**
+     * Prefix used in reflog messages when the ref was first created.
+     * <p>
+     * Does not have a corresponding constant in C git, but is untranslated like
+     * the other constants.
+     *
+     * @since 4.9
+     */
+    String PREFIX_CREATED = "created"; //$NON-NLS-1$
 
-	/**
-	 * Prefix used in reflog messages when the ref was updated with a fast
-	 * forward.
-	 * <p>
-	 * Untranslated, and exactly matches the
-	 * <a href="https://git.kernel.org/pub/scm/git/git.git/tree/builtin/fetch.c?id=f3da2b79be9565779e4f76dc5812c68e156afdf0#n680">
-	 * untranslated string in C git</a>.
-	 *
-	 * @since 4.9
-	 */
-	String PREFIX_FAST_FORWARD = "fast-forward"; //$NON-NLS-1$
+    /**
+     * Prefix used in reflog messages when the ref was updated with a fast
+     * forward.
+     * <p>
+     * Untranslated, and exactly matches the
+     * <a href="https://git.kernel.org/pub/scm/git/git.git/tree/builtin/fetch.c?id=f3da2b79be9565779e4f76dc5812c68e156afdf0#n680">
+     * untranslated string in C git</a>.
+     *
+     * @since 4.9
+     */
+    String PREFIX_FAST_FORWARD = "fast-forward"; //$NON-NLS-1$
 
-	/**
-	 * Prefix used in reflog messages when the ref was force updated.
-	 * <p>
-	 * Untranslated, and exactly matches the
-	 * <a href="https://git.kernel.org/pub/scm/git/git.git/tree/builtin/fetch.c?id=f3da2b79be9565779e4f76dc5812c68e156afdf0#n695">
-	 * untranslated string in C git</a>.
-	 *
-	 * @since 4.9
-	 */
-	String PREFIX_FORCED_UPDATE = "forced-update"; //$NON-NLS-1$
+    /**
+     * Prefix used in reflog messages when the ref was force updated.
+     * <p>
+     * Untranslated, and exactly matches the
+     * <a href="https://git.kernel.org/pub/scm/git/git.git/tree/builtin/fetch.c?id=f3da2b79be9565779e4f76dc5812c68e156afdf0#n695">
+     * untranslated string in C git</a>.
+     *
+     * @since 4.9
+     */
+    String PREFIX_FORCED_UPDATE = "forced-update"; //$NON-NLS-1$
 
-	/**
-	 * Get the commit id before the change
-	 *
-	 * @return the commit id before the change
-	 */
-	ObjectId getOldId();
+    /**
+     * Get the commit id before the change
+     *
+     * @return the commit id before the change
+     */
+    ObjectId getOldId();
 
-	/**
-	 * Get the commit id after the change
-	 *
-	 * @return the commit id after the change
-	 */
-	ObjectId getNewId();
+    /**
+     * Get the commit id after the change
+     *
+     * @return the commit id after the change
+     */
+    ObjectId getNewId();
 
-	/**
-	 * Get user performing the change
-	 *
-	 * @return user performing the change
-	 */
-	PersonIdent getWho();
+    /**
+     * Get user performing the change
+     *
+     * @return user performing the change
+     */
+    PersonIdent getWho();
 
-	/**
-	 * Get textual description of the change
-	 *
-	 * @return textual description of the change
-	 */
-	String getComment();
+    /**
+     * Get textual description of the change
+     *
+     * @return textual description of the change
+     */
+    String getComment();
 
-	/**
-	 * Parse checkout
-	 *
-	 * @return a {@link CheckoutEntry} with parsed
-	 *         information about a branch switch, or null if the entry is not a
-	 *         checkout
-	 */
-	CheckoutEntry parseCheckout();
+    /**
+     * Parse checkout
+     *
+     * @return a {@link CheckoutEntry} with parsed
+     * information about a branch switch, or null if the entry is not a
+     * checkout
+     */
+    CheckoutEntry parseCheckout();
 
 }

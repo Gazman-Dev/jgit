@@ -41,28 +41,25 @@ package org.eclipse.jgit.api.errors;
  * Thrown when a Ref can not be resolved
  */
 public class RefNotFoundException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for RefNotFoundException
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 * @since 4.1
-	 */
-	public RefNotFoundException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for RefNotFoundException
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     * @since 4.1
+     */
+    public RefNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for RefNotFoundException
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public RefNotFoundException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for RefNotFoundException
+     *
+     * @param message error message
+     */
+    public RefNotFoundException(String message) {
+        super(message);
+    }
 }

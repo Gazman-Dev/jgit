@@ -18,16 +18,16 @@ import org.eclipse.jgit.nls.TranslationBundle;
  */
 @SuppressWarnings("MissingSummary")
 public class DfsText extends TranslationBundle {
-	/**
-	 * Get an instance of this translation bundle.
-	 *
-	 * @return instance of this translation bundle.
-	 */
-	public static DfsText get() {
-		return NLS.getBundleFor(DfsText.class);
-	}
+    /**
+     * Get an instance of this translation bundle.
+     *
+     * @return instance of this translation bundle.
+     */
+    public static DfsText get() {
+        return NLS.getBundleFor(DfsText.class);
+    }
 
-	// @formatter:off
+    // @formatter:off
 	/***/ public String cannotReadIndex;
 	/***/ public String cannotReadCommitGraph;
 	/***/ public String shortReadOfBlock;

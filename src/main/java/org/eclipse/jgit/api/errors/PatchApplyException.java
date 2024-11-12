@@ -15,28 +15,25 @@ package org.eclipse.jgit.api.errors;
  * @since 2.0
  */
 public class PatchApplyException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for PatchApplyException
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public PatchApplyException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for PatchApplyException
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     */
+    public PatchApplyException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for PatchApplyException
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public PatchApplyException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for PatchApplyException
+     *
+     * @param message error message
+     */
+    public PatchApplyException(String message) {
+        super(message);
+    }
 
 }

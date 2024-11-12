@@ -28,40 +28,40 @@ import org.eclipse.jgit.errors.MissingObjectException;
  * lower level {@link #pending} isn't already fully buffered.
  */
 final class DelayRevQueue extends Generator {
-	private static final int OVER_SCAN = PendingGenerator.OVER_SCAN;
+    private static final int OVER_SCAN = PendingGenerator.OVER_SCAN;
 
-	private final Generator pending;
+    private final Generator pending;
 
-	private final FIFORevQueue delay;
+    private final FIFORevQueue delay;
 
-	private int size;
+    private int size;
 
-	DelayRevQueue(Generator g) {
-		super(g.firstParent);
-		pending = g;
-		delay = new FIFORevQueue();
-	}
+    DelayRevQueue(Generator g) {
+        super(g.firstParent);
+        pending = g;
+        delay = new FIFORevQueue();
+    }
 
-	@Override
-	int outputType() {
-		return pending.outputType();
-	}
+    @Override
+    int outputType() {
+        return pending.outputType();
+    }
 
-	@Override
-	RevCommit next() throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		while (size < OVER_SCAN) {
-			final RevCommit c = pending.next();
-			if (c == null)
-				break;
-			delay.add(c);
-			size++;
-		}
+    @Override
+    RevCommit next() throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        while (size < OVER_SCAN) {
+            final RevCommit c = pending.next();
+            if (c == null)
+                break;
+            delay.add(c);
+            size++;
+        }
 
-		final RevCommit c = delay.next();
-		if (c == null)
-			return null;
-		size--;
-		return c;
-	}
+        final RevCommit c = delay.next();
+        if (c == null)
+            return null;
+        size--;
+        return c;
+    }
 }

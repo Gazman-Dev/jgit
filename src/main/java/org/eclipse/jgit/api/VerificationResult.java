@@ -17,30 +17,29 @@ import org.eclipse.jgit.revwalk.RevObject;
  * verification.
  *
  * @see VerifySignatureCommand
- *
  * @since 5.11
  */
 public interface VerificationResult {
 
-	/**
-	 * If an error occurred during signature verification, this retrieves the
-	 * exception.
-	 *
-	 * @return the exception, or {@code null} if none occurred
-	 */
-	Throwable getException();
+    /**
+     * If an error occurred during signature verification, this retrieves the
+     * exception.
+     *
+     * @return the exception, or {@code null} if none occurred
+     */
+    Throwable getException();
 
-	/**
-	 * Retrieves the signature verification result.
-	 *
-	 * @return the result, or {@code null} if none was computed
-	 */
-	GpgSignatureVerifier.SignatureVerification getVerification();
+    /**
+     * Retrieves the signature verification result.
+     *
+     * @return the result, or {@code null} if none was computed
+     */
+    GpgSignatureVerifier.SignatureVerification getVerification();
 
-	/**
-	 * Retrieves the git object of which the signature was verified.
-	 *
-	 * @return the git object
-	 */
-	RevObject getObject();
+    /**
+     * Retrieves the git object of which the signature was verified.
+     *
+     * @return the git object
+     */
+    RevObject getObject();
 }

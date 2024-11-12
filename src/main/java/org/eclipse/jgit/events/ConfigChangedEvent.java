@@ -14,13 +14,13 @@ package org.eclipse.jgit.events;
  * Describes a change to one or more keys in the configuration.
  */
 public class ConfigChangedEvent extends RepositoryEvent<ConfigChangedListener> {
-	@Override
-	public Class<ConfigChangedListener> getListenerType() {
-		return ConfigChangedListener.class;
-	}
+    @Override
+    public Class<ConfigChangedListener> getListenerType() {
+        return ConfigChangedListener.class;
+    }
 
-	@Override
-	public void dispatch(ConfigChangedListener listener) {
-		listener.onConfigChanged(this);
-	}
+    @Override
+    public void dispatch(ConfigChangedListener listener) {
+        listener.onConfigChanged(this);
+    }
 }

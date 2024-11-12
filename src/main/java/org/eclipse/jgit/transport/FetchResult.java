@@ -26,41 +26,39 @@ import java.util.Map;
  * @see Transport#fetch(org.eclipse.jgit.lib.ProgressMonitor, Collection)
  */
 public class FetchResult extends OperationResult {
-	private final List<FetchHeadRecord> forMerge;
+    private final List<FetchHeadRecord> forMerge;
 
-	private final Map<String, FetchResult> submodules;
+    private final Map<String, FetchResult> submodules;
 
-	FetchResult() {
-		forMerge = new ArrayList<>();
-		submodules = new HashMap<>();
-	}
+    FetchResult() {
+        forMerge = new ArrayList<>();
+        submodules = new HashMap<>();
+    }
 
-	void add(FetchHeadRecord r) {
-		if (!r.notForMerge)
-			forMerge.add(r);
-	}
+    void add(FetchHeadRecord r) {
+        if (!r.notForMerge)
+            forMerge.add(r);
+    }
 
-	/**
-	 * Add fetch results for a submodule.
-	 *
-	 * @param path
-	 *            the submodule path
-	 * @param result
-	 *            the fetch result
-	 * @since 4.7
-	 */
-	public void addSubmodule(String path, FetchResult result) {
-		submodules.put(path, result);
-	}
+    /**
+     * Add fetch results for a submodule.
+     *
+     * @param path   the submodule path
+     * @param result the fetch result
+     * @since 4.7
+     */
+    public void addSubmodule(String path, FetchResult result) {
+        submodules.put(path, result);
+    }
 
-	/**
-	 * Get fetch results for submodules.
-	 *
-	 * @return Fetch results for submodules as a map of submodule paths to fetch
-	 *         results.
-	 * @since 4.7
-	 */
-	public Map<String, FetchResult> submoduleResults() {
-		return Collections.unmodifiableMap(submodules);
-	}
+    /**
+     * Get fetch results for submodules.
+     *
+     * @return Fetch results for submodules as a map of submodule paths to fetch
+     * results.
+     * @since 4.7
+     */
+    public Map<String, FetchResult> submoduleResults() {
+        return Collections.unmodifiableMap(submodules);
+    }
 }

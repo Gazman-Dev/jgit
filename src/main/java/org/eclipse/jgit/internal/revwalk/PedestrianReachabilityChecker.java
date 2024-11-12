@@ -28,43 +28,41 @@ import org.eclipse.jgit.revwalk.RevWalk;
  */
 public class PedestrianReachabilityChecker implements ReachabilityChecker {
 
-	private final boolean topoSort;
+    private final boolean topoSort;
 
-	private final RevWalk walk;
+    private final RevWalk walk;
 
-	/**
-	 * New instance of the reachability checker using a existing walk.
-	 *
-	 * @param topoSort
-	 *            walk commits in topological order
-	 * @param walk
-	 *            RevWalk instance to reuse. Caller retains ownership.
-	 */
-	public PedestrianReachabilityChecker(boolean topoSort,
-			RevWalk walk) {
-		this.topoSort = topoSort;
-		this.walk = walk;
-	}
+    /**
+     * New instance of the reachability checker using a existing walk.
+     *
+     * @param topoSort walk commits in topological order
+     * @param walk     RevWalk instance to reuse. Caller retains ownership.
+     */
+    public PedestrianReachabilityChecker(boolean topoSort,
+                                         RevWalk walk) {
+        this.topoSort = topoSort;
+        this.walk = walk;
+    }
 
-	@Override
-	public Optional<RevCommit> areAllReachable(Collection<RevCommit> targets,
-			Stream<RevCommit> starters)
-					throws MissingObjectException, IncorrectObjectTypeException,
-					IOException {
-		walk.reset();
-		if (topoSort) {
-			walk.sort(RevSort.TOPO);
-		}
+    @Override
+    public Optional<RevCommit> areAllReachable(Collection<RevCommit> targets,
+                                               Stream<RevCommit> starters)
+            throws MissingObjectException, IncorrectObjectTypeException,
+            IOException {
+        walk.reset();
+        if (topoSort) {
+            walk.sort(RevSort.TOPO);
+        }
 
-		for (RevCommit target: targets) {
-			walk.markStart(target);
-		}
+        for (RevCommit target : targets) {
+            walk.markStart(target);
+        }
 
-		Iterator<RevCommit> iterator = starters.iterator();
-		while (iterator.hasNext()) {
-			walk.markUninteresting(iterator.next());
-		}
+        Iterator<RevCommit> iterator = starters.iterator();
+        while (iterator.hasNext()) {
+            walk.markUninteresting(iterator.next());
+        }
 
-		return Optional.ofNullable(walk.next());
-	}
+        return Optional.ofNullable(walk.next());
+    }
 }

@@ -28,50 +28,50 @@ import org.eclipse.jgit.util.IntList.IntComparator;
  * https://git-scm.com/docs/pack-format#_pack_rev_files_have_the_format.
  */
 final class PackReverseIndexWriterV1 extends PackReverseIndexWriter {
-	private static final int DEFAULT_OID_VERSION = OID_VERSION_SHA1;
+    private static final int DEFAULT_OID_VERSION = OID_VERSION_SHA1;
 
-	PackReverseIndexWriterV1(final OutputStream dst) {
-		super(dst);
-	}
+    PackReverseIndexWriterV1(final OutputStream dst) {
+        super(dst);
+    }
 
-	@Override
-	protected void writeHeader() throws IOException {
-		out.write(MAGIC);
-		dataOutput.writeInt(VERSION_1);
-		dataOutput.writeInt(DEFAULT_OID_VERSION);
-	}
+    @Override
+    protected void writeHeader() throws IOException {
+        out.write(MAGIC);
+        dataOutput.writeInt(VERSION_1);
+        dataOutput.writeInt(DEFAULT_OID_VERSION);
+    }
 
-	@Override
-	protected void writeBody(List<? extends PackedObjectInfo> objectsByIndexPos)
-			throws IOException {
-		IntList positionsByOffset = IntList.filledWithRange(0,
-				objectsByIndexPos.size());
-		positionsByOffset
-				.sort(new IndexPositionsByOffsetComparator(objectsByIndexPos));
+    @Override
+    protected void writeBody(List<? extends PackedObjectInfo> objectsByIndexPos)
+            throws IOException {
+        IntList positionsByOffset = IntList.filledWithRange(0,
+                objectsByIndexPos.size());
+        positionsByOffset
+                .sort(new IndexPositionsByOffsetComparator(objectsByIndexPos));
 
-		for (int i = 0; i < positionsByOffset.size(); i++) {
-			int indexPosition = positionsByOffset.get(i);
-			dataOutput.writeInt(indexPosition);
-		}
-	}
+        for (int i = 0; i < positionsByOffset.size(); i++) {
+            int indexPosition = positionsByOffset.get(i);
+            dataOutput.writeInt(indexPosition);
+        }
+    }
 
-	private static class IndexPositionsByOffsetComparator
-			implements IntComparator {
-		private List<? extends PackedObjectInfo> objectsByIndexPos;
+    private static class IndexPositionsByOffsetComparator
+            implements IntComparator {
+        private List<? extends PackedObjectInfo> objectsByIndexPos;
 
-		private IndexPositionsByOffsetComparator(
-				List<? extends PackedObjectInfo> objectsByIndexPos) {
-			this.objectsByIndexPos = objectsByIndexPos;
-		}
+        private IndexPositionsByOffsetComparator(
+                List<? extends PackedObjectInfo> objectsByIndexPos) {
+            this.objectsByIndexPos = objectsByIndexPos;
+        }
 
-		@Override
-		public int compare(int firstIndexPosition, int secondIndexPosition) {
-			return Long.compare(getOffset(firstIndexPosition),
-					getOffset(secondIndexPosition));
-		}
+        @Override
+        public int compare(int firstIndexPosition, int secondIndexPosition) {
+            return Long.compare(getOffset(firstIndexPosition),
+                    getOffset(secondIndexPosition));
+        }
 
-		private long getOffset(int indexPosition) {
-			return objectsByIndexPos.get(indexPosition).getOffset();
-		}
-	}
+        private long getOffset(int indexPosition) {
+            return objectsByIndexPos.get(indexPosition).getOffset();
+        }
+    }
 }

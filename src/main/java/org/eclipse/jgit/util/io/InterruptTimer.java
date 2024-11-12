@@ -49,163 +49,161 @@ import org.eclipse.jgit.internal.JGitText;
  * @see TimeoutInputStream
  */
 public final class InterruptTimer {
-	private final AlarmState state;
+    private final AlarmState state;
 
-	private final AlarmThread thread;
+    private final AlarmThread thread;
 
-	final AutoKiller autoKiller;
+    final AutoKiller autoKiller;
 
-	/**
-	 * Create a new timer with a default thread name.
-	 */
-	public InterruptTimer() {
-		this("JGit-InterruptTimer"); //$NON-NLS-1$
-	}
+    /**
+     * Create a new timer with a default thread name.
+     */
+    public InterruptTimer() {
+        this("JGit-InterruptTimer"); //$NON-NLS-1$
+    }
 
-	/**
-	 * Create a new timer to signal on interrupt on the caller.
-	 * <p>
-	 * The timer thread is created in the calling thread's ThreadGroup.
-	 *
-	 * @param threadName
-	 *            name of the timer thread.
-	 */
-	public InterruptTimer(String threadName) {
-		state = new AlarmState();
-		autoKiller = new AutoKiller(state);
-		thread = new AlarmThread(threadName, state);
-		thread.start();
-	}
+    /**
+     * Create a new timer to signal on interrupt on the caller.
+     * <p>
+     * The timer thread is created in the calling thread's ThreadGroup.
+     *
+     * @param threadName name of the timer thread.
+     */
+    public InterruptTimer(String threadName) {
+        state = new AlarmState();
+        autoKiller = new AutoKiller(state);
+        thread = new AlarmThread(threadName, state);
+        thread.start();
+    }
 
-	/**
-	 * Arm the interrupt timer before entering a blocking operation.
-	 *
-	 * @param timeout
-	 *            number of milliseconds before the interrupt should trigger.
-	 *            Must be &gt; 0.
-	 */
-	public void begin(int timeout) {
-		if (timeout <= 0)
-			throw new IllegalArgumentException(MessageFormat.format(
-					JGitText.get().invalidTimeout, Integer.valueOf(timeout)));
-		Thread.interrupted();
-		state.begin(timeout);
-	}
+    /**
+     * Arm the interrupt timer before entering a blocking operation.
+     *
+     * @param timeout number of milliseconds before the interrupt should trigger.
+     *                Must be &gt; 0.
+     */
+    public void begin(int timeout) {
+        if (timeout <= 0)
+            throw new IllegalArgumentException(MessageFormat.format(
+                    JGitText.get().invalidTimeout, Integer.valueOf(timeout)));
+        Thread.interrupted();
+        state.begin(timeout);
+    }
 
-	/**
-	 * Disable the interrupt timer, as the operation is complete.
-	 */
-	public void end() {
-		state.end();
-	}
+    /**
+     * Disable the interrupt timer, as the operation is complete.
+     */
+    public void end() {
+        state.end();
+    }
 
-	/**
-	 * Shutdown the timer thread, and wait for it to terminate.
-	 */
-	public void terminate() {
-		state.terminate();
-		boolean interrupted = false;
-		try {
-			while (true) {
-				try {
-					thread.join();
-					return;
-				} catch (InterruptedException e) {
-					interrupted = true;
-				}
-			}
-		} finally {
-			if (interrupted) {
-				Thread.currentThread().interrupt();
-			}
-		}
-	}
+    /**
+     * Shutdown the timer thread, and wait for it to terminate.
+     */
+    public void terminate() {
+        state.terminate();
+        boolean interrupted = false;
+        try {
+            while (true) {
+                try {
+                    thread.join();
+                    return;
+                } catch (InterruptedException e) {
+                    interrupted = true;
+                }
+            }
+        } finally {
+            if (interrupted) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
 
-	static final class AlarmThread extends Thread {
-		AlarmThread(String name, AlarmState q) {
-			super(q);
-			setName(name);
-			setDaemon(true);
-		}
-	}
+    static final class AlarmThread extends Thread {
+        AlarmThread(String name, AlarmState q) {
+            super(q);
+            setName(name);
+            setDaemon(true);
+        }
+    }
 
-	// The trick here is, the AlarmThread does not have a reference to the
-	// AutoKiller instance, only the InterruptTimer itself does. Thus when
-	// the InterruptTimer is GC'd, the AutoKiller is also unreachable and
-	// can be GC'd. When it gets finalized, it tells the AlarmThread to
-	// terminate, triggering the thread to exit gracefully.
-	//
-	private static final class AutoKiller {
-		private final AlarmState state;
+    // The trick here is, the AlarmThread does not have a reference to the
+    // AutoKiller instance, only the InterruptTimer itself does. Thus when
+    // the InterruptTimer is GC'd, the AutoKiller is also unreachable and
+    // can be GC'd. When it gets finalized, it tells the AlarmThread to
+    // terminate, triggering the thread to exit gracefully.
+    //
+    private static final class AutoKiller {
+        private final AlarmState state;
 
-		AutoKiller(AlarmState s) {
-			state = s;
-		}
+        AutoKiller(AlarmState s) {
+            state = s;
+        }
 
-		@Override
-		protected void finalize() throws Throwable {
-			state.terminate();
-		}
-	}
+        @Override
+        protected void finalize() throws Throwable {
+            state.terminate();
+        }
+    }
 
-	static final class AlarmState implements Runnable {
-		private Thread callingThread;
+    static final class AlarmState implements Runnable {
+        private Thread callingThread;
 
-		private long deadline;
+        private long deadline;
 
-		private boolean terminated;
+        private boolean terminated;
 
-		AlarmState() {
-			callingThread = Thread.currentThread();
-		}
+        AlarmState() {
+            callingThread = Thread.currentThread();
+        }
 
-		@Override
-		public synchronized void run() {
-			while (!terminated && callingThread.isAlive()) {
-				try {
-					if (0 < deadline) {
-						final long delay = deadline - now();
-						if (delay <= 0) {
-							deadline = 0;
-							callingThread.interrupt();
-						} else {
-							wait(delay);
-						}
-					} else {
-						wait(1000);
-					}
-				} catch (InterruptedException e) {
-					// Treat an interrupt as notice to examine state.
-				}
-			}
-		}
+        @Override
+        public synchronized void run() {
+            while (!terminated && callingThread.isAlive()) {
+                try {
+                    if (0 < deadline) {
+                        final long delay = deadline - now();
+                        if (delay <= 0) {
+                            deadline = 0;
+                            callingThread.interrupt();
+                        } else {
+                            wait(delay);
+                        }
+                    } else {
+                        wait(1000);
+                    }
+                } catch (InterruptedException e) {
+                    // Treat an interrupt as notice to examine state.
+                }
+            }
+        }
 
-		synchronized void begin(int timeout) {
-			if (terminated)
-				throw new IllegalStateException(JGitText.get().timerAlreadyTerminated);
-			callingThread = Thread.currentThread();
-			deadline = now() + timeout;
-			notifyAll();
-		}
+        synchronized void begin(int timeout) {
+            if (terminated)
+                throw new IllegalStateException(JGitText.get().timerAlreadyTerminated);
+            callingThread = Thread.currentThread();
+            deadline = now() + timeout;
+            notifyAll();
+        }
 
-		synchronized void end() {
-			if (0 == deadline)
-				Thread.interrupted();
-			else
-				deadline = 0;
-			notifyAll();
-		}
+        synchronized void end() {
+            if (0 == deadline)
+                Thread.interrupted();
+            else
+                deadline = 0;
+            notifyAll();
+        }
 
-		synchronized void terminate() {
-			if (!terminated) {
-				deadline = 0;
-				terminated = true;
-				notifyAll();
-			}
-		}
+        synchronized void terminate() {
+            if (!terminated) {
+                deadline = 0;
+                terminated = true;
+                notifyAll();
+            }
+        }
 
-		private static long now() {
-			return System.currentTimeMillis();
-		}
-	}
+        private static long now() {
+            return System.currentTimeMillis();
+        }
+    }
 }

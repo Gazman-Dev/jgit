@@ -41,27 +41,24 @@ package org.eclipse.jgit.api.errors;
  * Exception thrown when transport operation failed
  */
 public class TransportException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for TransportException
-	 *
-	 * @param msg
-	 *            message describing the transport failure.
-	 */
-	public TransportException(String msg) {
-		super(msg);
-	}
+    /**
+     * Constructor for TransportException
+     *
+     * @param msg message describing the transport failure.
+     */
+    public TransportException(String msg) {
+        super(msg);
+    }
 
-	/**
-	 * Constructor for TransportException
-	 *
-	 * @param msg
-	 *            message describing the transport exception.
-	 * @param cause
-	 *            why the transport failed.
-	 */
-	public TransportException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
+    /**
+     * Constructor for TransportException
+     *
+     * @param msg   message describing the transport exception.
+     * @param cause why the transport failed.
+     */
+    public TransportException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

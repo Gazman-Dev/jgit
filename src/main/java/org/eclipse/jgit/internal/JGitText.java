@@ -20,16 +20,16 @@ import org.eclipse.jgit.nls.TranslationBundle;
 @SuppressWarnings("MissingSummary")
 public class JGitText extends TranslationBundle {
 
-	/**
-	 * Get an instance of this translation bundle
-	 *
-	 * @return an instance of this translation bundle
-	 */
-	public static JGitText get() {
-		return NLS.getBundleFor(JGitText.class);
-	}
+    /**
+     * Get an instance of this translation bundle
+     *
+     * @return an instance of this translation bundle
+     */
+    public static JGitText get() {
+        return NLS.getBundleFor(JGitText.class);
+    }
 
-	// @formatter:off
+    // @formatter:off
 	/***/ public String abbreviationLengthMustBeNonNegative;
 	/***/ public String abortingRebase;
 	/***/ public String abortingRebaseFailed;

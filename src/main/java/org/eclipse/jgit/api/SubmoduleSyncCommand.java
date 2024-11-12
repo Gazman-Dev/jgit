@@ -9,12 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.errors.ConfigInvalidException;
@@ -26,111 +20,113 @@ import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A class used to execute a submodule sync command.
- *
+ * <p>
  * This will set the remote URL in a submodule's repository to the current value
  * in the .gitmodules file.
  *
  * @see <a href=
- *      "http://www.kernel.org/pub/software/scm/git/docs/git-submodule.html"
- *      >Git documentation about submodules</a>
+ * "http://www.kernel.org/pub/software/scm/git/docs/git-submodule.html"
+ * >Git documentation about submodules</a>
  */
 public class SubmoduleSyncCommand extends GitCommand<Map<String, String>> {
 
-	private final Collection<String> paths;
+    private final Collection<String> paths;
 
-	/**
-	 * Constructor for SubmoduleSyncCommand.
-	 *
-	 * @param repo
-	 *            a {@link Repository} object.
-	 */
-	public SubmoduleSyncCommand(Repository repo) {
-		super(repo);
-		paths = new ArrayList<>();
-	}
+    /**
+     * Constructor for SubmoduleSyncCommand.
+     *
+     * @param repo a {@link Repository} object.
+     */
+    public SubmoduleSyncCommand(Repository repo) {
+        super(repo);
+        paths = new ArrayList<>();
+    }
 
-	/**
-	 * Add repository-relative submodule path to synchronize
-	 *
-	 * @param path
-	 *            (with <code>/</code> as separator)
-	 * @return this command
-	 */
-	public SubmoduleSyncCommand addPath(String path) {
-		paths.add(path);
-		return this;
-	}
+    /**
+     * Add repository-relative submodule path to synchronize
+     *
+     * @param path (with <code>/</code> as separator)
+     * @return this command
+     */
+    public SubmoduleSyncCommand addPath(String path) {
+        paths.add(path);
+        return this;
+    }
 
-	/**
-	 * Get branch that HEAD currently points to
-	 *
-	 * @param subRepo
-	 *            a {@link Repository} object.
-	 * @return shortened branch name, null on failures
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	protected String getHeadBranch(Repository subRepo) throws IOException {
-		Ref head = subRepo.exactRef(Constants.HEAD);
-		if (head != null && head.isSymbolic()) {
-			return Repository.shortenRefName(head.getLeaf().getName());
-		}
-		return null;
-	}
+    /**
+     * Get branch that HEAD currently points to
+     *
+     * @param subRepo a {@link Repository} object.
+     * @return shortened branch name, null on failures
+     * @throws IOException if an IO error occurred
+     */
+    protected String getHeadBranch(Repository subRepo) throws IOException {
+        Ref head = subRepo.exactRef(Constants.HEAD);
+        if (head != null && head.isSymbolic()) {
+            return Repository.shortenRefName(head.getLeaf().getName());
+        }
+        return null;
+    }
 
-	@Override
-	public Map<String, String> call() throws GitAPIException {
-		checkCallable();
+    @Override
+    public Map<String, String> call() throws GitAPIException {
+        checkCallable();
 
-		try (SubmoduleWalk generator = SubmoduleWalk.forIndex(repo)) {
-			if (!paths.isEmpty())
-				generator.setFilter(PathFilterGroup.createFromStrings(paths));
-			Map<String, String> synced = new HashMap<>();
-			StoredConfig config = repo.getConfig();
-			while (generator.next()) {
-				String remoteUrl = generator.getRemoteUrl();
-				if (remoteUrl == null)
-					continue;
+        try (SubmoduleWalk generator = SubmoduleWalk.forIndex(repo)) {
+            if (!paths.isEmpty())
+                generator.setFilter(PathFilterGroup.createFromStrings(paths));
+            Map<String, String> synced = new HashMap<>();
+            StoredConfig config = repo.getConfig();
+            while (generator.next()) {
+                String remoteUrl = generator.getRemoteUrl();
+                if (remoteUrl == null)
+                    continue;
 
-				String path = generator.getPath();
-				config.setString(ConfigConstants.CONFIG_SUBMODULE_SECTION,
-						path, ConfigConstants.CONFIG_KEY_URL, remoteUrl);
-				synced.put(path, remoteUrl);
+                String path = generator.getPath();
+                config.setString(ConfigConstants.CONFIG_SUBMODULE_SECTION,
+                        path, ConfigConstants.CONFIG_KEY_URL, remoteUrl);
+                synced.put(path, remoteUrl);
 
-				try (Repository subRepo = generator.getRepository()) {
-					if (subRepo == null) {
-						continue;
-					}
+                try (Repository subRepo = generator.getRepository()) {
+                    if (subRepo == null) {
+                        continue;
+                    }
 
-					StoredConfig subConfig;
-					String branch;
+                    StoredConfig subConfig;
+                    String branch;
 
-					subConfig = subRepo.getConfig();
-					// Get name of remote associated with current branch and
-					// fall back to default remote name as last resort
-					branch = getHeadBranch(subRepo);
-					String remote = null;
-					if (branch != null) {
-						remote = subConfig.getString(
-								ConfigConstants.CONFIG_BRANCH_SECTION, branch,
-								ConfigConstants.CONFIG_KEY_REMOTE);
-					}
-					if (remote == null) {
-						remote = Constants.DEFAULT_REMOTE_NAME;
-					}
+                    subConfig = subRepo.getConfig();
+                    // Get name of remote associated with current branch and
+                    // fall back to default remote name as last resort
+                    branch = getHeadBranch(subRepo);
+                    String remote = null;
+                    if (branch != null) {
+                        remote = subConfig.getString(
+                                ConfigConstants.CONFIG_BRANCH_SECTION, branch,
+                                ConfigConstants.CONFIG_KEY_REMOTE);
+                    }
+                    if (remote == null) {
+                        remote = Constants.DEFAULT_REMOTE_NAME;
+                    }
 
-					subConfig.setString(ConfigConstants.CONFIG_REMOTE_SECTION,
-							remote, ConfigConstants.CONFIG_KEY_URL, remoteUrl);
-					subConfig.save();
-				}
-			}
-			if (!synced.isEmpty())
-				config.save();
-			return synced;
-		} catch (IOException | ConfigInvalidException e) {
-			throw new JGitInternalException(e.getMessage(), e);
-		}
-	}
+                    subConfig.setString(ConfigConstants.CONFIG_REMOTE_SECTION,
+                            remote, ConfigConstants.CONFIG_KEY_URL, remoteUrl);
+                    subConfig.save();
+                }
+            }
+            if (!synced.isEmpty())
+                config.save();
+            return synced;
+        } catch (IOException | ConfigInvalidException e) {
+            throw new JGitInternalException(e.getMessage(), e);
+        }
+    }
 }

@@ -16,84 +16,77 @@ import org.eclipse.jgit.lib.ObjectId;
  */
 public class SubmoduleStatus {
 
-	private final SubmoduleStatusType type;
+    private final SubmoduleStatusType type;
 
-	private final String path;
+    private final String path;
 
-	private final ObjectId indexId;
+    private final ObjectId indexId;
 
-	private final ObjectId headId;
+    private final ObjectId headId;
 
-	/**
-	 * Create submodule status
-	 *
-	 * @param type
-	 *            a {@link SubmoduleStatusType}
-	 *            object.
-	 * @param path
-	 *            submodule path
-	 * @param indexId
-	 *            an {@link ObjectId} object.
-	 */
-	public SubmoduleStatus(final SubmoduleStatusType type, final String path,
-			final ObjectId indexId) {
-		this(type, path, indexId, null);
-	}
+    /**
+     * Create submodule status
+     *
+     * @param type    a {@link SubmoduleStatusType}
+     *                object.
+     * @param path    submodule path
+     * @param indexId an {@link ObjectId} object.
+     */
+    public SubmoduleStatus(final SubmoduleStatusType type, final String path,
+                           final ObjectId indexId) {
+        this(type, path, indexId, null);
+    }
 
-	/**
-	 * Create submodule status
-	 *
-	 * @param type
-	 *            a {@link SubmoduleStatusType}
-	 *            object.
-	 * @param path
-	 *            submodule path
-	 * @param indexId
-	 *            index id
-	 * @param headId
-	 *            head id
-	 */
-	public SubmoduleStatus(final SubmoduleStatusType type, final String path,
-			final ObjectId indexId, final ObjectId headId) {
-		this.type = type;
-		this.path = path;
-		this.indexId = indexId;
-		this.headId = headId;
-	}
+    /**
+     * Create submodule status
+     *
+     * @param type    a {@link SubmoduleStatusType}
+     *                object.
+     * @param path    submodule path
+     * @param indexId index id
+     * @param headId  head id
+     */
+    public SubmoduleStatus(final SubmoduleStatusType type, final String path,
+                           final ObjectId indexId, final ObjectId headId) {
+        this.type = type;
+        this.path = path;
+        this.indexId = indexId;
+        this.headId = headId;
+    }
 
-	/**
-	 * Get type
-	 *
-	 * @return type
-	 */
-	public SubmoduleStatusType getType() {
-		return type;
-	}
+    /**
+     * Get type
+     *
+     * @return type
+     */
+    public SubmoduleStatusType getType() {
+        return type;
+    }
 
-	/**
-	 * Get submodule path
-	 *
-	 * @return path submodule path
-	 */
-	public String getPath() {
-		return path;
-	}
+    /**
+     * Get submodule path
+     *
+     * @return path submodule path
+     */
+    public String getPath() {
+        return path;
+    }
 
-	/**
-	 * Get index object id
-	 *
-	 * @return index object id
-	 */
-	public ObjectId getIndexId() {
-		return indexId;
-	}
+    /**
+     * Get index object id
+     *
+     * @return index object id
+     */
+    public ObjectId getIndexId() {
+        return indexId;
+    }
 
-	/**
-	 * Get HEAD object id
-	 *
-	 * @return HEAD object id
-	 */
-	public ObjectId getHeadId() {
-		return headId;
-	}
+    /**
+     * Get HEAD object id
+     *
+     * @return HEAD object id
+     */
+    public ObjectId getHeadId() {
+        return headId;
+    }
 }

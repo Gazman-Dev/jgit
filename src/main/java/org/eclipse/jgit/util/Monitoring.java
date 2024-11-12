@@ -13,15 +13,15 @@ import org.eclipse.jgit.annotations.Nullable;
 
 public class Monitoring {
 
-	/**
-	 * No-op method for registering an MBean.
-	 *
-	 * @param mbean      the MBean object to register
-	 * @param metricName name of the JGit metric
-	 * @return null, since JMX is not supported on Android
-	 */
-	public static @Nullable Object registerMBean(Object mbean, String metricName) {
-		// JMX is not supported on Android; return null
-		return null;
-	}
+    /**
+     * No-op method for registering an MBean.
+     *
+     * @param mbean      the MBean object to register
+     * @param metricName name of the JGit metric
+     * @return null, since JMX is not supported on Android
+     */
+    public static @Nullable Object registerMBean(Object mbean, String metricName) {
+        // JMX is not supported on Android; return null
+        return null;
+    }
 }

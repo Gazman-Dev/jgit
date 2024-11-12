@@ -20,37 +20,36 @@ import org.eclipse.jgit.lib.ReflogEntry;
  * {@link Reftable}.
  */
 public abstract class LogCursor implements AutoCloseable {
-	/**
-	 * Check if another log record is available.
-	 *
-	 * @return {@code true} if there is another result.
-	 * @throws IOException
-	 *             logs cannot be read.
-	 */
-	public abstract boolean next() throws IOException;
+    /**
+     * Check if another log record is available.
+     *
+     * @return {@code true} if there is another result.
+     * @throws IOException logs cannot be read.
+     */
+    public abstract boolean next() throws IOException;
 
-	/**
-	 * Get name of the current reference.
-	 *
-	 * @return name of the current reference.
-	 */
-	public abstract String getRefName();
+    /**
+     * Get name of the current reference.
+     *
+     * @return name of the current reference.
+     */
+    public abstract String getRefName();
 
-	/**
-	 * Get identifier of the transaction that created the log record.
-	 *
-	 * @return identifier of the transaction that created the log record.
-	 */
-	public abstract long getUpdateIndex();
+    /**
+     * Get identifier of the transaction that created the log record.
+     *
+     * @return identifier of the transaction that created the log record.
+     */
+    public abstract long getUpdateIndex();
 
-	/**
-	 * Get current log entry.
-	 *
-	 * @return current log entry. Maybe null if we are producing deletions.
-	 */
-	@Nullable
-	public abstract ReflogEntry getReflogEntry();
+    /**
+     * Get current log entry.
+     *
+     * @return current log entry. Maybe null if we are producing deletions.
+     */
+    @Nullable
+    public abstract ReflogEntry getReflogEntry();
 
-	@Override
-	public abstract void close();
+    @Override
+    public abstract void close();
 }

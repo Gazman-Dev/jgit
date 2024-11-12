@@ -18,39 +18,39 @@ package org.eclipse.jgit.errors;
  * properly formatted.
  */
 public class RevisionSyntaxException extends IllegalArgumentException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final String revstr;
+    private final String revstr;
 
-	/**
-	 * Construct a RevisionSyntaxException indicating a syntax problem with a
-	 * revision (or object) string.
-	 *
-	 * @param revstr The problematic revision string
-	 */
-	public RevisionSyntaxException(String revstr) {
-		this.revstr = revstr;
-	}
+    /**
+     * Construct a RevisionSyntaxException indicating a syntax problem with a
+     * revision (or object) string.
+     *
+     * @param revstr The problematic revision string
+     */
+    public RevisionSyntaxException(String revstr) {
+        this.revstr = revstr;
+    }
 
-	/**
-	 * Construct a RevisionSyntaxException indicating a syntax problem with a
-	 * revision (or object) string.
-	 *
-	 * @param message a specific reason
-	 * @param revstr The problematic revision string
-	 */
-	public RevisionSyntaxException(String message, String revstr) {
-		super(message);
-		this.revstr = revstr;
-	}
+    /**
+     * Construct a RevisionSyntaxException indicating a syntax problem with a
+     * revision (or object) string.
+     *
+     * @param message a specific reason
+     * @param revstr  The problematic revision string
+     */
+    public RevisionSyntaxException(String message, String revstr) {
+        super(message);
+        this.revstr = revstr;
+    }
 
-	/**
-	 * Get the problematic revision string
-	 *
-	 * @return the problematic revision string
-	 * @since 6.8
-	 */
-	public String getRevstr() {
-		return revstr;
-	}
+    /**
+     * Get the problematic revision string
+     *
+     * @return the problematic revision string
+     * @since 6.8
+     */
+    public String getRevstr() {
+        return revstr;
+    }
 }

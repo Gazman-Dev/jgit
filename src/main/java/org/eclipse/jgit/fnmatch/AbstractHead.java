@@ -15,45 +15,43 @@ import java.util.List;
 import org.eclipse.jgit.internal.JGitText;
 
 abstract class AbstractHead implements Head {
-	private List<Head> newHeads = null;
+    private List<Head> newHeads = null;
 
-	private final boolean star;
+    private final boolean star;
 
-	/**
-	 * Whether the char matches
-	 *
-	 * @param c
-	 *            a char.
-	 * @return whether the char matches
-	 */
-	protected abstract boolean matches(char c);
+    /**
+     * Whether the char matches
+     *
+     * @param c a char.
+     * @return whether the char matches
+     */
+    protected abstract boolean matches(char c);
 
-	AbstractHead(boolean star) {
-		this.star = star;
-	}
+    AbstractHead(boolean star) {
+        this.star = star;
+    }
 
-	/**
-	 * Set {@link Head}s which will not be modified.
-	 *
-	 * @param newHeads
-	 *            a list of {@link Head}s which will
-	 *            not be modified.
-	 */
-	public final void setNewHeads(List<Head> newHeads) {
-		if (this.newHeads != null)
-			throw new IllegalStateException(JGitText.get().propertyIsAlreadyNonNull);
-		this.newHeads = newHeads;
-	}
+    /**
+     * Set {@link Head}s which will not be modified.
+     *
+     * @param newHeads a list of {@link Head}s which will
+     *                 not be modified.
+     */
+    public final void setNewHeads(List<Head> newHeads) {
+        if (this.newHeads != null)
+            throw new IllegalStateException(JGitText.get().propertyIsAlreadyNonNull);
+        this.newHeads = newHeads;
+    }
 
-	@Override
-	public List<Head> getNextHeads(char c) {
-		if (matches(c)) {
-			return newHeads;
-		}
-		return FileNameMatcher.EMPTY_HEAD_LIST;
-	}
+    @Override
+    public List<Head> getNextHeads(char c) {
+        if (matches(c)) {
+            return newHeads;
+        }
+        return FileNameMatcher.EMPTY_HEAD_LIST;
+    }
 
-	boolean isStar() {
-		return star;
-	}
+    boolean isStar() {
+        return star;
+    }
 }

@@ -21,63 +21,55 @@ import org.eclipse.jgit.transport.ReceiveCommand.Result;
  * @since 5.7
  */
 public interface ReceiveCommandErrorHandler {
-	/**
-	 * Handle an exception thrown while validating the new commit ID.
-	 *
-	 * @param cmd
-	 *            offending command
-	 * @param e
-	 *            exception thrown
-	 */
-	default void handleNewIdValidationException(ReceiveCommand cmd,
-			IOException e) {
-		cmd.setResult(Result.REJECTED_MISSING_OBJECT, cmd.getNewId().name());
-	}
+    /**
+     * Handle an exception thrown while validating the new commit ID.
+     *
+     * @param cmd offending command
+     * @param e   exception thrown
+     */
+    default void handleNewIdValidationException(ReceiveCommand cmd,
+                                                IOException e) {
+        cmd.setResult(Result.REJECTED_MISSING_OBJECT, cmd.getNewId().name());
+    }
 
-	/**
-	 * Handle an exception thrown while validating the old commit ID.
-	 *
-	 * @param cmd
-	 *            offending command
-	 * @param e
-	 *            exception thrown
-	 */
-	default void handleOldIdValidationException(ReceiveCommand cmd,
-			IOException e) {
-		cmd.setResult(Result.REJECTED_MISSING_OBJECT, cmd.getOldId().name());
-	}
+    /**
+     * Handle an exception thrown while validating the old commit ID.
+     *
+     * @param cmd offending command
+     * @param e   exception thrown
+     */
+    default void handleOldIdValidationException(ReceiveCommand cmd,
+                                                IOException e) {
+        cmd.setResult(Result.REJECTED_MISSING_OBJECT, cmd.getOldId().name());
+    }
 
-	/**
-	 * Handle an exception thrown while checking if the update is fast-forward.
-	 *
-	 * @param cmd
-	 *            offending command
-	 * @param e
-	 *            exception thrown
-	 */
-	default void handleFastForwardCheckException(ReceiveCommand cmd,
-			IOException e) {
-		if (e instanceof MissingObjectException) {
-			cmd.setResult(Result.REJECTED_MISSING_OBJECT, e.getMessage());
-		} else {
-			cmd.setResult(Result.REJECTED_OTHER_REASON);
-		}
-	}
+    /**
+     * Handle an exception thrown while checking if the update is fast-forward.
+     *
+     * @param cmd offending command
+     * @param e   exception thrown
+     */
+    default void handleFastForwardCheckException(ReceiveCommand cmd,
+                                                 IOException e) {
+        if (e instanceof MissingObjectException) {
+            cmd.setResult(Result.REJECTED_MISSING_OBJECT, e.getMessage());
+        } else {
+            cmd.setResult(Result.REJECTED_OTHER_REASON);
+        }
+    }
 
-	/**
-	 * Handle an exception thrown while checking if the update is fast-forward.
-	 *
-	 * @param cmds
-	 *            commands being processed
-	 * @param e
-	 *            exception thrown
-	 */
-	default void handleBatchRefUpdateException(List<ReceiveCommand> cmds,
-			IOException e) {
-		for (ReceiveCommand cmd : cmds) {
-			if (cmd.getResult() == Result.NOT_ATTEMPTED) {
-				cmd.reject(e);
-			}
-		}
-	}
+    /**
+     * Handle an exception thrown while checking if the update is fast-forward.
+     *
+     * @param cmds commands being processed
+     * @param e    exception thrown
+     */
+    default void handleBatchRefUpdateException(List<ReceiveCommand> cmds,
+                                               IOException e) {
+        for (ReceiveCommand cmd : cmds) {
+            if (cmd.getResult() == Result.NOT_ATTEMPTED) {
+                cmd.reject(e);
+            }
+        }
+    }
 }

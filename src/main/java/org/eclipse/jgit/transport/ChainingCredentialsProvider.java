@@ -22,64 +22,63 @@ import org.eclipse.jgit.errors.UnsupportedCredentialItem;
  */
 public class ChainingCredentialsProvider extends CredentialsProvider {
 
-	private List<CredentialsProvider> credentialProviders;
+    private List<CredentialsProvider> credentialProviders;
 
-	/**
-	 * Create a new chaining credential provider. This provider tries to
-	 * retrieve credentials from the chained credential providers in the order
-	 * they are given here. If multiple providers support the requested items
-	 * and have non-null credentials the first of them will be used.
-	 *
-	 * @param providers
-	 *            credential providers asked for credentials in the order given
-	 *            here
-	 */
-	public ChainingCredentialsProvider(CredentialsProvider... providers) {
-		this.credentialProviders = new ArrayList<>(
-				Arrays.asList(providers));
-	}
+    /**
+     * Create a new chaining credential provider. This provider tries to
+     * retrieve credentials from the chained credential providers in the order
+     * they are given here. If multiple providers support the requested items
+     * and have non-null credentials the first of them will be used.
+     *
+     * @param providers credential providers asked for credentials in the order given
+     *                  here
+     */
+    public ChainingCredentialsProvider(CredentialsProvider... providers) {
+        this.credentialProviders = new ArrayList<>(
+                Arrays.asList(providers));
+    }
 
-	@Override
-	public boolean isInteractive() {
-		for (CredentialsProvider p : credentialProviders)
-			if (p.isInteractive())
-				return true;
-		return false;
-	}
+    @Override
+    public boolean isInteractive() {
+        for (CredentialsProvider p : credentialProviders)
+            if (p.isInteractive())
+                return true;
+        return false;
+    }
 
-	@Override
-	public boolean supports(CredentialItem... items) {
-		for (CredentialsProvider p : credentialProviders)
-			if (p.supports(items))
-				return true;
-		return false;
-	}
+    @Override
+    public boolean supports(CredentialItem... items) {
+        for (CredentialsProvider p : credentialProviders)
+            if (p.supports(items))
+                return true;
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * Populates the credential items with the credentials provided by the first
-	 * credential provider in the list which populates them with non-null values
-	 *
-	 * @see CredentialsProvider#supports(CredentialItem[])
-	 */
-	@Override
-	public boolean get(URIish uri, CredentialItem... items)
-			throws UnsupportedCredentialItem {
-		for (CredentialsProvider p : credentialProviders) {
-			if (p.supports(items)) {
-				if (!p.get(uri, items)) {
-					if (p.isInteractive()) {
-						return false; // user cancelled the request
-					}
-					continue;
-				}
-				if (isAnyNull(items)) {
-					continue;
-				}
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Populates the credential items with the credentials provided by the first
+     * credential provider in the list which populates them with non-null values
+     *
+     * @see CredentialsProvider#supports(CredentialItem[])
+     */
+    @Override
+    public boolean get(URIish uri, CredentialItem... items)
+            throws UnsupportedCredentialItem {
+        for (CredentialsProvider p : credentialProviders) {
+            if (p.supports(items)) {
+                if (!p.get(uri, items)) {
+                    if (p.isInteractive()) {
+                        return false; // user cancelled the request
+                    }
+                    continue;
+                }
+                if (isAnyNull(items)) {
+                    continue;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 }

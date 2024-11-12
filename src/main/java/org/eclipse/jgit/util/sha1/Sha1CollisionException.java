@@ -22,17 +22,16 @@ import org.eclipse.jgit.lib.ObjectId;
  * @since 4.7
  */
 public class Sha1CollisionException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Initialize with default message.
-	 *
-	 * @param id
-	 *            object whose contents are a hash collision.
-	 */
-	public Sha1CollisionException(ObjectId id) {
-		super(MessageFormat.format(
-				JGitText.get().sha1CollisionDetected,
-				id.name()));
-	}
+    /**
+     * Initialize with default message.
+     *
+     * @param id object whose contents are a hash collision.
+     */
+    public Sha1CollisionException(ObjectId id) {
+        super(MessageFormat.format(
+                JGitText.get().sha1CollisionDetected,
+                id.name()));
+    }
 }

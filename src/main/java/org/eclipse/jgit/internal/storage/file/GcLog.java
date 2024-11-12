@@ -30,114 +30,111 @@ import org.eclipse.jgit.util.SystemReader;
  * This class manages the gc.log file for a {@link FileRepository}.
  */
 class GcLog {
-	private final FileRepository repo;
+    private final FileRepository repo;
 
-	private final File logFile;
+    private final File logFile;
 
-	private final LockFile lock;
+    private final LockFile lock;
 
-	private Instant gcLogExpire;
+    private Instant gcLogExpire;
 
-	private static final String LOG_EXPIRY_DEFAULT = "1.day.ago"; //$NON-NLS-1$
+    private static final String LOG_EXPIRY_DEFAULT = "1.day.ago"; //$NON-NLS-1$
 
-	private boolean nonEmpty = false;
+    private boolean nonEmpty = false;
 
-	/**
-	 * Construct a GcLog object for a {@link FileRepository}
-	 *
-	 * @param repo
-	 *            the repository
-	 */
-	GcLog(FileRepository repo) {
-		this.repo = repo;
-		logFile = new File(repo.getDirectory(), "gc.log"); //$NON-NLS-1$
-		lock = new LockFile(logFile);
-	}
+    /**
+     * Construct a GcLog object for a {@link FileRepository}
+     *
+     * @param repo the repository
+     */
+    GcLog(FileRepository repo) {
+        this.repo = repo;
+        logFile = new File(repo.getDirectory(), "gc.log"); //$NON-NLS-1$
+        lock = new LockFile(logFile);
+    }
 
-	private Instant getLogExpiry() throws ParseException {
-		if (gcLogExpire == null) {
-			String logExpiryStr = repo.getConfig().getString(
-					ConfigConstants.CONFIG_GC_SECTION, null,
-					ConfigConstants.CONFIG_KEY_LOGEXPIRY);
-			if (logExpiryStr == null) {
-				logExpiryStr = LOG_EXPIRY_DEFAULT;
-			}
-			gcLogExpire = GitDateParser.parse(logExpiryStr, null,
-					SystemReader.getInstance().getLocale()).toInstant();
-		}
-		return gcLogExpire;
-	}
+    private Instant getLogExpiry() throws ParseException {
+        if (gcLogExpire == null) {
+            String logExpiryStr = repo.getConfig().getString(
+                    ConfigConstants.CONFIG_GC_SECTION, null,
+                    ConfigConstants.CONFIG_KEY_LOGEXPIRY);
+            if (logExpiryStr == null) {
+                logExpiryStr = LOG_EXPIRY_DEFAULT;
+            }
+            gcLogExpire = GitDateParser.parse(logExpiryStr, null,
+                    SystemReader.getInstance().getLocale()).toInstant();
+        }
+        return gcLogExpire;
+    }
 
-	private boolean autoGcBlockedByOldLockFile() {
-		try {
-			FileTime lastModified = Files.getLastModifiedTime(FileUtils.toPath(logFile));
-			if (lastModified.toInstant().compareTo(getLogExpiry()) > 0) {
-				// There is an existing log file, which is too recent to ignore
-				return true;
-			}
-		} catch (NoSuchFileException e) {
-			// No existing log file, OK.
-		} catch (IOException | ParseException e) {
-			throw new JGitInternalException(e.getMessage(), e);
-		}
-		return false;
-	}
+    private boolean autoGcBlockedByOldLockFile() {
+        try {
+            FileTime lastModified = Files.getLastModifiedTime(FileUtils.toPath(logFile));
+            if (lastModified.toInstant().compareTo(getLogExpiry()) > 0) {
+                // There is an existing log file, which is too recent to ignore
+                return true;
+            }
+        } catch (NoSuchFileException e) {
+            // No existing log file, OK.
+        } catch (IOException | ParseException e) {
+            throw new JGitInternalException(e.getMessage(), e);
+        }
+        return false;
+    }
 
-	/**
-	 * Lock the GC log file for updates
-	 *
-	 * @return {@code true} if we hold the lock
-	 */
-	boolean lock() {
-		try {
-			if (!lock.lock()) {
-				return false;
-			}
-		} catch (IOException e) {
-			throw new JGitInternalException(e.getMessage(), e);
-		}
-		if (autoGcBlockedByOldLockFile()) {
-			lock.unlock();
-			return false;
-		}
-		return true;
-	}
+    /**
+     * Lock the GC log file for updates
+     *
+     * @return {@code true} if we hold the lock
+     */
+    boolean lock() {
+        try {
+            if (!lock.lock()) {
+                return false;
+            }
+        } catch (IOException e) {
+            throw new JGitInternalException(e.getMessage(), e);
+        }
+        if (autoGcBlockedByOldLockFile()) {
+            lock.unlock();
+            return false;
+        }
+        return true;
+    }
 
-	/**
-	 * Unlock (roll back) the GC log lock
-	 */
-	void unlock() {
-		lock.unlock();
-	}
+    /**
+     * Unlock (roll back) the GC log lock
+     */
+    void unlock() {
+        lock.unlock();
+    }
 
-	/**
-	 * Commit changes to the gc log, if there have been any writes. Otherwise,
-	 * just unlock and delete the existing file (if any)
-	 *
-	 * @return true if committing (or unlocking/deleting) succeeds.
-	 */
-	boolean commit() {
-		if (nonEmpty) {
-			return lock.commit();
-		}
-		logFile.delete();
-		lock.unlock();
-		return true;
-	}
+    /**
+     * Commit changes to the gc log, if there have been any writes. Otherwise,
+     * just unlock and delete the existing file (if any)
+     *
+     * @return true if committing (or unlocking/deleting) succeeds.
+     */
+    boolean commit() {
+        if (nonEmpty) {
+            return lock.commit();
+        }
+        logFile.delete();
+        lock.unlock();
+        return true;
+    }
 
-	/**
-	 * Write to the pending gc log. Content will be committed upon a call to
-	 * commit()
-	 *
-	 * @param content
-	 *            The content to write
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	void write(String content) throws IOException {
-		if (content.length() > 0) {
-			nonEmpty = true;
-		}
-		lock.write(content.getBytes(UTF_8));
-	}
+    /**
+     * Write to the pending gc log. Content will be committed upon a call to
+     * commit()
+     *
+     * @param content The content to write
+     * @throws IOException if an IO error occurred
+     */
+    void write(String content) throws IOException {
+        if (content.length() > 0) {
+            nonEmpty = true;
+        }
+        lock.write(content.getBytes(UTF_8));
+    }
 }

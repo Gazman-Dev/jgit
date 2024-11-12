@@ -67,444 +67,435 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
  * @since 4.1
  */
 public class PushCertificateStore implements AutoCloseable {
-	/** Ref name storing push certificates. */
-	static final String REF_NAME =
-			Constants.R_REFS + "meta/push-certs"; //$NON-NLS-1$
+    /**
+     * Ref name storing push certificates.
+     */
+    static final String REF_NAME =
+            Constants.R_REFS + "meta/push-certs"; //$NON-NLS-1$
 
-	private static class PendingCert {
-		PushCertificate cert;
-		PersonIdent ident;
-		Collection<ReceiveCommand> matching;
+    private static class PendingCert {
+        PushCertificate cert;
+        PersonIdent ident;
+        Collection<ReceiveCommand> matching;
 
-		PendingCert(PushCertificate cert, PersonIdent ident,
-				Collection<ReceiveCommand> matching) {
-			this.cert = cert;
-			this.ident = ident;
-			this.matching = matching;
-		}
-	}
+        PendingCert(PushCertificate cert, PersonIdent ident,
+                    Collection<ReceiveCommand> matching) {
+            this.cert = cert;
+            this.ident = ident;
+            this.matching = matching;
+        }
+    }
 
-	private final Repository db;
-	private final List<PendingCert> pending;
-	ObjectReader reader;
-	RevCommit commit;
+    private final Repository db;
+    private final List<PendingCert> pending;
+    ObjectReader reader;
+    RevCommit commit;
 
-	/**
-	 * Create a new store backed by the given repository.
-	 *
-	 * @param db
-	 *            the repository.
-	 */
-	public PushCertificateStore(Repository db) {
-		this.db = db;
-		pending = new ArrayList<>();
-	}
+    /**
+     * Create a new store backed by the given repository.
+     *
+     * @param db the repository.
+     */
+    public PushCertificateStore(Repository db) {
+        this.db = db;
+        pending = new ArrayList<>();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * Close resources opened by this store.
-	 * <p>
-	 * If {@link #get(String)} was called, closes the cached object reader
-	 * created by that method. Does not close the underlying repository.
-	 */
-	@Override
-	public void close() {
-		if (reader != null) {
-			reader.close();
-			reader = null;
-			commit = null;
-		}
-	}
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Close resources opened by this store.
+     * <p>
+     * If {@link #get(String)} was called, closes the cached object reader
+     * created by that method. Does not close the underlying repository.
+     */
+    @Override
+    public void close() {
+        if (reader != null) {
+            reader.close();
+            reader = null;
+            commit = null;
+        }
+    }
 
-	/**
-	 * Get latest push certificate associated with a ref.
-	 * <p>
-	 * Lazily opens {@code refs/meta/push-certs} and reads from the repository as
-	 * necessary. The state is cached between calls to {@code get}; to reread the,
-	 * call {@link #close()} first.
-	 *
-	 * @param refName
-	 *            the ref name to get the certificate for.
-	 * @return last certificate affecting the ref, or null if no cert was recorded
-	 *         for the last update to this ref.
-	 * @throws IOException
-	 *             if a problem occurred reading the repository.
-	 */
-	public PushCertificate get(String refName) throws IOException {
-		if (reader == null) {
-			load();
-		}
-		try (TreeWalk tw = newTreeWalk(refName)) {
-			return read(tw);
-		}
-	}
+    /**
+     * Get latest push certificate associated with a ref.
+     * <p>
+     * Lazily opens {@code refs/meta/push-certs} and reads from the repository as
+     * necessary. The state is cached between calls to {@code get}; to reread the,
+     * call {@link #close()} first.
+     *
+     * @param refName the ref name to get the certificate for.
+     * @return last certificate affecting the ref, or null if no cert was recorded
+     * for the last update to this ref.
+     * @throws IOException if a problem occurred reading the repository.
+     */
+    public PushCertificate get(String refName) throws IOException {
+        if (reader == null) {
+            load();
+        }
+        try (TreeWalk tw = newTreeWalk(refName)) {
+            return read(tw);
+        }
+    }
 
-	/**
-	 * Iterate over all push certificates affecting a ref.
-	 * <p>
-	 * Only includes push certificates actually stored in the tree; see class
-	 * Javadoc for conditions where this might not include all push certs ever
-	 * seen for this ref.
-	 * <p>
-	 * The returned iterable may be iterated multiple times, and push certs will
-	 * be re-read from the current state of the store on each call to {@link
-	 * Iterable#iterator()}. However, method calls on the returned iterator may
-	 * fail if {@code save} or {@code close} is called on the enclosing store
-	 * during iteration.
-	 *
-	 * @param refName
-	 *            the ref name to get certificates for.
-	 * @return iterable over certificates; must be fully iterated in order to
-	 *         close resources.
-	 */
-	public Iterable<PushCertificate> getAll(String refName) {
-		return () -> new Iterator<>() {
-			private final String path = pathName(refName);
+    /**
+     * Iterate over all push certificates affecting a ref.
+     * <p>
+     * Only includes push certificates actually stored in the tree; see class
+     * Javadoc for conditions where this might not include all push certs ever
+     * seen for this ref.
+     * <p>
+     * The returned iterable may be iterated multiple times, and push certs will
+     * be re-read from the current state of the store on each call to {@link
+     * Iterable#iterator()}. However, method calls on the returned iterator may
+     * fail if {@code save} or {@code close} is called on the enclosing store
+     * during iteration.
+     *
+     * @param refName the ref name to get certificates for.
+     * @return iterable over certificates; must be fully iterated in order to
+     * close resources.
+     */
+    public Iterable<PushCertificate> getAll(String refName) {
+        return () -> new Iterator<>() {
+            private final String path = pathName(refName);
 
-			private PushCertificate next;
+            private PushCertificate next;
 
-			private RevWalk rw;
-			{
-				try {
-					if (reader == null) {
-						load();
-					}
-					if (commit != null) {
-						rw = new RevWalk(reader);
-						rw.setTreeFilter(AndTreeFilter.create(
-								PathFilterGroup.create(Collections
-										.singleton(PathFilter.create(path))),
-								TreeFilter.ANY_DIFF));
-						rw.setRewriteParents(false);
-						rw.markStart(rw.parseCommit(commit));
-					} else {
-						rw = null;
-					}
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-			}
+            private RevWalk rw;
 
-			@Override
-			public boolean hasNext() {
-				try {
-					if (next == null) {
-						if (rw == null) {
-							return false;
-						}
-						try {
-							RevCommit c = rw.next();
-							if (c != null) {
-								try (TreeWalk tw = TreeWalk.forPath(
-										rw.getObjectReader(), path,
-										c.getTree())) {
-									next = read(tw);
-								}
-							} else {
-								next = null;
-							}
-						} catch (IOException e) {
-							throw new RuntimeException(e);
-						}
-					}
-					return next != null;
-				} finally {
-					if (next == null && rw != null) {
-						rw.close();
-						rw = null;
-					}
-				}
-			}
+            {
+                try {
+                    if (reader == null) {
+                        load();
+                    }
+                    if (commit != null) {
+                        rw = new RevWalk(reader);
+                        rw.setTreeFilter(AndTreeFilter.create(
+                                PathFilterGroup.create(Collections
+                                        .singleton(PathFilter.create(path))),
+                                TreeFilter.ANY_DIFF));
+                        rw.setRewriteParents(false);
+                        rw.markStart(rw.parseCommit(commit));
+                    } else {
+                        rw = null;
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
-			@Override
-			public PushCertificate next() {
-				if (!hasNext()) {
-					throw new NoSuchElementException();
-				}
-				PushCertificate n = next;
-				next = null;
-				return n;
-			}
+            @Override
+            public boolean hasNext() {
+                try {
+                    if (next == null) {
+                        if (rw == null) {
+                            return false;
+                        }
+                        try {
+                            RevCommit c = rw.next();
+                            if (c != null) {
+                                try (TreeWalk tw = TreeWalk.forPath(
+                                        rw.getObjectReader(), path,
+                                        c.getTree())) {
+                                    next = read(tw);
+                                }
+                            } else {
+                                next = null;
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    return next != null;
+                } finally {
+                    if (next == null && rw != null) {
+                        rw.close();
+                        rw = null;
+                    }
+                }
+            }
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
+            @Override
+            public PushCertificate next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                PushCertificate n = next;
+                next = null;
+                return n;
+            }
 
-	void load() throws IOException {
-		close();
-		reader = db.newObjectReader();
-		Ref ref = db.getRefDatabase().exactRef(REF_NAME);
-		if (ref == null) {
-			// No ref, same as empty.
-			return;
-		}
-		try (RevWalk rw = new RevWalk(reader)) {
-			commit = rw.parseCommit(ref.getObjectId());
-		}
-	}
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
 
-	static PushCertificate read(TreeWalk tw) throws IOException {
-		if (tw == null || (tw.getRawMode(0) & TYPE_FILE) != TYPE_FILE) {
-			return null;
-		}
-		ObjectLoader loader =
-				tw.getObjectReader().open(tw.getObjectId(0), OBJ_BLOB);
-		try (InputStream in = loader.openStream();
-				Reader r = new BufferedReader(
-						new InputStreamReader(in, UTF_8))) {
-			return PushCertificateParser.fromReader(r);
-		}
-	}
+    void load() throws IOException {
+        close();
+        reader = db.newObjectReader();
+        Ref ref = db.getRefDatabase().exactRef(REF_NAME);
+        if (ref == null) {
+            // No ref, same as empty.
+            return;
+        }
+        try (RevWalk rw = new RevWalk(reader)) {
+            commit = rw.parseCommit(ref.getObjectId());
+        }
+    }
 
-	/**
-	 * Put a certificate to be saved to the store.
-	 * <p>
-	 * Writes the contents of this certificate for each ref mentioned. It is up
-	 * to the caller to ensure this certificate accurately represents the state
-	 * of the ref.
-	 * <p>
-	 * Pending certificates added to this method are not returned by
-	 * {@link #get(String)} and {@link #getAll(String)} until after calling
-	 * {@link #save()}.
-	 *
-	 * @param cert
-	 *            certificate to store.
-	 * @param ident
-	 *            identity for the commit that stores this certificate. Pending
-	 *            certificates are sorted by identity timestamp during
-	 *            {@link #save()}.
-	 */
-	public void put(PushCertificate cert, PersonIdent ident) {
-		put(cert, ident, null);
-	}
+    static PushCertificate read(TreeWalk tw) throws IOException {
+        if (tw == null || (tw.getRawMode(0) & TYPE_FILE) != TYPE_FILE) {
+            return null;
+        }
+        ObjectLoader loader =
+                tw.getObjectReader().open(tw.getObjectId(0), OBJ_BLOB);
+        try (InputStream in = loader.openStream();
+             Reader r = new BufferedReader(
+                     new InputStreamReader(in, UTF_8))) {
+            return PushCertificateParser.fromReader(r);
+        }
+    }
 
-	/**
-	 * Put a certificate to be saved to the store, matching a set of commands.
-	 * <p>
-	 * Like {@link #put(PushCertificate, PersonIdent)}, except a value is only
-	 * stored for a push certificate if there is a corresponding command in the
-	 * list that exactly matches the old/new values mentioned in the push
-	 * certificate.
-	 * <p>
-	 * Pending certificates added to this method are not returned by
-	 * {@link #get(String)} and {@link #getAll(String)} until after calling
-	 * {@link #save()}.
-	 *
-	 * @param cert
-	 *            certificate to store.
-	 * @param ident
-	 *            identity for the commit that stores this certificate. Pending
-	 *            certificates are sorted by identity timestamp during
-	 *            {@link #save()}.
-	 * @param matching
-	 *            only store certs for the refs listed in this list whose values
-	 *            match the commands in the cert.
-	 */
-	public void put(PushCertificate cert, PersonIdent ident,
-			Collection<ReceiveCommand> matching) {
-		pending.add(new PendingCert(cert, ident, matching));
-	}
+    /**
+     * Put a certificate to be saved to the store.
+     * <p>
+     * Writes the contents of this certificate for each ref mentioned. It is up
+     * to the caller to ensure this certificate accurately represents the state
+     * of the ref.
+     * <p>
+     * Pending certificates added to this method are not returned by
+     * {@link #get(String)} and {@link #getAll(String)} until after calling
+     * {@link #save()}.
+     *
+     * @param cert  certificate to store.
+     * @param ident identity for the commit that stores this certificate. Pending
+     *              certificates are sorted by identity timestamp during
+     *              {@link #save()}.
+     */
+    public void put(PushCertificate cert, PersonIdent ident) {
+        put(cert, ident, null);
+    }
 
-	/**
-	 * Save pending certificates to the store.
-	 * <p>
-	 * One commit is created per certificate added with
-	 * {@link #put(PushCertificate, PersonIdent)}, in order of identity
-	 * timestamps, and a single ref update is performed.
-	 * <p>
-	 * The pending list is cleared if and only the ref update fails, which
-	 * allows for easy retries in case of lock failure.
-	 *
-	 * @return the result of attempting to update the ref.
-	 * @throws IOException
-	 *             if there was an error reading from or writing to the
-	 *             repository.
-	 */
-	public RefUpdate.Result save() throws IOException {
-		ObjectId newId = write();
-		if (newId == null) {
-			return RefUpdate.Result.NO_CHANGE;
-		}
-		try (ObjectInserter inserter = db.newObjectInserter()) {
-			RefUpdate.Result result = updateRef(newId);
-			switch (result) {
-				case FAST_FORWARD:
-				case NEW:
-				case NO_CHANGE:
-					pending.clear();
-					break;
-				default:
-					break;
-			}
-			return result;
-		} finally {
-			close();
-		}
-	}
+    /**
+     * Put a certificate to be saved to the store, matching a set of commands.
+     * <p>
+     * Like {@link #put(PushCertificate, PersonIdent)}, except a value is only
+     * stored for a push certificate if there is a corresponding command in the
+     * list that exactly matches the old/new values mentioned in the push
+     * certificate.
+     * <p>
+     * Pending certificates added to this method are not returned by
+     * {@link #get(String)} and {@link #getAll(String)} until after calling
+     * {@link #save()}.
+     *
+     * @param cert     certificate to store.
+     * @param ident    identity for the commit that stores this certificate. Pending
+     *                 certificates are sorted by identity timestamp during
+     *                 {@link #save()}.
+     * @param matching only store certs for the refs listed in this list whose values
+     *                 match the commands in the cert.
+     */
+    public void put(PushCertificate cert, PersonIdent ident,
+                    Collection<ReceiveCommand> matching) {
+        pending.add(new PendingCert(cert, ident, matching));
+    }
 
-	/**
-	 * Save pending certificates to the store in an existing batch ref update.
-	 * <p>
-	 * One commit is created per certificate added with
-	 * {@link #put(PushCertificate, PersonIdent)}, in order of identity
-	 * timestamps, all commits are flushed, and a single command is added to the
-	 * batch.
-	 * <p>
-	 * The cached ref value and pending list are <em>not</em> cleared. If the
-	 * ref update succeeds, the caller is responsible for calling
-	 * {@link #close()} and/or {@link #clear()}.
-	 *
-	 * @param batch
-	 *            update to save to.
-	 * @return whether a command was added to the batch.
-	 * @throws IOException
-	 *             if there was an error reading from or writing to the
-	 *             repository.
-	 */
-	public boolean save(BatchRefUpdate batch) throws IOException {
-		ObjectId newId = write();
-		if (newId == null || newId.equals(commit)) {
-			return false;
-		}
-		batch.addCommand(new ReceiveCommand(
-				commit != null ? commit : ObjectId.zeroId(), newId, REF_NAME));
-		return true;
-	}
+    /**
+     * Save pending certificates to the store.
+     * <p>
+     * One commit is created per certificate added with
+     * {@link #put(PushCertificate, PersonIdent)}, in order of identity
+     * timestamps, and a single ref update is performed.
+     * <p>
+     * The pending list is cleared if and only the ref update fails, which
+     * allows for easy retries in case of lock failure.
+     *
+     * @return the result of attempting to update the ref.
+     * @throws IOException if there was an error reading from or writing to the
+     *                     repository.
+     */
+    public RefUpdate.Result save() throws IOException {
+        ObjectId newId = write();
+        if (newId == null) {
+            return RefUpdate.Result.NO_CHANGE;
+        }
+        try (ObjectInserter inserter = db.newObjectInserter()) {
+            RefUpdate.Result result = updateRef(newId);
+            switch (result) {
+                case FAST_FORWARD:
+                case NEW:
+                case NO_CHANGE:
+                    pending.clear();
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        } finally {
+            close();
+        }
+    }
 
-	/**
-	 * Clear pending certificates added with {@link #put(PushCertificate,
-	 * PersonIdent)}.
-	 */
-	public void clear() {
-		pending.clear();
-	}
+    /**
+     * Save pending certificates to the store in an existing batch ref update.
+     * <p>
+     * One commit is created per certificate added with
+     * {@link #put(PushCertificate, PersonIdent)}, in order of identity
+     * timestamps, all commits are flushed, and a single command is added to the
+     * batch.
+     * <p>
+     * The cached ref value and pending list are <em>not</em> cleared. If the
+     * ref update succeeds, the caller is responsible for calling
+     * {@link #close()} and/or {@link #clear()}.
+     *
+     * @param batch update to save to.
+     * @return whether a command was added to the batch.
+     * @throws IOException if there was an error reading from or writing to the
+     *                     repository.
+     */
+    public boolean save(BatchRefUpdate batch) throws IOException {
+        ObjectId newId = write();
+        if (newId == null || newId.equals(commit)) {
+            return false;
+        }
+        batch.addCommand(new ReceiveCommand(
+                commit != null ? commit : ObjectId.zeroId(), newId, REF_NAME));
+        return true;
+    }
 
-	private ObjectId write() throws IOException {
-		if (pending.isEmpty()) {
-			return null;
-		}
-		if (reader == null) {
-			load();
-		}
-		sortPending(pending);
+    /**
+     * Clear pending certificates added with {@link #put(PushCertificate,
+     * PersonIdent)}.
+     */
+    public void clear() {
+        pending.clear();
+    }
 
-		ObjectId curr = commit;
-		DirCache dc = newDirCache();
-		try (ObjectInserter inserter = db.newObjectInserter()) {
-			for (PendingCert pc : pending) {
-				curr = saveCert(inserter, dc, pc, curr);
-			}
-			inserter.flush();
-			return curr;
-		}
-	}
+    private ObjectId write() throws IOException {
+        if (pending.isEmpty()) {
+            return null;
+        }
+        if (reader == null) {
+            load();
+        }
+        sortPending(pending);
 
-	private static void sortPending(List<PendingCert> pending) {
-		Collections.sort(pending, (PendingCert a, PendingCert b) -> Long.signum(
-				a.ident.getWhen().getTime() - b.ident.getWhen().getTime()));
-	}
+        ObjectId curr = commit;
+        DirCache dc = newDirCache();
+        try (ObjectInserter inserter = db.newObjectInserter()) {
+            for (PendingCert pc : pending) {
+                curr = saveCert(inserter, dc, pc, curr);
+            }
+            inserter.flush();
+            return curr;
+        }
+    }
 
-	private DirCache newDirCache() throws IOException {
-		if (commit != null) {
-			return DirCache.read(reader, commit.getTree());
-		}
-		return DirCache.newInCore();
-	}
+    private static void sortPending(List<PendingCert> pending) {
+        Collections.sort(pending, (PendingCert a, PendingCert b) -> Long.signum(
+                a.ident.getWhen().getTime() - b.ident.getWhen().getTime()));
+    }
 
-	private ObjectId saveCert(ObjectInserter inserter, DirCache dc,
-			PendingCert pc, ObjectId curr) throws IOException {
-		Map<String, ReceiveCommand> byRef;
-		if (pc.matching != null) {
-			byRef = new HashMap<>();
-			for (ReceiveCommand cmd : pc.matching) {
-				if (byRef.put(cmd.getRefName(), cmd) != null) {
-					throw new IllegalStateException();
-				}
-			}
-		} else {
-			byRef = null;
-		}
+    private DirCache newDirCache() throws IOException {
+        if (commit != null) {
+            return DirCache.read(reader, commit.getTree());
+        }
+        return DirCache.newInCore();
+    }
 
-		DirCacheEditor editor = dc.editor();
-		String certText = pc.cert.toText() + pc.cert.getSignature();
-		final ObjectId certId = inserter.insert(OBJ_BLOB, certText.getBytes(UTF_8));
-		boolean any = false;
-		for (ReceiveCommand cmd : pc.cert.getCommands()) {
-			if (byRef != null && !commandsEqual(cmd, byRef.get(cmd.getRefName()))) {
-				continue;
-			}
-			any = true;
-			editor.add(new PathEdit(pathName(cmd.getRefName())) {
-				@Override
-				public void apply(DirCacheEntry ent) {
-					ent.setFileMode(FileMode.REGULAR_FILE);
-					ent.setObjectId(certId);
-				}
-			});
-		}
-		if (!any) {
-			return curr;
-		}
-		editor.finish();
-		CommitBuilder cb = new CommitBuilder();
-		cb.setAuthor(pc.ident);
-		cb.setCommitter(pc.ident);
-		cb.setTreeId(dc.writeTree(inserter));
-		if (curr != null) {
-			cb.setParentId(curr);
-		} else {
-			cb.setParentIds(Collections.<ObjectId> emptyList());
-		}
-		cb.setMessage(buildMessage(pc.cert));
-		return inserter.insert(OBJ_COMMIT, cb.build());
-	}
+    private ObjectId saveCert(ObjectInserter inserter, DirCache dc,
+                              PendingCert pc, ObjectId curr) throws IOException {
+        Map<String, ReceiveCommand> byRef;
+        if (pc.matching != null) {
+            byRef = new HashMap<>();
+            for (ReceiveCommand cmd : pc.matching) {
+                if (byRef.put(cmd.getRefName(), cmd) != null) {
+                    throw new IllegalStateException();
+                }
+            }
+        } else {
+            byRef = null;
+        }
 
-	private static boolean commandsEqual(ReceiveCommand c1, ReceiveCommand c2) {
-		if (c1 == null || c2 == null) {
-			return c1 == c2;
-		}
-		return c1.getRefName().equals(c2.getRefName())
-				&& c1.getOldId().equals(c2.getOldId())
-				&& c1.getNewId().equals(c2.getNewId());
-	}
+        DirCacheEditor editor = dc.editor();
+        String certText = pc.cert.toText() + pc.cert.getSignature();
+        final ObjectId certId = inserter.insert(OBJ_BLOB, certText.getBytes(UTF_8));
+        boolean any = false;
+        for (ReceiveCommand cmd : pc.cert.getCommands()) {
+            if (byRef != null && !commandsEqual(cmd, byRef.get(cmd.getRefName()))) {
+                continue;
+            }
+            any = true;
+            editor.add(new PathEdit(pathName(cmd.getRefName())) {
+                @Override
+                public void apply(DirCacheEntry ent) {
+                    ent.setFileMode(FileMode.REGULAR_FILE);
+                    ent.setObjectId(certId);
+                }
+            });
+        }
+        if (!any) {
+            return curr;
+        }
+        editor.finish();
+        CommitBuilder cb = new CommitBuilder();
+        cb.setAuthor(pc.ident);
+        cb.setCommitter(pc.ident);
+        cb.setTreeId(dc.writeTree(inserter));
+        if (curr != null) {
+            cb.setParentId(curr);
+        } else {
+            cb.setParentIds(Collections.<ObjectId>emptyList());
+        }
+        cb.setMessage(buildMessage(pc.cert));
+        return inserter.insert(OBJ_COMMIT, cb.build());
+    }
 
-	private RefUpdate.Result updateRef(ObjectId newId) throws IOException {
-		RefUpdate ru = db.updateRef(REF_NAME);
-		ru.setExpectedOldObjectId(commit != null ? commit : ObjectId.zeroId());
-		ru.setNewObjectId(newId);
-		ru.setRefLogIdent(pending.get(pending.size() - 1).ident);
-		ru.setRefLogMessage(JGitText.get().storePushCertReflog, false);
-		try (RevWalk rw = new RevWalk(reader)) {
-			return ru.update(rw);
-		}
-	}
+    private static boolean commandsEqual(ReceiveCommand c1, ReceiveCommand c2) {
+        if (c1 == null || c2 == null) {
+            return c1 == c2;
+        }
+        return c1.getRefName().equals(c2.getRefName())
+                && c1.getOldId().equals(c2.getOldId())
+                && c1.getNewId().equals(c2.getNewId());
+    }
 
-	private TreeWalk newTreeWalk(String refName) throws IOException {
-		if (commit == null) {
-			return null;
-		}
-		return TreeWalk.forPath(reader, pathName(refName), commit.getTree());
-	}
+    private RefUpdate.Result updateRef(ObjectId newId) throws IOException {
+        RefUpdate ru = db.updateRef(REF_NAME);
+        ru.setExpectedOldObjectId(commit != null ? commit : ObjectId.zeroId());
+        ru.setNewObjectId(newId);
+        ru.setRefLogIdent(pending.get(pending.size() - 1).ident);
+        ru.setRefLogMessage(JGitText.get().storePushCertReflog, false);
+        try (RevWalk rw = new RevWalk(reader)) {
+            return ru.update(rw);
+        }
+    }
 
-	static String pathName(String refName) {
-		return refName + "@{cert}"; //$NON-NLS-1$
-	}
+    private TreeWalk newTreeWalk(String refName) throws IOException {
+        if (commit == null) {
+            return null;
+        }
+        return TreeWalk.forPath(reader, pathName(refName), commit.getTree());
+    }
 
-	private static String buildMessage(PushCertificate cert) {
-		StringBuilder sb = new StringBuilder();
-		if (cert.getCommands().size() == 1) {
-			sb.append(MessageFormat.format(
-					JGitText.get().storePushCertOneRef,
-					cert.getCommands().get(0).getRefName()));
-		} else {
-			sb.append(MessageFormat.format(
-					JGitText.get().storePushCertMultipleRefs,
-					Integer.valueOf(cert.getCommands().size())));
-		}
-		return sb.append('\n').toString();
-	}
+    static String pathName(String refName) {
+        return refName + "@{cert}"; //$NON-NLS-1$
+    }
+
+    private static String buildMessage(PushCertificate cert) {
+        StringBuilder sb = new StringBuilder();
+        if (cert.getCommands().size() == 1) {
+            sb.append(MessageFormat.format(
+                    JGitText.get().storePushCertOneRef,
+                    cert.getCommands().get(0).getRefName()));
+        } else {
+            sb.append(MessageFormat.format(
+                    JGitText.get().storePushCertMultipleRefs,
+                    Integer.valueOf(cert.getCommands().size())));
+        }
+        return sb.append('\n').toString();
+    }
 }

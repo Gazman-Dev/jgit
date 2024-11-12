@@ -27,94 +27,80 @@ import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
  * </p>
  */
 abstract class ByteWindow {
-	protected final Pack pack;
+    protected final Pack pack;
 
-	protected final long start;
+    protected final long start;
 
-	protected final long end;
+    protected final long end;
 
-	/**
-	 * Constructor for ByteWindow.
-	 *
-	 * @param p
-	 *            a {@link Pack}.
-	 * @param s
-	 *            where the byte window starts in the pack file
-	 * @param n
-	 *            size of the byte window
-	 */
-	protected ByteWindow(Pack p, long s, int n) {
-		pack = p;
-		start = s;
-		end = start + n;
-	}
+    /**
+     * Constructor for ByteWindow.
+     *
+     * @param p a {@link Pack}.
+     * @param s where the byte window starts in the pack file
+     * @param n size of the byte window
+     */
+    protected ByteWindow(Pack p, long s, int n) {
+        pack = p;
+        start = s;
+        end = start + n;
+    }
 
-	final int size() {
-		return (int) (end - start);
-	}
+    final int size() {
+        return (int) (end - start);
+    }
 
-	final boolean contains(Pack neededPack, long neededPos) {
-		return pack == neededPack && start <= neededPos && neededPos < end;
-	}
+    final boolean contains(Pack neededPack, long neededPos) {
+        return pack == neededPack && start <= neededPos && neededPos < end;
+    }
 
-	/**
-	 * Copy bytes from the window to a caller supplied buffer.
-	 *
-	 * @param pos
-	 *            offset within the file to start copying from.
-	 * @param dstbuf
-	 *            destination buffer to copy into.
-	 * @param dstoff
-	 *            offset within <code>dstbuf</code> to start copying into.
-	 * @param cnt
-	 *            number of bytes to copy. This value may exceed the number of
-	 *            bytes remaining in the window starting at offset
-	 *            <code>pos</code>.
-	 * @return number of bytes actually copied; this may be less than
-	 *         <code>cnt</code> if <code>cnt</code> exceeded the number of
-	 *         bytes available.
-	 */
-	final int copy(long pos, byte[] dstbuf, int dstoff, int cnt) {
-		return copy((int) (pos - start), dstbuf, dstoff, cnt);
-	}
+    /**
+     * Copy bytes from the window to a caller supplied buffer.
+     *
+     * @param pos    offset within the file to start copying from.
+     * @param dstbuf destination buffer to copy into.
+     * @param dstoff offset within <code>dstbuf</code> to start copying into.
+     * @param cnt    number of bytes to copy. This value may exceed the number of
+     *               bytes remaining in the window starting at offset
+     *               <code>pos</code>.
+     * @return number of bytes actually copied; this may be less than
+     * <code>cnt</code> if <code>cnt</code> exceeded the number of
+     * bytes available.
+     */
+    final int copy(long pos, byte[] dstbuf, int dstoff, int cnt) {
+        return copy((int) (pos - start), dstbuf, dstoff, cnt);
+    }
 
-	/**
-	 * Copy bytes from the window to a caller supplied buffer.
-	 *
-	 * @param pos
-	 *            offset within the window to start copying from.
-	 * @param dstbuf
-	 *            destination buffer to copy into.
-	 * @param dstoff
-	 *            offset within <code>dstbuf</code> to start copying into.
-	 * @param cnt
-	 *            number of bytes to copy. This value may exceed the number of
-	 *            bytes remaining in the window starting at offset
-	 *            <code>pos</code>.
-	 * @return number of bytes actually copied; this may be less than
-	 *         <code>cnt</code> if <code>cnt</code> exceeded the number of
-	 *         bytes available.
-	 */
-	protected abstract int copy(int pos, byte[] dstbuf, int dstoff, int cnt);
+    /**
+     * Copy bytes from the window to a caller supplied buffer.
+     *
+     * @param pos    offset within the window to start copying from.
+     * @param dstbuf destination buffer to copy into.
+     * @param dstoff offset within <code>dstbuf</code> to start copying into.
+     * @param cnt    number of bytes to copy. This value may exceed the number of
+     *               bytes remaining in the window starting at offset
+     *               <code>pos</code>.
+     * @return number of bytes actually copied; this may be less than
+     * <code>cnt</code> if <code>cnt</code> exceeded the number of
+     * bytes available.
+     */
+    protected abstract int copy(int pos, byte[] dstbuf, int dstoff, int cnt);
 
-	abstract void write(PackOutputStream out, long pos, int cnt)
-			throws IOException;
+    abstract void write(PackOutputStream out, long pos, int cnt)
+            throws IOException;
 
-	final int setInput(long pos, Inflater inf) throws DataFormatException {
-		return setInput((int) (pos - start), inf);
-	}
+    final int setInput(long pos, Inflater inf) throws DataFormatException {
+        return setInput((int) (pos - start), inf);
+    }
 
-	/**
-	 * Set the input
-	 *
-	 * @param pos
-	 *            position
-	 * @param inf
-	 *            an {@link Inflater} object.
-	 * @return size of the byte window
-	 * @throws DataFormatException
-	 *             if any.
-	 */
-	protected abstract int setInput(int pos, Inflater inf)
-			throws DataFormatException;
+    /**
+     * Set the input
+     *
+     * @param pos position
+     * @param inf an {@link Inflater} object.
+     * @return size of the byte window
+     * @throws DataFormatException if any.
+     */
+    protected abstract int setInput(int pos, Inflater inf)
+            throws DataFormatException;
 }

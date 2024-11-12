@@ -29,177 +29,177 @@ import com.googlecode.javaewah.IntIterator;
  * be used with a PackBitmapIndexBuilder, which is also not thread safe.
  */
 public class PackBitmapIndexRemapper extends PackBitmapIndex
-		implements Iterable<PackBitmapIndexRemapper.Entry> {
+        implements Iterable<PackBitmapIndexRemapper.Entry> {
 
-	private final BasePackBitmapIndex oldPackIndex;
-	final PackBitmapIndex newPackIndex;
-	private final BitSet inflated;
-	private final int[] prevToNewMapping;
+    private final BasePackBitmapIndex oldPackIndex;
+    final PackBitmapIndex newPackIndex;
+    private final BitSet inflated;
+    private final int[] prevToNewMapping;
 
-	/**
-	 * A PackBitmapIndex that maps the positions in the prevBitmapIndex to the
-	 * ones in the newIndex.
-	 *
-	 * @param prevBitmapIndex
-	 *            the bitmap index with the old mapping.
-	 * @param newIndex
-	 *            the bitmap index with the new mapping.
-	 * @return a bitmap index that attempts to do the mapping between the two.
-	 */
-	public static PackBitmapIndexRemapper newPackBitmapIndex(
-			BitmapIndex prevBitmapIndex, PackBitmapIndex newIndex) {
-		if (!(prevBitmapIndex instanceof BitmapIndexImpl))
-			return new PackBitmapIndexRemapper(newIndex);
+    /**
+     * A PackBitmapIndex that maps the positions in the prevBitmapIndex to the
+     * ones in the newIndex.
+     *
+     * @param prevBitmapIndex the bitmap index with the old mapping.
+     * @param newIndex        the bitmap index with the new mapping.
+     * @return a bitmap index that attempts to do the mapping between the two.
+     */
+    public static PackBitmapIndexRemapper newPackBitmapIndex(
+            BitmapIndex prevBitmapIndex, PackBitmapIndex newIndex) {
+        if (!(prevBitmapIndex instanceof BitmapIndexImpl))
+            return new PackBitmapIndexRemapper(newIndex);
 
-		PackBitmapIndex prevIndex = ((BitmapIndexImpl) prevBitmapIndex)
-				.getPackBitmapIndex();
-		if (!(prevIndex instanceof BasePackBitmapIndex))
-			return new PackBitmapIndexRemapper(newIndex);
+        PackBitmapIndex prevIndex = ((BitmapIndexImpl) prevBitmapIndex)
+                .getPackBitmapIndex();
+        if (!(prevIndex instanceof BasePackBitmapIndex))
+            return new PackBitmapIndexRemapper(newIndex);
 
-		return new PackBitmapIndexRemapper(
-				(BasePackBitmapIndex) prevIndex, newIndex);
-	}
+        return new PackBitmapIndexRemapper(
+                (BasePackBitmapIndex) prevIndex, newIndex);
+    }
 
-	private PackBitmapIndexRemapper(PackBitmapIndex newPackIndex) {
-		this.oldPackIndex = null;
-		this.newPackIndex = newPackIndex;
-		this.inflated = null;
-		this.prevToNewMapping = null;
-	}
+    private PackBitmapIndexRemapper(PackBitmapIndex newPackIndex) {
+        this.oldPackIndex = null;
+        this.newPackIndex = newPackIndex;
+        this.inflated = null;
+        this.prevToNewMapping = null;
+    }
 
-	private PackBitmapIndexRemapper(
-			BasePackBitmapIndex oldPackIndex, PackBitmapIndex newPackIndex) {
-		this.oldPackIndex = oldPackIndex;
-		this.newPackIndex = newPackIndex;
-		inflated = new BitSet(newPackIndex.getObjectCount());
+    private PackBitmapIndexRemapper(
+            BasePackBitmapIndex oldPackIndex, PackBitmapIndex newPackIndex) {
+        this.oldPackIndex = oldPackIndex;
+        this.newPackIndex = newPackIndex;
+        inflated = new BitSet(newPackIndex.getObjectCount());
 
-		prevToNewMapping = new int[oldPackIndex.getObjectCount()];
-		for (int pos = 0; pos < prevToNewMapping.length; pos++)
-			prevToNewMapping[pos] = newPackIndex.findPosition(
-					oldPackIndex.getObject(pos));
-	}
+        prevToNewMapping = new int[oldPackIndex.getObjectCount()];
+        for (int pos = 0; pos < prevToNewMapping.length; pos++)
+            prevToNewMapping[pos] = newPackIndex.findPosition(
+                    oldPackIndex.getObject(pos));
+    }
 
-	@Override
-	public int findPosition(AnyObjectId objectId) {
-		return newPackIndex.findPosition(objectId);
-	}
+    @Override
+    public int findPosition(AnyObjectId objectId) {
+        return newPackIndex.findPosition(objectId);
+    }
 
-	@Override
-	public ObjectId getObject(int position) throws IllegalArgumentException {
-		return newPackIndex.getObject(position);
-	}
+    @Override
+    public ObjectId getObject(int position) throws IllegalArgumentException {
+        return newPackIndex.getObject(position);
+    }
 
-	@Override
-	public int getObjectCount() {
-		return newPackIndex.getObjectCount();
-	}
+    @Override
+    public int getObjectCount() {
+        return newPackIndex.getObjectCount();
+    }
 
-	@Override
-	public int getBaseBitmapCount() {
-		return newPackIndex.getBaseBitmapCount();
-	}
+    @Override
+    public int getBaseBitmapCount() {
+        return newPackIndex.getBaseBitmapCount();
+    }
 
-	@Override
-	public long getBaseBitmapSizeInBytes() {
-		return newPackIndex.getBaseBitmapSizeInBytes();
-	}
+    @Override
+    public long getBaseBitmapSizeInBytes() {
+        return newPackIndex.getBaseBitmapSizeInBytes();
+    }
 
-	@Override
-	public int getXorBitmapCount() {
-		return newPackIndex.getXorBitmapCount();
-	}
+    @Override
+    public int getXorBitmapCount() {
+        return newPackIndex.getXorBitmapCount();
+    }
 
-	@Override
-	public long getXorBitmapSizeInBytes() {
-		return newPackIndex.getXorBitmapSizeInBytes();
-	}
+    @Override
+    public long getXorBitmapSizeInBytes() {
+        return newPackIndex.getXorBitmapSizeInBytes();
+    }
 
-	@Override
-	public EWAHCompressedBitmap ofObjectType(
-			EWAHCompressedBitmap bitmap, int type) {
-		return newPackIndex.ofObjectType(bitmap, type);
-	}
+    @Override
+    public EWAHCompressedBitmap ofObjectType(
+            EWAHCompressedBitmap bitmap, int type) {
+        return newPackIndex.ofObjectType(bitmap, type);
+    }
 
-	@Override
-	public Iterator<Entry> iterator() {
-		if (oldPackIndex == null)
-			return Collections.<Entry> emptyList().iterator();
+    @Override
+    public Iterator<Entry> iterator() {
+        if (oldPackIndex == null)
+            return Collections.<Entry>emptyList().iterator();
 
-		final Iterator<StoredBitmap> it = oldPackIndex.getBitmaps().iterator();
-		return new Iterator<>() {
-			private Entry entry;
+        final Iterator<StoredBitmap> it = oldPackIndex.getBitmaps().iterator();
+        return new Iterator<>() {
+            private Entry entry;
 
-			@Override
-			public boolean hasNext() {
-				while (entry == null && it.hasNext()) {
-					StoredBitmap sb = it.next();
-					if (newPackIndex.findPosition(sb) != -1)
-						entry = new Entry(sb, sb.getFlags());
-				}
-				return entry != null;
-			}
+            @Override
+            public boolean hasNext() {
+                while (entry == null && it.hasNext()) {
+                    StoredBitmap sb = it.next();
+                    if (newPackIndex.findPosition(sb) != -1)
+                        entry = new Entry(sb, sb.getFlags());
+                }
+                return entry != null;
+            }
 
-			@Override
-			public Entry next() {
-				if (!hasNext())
-					throw new NoSuchElementException();
+            @Override
+            public Entry next() {
+                if (!hasNext())
+                    throw new NoSuchElementException();
 
-				Entry res = entry;
-				entry = null;
-				return res;
-			}
+                Entry res = entry;
+                entry = null;
+                return res;
+            }
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
 
-	@Override
-	public EWAHCompressedBitmap getBitmap(AnyObjectId objectId) {
-		EWAHCompressedBitmap bitmap = newPackIndex.getBitmap(objectId);
-		if (bitmap != null || oldPackIndex == null)
-			return bitmap;
+    @Override
+    public EWAHCompressedBitmap getBitmap(AnyObjectId objectId) {
+        EWAHCompressedBitmap bitmap = newPackIndex.getBitmap(objectId);
+        if (bitmap != null || oldPackIndex == null)
+            return bitmap;
 
-		StoredBitmap oldBitmap = oldPackIndex.getBitmaps().get(objectId);
-		if (oldBitmap == null)
-			return null;
+        StoredBitmap oldBitmap = oldPackIndex.getBitmaps().get(objectId);
+        if (oldBitmap == null)
+            return null;
 
-		if (newPackIndex.findPosition(objectId) == -1)
-			return null;
+        if (newPackIndex.findPosition(objectId) == -1)
+            return null;
 
-		inflated.clear();
-		for (IntIterator i = oldBitmap.getBitmapWithoutCaching()
-				.intIterator(); i.hasNext();)
-			inflated.set(prevToNewMapping[i.next()]);
-		bitmap = inflated.toEWAHCompressedBitmap();
-		bitmap.trim();
-		return bitmap;
-	}
+        inflated.clear();
+        for (IntIterator i = oldBitmap.getBitmapWithoutCaching()
+                .intIterator(); i.hasNext(); )
+            inflated.set(prevToNewMapping[i.next()]);
+        bitmap = inflated.toEWAHCompressedBitmap();
+        bitmap.trim();
+        return bitmap;
+    }
 
-	/** An entry in the old PackBitmapIndex. */
-	public static final class Entry extends ObjectId {
-		private final int flags;
+    /**
+     * An entry in the old PackBitmapIndex.
+     */
+    public static final class Entry extends ObjectId {
+        private final int flags;
 
-		Entry(AnyObjectId src, int flags) {
-			super(src);
-			this.flags = flags;
-		}
+        Entry(AnyObjectId src, int flags) {
+            super(src);
+            this.flags = flags;
+        }
 
-		/**
-		 * Get flags
-		 *
-		 * @return the flags associated with the bitmap.
-		 */
-		public int getFlags() {
-			return flags;
-		}
-	}
+        /**
+         * Get flags
+         *
+         * @return the flags associated with the bitmap.
+         */
+        public int getFlags() {
+            return flags;
+        }
+    }
 
-	@Override
-	public int getBitmapCount() {
-		// The count is only useful for the end index, not the remapper.
-		return 0;
-	}
+    @Override
+    public int getBitmapCount() {
+        // The count is only useful for the end index, not the remapper.
+        return 0;
+    }
 }

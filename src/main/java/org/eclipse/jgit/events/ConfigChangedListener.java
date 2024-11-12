@@ -14,11 +14,10 @@ package org.eclipse.jgit.events;
  * Receives {@link ConfigChangedEvent}s.
  */
 public interface ConfigChangedListener extends RepositoryListener {
-	/**
-	 * Invoked when any change is made to the configuration.
-	 *
-	 * @param event
-	 *            information about the changes.
-	 */
-	void onConfigChanged(ConfigChangedEvent event);
+    /**
+     * Invoked when any change is made to the configuration.
+     *
+     * @param event information about the changes.
+     */
+    void onConfigChanged(ConfigChangedEvent event);
 }

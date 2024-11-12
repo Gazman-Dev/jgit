@@ -18,30 +18,32 @@ package org.eclipse.jgit.transport;
  * @since 5.1
  */
 public final class CapabilitiesV2Request {
-	private CapabilitiesV2Request() {
-	}
+    private CapabilitiesV2Request() {
+    }
 
-	/**
-	 * Create builder
-	 *
-	 * @return A builder of {@link CapabilitiesV2Request}.
-	 */
-	public static Builder builder() {
-		return new Builder();
-	}
+    /**
+     * Create builder
+     *
+     * @return A builder of {@link CapabilitiesV2Request}.
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
-	/** A builder for {@link CapabilitiesV2Request}. */
-	public static final class Builder {
-		private Builder() {
-		}
+    /**
+     * A builder for {@link CapabilitiesV2Request}.
+     */
+    public static final class Builder {
+        private Builder() {
+        }
 
-		/**
-		 * Build the request
-		 *
-		 * @return CapabilitiesV2Request
-		 */
-		public CapabilitiesV2Request build() {
-			return new CapabilitiesV2Request();
-		}
-	}
+        /**
+         * Build the request
+         *
+         * @return CapabilitiesV2Request
+         */
+        public CapabilitiesV2Request build() {
+            return new CapabilitiesV2Request();
+        }
+    }
 }

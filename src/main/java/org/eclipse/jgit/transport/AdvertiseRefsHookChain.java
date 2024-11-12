@@ -24,48 +24,47 @@ import java.util.List;
  * {@link ReceivePack#getAdvertisedObjects()}.
  */
 public class AdvertiseRefsHookChain implements AdvertiseRefsHook {
-	private final AdvertiseRefsHook[] hooks;
-	private final int count;
+    private final AdvertiseRefsHook[] hooks;
+    private final int count;
 
-	/**
-	 * Create a new hook chaining the given hooks together.
-	 *
-	 * @param hooks
-	 *            hooks to execute, in order.
-	 * @return a new hook chain of the given hooks.
-	 */
-	public static AdvertiseRefsHook newChain(List<? extends AdvertiseRefsHook> hooks) {
-		AdvertiseRefsHook[] newHooks = new AdvertiseRefsHook[hooks.size()];
-		int i = 0;
-		for (AdvertiseRefsHook hook : hooks)
-			if (hook != AdvertiseRefsHook.DEFAULT)
-				newHooks[i++] = hook;
-		switch (i) {
-		case 0:
-			return AdvertiseRefsHook.DEFAULT;
-		case 1:
-			return newHooks[0];
-		default:
-			return new AdvertiseRefsHookChain(newHooks, i);
-		}
-	}
+    /**
+     * Create a new hook chaining the given hooks together.
+     *
+     * @param hooks hooks to execute, in order.
+     * @return a new hook chain of the given hooks.
+     */
+    public static AdvertiseRefsHook newChain(List<? extends AdvertiseRefsHook> hooks) {
+        AdvertiseRefsHook[] newHooks = new AdvertiseRefsHook[hooks.size()];
+        int i = 0;
+        for (AdvertiseRefsHook hook : hooks)
+            if (hook != AdvertiseRefsHook.DEFAULT)
+                newHooks[i++] = hook;
+        switch (i) {
+            case 0:
+                return AdvertiseRefsHook.DEFAULT;
+            case 1:
+                return newHooks[0];
+            default:
+                return new AdvertiseRefsHookChain(newHooks, i);
+        }
+    }
 
-	@Override
-	public void advertiseRefs(ReceivePack rp)
-			throws IOException {
-		for (int i = 0; i < count; i++)
-			hooks[i].advertiseRefs(rp);
-	}
+    @Override
+    public void advertiseRefs(ReceivePack rp)
+            throws IOException {
+        for (int i = 0; i < count; i++)
+            hooks[i].advertiseRefs(rp);
+    }
 
-	@Override
-	public void advertiseRefs(UploadPack rp)
-			throws ServiceMayNotContinueException {
-		for (int i = 0; i < count; i++)
-			hooks[i].advertiseRefs(rp);
-	}
+    @Override
+    public void advertiseRefs(UploadPack rp)
+            throws ServiceMayNotContinueException {
+        for (int i = 0; i < count; i++)
+            hooks[i].advertiseRefs(rp);
+    }
 
-	private AdvertiseRefsHookChain(AdvertiseRefsHook[] hooks, int count) {
-		this.hooks = hooks;
-		this.count = count;
-	}
+    private AdvertiseRefsHookChain(AdvertiseRefsHook[] hooks, int count) {
+        this.hooks = hooks;
+        this.count = count;
+    }
 }

@@ -18,25 +18,25 @@ import java.io.IOException;
  * error that users need to be made aware of.
  */
 public class ObjectWritingException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructs an ObjectWritingException with the specified detail message.
-	 *
-	 * @param s message
-	 */
-	public ObjectWritingException(String s) {
-		super(s);
-	}
+    /**
+     * Constructs an ObjectWritingException with the specified detail message.
+     *
+     * @param s message
+     */
+    public ObjectWritingException(String s) {
+        super(s);
+    }
 
-	/**
-	 * Constructs an ObjectWritingException with the specified detail message.
-	 *
-	 * @param s message
-	 * @param cause root cause exception
-	 */
-	public ObjectWritingException(String s, Throwable cause) {
-		super(s);
-		initCause(cause);
-	}
+    /**
+     * Constructs an ObjectWritingException with the specified detail message.
+     *
+     * @param s     message
+     * @param cause root cause exception
+     */
+    public ObjectWritingException(String s, Throwable cause) {
+        super(s);
+        initCause(cause);
+    }
 }

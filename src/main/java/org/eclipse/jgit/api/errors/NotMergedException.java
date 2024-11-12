@@ -43,12 +43,12 @@ import org.eclipse.jgit.internal.JGitText;
  * Thrown when branch deletion fails due to unmerged data
  */
 public class NotMergedException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * The default constructor with a default message
-	 */
-	public NotMergedException() {
-		super(JGitText.get().notMergedExceptionMessage);
-	}
+    /**
+     * The default constructor with a default message
+     */
+    public NotMergedException() {
+        super(JGitText.get().notMergedExceptionMessage);
+    }
 }

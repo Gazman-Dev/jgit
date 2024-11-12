@@ -13,27 +13,24 @@ package org.eclipse.jgit.api.errors;
  * The commit to be cherry-pick'ed did not have exactly one parent
  */
 public class MultipleParentsNotAllowedException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for MultipleParentsNotAllowedException.
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public MultipleParentsNotAllowedException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for MultipleParentsNotAllowedException.
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     */
+    public MultipleParentsNotAllowedException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for MultipleParentsNotAllowedException.
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public MultipleParentsNotAllowedException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for MultipleParentsNotAllowedException.
+     *
+     * @param message error message
+     */
+    public MultipleParentsNotAllowedException(String message) {
+        super(message);
+    }
 }

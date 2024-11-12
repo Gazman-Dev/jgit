@@ -25,97 +25,92 @@ import org.eclipse.jgit.util.FS;
  */
 public abstract class SshTransport extends TcpTransport {
 
-	private SshSessionFactory sch;
+    private SshSessionFactory sch;
 
-	/**
-	 * The open SSH session
-	 */
-	private RemoteSession sock;
+    /**
+     * The open SSH session
+     */
+    private RemoteSession sock;
 
-	/**
-	 * Create a new transport instance.
-	 *
-	 * @param local
-	 *            the repository this instance will fetch into, or push out of.
-	 *            This must be the repository passed to
-	 *            {@link #open(Repository, URIish)}.
-	 * @param uri
-	 *            the URI used to access the remote repository. This must be the
-	 *            URI passed to {@link #open(Repository, URIish)}.
-	 */
-	protected SshTransport(Repository local, URIish uri) {
-		super(local, uri);
-		sch = SshSessionFactory.getInstance();
-	}
+    /**
+     * Create a new transport instance.
+     *
+     * @param local the repository this instance will fetch into, or push out of.
+     *              This must be the repository passed to
+     *              {@link #open(Repository, URIish)}.
+     * @param uri   the URI used to access the remote repository. This must be the
+     *              URI passed to {@link #open(Repository, URIish)}.
+     */
+    protected SshTransport(Repository local, URIish uri) {
+        super(local, uri);
+        sch = SshSessionFactory.getInstance();
+    }
 
-	/**
-	 * Create a new transport instance without a local repository.
-	 *
-	 * @param uri the URI used to access the remote repository. This must be the
-	 *            URI passed to {@link #open(URIish)}.
-	 * @since 3.5
-	 */
-	protected SshTransport(URIish uri) {
-		super(uri);
-		sch = SshSessionFactory.getInstance();
-	}
+    /**
+     * Create a new transport instance without a local repository.
+     *
+     * @param uri the URI used to access the remote repository. This must be the
+     *            URI passed to {@link #open(URIish)}.
+     * @since 3.5
+     */
+    protected SshTransport(URIish uri) {
+        super(uri);
+        sch = SshSessionFactory.getInstance();
+    }
 
-	/**
-	 * Set SSH session factory instead of the default one for this instance of
-	 * the transport.
-	 *
-	 * @param factory
-	 *            a factory to set, must not be null
-	 * @throws IllegalStateException
-	 *             if session has been already created.
-	 */
-	public void setSshSessionFactory(SshSessionFactory factory) {
-		if (factory == null)
-			throw new NullPointerException(JGitText.get().theFactoryMustNotBeNull);
-		if (sock != null)
-			throw new IllegalStateException(
-					JGitText.get().anSSHSessionHasBeenAlreadyCreated);
-		sch = factory;
-	}
+    /**
+     * Set SSH session factory instead of the default one for this instance of
+     * the transport.
+     *
+     * @param factory a factory to set, must not be null
+     * @throws IllegalStateException if session has been already created.
+     */
+    public void setSshSessionFactory(SshSessionFactory factory) {
+        if (factory == null)
+            throw new NullPointerException(JGitText.get().theFactoryMustNotBeNull);
+        if (sock != null)
+            throw new IllegalStateException(
+                    JGitText.get().anSSHSessionHasBeenAlreadyCreated);
+        sch = factory;
+    }
 
-	/**
-	 * Get the SSH session factory
-	 *
-	 * @return the SSH session factory that will be used for creating SSH
-	 *         sessions
-	 */
-	public SshSessionFactory getSshSessionFactory() {
-		return sch;
-	}
+    /**
+     * Get the SSH session factory
+     *
+     * @return the SSH session factory that will be used for creating SSH
+     * sessions
+     */
+    public SshSessionFactory getSshSessionFactory() {
+        return sch;
+    }
 
-	/**
-	 * Get the default SSH session
-	 *
-	 * @return a remote session
-	 * @throws TransportException
-	 *             in case of error with opening SSH session
-	 */
-	protected RemoteSession getSession() throws TransportException {
-		if (sock != null)
-			return sock;
+    /**
+     * Get the default SSH session
+     *
+     * @return a remote session
+     * @throws TransportException in case of error with opening SSH session
+     */
+    protected RemoteSession getSession() throws TransportException {
+        if (sock != null)
+            return sock;
 
-		final int tms = getTimeout() > 0 ? getTimeout() * 1000 : 0;
+        final int tms = getTimeout() > 0 ? getTimeout() * 1000 : 0;
 
-		final FS fs = local == null ? FS.detect() : local.getFS();
+        final FS fs = local == null ? FS.detect() : local.getFS();
 
-		sock = sch
-				.getSession(uri, getCredentialsProvider(), fs, tms);
-		return sock;
-	}
+        sock = sch
+                .getSession(uri, getCredentialsProvider(), fs, tms);
+        return sock;
+    }
 
-	@Override
-	public void close() {
-		if (sock != null) {
-			try {
-				sch.releaseSession(sock);
-			} finally {
-				sock = null;
-			}
-		}
-	}
+    @Override
+    public void close() {
+        if (sock != null) {
+            try {
+                sch.releaseSession(sock);
+            } finally {
+                sock = null;
+            }
+        }
+    }
 }

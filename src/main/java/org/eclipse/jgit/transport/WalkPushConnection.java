@@ -66,310 +66,320 @@ import org.eclipse.jgit.transport.RemoteRefUpdate.Status;
  * @see WalkRemoteObjectDatabase
  */
 class WalkPushConnection extends BaseConnection implements PushConnection {
-	/** The repository this transport pushes out of. */
-	private final Repository local;
+    /**
+     * The repository this transport pushes out of.
+     */
+    private final Repository local;
 
-	/** Location of the remote repository we are writing to. */
-	private final URIish uri;
+    /**
+     * Location of the remote repository we are writing to.
+     */
+    private final URIish uri;
 
-	/** Database connection to the remote repository. */
-	final WalkRemoteObjectDatabase dest;
+    /**
+     * Database connection to the remote repository.
+     */
+    final WalkRemoteObjectDatabase dest;
 
-	/** The configured transport we were constructed by. */
-	private final Transport transport;
+    /**
+     * The configured transport we were constructed by.
+     */
+    private final Transport transport;
 
-	/**
-	 * Packs already known to reside in the remote repository.
-	 * <p>
-	 * This is a LinkedHashMap to maintain the original order.
-	 */
-	private LinkedHashMap<String, String> packNames;
+    /**
+     * Packs already known to reside in the remote repository.
+     * <p>
+     * This is a LinkedHashMap to maintain the original order.
+     */
+    private LinkedHashMap<String, String> packNames;
 
-	/** Complete listing of refs the remote will have after our push. */
-	private Map<String, Ref> newRefs;
+    /**
+     * Complete listing of refs the remote will have after our push.
+     */
+    private Map<String, Ref> newRefs;
 
-	/**
-	 * Updates which require altering the packed-refs file to complete.
-	 * <p>
-	 * If this collection is non-empty then any refs listed in {@link #newRefs}
-	 * with a storage class of {@link Storage#PACKED} will be written.
-	 */
-	private Collection<RemoteRefUpdate> packedRefUpdates;
+    /**
+     * Updates which require altering the packed-refs file to complete.
+     * <p>
+     * If this collection is non-empty then any refs listed in {@link #newRefs}
+     * with a storage class of {@link Storage#PACKED} will be written.
+     */
+    private Collection<RemoteRefUpdate> packedRefUpdates;
 
-	WalkPushConnection(final WalkTransport walkTransport,
-			final WalkRemoteObjectDatabase w) {
-		transport = (Transport) walkTransport;
-		local = transport.local;
-		uri = transport.getURI();
-		dest = w;
-	}
+    WalkPushConnection(final WalkTransport walkTransport,
+                       final WalkRemoteObjectDatabase w) {
+        transport = (Transport) walkTransport;
+        local = transport.local;
+        uri = transport.getURI();
+        dest = w;
+    }
 
-	@Override
-	public void push(final ProgressMonitor monitor,
-			final Map<String, RemoteRefUpdate> refUpdates)
-			throws TransportException {
-		push(monitor, refUpdates, null);
-	}
+    @Override
+    public void push(final ProgressMonitor monitor,
+                     final Map<String, RemoteRefUpdate> refUpdates)
+            throws TransportException {
+        push(monitor, refUpdates, null);
+    }
 
-	@Override
-	public void push(final ProgressMonitor monitor,
-			final Map<String, RemoteRefUpdate> refUpdates, OutputStream out)
-			throws TransportException {
-		markStartedOperation();
-		packNames = null;
-		newRefs = new TreeMap<>(getRefsMap());
-		packedRefUpdates = new ArrayList<>(refUpdates.size());
+    @Override
+    public void push(final ProgressMonitor monitor,
+                     final Map<String, RemoteRefUpdate> refUpdates, OutputStream out)
+            throws TransportException {
+        markStartedOperation();
+        packNames = null;
+        newRefs = new TreeMap<>(getRefsMap());
+        packedRefUpdates = new ArrayList<>(refUpdates.size());
 
-		// Filter the commands and issue all deletes first. This way we
-		// can correctly handle a directory being cleared out and a new
-		// ref using the directory name being created.
-		//
-		final List<RemoteRefUpdate> updates = new ArrayList<>();
-		for (RemoteRefUpdate u : refUpdates.values()) {
-			final String n = u.getRemoteName();
-			if (!n.startsWith("refs/") || !Repository.isValidRefName(n)) { //$NON-NLS-1$
-				u.setStatus(Status.REJECTED_OTHER_REASON);
-				u.setMessage(JGitText.get().funnyRefname);
-				continue;
-			}
+        // Filter the commands and issue all deletes first. This way we
+        // can correctly handle a directory being cleared out and a new
+        // ref using the directory name being created.
+        //
+        final List<RemoteRefUpdate> updates = new ArrayList<>();
+        for (RemoteRefUpdate u : refUpdates.values()) {
+            final String n = u.getRemoteName();
+            if (!n.startsWith("refs/") || !Repository.isValidRefName(n)) { //$NON-NLS-1$
+                u.setStatus(Status.REJECTED_OTHER_REASON);
+                u.setMessage(JGitText.get().funnyRefname);
+                continue;
+            }
 
-			if (AnyObjectId.isEqual(ObjectId.zeroId(), u.getNewObjectId()))
-				deleteCommand(u);
-			else
-				updates.add(u);
-		}
+            if (AnyObjectId.isEqual(ObjectId.zeroId(), u.getNewObjectId()))
+                deleteCommand(u);
+            else
+                updates.add(u);
+        }
 
-		// If we have any updates we need to upload the objects first, to
-		// prevent creating refs pointing at non-existent data. Then we
-		// can update the refs, and the info-refs file for dumb transports.
-		//
-		if (!updates.isEmpty())
-			sendpack(updates, monitor);
-		for (RemoteRefUpdate u : updates)
-			updateCommand(u);
+        // If we have any updates we need to upload the objects first, to
+        // prevent creating refs pointing at non-existent data. Then we
+        // can update the refs, and the info-refs file for dumb transports.
+        //
+        if (!updates.isEmpty())
+            sendpack(updates, monitor);
+        for (RemoteRefUpdate u : updates)
+            updateCommand(u);
 
-		// Is this a new repository? If so we should create additional
-		// metadata files so it is properly initialized during the push.
-		//
-		if (!updates.isEmpty() && isNewRepository())
-			createNewRepository(updates);
+        // Is this a new repository? If so we should create additional
+        // metadata files so it is properly initialized during the push.
+        //
+        if (!updates.isEmpty() && isNewRepository())
+            createNewRepository(updates);
 
-		RefWriter refWriter = new RefWriter(newRefs.values()) {
-			@Override
-			protected void writeFile(String file, byte[] content)
-					throws IOException {
-				dest.writeFile(ROOT_DIR + file, content);
-			}
-		};
-		if (!packedRefUpdates.isEmpty()) {
-			try {
-				refWriter.writePackedRefs();
-				for (RemoteRefUpdate u : packedRefUpdates)
-					u.setStatus(Status.OK);
-			} catch (IOException err) {
-				for (RemoteRefUpdate u : packedRefUpdates) {
-					u.setStatus(Status.REJECTED_OTHER_REASON);
-					u.setMessage(err.getMessage());
-				}
-				throw new TransportException(uri, JGitText.get().failedUpdatingRefs, err);
-			}
-		}
+        RefWriter refWriter = new RefWriter(newRefs.values()) {
+            @Override
+            protected void writeFile(String file, byte[] content)
+                    throws IOException {
+                dest.writeFile(ROOT_DIR + file, content);
+            }
+        };
+        if (!packedRefUpdates.isEmpty()) {
+            try {
+                refWriter.writePackedRefs();
+                for (RemoteRefUpdate u : packedRefUpdates)
+                    u.setStatus(Status.OK);
+            } catch (IOException err) {
+                for (RemoteRefUpdate u : packedRefUpdates) {
+                    u.setStatus(Status.REJECTED_OTHER_REASON);
+                    u.setMessage(err.getMessage());
+                }
+                throw new TransportException(uri, JGitText.get().failedUpdatingRefs, err);
+            }
+        }
 
-		try {
-			refWriter.writeInfoRefs();
-		} catch (IOException err) {
-			throw new TransportException(uri, JGitText.get().failedUpdatingRefs, err);
-		}
-	}
+        try {
+            refWriter.writeInfoRefs();
+        } catch (IOException err) {
+            throw new TransportException(uri, JGitText.get().failedUpdatingRefs, err);
+        }
+    }
 
-	@Override
-	public void close() {
-		dest.close();
-	}
+    @Override
+    public void close() {
+        dest.close();
+    }
 
-	private void sendpack(final List<RemoteRefUpdate> updates,
-			final ProgressMonitor monitor) throws TransportException {
-		PackFile pack = null;
-		PackFile idx = null;
-		try (PackWriter writer = new PackWriter(transport.getPackConfig(),
-				local.newObjectReader())) {
+    private void sendpack(final List<RemoteRefUpdate> updates,
+                          final ProgressMonitor monitor) throws TransportException {
+        PackFile pack = null;
+        PackFile idx = null;
+        try (PackWriter writer = new PackWriter(transport.getPackConfig(),
+                local.newObjectReader())) {
 
-			final Set<ObjectId> need = new HashSet<>();
-			final Set<ObjectId> have = new HashSet<>();
-			for (RemoteRefUpdate r : updates)
-				need.add(r.getNewObjectId());
-			for (Ref r : getRefs()) {
-				have.add(r.getObjectId());
-				if (r.getPeeledObjectId() != null)
-					have.add(r.getPeeledObjectId());
-			}
-			writer.preparePack(monitor, need, have);
+            final Set<ObjectId> need = new HashSet<>();
+            final Set<ObjectId> have = new HashSet<>();
+            for (RemoteRefUpdate r : updates)
+                need.add(r.getNewObjectId());
+            for (Ref r : getRefs()) {
+                have.add(r.getObjectId());
+                if (r.getPeeledObjectId() != null)
+                    have.add(r.getPeeledObjectId());
+            }
+            writer.preparePack(monitor, need, have);
 
-			// We don't have to continue further if the pack will
-			// be an empty pack, as the remote has all objects it
-			// needs to complete this change.
-			//
-			if (writer.getObjectCount() == 0)
-				return;
+            // We don't have to continue further if the pack will
+            // be an empty pack, as the remote has all objects it
+            // needs to complete this change.
+            //
+            if (writer.getObjectCount() == 0)
+                return;
 
-			packNames = new LinkedHashMap<>();
-			for (String n : dest.getPackNames())
-				packNames.put(n, n);
+            packNames = new LinkedHashMap<>();
+            for (String n : dest.getPackNames())
+                packNames.put(n, n);
 
-			File packDir = new File("pack"); //$NON-NLS-1$
-			pack = new PackFile(packDir, writer.computeName(),
-					PackExt.PACK);
-			idx = pack.create(PackExt.INDEX);
+            File packDir = new File("pack"); //$NON-NLS-1$
+            pack = new PackFile(packDir, writer.computeName(),
+                    PackExt.PACK);
+            idx = pack.create(PackExt.INDEX);
 
-			if (packNames.remove(pack.getName()) != null) {
-				// The remote already contains this pack. We should
-				// remove the index before overwriting to prevent bad
-				// offsets from appearing to clients.
-				//
-				dest.writeInfoPacks(packNames.keySet());
-				dest.deleteFile(sanitizedPath(idx));
-			}
+            if (packNames.remove(pack.getName()) != null) {
+                // The remote already contains this pack. We should
+                // remove the index before overwriting to prevent bad
+                // offsets from appearing to clients.
+                //
+                dest.writeInfoPacks(packNames.keySet());
+                dest.deleteFile(sanitizedPath(idx));
+            }
 
-			// Write the pack file, then the index, as readers look the
-			// other direction (index, then pack file).
-			//
-			String wt = "Put " + pack.getName().substring(0, 12); //$NON-NLS-1$
-			try (OutputStream os = new BufferedOutputStream(
-					dest.writeFile(sanitizedPath(pack), monitor,
-							wt + "." + pack.getPackExt().getExtension()))) { //$NON-NLS-1$
-				writer.writePack(monitor, monitor, os);
-			}
+            // Write the pack file, then the index, as readers look the
+            // other direction (index, then pack file).
+            //
+            String wt = "Put " + pack.getName().substring(0, 12); //$NON-NLS-1$
+            try (OutputStream os = new BufferedOutputStream(
+                    dest.writeFile(sanitizedPath(pack), monitor,
+                            wt + "." + pack.getPackExt().getExtension()))) { //$NON-NLS-1$
+                writer.writePack(monitor, monitor, os);
+            }
 
-			try (OutputStream os = new BufferedOutputStream(
-					dest.writeFile(sanitizedPath(idx), monitor,
-							wt + "." + idx.getPackExt().getExtension()))) { //$NON-NLS-1$
-				writer.writeIndex(os);
-			}
+            try (OutputStream os = new BufferedOutputStream(
+                    dest.writeFile(sanitizedPath(idx), monitor,
+                            wt + "." + idx.getPackExt().getExtension()))) { //$NON-NLS-1$
+                writer.writeIndex(os);
+            }
 
-			// Record the pack at the start of the pack info list. This
-			// way clients are likely to consult the newest pack first,
-			// and discover the most recent objects there.
-			//
-			final ArrayList<String> infoPacks = new ArrayList<>();
-			infoPacks.add(pack.getName());
-			infoPacks.addAll(packNames.keySet());
-			dest.writeInfoPacks(infoPacks);
+            // Record the pack at the start of the pack info list. This
+            // way clients are likely to consult the newest pack first,
+            // and discover the most recent objects there.
+            //
+            final ArrayList<String> infoPacks = new ArrayList<>();
+            infoPacks.add(pack.getName());
+            infoPacks.addAll(packNames.keySet());
+            dest.writeInfoPacks(infoPacks);
 
-		} catch (IOException err) {
-			safeDelete(idx);
-			safeDelete(pack);
+        } catch (IOException err) {
+            safeDelete(idx);
+            safeDelete(pack);
 
-			throw new TransportException(uri, JGitText.get().cannotStoreObjects, err);
-		}
-	}
+            throw new TransportException(uri, JGitText.get().cannotStoreObjects, err);
+        }
+    }
 
-	private void safeDelete(File path) {
-		if (path != null) {
-			try {
-				dest.deleteFile(sanitizedPath(path));
-			} catch (IOException cleanupFailure) {
-				// Ignore the deletion failure. We probably are
-				// already failing and were just trying to pick
-				// up after ourselves.
-			}
-		}
-	}
+    private void safeDelete(File path) {
+        if (path != null) {
+            try {
+                dest.deleteFile(sanitizedPath(path));
+            } catch (IOException cleanupFailure) {
+                // Ignore the deletion failure. We probably are
+                // already failing and were just trying to pick
+                // up after ourselves.
+            }
+        }
+    }
 
-	private void deleteCommand(RemoteRefUpdate u) {
-		final Ref r = newRefs.remove(u.getRemoteName());
-		if (r == null) {
-			// Already gone.
-			//
-			u.setStatus(Status.OK);
-			return;
-		}
+    private void deleteCommand(RemoteRefUpdate u) {
+        final Ref r = newRefs.remove(u.getRemoteName());
+        if (r == null) {
+            // Already gone.
+            //
+            u.setStatus(Status.OK);
+            return;
+        }
 
-		if (r.getStorage().isPacked())
-			packedRefUpdates.add(u);
+        if (r.getStorage().isPacked())
+            packedRefUpdates.add(u);
 
-		if (r.getStorage().isLoose()) {
-			try {
-				dest.deleteRef(u.getRemoteName());
-				u.setStatus(Status.OK);
-			} catch (IOException e) {
-				u.setStatus(Status.REJECTED_OTHER_REASON);
-				u.setMessage(e.getMessage());
-			}
-		}
+        if (r.getStorage().isLoose()) {
+            try {
+                dest.deleteRef(u.getRemoteName());
+                u.setStatus(Status.OK);
+            } catch (IOException e) {
+                u.setStatus(Status.REJECTED_OTHER_REASON);
+                u.setMessage(e.getMessage());
+            }
+        }
 
-		try {
-			dest.deleteRefLog(u.getRemoteName());
-		} catch (IOException e) {
-			u.setStatus(Status.REJECTED_OTHER_REASON);
-			u.setMessage(e.getMessage());
-		}
-	}
+        try {
+            dest.deleteRefLog(u.getRemoteName());
+        } catch (IOException e) {
+            u.setStatus(Status.REJECTED_OTHER_REASON);
+            u.setMessage(e.getMessage());
+        }
+    }
 
-	private void updateCommand(RemoteRefUpdate u) {
-		try {
-			dest.writeRef(u.getRemoteName(), u.getNewObjectId());
-			newRefs.put(u.getRemoteName(), new ObjectIdRef.Unpeeled(
-					Storage.LOOSE, u.getRemoteName(), u.getNewObjectId()));
-			u.setStatus(Status.OK);
-		} catch (IOException e) {
-			u.setStatus(Status.REJECTED_OTHER_REASON);
-			u.setMessage(e.getMessage());
-		}
-	}
+    private void updateCommand(RemoteRefUpdate u) {
+        try {
+            dest.writeRef(u.getRemoteName(), u.getNewObjectId());
+            newRefs.put(u.getRemoteName(), new ObjectIdRef.Unpeeled(
+                    Storage.LOOSE, u.getRemoteName(), u.getNewObjectId()));
+            u.setStatus(Status.OK);
+        } catch (IOException e) {
+            u.setStatus(Status.REJECTED_OTHER_REASON);
+            u.setMessage(e.getMessage());
+        }
+    }
 
-	private boolean isNewRepository() {
-		return getRefsMap().isEmpty() && packNames != null
-				&& packNames.isEmpty();
-	}
+    private boolean isNewRepository() {
+        return getRefsMap().isEmpty() && packNames != null
+                && packNames.isEmpty();
+    }
 
-	private void createNewRepository(List<RemoteRefUpdate> updates)
-			throws TransportException {
-		try {
-			final String ref = "ref: " + pickHEAD(updates) + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
-			final byte[] bytes = Constants.encode(ref);
-			dest.writeFile(ROOT_DIR + Constants.HEAD, bytes);
-		} catch (IOException e) {
-			throw new TransportException(uri, JGitText.get().cannotCreateHEAD, e);
-		}
+    private void createNewRepository(List<RemoteRefUpdate> updates)
+            throws TransportException {
+        try {
+            final String ref = "ref: " + pickHEAD(updates) + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
+            final byte[] bytes = Constants.encode(ref);
+            dest.writeFile(ROOT_DIR + Constants.HEAD, bytes);
+        } catch (IOException e) {
+            throw new TransportException(uri, JGitText.get().cannotCreateHEAD, e);
+        }
 
-		try {
-			final String config = "[core]\n" //$NON-NLS-1$
-					+ "\trepositoryformatversion = 0\n"; //$NON-NLS-1$
-			final byte[] bytes = Constants.encode(config);
-			dest.writeFile(ROOT_DIR + Constants.CONFIG, bytes);
-		} catch (IOException e) {
-			throw new TransportException(uri, JGitText.get().cannotCreateConfig, e);
-		}
-	}
+        try {
+            final String config = "[core]\n" //$NON-NLS-1$
+                    + "\trepositoryformatversion = 0\n"; //$NON-NLS-1$
+            final byte[] bytes = Constants.encode(config);
+            dest.writeFile(ROOT_DIR + Constants.CONFIG, bytes);
+        } catch (IOException e) {
+            throw new TransportException(uri, JGitText.get().cannotCreateConfig, e);
+        }
+    }
 
-	private static String pickHEAD(List<RemoteRefUpdate> updates) {
-		// Try to use master if the user is pushing that, it is the
-		// default branch and is likely what they want to remain as
-		// the default on the new remote.
-		//
-		for (RemoteRefUpdate u : updates) {
-			final String n = u.getRemoteName();
-			if (n.equals(Constants.R_HEADS + Constants.MASTER))
-				return n;
-		}
+    private static String pickHEAD(List<RemoteRefUpdate> updates) {
+        // Try to use master if the user is pushing that, it is the
+        // default branch and is likely what they want to remain as
+        // the default on the new remote.
+        //
+        for (RemoteRefUpdate u : updates) {
+            final String n = u.getRemoteName();
+            if (n.equals(Constants.R_HEADS + Constants.MASTER))
+                return n;
+        }
 
-		// Pick any branch, under the assumption the user pushed only
-		// one to the remote side.
-		//
-		for (RemoteRefUpdate u : updates) {
-			final String n = u.getRemoteName();
-			if (n.startsWith(Constants.R_HEADS))
-				return n;
-		}
-		return updates.get(0).getRemoteName();
-	}
+        // Pick any branch, under the assumption the user pushed only
+        // one to the remote side.
+        //
+        for (RemoteRefUpdate u : updates) {
+            final String n = u.getRemoteName();
+            if (n.startsWith(Constants.R_HEADS))
+                return n;
+        }
+        return updates.get(0).getRemoteName();
+    }
 
-	private static String sanitizedPath(File file) {
-		String path = file.getPath();
-		if (File.separatorChar != '/') {
-			path = path.replace(File.separatorChar, '/');
-		}
-		return path;
-	}
+    private static String sanitizedPath(File file) {
+        String path = file.getPath();
+        if (File.separatorChar != '/') {
+            path = path.replace(File.separatorChar, '/');
+        }
+        return path;
+    }
 
 }

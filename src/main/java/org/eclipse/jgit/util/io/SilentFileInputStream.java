@@ -21,22 +21,20 @@ import java.io.IOException;
  * @since 5.0
  */
 public class SilentFileInputStream extends FileInputStream {
-	/**
-	 * @param file
-	 *            the file
-	 * @throws FileNotFoundException
-	 *             the file was not found
-	 */
-	public SilentFileInputStream(File file) throws FileNotFoundException {
-		super(file);
-	}
+    /**
+     * @param file the file
+     * @throws FileNotFoundException the file was not found
+     */
+    public SilentFileInputStream(File file) throws FileNotFoundException {
+        super(file);
+    }
 
-	@Override
-	public void close() {
-		try {
-			super.close();
-		} catch (IOException e) {
-			// Ignore
-		}
-	}
+    @Override
+    public void close() {
+        try {
+            super.close();
+        } catch (IOException e) {
+            // Ignore
+        }
+    }
 }

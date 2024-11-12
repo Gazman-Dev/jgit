@@ -45,34 +45,31 @@ import org.eclipse.jgit.internal.JGitText;
  * reference
  */
 public class DetachedHeadException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * The default constructor with a default message
-	 */
-	public DetachedHeadException() {
-		this(JGitText.get().detachedHeadDetected);
-	}
+    /**
+     * The default constructor with a default message
+     */
+    public DetachedHeadException() {
+        this(JGitText.get().detachedHeadDetected);
+    }
 
-	/**
-	 * Constructor for DetachedHeadException.
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable} object.
-	 */
-	public DetachedHeadException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for DetachedHeadException.
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable} object.
+     */
+    public DetachedHeadException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for DetachedHeadException.
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public DetachedHeadException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for DetachedHeadException.
+     *
+     * @param message error message
+     */
+    public DetachedHeadException(String message) {
+        super(message);
+    }
 }

@@ -17,62 +17,61 @@ import java.util.zip.Inflater;
  * Creates zlib based inflaters as necessary for object decompression.
  */
 public class InflaterCache {
-	private static final int SZ = 4;
+    private static final int SZ = 4;
 
-	private static final Inflater[] inflaterCache;
+    private static final Inflater[] inflaterCache;
 
-	private static int openInflaterCount;
+    private static int openInflaterCount;
 
-	static {
-		inflaterCache = new Inflater[SZ];
-	}
+    static {
+        inflaterCache = new Inflater[SZ];
+    }
 
-	/**
-	 * Obtain an Inflater for decompression.
-	 * <p>
-	 * Inflaters obtained through this cache should be returned (if possible) by
-	 * {@link #release(Inflater)} to avoid garbage collection and reallocation.
-	 *
-	 * @return an available inflater. Never null.
-	 */
-	public static Inflater get() {
-		final Inflater r = getImpl();
-		return r != null ? r : new Inflater(false);
-	}
+    /**
+     * Obtain an Inflater for decompression.
+     * <p>
+     * Inflaters obtained through this cache should be returned (if possible) by
+     * {@link #release(Inflater)} to avoid garbage collection and reallocation.
+     *
+     * @return an available inflater. Never null.
+     */
+    public static Inflater get() {
+        final Inflater r = getImpl();
+        return r != null ? r : new Inflater(false);
+    }
 
-	private static synchronized Inflater getImpl() {
-		if (openInflaterCount > 0) {
-			final Inflater r = inflaterCache[--openInflaterCount];
-			inflaterCache[openInflaterCount] = null;
-			return r;
-		}
-		return null;
-	}
+    private static synchronized Inflater getImpl() {
+        if (openInflaterCount > 0) {
+            final Inflater r = inflaterCache[--openInflaterCount];
+            inflaterCache[openInflaterCount] = null;
+            return r;
+        }
+        return null;
+    }
 
-	/**
-	 * Release an inflater previously obtained from this cache.
-	 *
-	 * @param i
-	 *            the inflater to return. May be null, in which case this method
-	 *            does nothing.
-	 */
-	public static void release(Inflater i) {
-		if (i != null) {
-			i.reset();
-			if (releaseImpl(i))
-				i.end();
-		}
-	}
+    /**
+     * Release an inflater previously obtained from this cache.
+     *
+     * @param i the inflater to return. May be null, in which case this method
+     *          does nothing.
+     */
+    public static void release(Inflater i) {
+        if (i != null) {
+            i.reset();
+            if (releaseImpl(i))
+                i.end();
+        }
+    }
 
-	private static synchronized boolean releaseImpl(Inflater i) {
-		if (openInflaterCount < SZ) {
-			inflaterCache[openInflaterCount++] = i;
-			return false;
-		}
-		return true;
-	}
+    private static synchronized boolean releaseImpl(Inflater i) {
+        if (openInflaterCount < SZ) {
+            inflaterCache[openInflaterCount++] = i;
+            return false;
+        }
+        return true;
+    }
 
-	private InflaterCache() {
-		throw new UnsupportedOperationException();
-	}
+    private InflaterCache() {
+        throw new UnsupportedOperationException();
+    }
 }

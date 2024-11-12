@@ -21,29 +21,26 @@ import org.eclipse.jgit.transport.URIish;
  * @since 3.3
  */
 public class TooLargePackException extends TransportException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct a too large pack exception.
-	 *
-	 * @param packSizeLimit
-	 *            the pack size limit (in bytes) that was exceeded
-	 */
-	public TooLargePackException(long packSizeLimit) {
-		super(MessageFormat.format(JGitText.get().receivePackTooLarge,
-				Long.valueOf(packSizeLimit)));
-	}
+    /**
+     * Construct a too large pack exception.
+     *
+     * @param packSizeLimit the pack size limit (in bytes) that was exceeded
+     */
+    public TooLargePackException(long packSizeLimit) {
+        super(MessageFormat.format(JGitText.get().receivePackTooLarge,
+                Long.valueOf(packSizeLimit)));
+    }
 
-	/**
-	 * Construct a too large pack exception.
-	 *
-	 * @param uri
-	 *            URI used for transport
-	 * @param s
-	 *            message
-	 * @since 4.0
-	 */
-	public TooLargePackException(URIish uri, String s) {
-		super(uri.setPass(null) + ": " + s); //$NON-NLS-1$
-	}
+    /**
+     * Construct a too large pack exception.
+     *
+     * @param uri URI used for transport
+     * @param s   message
+     * @since 4.0
+     */
+    public TooLargePackException(URIish uri, String s) {
+        super(uri.setPass(null) + ": " + s); //$NON-NLS-1$
+    }
 }

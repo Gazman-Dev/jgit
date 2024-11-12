@@ -42,157 +42,156 @@ import org.eclipse.jgit.internal.JGitText;
  * @since 4.6
  */
 public class IsolatedOutputStream extends OutputStream {
-	private final OutputStream dst;
-	private final ExecutorService copier;
-	private Future<Void> pending;
+    private final OutputStream dst;
+    private final ExecutorService copier;
+    private Future<Void> pending;
 
-	/**
-	 * Wraps an OutputStream.
-	 *
-	 * @param out
-	 *            stream to send all writes to.
-	 */
-	public IsolatedOutputStream(OutputStream out) {
-		dst = out;
-		copier = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
-				new ArrayBlockingQueue<>(1), new NamedThreadFactory());
-	}
+    /**
+     * Wraps an OutputStream.
+     *
+     * @param out stream to send all writes to.
+     */
+    public IsolatedOutputStream(OutputStream out) {
+        dst = out;
+        copier = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
+                new ArrayBlockingQueue<>(1), new NamedThreadFactory());
+    }
 
-	@Override
-	public void write(int ch) throws IOException {
-		write(new byte[] { (byte) ch }, 0, 1);
-	}
+    @Override
+    public void write(int ch) throws IOException {
+        write(new byte[]{(byte) ch}, 0, 1);
+    }
 
-	@Override
-	public void write(byte[] buf, int pos, int cnt)
-			throws IOException {
-		checkClosed();
-		execute(() -> {
-			dst.write(buf, pos, cnt);
-			return null;
-		});
-	}
+    @Override
+    public void write(byte[] buf, int pos, int cnt)
+            throws IOException {
+        checkClosed();
+        execute(() -> {
+            dst.write(buf, pos, cnt);
+            return null;
+        });
+    }
 
-	@Override
-	public void flush() throws IOException {
-		checkClosed();
-		execute(() -> {
-			dst.flush();
-			return null;
-		});
-	}
+    @Override
+    public void flush() throws IOException {
+        checkClosed();
+        execute(() -> {
+            dst.flush();
+            return null;
+        });
+    }
 
-	@Override
-	public void close() throws IOException {
-		if (!copier.isShutdown()) {
-			try {
-				if (pending == null || tryCleanClose()) {
-					cleanClose();
-				} else {
-					dirtyClose();
-				}
-			} finally {
-				copier.shutdown();
-			}
-		}
-	}
+    @Override
+    public void close() throws IOException {
+        if (!copier.isShutdown()) {
+            try {
+                if (pending == null || tryCleanClose()) {
+                    cleanClose();
+                } else {
+                    dirtyClose();
+                }
+            } finally {
+                copier.shutdown();
+            }
+        }
+    }
 
-	private boolean tryCleanClose() {
-		/*
-		 * If the caller stopped waiting for a prior write or flush, they could
-		 * be trying to close a stream that is still in-use. Check if the prior
-		 * operation ended in a predictable way.
-		 */
-		try {
-			pending.get(0, TimeUnit.MILLISECONDS);
-			pending = null;
-			return true;
-		} catch (TimeoutException | InterruptedException e) {
-			return false;
-		} catch (ExecutionException e) {
-			pending = null;
-			return true;
-		}
-	}
+    private boolean tryCleanClose() {
+        /*
+         * If the caller stopped waiting for a prior write or flush, they could
+         * be trying to close a stream that is still in-use. Check if the prior
+         * operation ended in a predictable way.
+         */
+        try {
+            pending.get(0, TimeUnit.MILLISECONDS);
+            pending = null;
+            return true;
+        } catch (TimeoutException | InterruptedException e) {
+            return false;
+        } catch (ExecutionException e) {
+            pending = null;
+            return true;
+        }
+    }
 
-	private void cleanClose() throws IOException {
-		execute(() -> {
-			dst.close();
-			return null;
-		});
-	}
+    private void cleanClose() throws IOException {
+        execute(() -> {
+            dst.close();
+            return null;
+        });
+    }
 
-	private void dirtyClose() throws IOException {
-		/*
-		 * Interrupt any still pending write or flush operation. This may cause
-		 * massive failures inside of the stream, but its going to be closed as
-		 * the next step.
-		 */
-		pending.cancel(true);
+    private void dirtyClose() throws IOException {
+        /*
+         * Interrupt any still pending write or flush operation. This may cause
+         * massive failures inside of the stream, but its going to be closed as
+         * the next step.
+         */
+        pending.cancel(true);
 
-		Future<Void> close;
-		try {
-			close = copier.submit(() -> {
-				dst.close();
-				return null;
-			});
-		} catch (RejectedExecutionException e) {
-			throw new IOException(e);
-		}
-		try {
-			close.get(200, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException | TimeoutException e) {
-			close.cancel(true);
-			throw new IOException(e);
-		} catch (ExecutionException e) {
-			throw new IOException(e.getCause());
-		}
-	}
+        Future<Void> close;
+        try {
+            close = copier.submit(() -> {
+                dst.close();
+                return null;
+            });
+        } catch (RejectedExecutionException e) {
+            throw new IOException(e);
+        }
+        try {
+            close.get(200, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | TimeoutException e) {
+            close.cancel(true);
+            throw new IOException(e);
+        } catch (ExecutionException e) {
+            throw new IOException(e.getCause());
+        }
+    }
 
-	private void checkClosed() throws IOException {
-		if (copier.isShutdown()) {
-			throw new IOException(JGitText.get().closed);
-		}
-	}
+    private void checkClosed() throws IOException {
+        if (copier.isShutdown()) {
+            throw new IOException(JGitText.get().closed);
+        }
+    }
 
-	private void execute(Callable<Void> task) throws IOException {
-		if (pending != null) {
-			// Check (and rethrow) any prior failed operation.
-			checkedGet(pending);
-		}
-		try {
-			pending = copier.submit(task);
-		} catch (RejectedExecutionException e) {
-			throw new IOException(e);
-		}
-		checkedGet(pending);
-		pending = null;
-	}
+    private void execute(Callable<Void> task) throws IOException {
+        if (pending != null) {
+            // Check (and rethrow) any prior failed operation.
+            checkedGet(pending);
+        }
+        try {
+            pending = copier.submit(task);
+        } catch (RejectedExecutionException e) {
+            throw new IOException(e);
+        }
+        checkedGet(pending);
+        pending = null;
+    }
 
-	private static void checkedGet(Future<Void> future) throws IOException {
-		try {
-			future.get();
-		} catch (InterruptedException e) {
-			throw interrupted(e);
-		} catch (ExecutionException e) {
-			throw new IOException(e.getCause());
-		}
-	}
+    private static void checkedGet(Future<Void> future) throws IOException {
+        try {
+            future.get();
+        } catch (InterruptedException e) {
+            throw interrupted(e);
+        } catch (ExecutionException e) {
+            throw new IOException(e.getCause());
+        }
+    }
 
-	private static InterruptedIOException interrupted(InterruptedException c) {
-		InterruptedIOException e = new InterruptedIOException();
-		e.initCause(c);
-		return e;
-	}
+    private static InterruptedIOException interrupted(InterruptedException c) {
+        InterruptedIOException e = new InterruptedIOException();
+        e.initCause(c);
+        return e;
+    }
 
-	private static class NamedThreadFactory implements ThreadFactory {
-		private static final AtomicInteger cnt = new AtomicInteger();
+    private static class NamedThreadFactory implements ThreadFactory {
+        private static final AtomicInteger cnt = new AtomicInteger();
 
-		@Override
-		public Thread newThread(Runnable r) {
-			int n = cnt.incrementAndGet();
-			String name = IsolatedOutputStream.class.getSimpleName() + '-' + n;
-			return new Thread(r, name);
-		}
-	}
+        @Override
+        public Thread newThread(Runnable r) {
+            int n = cnt.incrementAndGet();
+            String name = IsolatedOutputStream.class.getSimpleName() + '-' + n;
+            return new Thread(r, name);
+        }
+    }
 }

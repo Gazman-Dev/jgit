@@ -21,16 +21,15 @@ import org.eclipse.jgit.internal.JGitText;
  * @since 4.5
  */
 public class UnsupportedPackIndexVersionException extends IOException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct an exception.
-	 *
-	 * @param version
-	 *            pack index version
-	 */
-	public UnsupportedPackIndexVersionException(int version) {
-		super(MessageFormat.format(JGitText.get().unsupportedPackIndexVersion,
-				Integer.valueOf(version)));
-	}
+    /**
+     * Construct an exception.
+     *
+     * @param version pack index version
+     */
+    public UnsupportedPackIndexVersionException(int version) {
+        super(MessageFormat.format(JGitText.get().unsupportedPackIndexVersion,
+                Integer.valueOf(version)));
+    }
 }

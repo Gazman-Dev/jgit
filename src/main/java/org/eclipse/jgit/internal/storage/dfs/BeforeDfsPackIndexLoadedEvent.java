@@ -19,35 +19,34 @@ import org.eclipse.jgit.events.RepositoryEvent;
  * means the call to {@link #getRepository} will always return null.
  */
 public class BeforeDfsPackIndexLoadedEvent
-		extends RepositoryEvent<BeforeDfsPackIndexLoadedListener> {
-	private final DfsPackFile pack;
+        extends RepositoryEvent<BeforeDfsPackIndexLoadedListener> {
+    private final DfsPackFile pack;
 
-	/**
-	 * A new event triggered before a PackFile index is loaded.
-	 *
-	 * @param pack
-	 *            the pack
-	 */
-	public BeforeDfsPackIndexLoadedEvent(DfsPackFile pack) {
-		this.pack = pack;
-	}
+    /**
+     * A new event triggered before a PackFile index is loaded.
+     *
+     * @param pack the pack
+     */
+    public BeforeDfsPackIndexLoadedEvent(DfsPackFile pack) {
+        this.pack = pack;
+    }
 
-	/**
-	 * Get the PackFile containing the index that will be loaded.
-	 *
-	 * @return the PackFile containing the index that will be loaded.
-	 */
-	public DfsPackFile getPackFile() {
-		return pack;
-	}
+    /**
+     * Get the PackFile containing the index that will be loaded.
+     *
+     * @return the PackFile containing the index that will be loaded.
+     */
+    public DfsPackFile getPackFile() {
+        return pack;
+    }
 
-	@Override
-	public Class<BeforeDfsPackIndexLoadedListener> getListenerType() {
-		return BeforeDfsPackIndexLoadedListener.class;
-	}
+    @Override
+    public Class<BeforeDfsPackIndexLoadedListener> getListenerType() {
+        return BeforeDfsPackIndexLoadedListener.class;
+    }
 
-	@Override
-	public void dispatch(BeforeDfsPackIndexLoadedListener listener) {
-		listener.onBeforeDfsPackIndexLoaded(this);
-	}
+    @Override
+    public void dispatch(BeforeDfsPackIndexLoadedListener listener) {
+        listener.onBeforeDfsPackIndexLoaded(this);
+    }
 }

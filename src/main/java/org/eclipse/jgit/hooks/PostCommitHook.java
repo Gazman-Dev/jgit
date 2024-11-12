@@ -24,64 +24,61 @@ import org.eclipse.jgit.util.ProcessResult;
  */
 public class PostCommitHook extends GitHook<Void> {
 
-	/** The post-commit hook name. */
-	public static final String NAME = "post-commit"; //$NON-NLS-1$
+    /**
+     * The post-commit hook name.
+     */
+    public static final String NAME = "post-commit"; //$NON-NLS-1$
 
-	/**
-	 * Constructor for PostCommitHook
-	 * <p>
-	 * This constructor will use the default error stream.
-	 * </p>
-	 *
-	 * @param repo
-	 *            The repository
-	 * @param outputStream
-	 *            The output stream the hook must use. {@code null} is allowed,
-	 *            in which case the hook will use {@code System.out}.
-	 */
-	protected PostCommitHook(Repository repo, PrintStream outputStream) {
-		super(repo, outputStream);
-	}
+    /**
+     * Constructor for PostCommitHook
+     * <p>
+     * This constructor will use the default error stream.
+     * </p>
+     *
+     * @param repo         The repository
+     * @param outputStream The output stream the hook must use. {@code null} is allowed,
+     *                     in which case the hook will use {@code System.out}.
+     */
+    protected PostCommitHook(Repository repo, PrintStream outputStream) {
+        super(repo, outputStream);
+    }
 
-	/**
-	 * Constructor for PostCommitHook
-	 *
-	 * @param repo
-	 *            The repository
-	 * @param outputStream
-	 *            The output stream the hook must use. {@code null} is allowed,
-	 *            in which case the hook will use {@code System.out}.
-	 * @param errorStream
-	 *            The error stream the hook must use. {@code null} is allowed,
-	 *            in which case the hook will use {@code System.err}.
-	 * @since 5.6
-	 */
-	protected PostCommitHook(Repository repo, PrintStream outputStream,
-			PrintStream errorStream) {
-		super(repo, outputStream, errorStream);
-	}
+    /**
+     * Constructor for PostCommitHook
+     *
+     * @param repo         The repository
+     * @param outputStream The output stream the hook must use. {@code null} is allowed,
+     *                     in which case the hook will use {@code System.out}.
+     * @param errorStream  The error stream the hook must use. {@code null} is allowed,
+     *                     in which case the hook will use {@code System.err}.
+     * @since 5.6
+     */
+    protected PostCommitHook(Repository repo, PrintStream outputStream,
+                             PrintStream errorStream) {
+        super(repo, outputStream, errorStream);
+    }
 
-	@Override
-	public Void call() throws IOException, AbortedByHookException {
-		doRun();
-		return null;
-	}
+    @Override
+    public Void call() throws IOException, AbortedByHookException {
+        doRun();
+        return null;
+    }
 
-	@Override
-	public String getHookName() {
-		return NAME;
-	}
+    @Override
+    public String getHookName() {
+        return NAME;
+    }
 
 
-	/**
-	 * Overwrites the default implementation to never throw an
-	 * {@link AbortedByHookException}, as the commit has already been done and
-	 * the exit code of the post-commit hook has no effect.
-	 */
-	@Override
-	protected void handleError(String message, ProcessResult result)
-			throws AbortedByHookException {
-		// Do nothing as the exit code of the post-commit hook has no effect.
-	}
+    /**
+     * Overwrites the default implementation to never throw an
+     * {@link AbortedByHookException}, as the commit has already been done and
+     * the exit code of the post-commit hook has no effect.
+     */
+    @Override
+    protected void handleError(String message, ProcessResult result)
+            throws AbortedByHookException {
+        // Do nothing as the exit code of the post-commit hook has no effect.
+    }
 
 }

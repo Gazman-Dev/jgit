@@ -16,17 +16,17 @@ package org.eclipse.jgit.lib;
  * @since 3.0
  */
 public abstract class BitmapObject {
-	/**
-	 * Get Git object type. See {@link Constants}.
-	 *
-	 * @return object type
-	 */
-	public abstract int getType();
+    /**
+     * Get Git object type. See {@link Constants}.
+     *
+     * @return object type
+     */
+    public abstract int getType();
 
-	/**
-	 * Get the name of this object.
-	 *
-	 * @return unique hash of this object.
-	 */
-	public abstract ObjectId getObjectId();
+    /**
+     * Get the name of this object.
+     *
+     * @return unique hash of this object.
+     */
+    public abstract ObjectId getObjectId();
 }

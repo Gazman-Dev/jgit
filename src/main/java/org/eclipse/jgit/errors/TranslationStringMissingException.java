@@ -16,38 +16,34 @@ import java.util.Locale;
  * bundle and locale is missing.
  */
 public class TranslationStringMissingException extends TranslationBundleException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final String key;
+    private final String key;
 
-	/**
-	 * Construct a
-	 * {@link TranslationStringMissingException} for the
-	 * specified bundle class, locale and translation key
-	 *
-	 * @param bundleClass
-	 *            the bundle class for which a translation string was missing
-	 * @param locale
-	 *            the locale for which a translation string was missing
-	 * @param key
-	 *            the key of the missing translation string
-	 * @param cause
-	 *            the original exception thrown from the
-	 *            {@link java.util.ResourceBundle#getString(String)} method.
-	 */
-	public TranslationStringMissingException(Class bundleClass, Locale locale, String key, Exception cause) {
-		super("Translation missing for [" + bundleClass.getName() + ", " //$NON-NLS-1$ //$NON-NLS-2$
-				+ locale.toString() + ", " + key + "]", bundleClass, locale, //$NON-NLS-1$ //$NON-NLS-2$
-				cause);
-		this.key = key;
-	}
+    /**
+     * Construct a
+     * {@link TranslationStringMissingException} for the
+     * specified bundle class, locale and translation key
+     *
+     * @param bundleClass the bundle class for which a translation string was missing
+     * @param locale      the locale for which a translation string was missing
+     * @param key         the key of the missing translation string
+     * @param cause       the original exception thrown from the
+     *                    {@link java.util.ResourceBundle#getString(String)} method.
+     */
+    public TranslationStringMissingException(Class bundleClass, Locale locale, String key, Exception cause) {
+        super("Translation missing for [" + bundleClass.getName() + ", " //$NON-NLS-1$ //$NON-NLS-2$
+                        + locale.toString() + ", " + key + "]", bundleClass, locale, //$NON-NLS-1$ //$NON-NLS-2$
+                cause);
+        this.key = key;
+    }
 
-	/**
-	 * Get the key of the missing translation string
-	 *
-	 * @return the key of the missing translation string
-	 */
-	public String getKey() {
-		return key;
-	}
+    /**
+     * Get the key of the missing translation string
+     *
+     * @return the key of the missing translation string
+     */
+    public String getKey() {
+        return key;
+    }
 }

@@ -18,47 +18,43 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
  * Persistent configuration that can be stored and loaded from a location.
  */
 public abstract class StoredConfig extends Config {
-	/**
-	 * Create a configuration with no default fallback.
-	 */
-	public StoredConfig() {
-		super();
-	}
+    /**
+     * Create a configuration with no default fallback.
+     */
+    public StoredConfig() {
+        super();
+    }
 
-	/**
-	 * Create an empty configuration with a fallback for missing keys.
-	 *
-	 * @param defaultConfig
-	 *            the base configuration to be consulted when a key is missing
-	 *            from this configuration instance.
-	 */
-	public StoredConfig(Config defaultConfig) {
-		super(defaultConfig);
-	}
+    /**
+     * Create an empty configuration with a fallback for missing keys.
+     *
+     * @param defaultConfig the base configuration to be consulted when a key is missing
+     *                      from this configuration instance.
+     */
+    public StoredConfig(Config defaultConfig) {
+        super(defaultConfig);
+    }
 
-	/**
-	 * Load the configuration from the persistent store.
-	 * <p>
-	 * If the configuration does not exist, this configuration is cleared, and
-	 * thus behaves the same as though the backing store exists, but is empty.
-	 *
-	 * @throws IOException
-	 *             the configuration could not be read (but does exist).
-	 * @throws ConfigInvalidException
-	 *             the configuration is not properly formatted.
-	 */
-	public abstract void load() throws IOException, ConfigInvalidException;
+    /**
+     * Load the configuration from the persistent store.
+     * <p>
+     * If the configuration does not exist, this configuration is cleared, and
+     * thus behaves the same as though the backing store exists, but is empty.
+     *
+     * @throws IOException            the configuration could not be read (but does exist).
+     * @throws ConfigInvalidException the configuration is not properly formatted.
+     */
+    public abstract void load() throws IOException, ConfigInvalidException;
 
-	/**
-	 * Save the configuration to the persistent store.
-	 *
-	 * @throws IOException
-	 *             the configuration could not be written.
-	 */
-	public abstract void save() throws IOException;
+    /**
+     * Save the configuration to the persistent store.
+     *
+     * @throws IOException the configuration could not be written.
+     */
+    public abstract void save() throws IOException;
 
-	@Override
-	public void clear() {
-		super.clear();
-	}
+    @Override
+    public void clear() {
+        super.clear();
+    }
 }

@@ -24,32 +24,32 @@ import java.util.concurrent.atomic.AtomicLong;
  * @since 4.6
  */
 public class MonotonicSystemClock implements MonotonicClock {
-	private static final AtomicLong before = new AtomicLong();
+    private static final AtomicLong before = new AtomicLong();
 
-	private static long nowMicros() {
-		long now = MILLISECONDS.toMicros(System.currentTimeMillis());
-		for (;;) {
-			long o = before.get();
-			long n = Math.max(o + 1, now);
-			if (before.compareAndSet(o, n)) {
-				return n;
-			}
-		}
-	}
+    private static long nowMicros() {
+        long now = MILLISECONDS.toMicros(System.currentTimeMillis());
+        for (; ; ) {
+            long o = before.get();
+            long n = Math.max(o + 1, now);
+            if (before.compareAndSet(o, n)) {
+                return n;
+            }
+        }
+    }
 
-	@Override
-	public ProposedTimestamp propose() {
-		final long u = nowMicros();
-		return new ProposedTimestamp() {
-			@Override
-			public long read(TimeUnit unit) {
-				return unit.convert(u, MICROSECONDS);
-			}
+    @Override
+    public ProposedTimestamp propose() {
+        final long u = nowMicros();
+        return new ProposedTimestamp() {
+            @Override
+            public long read(TimeUnit unit) {
+                return unit.convert(u, MICROSECONDS);
+            }
 
-			@Override
-			public void blockUntil(Duration maxWait) {
-				// Assume system clock never goes backwards.
-			}
-		};
-	}
+            @Override
+            public void blockUntil(Duration maxWait) {
+                // Assume system clock never goes backwards.
+            }
+        };
+    }
 }

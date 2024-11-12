@@ -18,18 +18,16 @@ import org.eclipse.jgit.transport.URIish;
  * which is not supported by this provider.
  */
 public class UnsupportedCredentialItem extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructs an UnsupportedCredentialItem with the specified detail message
-	 * prefixed with provided URI.
-	 *
-	 * @param uri
-	 *            URI used for transport
-	 * @param s
-	 *            message
-	 */
-	public UnsupportedCredentialItem(URIish uri, String s) {
-		super(uri.setPass(null) + ": " + s); //$NON-NLS-1$
-	}
+    /**
+     * Constructs an UnsupportedCredentialItem with the specified detail message
+     * prefixed with provided URI.
+     *
+     * @param uri URI used for transport
+     * @param s   message
+     */
+    public UnsupportedCredentialItem(URIish uri, String s) {
+        super(uri.setPass(null) + ": " + s); //$NON-NLS-1$
+    }
 }

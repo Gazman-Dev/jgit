@@ -50,58 +50,57 @@ import org.eclipse.jgit.treewalk.AbstractTreeIterator;
  * </pre>
  */
 public class DirCacheBuildIterator extends DirCacheIterator {
-	private final DirCacheBuilder builder;
+    private final DirCacheBuilder builder;
 
-	/**
-	 * Create a new iterator for an already loaded DirCache instance.
-	 * <p>
-	 * The iterator implementation may copy part of the cache's data during
-	 * construction, so the cache must be read in prior to creating the
-	 * iterator.
-	 *
-	 * @param dcb
-	 *            the cache builder for the cache to walk. The cache must be
-	 *            already loaded into memory.
-	 */
-	public DirCacheBuildIterator(DirCacheBuilder dcb) {
-		super(dcb.getDirCache());
-		builder = dcb;
-	}
+    /**
+     * Create a new iterator for an already loaded DirCache instance.
+     * <p>
+     * The iterator implementation may copy part of the cache's data during
+     * construction, so the cache must be read in prior to creating the
+     * iterator.
+     *
+     * @param dcb the cache builder for the cache to walk. The cache must be
+     *            already loaded into memory.
+     */
+    public DirCacheBuildIterator(DirCacheBuilder dcb) {
+        super(dcb.getDirCache());
+        builder = dcb;
+    }
 
-	DirCacheBuildIterator(final DirCacheBuildIterator p,
-			final DirCacheTree dct) {
-		super(p, dct);
-		builder = p.builder;
-	}
+    DirCacheBuildIterator(final DirCacheBuildIterator p,
+                          final DirCacheTree dct) {
+        super(p, dct);
+        builder = p.builder;
+    }
 
-	@Override
-	public AbstractTreeIterator createSubtreeIterator(ObjectReader reader)
-			throws IncorrectObjectTypeException, IOException {
-		if (currentSubtree == null)
-			throw new IncorrectObjectTypeException(getEntryObjectId(),
-					Constants.TYPE_TREE);
-		return new DirCacheBuildIterator(this, currentSubtree);
-	}
+    @Override
+    public AbstractTreeIterator createSubtreeIterator(ObjectReader reader)
+            throws IncorrectObjectTypeException, IOException {
+        if (currentSubtree == null)
+            throw new IncorrectObjectTypeException(getEntryObjectId(),
+                    Constants.TYPE_TREE);
+        return new DirCacheBuildIterator(this, currentSubtree);
+    }
 
-	@Override
-	public void skip() throws CorruptObjectException {
-		if (currentSubtree != null)
-			builder.keep(ptr, currentSubtree.getEntrySpan());
-		else
-			builder.keep(ptr, 1);
-		next(1);
-	}
+    @Override
+    public void skip() throws CorruptObjectException {
+        if (currentSubtree != null)
+            builder.keep(ptr, currentSubtree.getEntrySpan());
+        else
+            builder.keep(ptr, 1);
+        next(1);
+    }
 
-	@Override
-	public void stopWalk() {
-		final int cur = ptr;
-		final int cnt = cache.getEntryCount();
-		if (cur < cnt)
-			builder.keep(cur, cnt - cur);
-	}
+    @Override
+    public void stopWalk() {
+        final int cur = ptr;
+        final int cnt = cache.getEntryCount();
+        if (cur < cnt)
+            builder.keep(cur, cnt - cur);
+    }
 
-	@Override
-	protected boolean needsStopWalk() {
-		return ptr < cache.getEntryCount();
-	}
+    @Override
+    protected boolean needsStopWalk() {
+        return ptr < cache.getEntryCount();
+    }
 }

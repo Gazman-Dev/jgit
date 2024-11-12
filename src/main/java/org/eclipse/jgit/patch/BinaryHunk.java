@@ -20,123 +20,137 @@ import static org.eclipse.jgit.util.RawParseUtils.parseBase10;
  * Part of a "GIT binary patch" to describe the pre-image or post-image
  */
 public class BinaryHunk {
-	private static final byte[] LITERAL = encodeASCII("literal "); //$NON-NLS-1$
+    private static final byte[] LITERAL = encodeASCII("literal "); //$NON-NLS-1$
 
-	private static final byte[] DELTA = encodeASCII("delta "); //$NON-NLS-1$
+    private static final byte[] DELTA = encodeASCII("delta "); //$NON-NLS-1$
 
-	/** Type of information stored in a binary hunk. */
-	public enum Type {
-		/** The full content is stored, deflated. */
-		LITERAL_DEFLATED,
+    /**
+     * Type of information stored in a binary hunk.
+     */
+    public enum Type {
+        /**
+         * The full content is stored, deflated.
+         */
+        LITERAL_DEFLATED,
 
-		/** A Git pack-style delta is stored, deflated. */
-		DELTA_DEFLATED;
-	}
+        /**
+         * A Git pack-style delta is stored, deflated.
+         */
+        DELTA_DEFLATED;
+    }
 
-	private final FileHeader file;
+    private final FileHeader file;
 
-	/** Offset within {@link #file}.buf to the "literal" or "delta " line. */
-	final int startOffset;
+    /**
+     * Offset within {@link #file}.buf to the "literal" or "delta " line.
+     */
+    final int startOffset;
 
-	/** Position 1 past the end of this hunk within {@link #file}'s buf. */
-	int endOffset;
+    /**
+     * Position 1 past the end of this hunk within {@link #file}'s buf.
+     */
+    int endOffset;
 
-	/** Type of the data meaning. */
-	private Type type;
+    /**
+     * Type of the data meaning.
+     */
+    private Type type;
 
-	/** Inflated length of the data. */
-	private int length;
+    /**
+     * Inflated length of the data.
+     */
+    private int length;
 
-	BinaryHunk(FileHeader fh, int offset) {
-		file = fh;
-		startOffset = offset;
-	}
+    BinaryHunk(FileHeader fh, int offset) {
+        file = fh;
+        startOffset = offset;
+    }
 
-	/**
-	 * Get header for the file this hunk applies to.
-	 *
-	 * @return header for the file this hunk applies to.
-	 */
-	public FileHeader getFileHeader() {
-		return file;
-	}
+    /**
+     * Get header for the file this hunk applies to.
+     *
+     * @return header for the file this hunk applies to.
+     */
+    public FileHeader getFileHeader() {
+        return file;
+    }
 
-	/**
-	 * Get the byte array holding this hunk's patch script.
-	 *
-	 * @return the byte array holding this hunk's patch script.
-	 */
-	public byte[] getBuffer() {
-		return file.buf;
-	}
+    /**
+     * Get the byte array holding this hunk's patch script.
+     *
+     * @return the byte array holding this hunk's patch script.
+     */
+    public byte[] getBuffer() {
+        return file.buf;
+    }
 
-	/**
-	 * Get offset the start of this hunk in {@link #getBuffer()}.
-	 *
-	 * @return offset the start of this hunk in {@link #getBuffer()}.
-	 */
-	public int getStartOffset() {
-		return startOffset;
-	}
+    /**
+     * Get offset the start of this hunk in {@link #getBuffer()}.
+     *
+     * @return offset the start of this hunk in {@link #getBuffer()}.
+     */
+    public int getStartOffset() {
+        return startOffset;
+    }
 
-	/**
-	 * Get offset one past the end of the hunk in {@link #getBuffer()}.
-	 *
-	 * @return offset one past the end of the hunk in {@link #getBuffer()}.
-	 */
-	public int getEndOffset() {
-		return endOffset;
-	}
+    /**
+     * Get offset one past the end of the hunk in {@link #getBuffer()}.
+     *
+     * @return offset one past the end of the hunk in {@link #getBuffer()}.
+     */
+    public int getEndOffset() {
+        return endOffset;
+    }
 
-	/**
-	 * Get type of this binary hunk.
-	 *
-	 * @return type of this binary hunk.
-	 */
-	public Type getType() {
-		return type;
-	}
+    /**
+     * Get type of this binary hunk.
+     *
+     * @return type of this binary hunk.
+     */
+    public Type getType() {
+        return type;
+    }
 
-	/**
-	 * Get inflated size of this hunk's data.
-	 *
-	 * @return inflated size of this hunk's data.
-	 */
-	public int getSize() {
-		return length;
-	}
+    /**
+     * Get inflated size of this hunk's data.
+     *
+     * @return inflated size of this hunk's data.
+     */
+    public int getSize() {
+        return length;
+    }
 
-	int parseHunk(int ptr, int end) {
-		final byte[] buf = file.buf;
+    int parseHunk(int ptr, int end) {
+        final byte[] buf = file.buf;
 
-		if (match(buf, ptr, LITERAL) >= 0) {
-			type = Type.LITERAL_DEFLATED;
-			length = parseBase10(buf, ptr + LITERAL.length, null);
+        if (match(buf, ptr, LITERAL) >= 0) {
+            type = Type.LITERAL_DEFLATED;
+            length = parseBase10(buf, ptr + LITERAL.length, null);
 
-		} else if (match(buf, ptr, DELTA) >= 0) {
-			type = Type.DELTA_DEFLATED;
-			length = parseBase10(buf, ptr + DELTA.length, null);
+        } else if (match(buf, ptr, DELTA) >= 0) {
+            type = Type.DELTA_DEFLATED;
+            length = parseBase10(buf, ptr + DELTA.length, null);
 
-		} else {
-			// Not a valid binary hunk. Signal to the caller that
-			// we cannot parse any further and that this line should
-			// be treated otherwise.
-			//
-			return -1;
-		}
-		ptr = nextLF(buf, ptr);
+        } else {
+            // Not a valid binary hunk. Signal to the caller that
+            // we cannot parse any further and that this line should
+            // be treated otherwise.
+            //
+            return -1;
+        }
+        ptr = nextLF(buf, ptr);
 
-		// Skip until the first blank line; that is the end of the binary
-		// encoded information in this hunk. To save time we don't do a
-		// validation of the binary data at this point.
-		//
-		while (ptr < end) {
-			final boolean empty = buf[ptr] == '\n';
-			ptr = nextLF(buf, ptr);
-			if (empty)
-				break;
-		}
+        // Skip until the first blank line; that is the end of the binary
+        // encoded information in this hunk. To save time we don't do a
+        // validation of the binary data at this point.
+        //
+        while (ptr < end) {
+            final boolean empty = buf[ptr] == '\n';
+            ptr = nextLF(buf, ptr);
+            if (empty)
+                break;
+        }
 
-		return ptr;
-	}
+        return ptr;
+    }
 }

@@ -25,59 +25,58 @@ import org.eclipse.jgit.lib.ObjectId;
  * one hook throws an exception, execution of remaining hook methods is aborted.
  */
 public class PreUploadHookChain implements PreUploadHook {
-	private final List<PreUploadHook> hooks;
+    private final List<PreUploadHook> hooks;
 
-	/**
-	 * Create a new hook chaining the given hooks together.
-	 *
-	 * @param hooks
-	 *            hooks to execute, in order.
-	 * @return a new hook chain of the given hooks.
-	 */
-	public static PreUploadHook newChain(List<PreUploadHook> hooks) {
-		List<PreUploadHook> newHooks = hooks.stream()
-				.filter(hook -> !hook.equals(PreUploadHook.NULL))
-				.collect(Collectors.toList());
+    /**
+     * Create a new hook chaining the given hooks together.
+     *
+     * @param hooks hooks to execute, in order.
+     * @return a new hook chain of the given hooks.
+     */
+    public static PreUploadHook newChain(List<PreUploadHook> hooks) {
+        List<PreUploadHook> newHooks = hooks.stream()
+                .filter(hook -> !hook.equals(PreUploadHook.NULL))
+                .collect(Collectors.toList());
 
-		if (newHooks.isEmpty()) {
-			return PreUploadHook.NULL;
-		} else if (newHooks.size() == 1) {
-			return newHooks.get(0);
-		} else {
-			return new PreUploadHookChain(newHooks);
-		}
-	}
+        if (newHooks.isEmpty()) {
+            return PreUploadHook.NULL;
+        } else if (newHooks.size() == 1) {
+            return newHooks.get(0);
+        } else {
+            return new PreUploadHookChain(newHooks);
+        }
+    }
 
-	@Override
-	public void onBeginNegotiateRound(UploadPack up,
-			Collection<? extends ObjectId> wants, int cntOffered)
-			throws ServiceMayNotContinueException {
-		for (PreUploadHook hook : hooks) {
-			hook.onBeginNegotiateRound(up, wants, cntOffered);
-		}
-	}
+    @Override
+    public void onBeginNegotiateRound(UploadPack up,
+                                      Collection<? extends ObjectId> wants, int cntOffered)
+            throws ServiceMayNotContinueException {
+        for (PreUploadHook hook : hooks) {
+            hook.onBeginNegotiateRound(up, wants, cntOffered);
+        }
+    }
 
-	@Override
-	public void onEndNegotiateRound(UploadPack up,
-			Collection<? extends ObjectId> wants, int cntCommon,
-			int cntNotFound, boolean ready)
-			throws ServiceMayNotContinueException {
-		for (PreUploadHook hook : hooks) {
-			hook.onEndNegotiateRound(up, wants, cntCommon, cntNotFound, ready);
-		}
-	}
+    @Override
+    public void onEndNegotiateRound(UploadPack up,
+                                    Collection<? extends ObjectId> wants, int cntCommon,
+                                    int cntNotFound, boolean ready)
+            throws ServiceMayNotContinueException {
+        for (PreUploadHook hook : hooks) {
+            hook.onEndNegotiateRound(up, wants, cntCommon, cntNotFound, ready);
+        }
+    }
 
-	@Override
-	public void onSendPack(UploadPack up,
-			Collection<? extends ObjectId> wants,
-			Collection<? extends ObjectId> haves)
-			throws ServiceMayNotContinueException {
-		for (PreUploadHook hook : hooks) {
-			hook.onSendPack(up, wants, haves);
-		}
-	}
+    @Override
+    public void onSendPack(UploadPack up,
+                           Collection<? extends ObjectId> wants,
+                           Collection<? extends ObjectId> haves)
+            throws ServiceMayNotContinueException {
+        for (PreUploadHook hook : hooks) {
+            hook.onSendPack(up, wants, haves);
+        }
+    }
 
-	private PreUploadHookChain(List<PreUploadHook> hooks) {
-		this.hooks = Collections.unmodifiableList(hooks);
-	}
+    private PreUploadHookChain(List<PreUploadHook> hooks) {
+        this.hooks = Collections.unmodifiableList(hooks);
+    }
 }

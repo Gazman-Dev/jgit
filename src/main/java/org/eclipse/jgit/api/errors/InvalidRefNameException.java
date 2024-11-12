@@ -41,27 +41,24 @@ package org.eclipse.jgit.api.errors;
  * Exception thrown when an invalid Ref name was encountered
  */
 public class InvalidRefNameException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for InvalidRefNameException
-	 *
-	 * @param msg
-	 *            error message
-	 */
-	public InvalidRefNameException(String msg) {
-		super(msg);
-	}
+    /**
+     * Constructor for InvalidRefNameException
+     *
+     * @param msg error message
+     */
+    public InvalidRefNameException(String msg) {
+        super(msg);
+    }
 
-	/**
-	 * Constructor for InvalidRefNameException.
-	 *
-	 * @param msg
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public InvalidRefNameException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
+    /**
+     * Constructor for InvalidRefNameException.
+     *
+     * @param msg   error message
+     * @param cause a {@link Throwable}
+     */
+    public InvalidRefNameException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

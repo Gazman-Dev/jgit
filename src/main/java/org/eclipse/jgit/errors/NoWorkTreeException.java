@@ -17,12 +17,12 @@ import org.eclipse.jgit.internal.JGitText;
  * and is thus bare.
  */
 public class NoWorkTreeException extends IllegalStateException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Creates an exception indicating there is no work tree for a repository.
-	 */
-	public NoWorkTreeException() {
-		super(JGitText.get().bareRepositoryNoWorkdirAndIndex);
-	}
+    /**
+     * Creates an exception indicating there is no work tree for a repository.
+     */
+    public NoWorkTreeException() {
+        super(JGitText.get().bareRepositoryNoWorkdirAndIndex);
+    }
 }

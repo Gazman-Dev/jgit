@@ -13,12 +13,11 @@ package org.eclipse.jgit.fnmatch;
 import java.util.List;
 
 interface Head {
-	/**
-	 * Get the character which decides which heads are returned
-	 *
-	 * @param c
-	 *            the character which decides which heads are returned.
-	 * @return a list of heads based on the input.
-	 */
-	List<Head> getNextHeads(char c);
+    /**
+     * Get the character which decides which heads are returned
+     *
+     * @param c the character which decides which heads are returned.
+     * @return a list of heads based on the input.
+     */
+    List<Head> getNextHeads(char c);
 }

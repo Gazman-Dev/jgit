@@ -42,14 +42,14 @@ package org.eclipse.jgit.api.errors;
  * Exception thrown when an operation was canceled
  */
 public class CanceledException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * <p>Constructor for CanceledException.</p>
-	 *
-	 * @param message a {@link String} object.
-	 */
-	public CanceledException(String message) {
-		super(message);
-	}
+    /**
+     * <p>Constructor for CanceledException.</p>
+     *
+     * @param message a {@link String} object.
+     */
+    public CanceledException(String message) {
+        super(message);
+    }
 }

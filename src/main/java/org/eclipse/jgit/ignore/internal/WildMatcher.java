@@ -17,29 +17,29 @@ package org.eclipse.jgit.ignore.internal;
  */
 public final class WildMatcher extends AbstractMatcher {
 
-	static final String WILDMATCH = "**"; //$NON-NLS-1$
+    static final String WILDMATCH = "**"; //$NON-NLS-1$
 
-	// double star for the beginning of pattern
-	static final String WILDMATCH2 = "/**"; //$NON-NLS-1$
+    // double star for the beginning of pattern
+    static final String WILDMATCH2 = "/**"; //$NON-NLS-1$
 
-	WildMatcher(boolean dirOnly) {
-		super(WILDMATCH, dirOnly);
-	}
+    WildMatcher(boolean dirOnly) {
+        super(WILDMATCH, dirOnly);
+    }
 
-	@Override
-	public final boolean matches(String path, boolean assumeDirectory,
-			boolean pathMatch) {
-		return !dirOnly || assumeDirectory
-				|| (!pathMatch && isSubdirectory(path));
-	}
+    @Override
+    public final boolean matches(String path, boolean assumeDirectory,
+                                 boolean pathMatch) {
+        return !dirOnly || assumeDirectory
+                || (!pathMatch && isSubdirectory(path));
+    }
 
-	@Override
-	public final boolean matches(String segment, int startIncl, int endExcl) {
-		return true;
-	}
+    @Override
+    public final boolean matches(String segment, int startIncl, int endExcl) {
+        return true;
+    }
 
-	private static boolean isSubdirectory(String path) {
-		final int slashIndex = path.indexOf('/');
-		return slashIndex >= 0 && slashIndex < path.length() - 1;
-	}
+    private static boolean isSubdirectory(String path) {
+        final int slashIndex = path.indexOf('/');
+        return slashIndex >= 0 && slashIndex < path.length() - 1;
+    }
 }

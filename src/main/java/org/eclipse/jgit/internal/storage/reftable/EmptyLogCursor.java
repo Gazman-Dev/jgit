@@ -14,30 +14,32 @@ import java.io.IOException;
 
 import org.eclipse.jgit.lib.ReflogEntry;
 
-/** Empty {@link LogCursor} with no results. */
+/**
+ * Empty {@link LogCursor} with no results.
+ */
 class EmptyLogCursor extends LogCursor {
-	@Override
-	public boolean next() throws IOException {
-		return false;
-	}
+    @Override
+    public boolean next() throws IOException {
+        return false;
+    }
 
-	@Override
-	public String getRefName() {
-		return null;
-	}
+    @Override
+    public String getRefName() {
+        return null;
+    }
 
-	@Override
-	public long getUpdateIndex() {
-		return 0;
-	}
+    @Override
+    public long getUpdateIndex() {
+        return 0;
+    }
 
-	@Override
-	public ReflogEntry getReflogEntry() {
-		return null;
-	}
+    @Override
+    public ReflogEntry getReflogEntry() {
+        return null;
+    }
 
-	@Override
-	public void close() {
-		// Do nothing.
-	}
+    @Override
+    public void close() {
+        // Do nothing.
+    }
 }

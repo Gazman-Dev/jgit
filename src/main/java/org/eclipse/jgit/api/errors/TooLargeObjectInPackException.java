@@ -44,27 +44,24 @@ package org.eclipse.jgit.api.errors;
  * @since 4.4
  */
 public class TooLargeObjectInPackException extends TransportException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for TooLargeObjectInPackException
-	 *
-	 * @param msg
-	 *            message describing the transport failure.
-	 */
-	public TooLargeObjectInPackException(String msg) {
-		super(msg);
-	}
+    /**
+     * Constructor for TooLargeObjectInPackException
+     *
+     * @param msg message describing the transport failure.
+     */
+    public TooLargeObjectInPackException(String msg) {
+        super(msg);
+    }
 
-	/**
-	 * Constructor for TooLargeObjectInPackException
-	 *
-	 * @param msg
-	 *            message describing the transport exception.
-	 * @param cause
-	 *            why the transport failed.
-	 */
-	public TooLargeObjectInPackException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
+    /**
+     * Constructor for TooLargeObjectInPackException
+     *
+     * @param msg   message describing the transport exception.
+     * @param cause why the transport failed.
+     */
+    public TooLargeObjectInPackException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

@@ -14,32 +14,40 @@ import org.eclipse.jgit.internal.storage.pack.ObjectToPack;
 import org.eclipse.jgit.internal.storage.pack.StoredObjectRepresentation;
 import org.eclipse.jgit.lib.AnyObjectId;
 
-/** {@link ObjectToPack} for {@link ObjectDirectory}. */
+/**
+ * {@link ObjectToPack} for {@link ObjectDirectory}.
+ */
 class LocalObjectToPack extends ObjectToPack {
-	/** Pack to reuse compressed data from, otherwise null. */
-	Pack pack;
+    /**
+     * Pack to reuse compressed data from, otherwise null.
+     */
+    Pack pack;
 
-	/** Offset of the object's header in {@link #pack}. */
-	long offset;
+    /**
+     * Offset of the object's header in {@link #pack}.
+     */
+    long offset;
 
-	/** Length of the data section of the object. */
-	long length;
+    /**
+     * Length of the data section of the object.
+     */
+    long length;
 
-	LocalObjectToPack(AnyObjectId src, int type) {
-		super(src, type);
-	}
+    LocalObjectToPack(AnyObjectId src, int type) {
+        super(src, type);
+    }
 
-	@Override
-	protected void clearReuseAsIs() {
-		super.clearReuseAsIs();
-		pack = null;
-	}
+    @Override
+    protected void clearReuseAsIs() {
+        super.clearReuseAsIs();
+        pack = null;
+    }
 
-	@Override
-	public void select(StoredObjectRepresentation ref) {
-		LocalObjectRepresentation ptr = (LocalObjectRepresentation) ref;
-		this.pack = ptr.pack;
-		this.offset = ptr.offset;
-		this.length = ptr.length;
-	}
+    @Override
+    public void select(StoredObjectRepresentation ref) {
+        LocalObjectRepresentation ptr = (LocalObjectRepresentation) ref;
+        this.pack = ptr.pack;
+        this.offset = ptr.offset;
+        this.length = ptr.length;
+    }
 }

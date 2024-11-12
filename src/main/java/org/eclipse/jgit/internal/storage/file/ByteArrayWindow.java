@@ -23,43 +23,43 @@ import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
  * A {@link ByteWindow} with an underlying byte array for storage.
  */
 final class ByteArrayWindow extends ByteWindow {
-	private final byte[] array;
+    private final byte[] array;
 
-	ByteArrayWindow(Pack pack, long o, byte[] b) {
-		super(pack, o, b.length);
-		array = b;
-	}
+    ByteArrayWindow(Pack pack, long o, byte[] b) {
+        super(pack, o, b.length);
+        array = b;
+    }
 
-	@Override
-	protected int copy(int p, byte[] b, int o, int n) {
-		n = Math.min(array.length - p, n);
-		System.arraycopy(array, p, b, o, n);
-		return n;
-	}
+    @Override
+    protected int copy(int p, byte[] b, int o, int n) {
+        n = Math.min(array.length - p, n);
+        System.arraycopy(array, p, b, o, n);
+        return n;
+    }
 
-	@Override
-	protected int setInput(int pos, Inflater inf)
-			throws DataFormatException {
-		int n = array.length - pos;
-		inf.setInput(array, pos, n);
-		return n;
-	}
+    @Override
+    protected int setInput(int pos, Inflater inf)
+            throws DataFormatException {
+        int n = array.length - pos;
+        inf.setInput(array, pos, n);
+        return n;
+    }
 
-	void crc32(CRC32 out, long pos, int cnt) {
-		out.update(array, (int) (pos - start), cnt);
-	}
+    void crc32(CRC32 out, long pos, int cnt) {
+        out.update(array, (int) (pos - start), cnt);
+    }
 
-	@Override
-	void write(PackOutputStream out, long pos, int cnt)
-			throws IOException {
-		int ptr = (int) (pos - start);
-		out.write(array, ptr, cnt);
-	}
+    @Override
+    void write(PackOutputStream out, long pos, int cnt)
+            throws IOException {
+        int ptr = (int) (pos - start);
+        out.write(array, ptr, cnt);
+    }
 
-	void check(Inflater inf, byte[] tmp, long pos, int cnt)
-			throws DataFormatException {
-		inf.setInput(array, (int) (pos - start), cnt);
-		while (inf.inflate(tmp, 0, tmp.length) > 0)
-			continue;
-	}
+    void check(Inflater inf, byte[] tmp, long pos, int cnt)
+            throws DataFormatException {
+        inf.setInput(array, (int) (pos - start), cnt);
+        while (inf.inflate(tmp, 0, tmp.length) > 0)
+            continue;
+    }
 }

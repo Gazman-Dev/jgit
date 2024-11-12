@@ -15,10 +15,10 @@ package org.eclipse.jgit.attributes;
  * @since 4.2
  */
 public interface AttributesProvider {
-	/**
-	 * Get attributes
-	 *
-	 * @return the currently active attributes
-	 */
-	Attributes getAttributes();
+    /**
+     * Get attributes
+     *
+     * @return the currently active attributes
+     */
+    Attributes getAttributes();
 }

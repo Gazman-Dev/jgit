@@ -34,25 +34,25 @@ import org.eclipse.jgit.util.io.UnionInputStream;
  */
 public class DefaultNoteMerger implements NoteMerger {
 
-	@Override
-	public Note merge(Note base, Note ours, Note theirs, ObjectReader reader,
-			ObjectInserter inserter) throws IOException {
-		if (ours == null)
-			return theirs;
+    @Override
+    public Note merge(Note base, Note ours, Note theirs, ObjectReader reader,
+                      ObjectInserter inserter) throws IOException {
+        if (ours == null)
+            return theirs;
 
-		if (theirs == null)
-			return ours;
+        if (theirs == null)
+            return ours;
 
-		if (ours.getData().equals(theirs.getData()))
-			return ours;
+        if (ours.getData().equals(theirs.getData()))
+            return ours;
 
-		ObjectLoader lo = reader.open(ours.getData());
-		ObjectLoader lt = reader.open(theirs.getData());
-		try (UnionInputStream union = new UnionInputStream(lo.openStream(),
-				lt.openStream())) {
-			ObjectId noteData = inserter.insert(Constants.OBJ_BLOB,
-					lo.getSize() + lt.getSize(), union);
-			return new Note(ours, noteData);
-		}
-	}
+        ObjectLoader lo = reader.open(ours.getData());
+        ObjectLoader lt = reader.open(theirs.getData());
+        try (UnionInputStream union = new UnionInputStream(lo.openStream(),
+                lt.openStream())) {
+            ObjectId noteData = inserter.insert(Constants.OBJ_BLOB,
+                    lo.getSize() + lt.getSize(), union);
+            return new Note(ours, noteData);
+        }
+    }
 }

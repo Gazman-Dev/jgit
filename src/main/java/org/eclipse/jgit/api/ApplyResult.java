@@ -20,27 +20,26 @@ import java.util.List;
  */
 public class ApplyResult {
 
-	private List<File> updatedFiles = new ArrayList<>();
+    private List<File> updatedFiles = new ArrayList<>();
 
-	/**
-	 * Add updated file
-	 *
-	 * @param f
-	 *            an updated file
-	 * @return this instance
-	 */
-	public ApplyResult addUpdatedFile(File f) {
-		updatedFiles.add(f);
-		return this;
+    /**
+     * Add updated file
+     *
+     * @param f an updated file
+     * @return this instance
+     */
+    public ApplyResult addUpdatedFile(File f) {
+        updatedFiles.add(f);
+        return this;
 
-	}
+    }
 
-	/**
-	 * Get updated files
-	 *
-	 * @return updated files
-	 */
-	public List<File> getUpdatedFiles() {
-		return updatedFiles;
-	}
+    /**
+     * Get updated files
+     *
+     * @return updated files
+     */
+    public List<File> getUpdatedFiles() {
+        return updatedFiles;
+    }
 }

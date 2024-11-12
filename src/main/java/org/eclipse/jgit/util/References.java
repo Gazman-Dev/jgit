@@ -16,19 +16,16 @@ package org.eclipse.jgit.util;
  */
 public interface References {
 
-	/**
-	 * Compare two references
-	 *
-	 * @param <T>
-	 *            type of the references
-	 * @param ref1
-	 *            first reference
-	 * @param ref2
-	 *            second reference
-	 * @return {@code true} if both references refer to the same object
-	 */
-	@SuppressWarnings("ReferenceEquality")
-	public static <T> boolean isSameObject(T ref1, T ref2) {
-		return ref1 == ref2;
-	}
+    /**
+     * Compare two references
+     *
+     * @param <T>  type of the references
+     * @param ref1 first reference
+     * @param ref2 second reference
+     * @return {@code true} if both references refer to the same object
+     */
+    @SuppressWarnings("ReferenceEquality")
+    public static <T> boolean isSameObject(T ref1, T ref2) {
+        return ref1 == ref2;
+    }
 }

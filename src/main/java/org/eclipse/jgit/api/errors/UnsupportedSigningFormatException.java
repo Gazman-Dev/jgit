@@ -43,27 +43,24 @@ package org.eclipse.jgit.api.errors;
  * @since 5.3
  */
 public class UnsupportedSigningFormatException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for UnsupportedGpgFormatException
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public UnsupportedSigningFormatException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for UnsupportedGpgFormatException
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     */
+    public UnsupportedSigningFormatException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for UnsupportedGpgFormatException
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public UnsupportedSigningFormatException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for UnsupportedGpgFormatException
+     *
+     * @param message error message
+     */
+    public UnsupportedSigningFormatException(String message) {
+        super(message);
+    }
 }

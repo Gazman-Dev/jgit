@@ -13,172 +13,164 @@
 
 package org.eclipse.jgit.lib;
 
+import org.eclipse.jgit.internal.storage.file.RefDirectory;
+import org.eclipse.jgit.util.RefList;
+import org.eclipse.jgit.util.RefMap;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.jgit.internal.storage.file.RefDirectory;
-import org.eclipse.jgit.util.RefList;
-import org.eclipse.jgit.util.RefMap;
-
 /**
  * Writes out refs to the {@link Constants#INFO_REFS} and
  * {@link Constants#PACKED_REFS} files.
- *
+ * <p>
  * This class is abstract as the writing of the files must be handled by the
  * caller. This is because it is used by transport classes as well.
  */
 public abstract class RefWriter {
 
-	private final Collection<Ref> refs;
+    private final Collection<Ref> refs;
 
-	/**
-	 * <p>Constructor for RefWriter.</p>
-	 *
-	 * @param refs
-	 *            the complete set of references. This should have been computed
-	 *            by applying updates to the advertised refs already discovered.
-	 */
-	public RefWriter(Collection<Ref> refs) {
-		this.refs = RefComparator.sort(refs);
-	}
+    /**
+     * <p>Constructor for RefWriter.</p>
+     *
+     * @param refs the complete set of references. This should have been computed
+     *             by applying updates to the advertised refs already discovered.
+     */
+    public RefWriter(Collection<Ref> refs) {
+        this.refs = RefComparator.sort(refs);
+    }
 
-	/**
-	 * <p>Constructor for RefWriter.</p>
-	 *
-	 * @param refs
-	 *            the complete set of references. This should have been computed
-	 *            by applying updates to the advertised refs already discovered.
-	 */
-	public RefWriter(Map<String, Ref> refs) {
-		if (refs instanceof RefMap)
-			this.refs = refs.values();
-		else
-			this.refs = RefComparator.sort(refs.values());
-	}
+    /**
+     * <p>Constructor for RefWriter.</p>
+     *
+     * @param refs the complete set of references. This should have been computed
+     *             by applying updates to the advertised refs already discovered.
+     */
+    public RefWriter(Map<String, Ref> refs) {
+        if (refs instanceof RefMap)
+            this.refs = refs.values();
+        else
+            this.refs = RefComparator.sort(refs.values());
+    }
 
-	/**
-	 * <p>Constructor for RefWriter.</p>
-	 *
-	 * @param refs
-	 *            the complete set of references. This should have been computed
-	 *            by applying updates to the advertised refs already discovered.
-	 */
-	public RefWriter(RefList<Ref> refs) {
-		this.refs = refs.asList();
-	}
+    /**
+     * <p>Constructor for RefWriter.</p>
+     *
+     * @param refs the complete set of references. This should have been computed
+     *             by applying updates to the advertised refs already discovered.
+     */
+    public RefWriter(RefList<Ref> refs) {
+        this.refs = refs.asList();
+    }
 
-	/**
-	 * Rebuild the {@link Constants#INFO_REFS}.
-	 * <p>
-	 * This method rebuilds the contents of the
-	 * {@link Constants#INFO_REFS} file to match the passed
-	 * list of references.
-	 *
-	 * @throws IOException
-	 *             writing is not supported, or attempting to write the file
-	 *             failed, possibly due to permissions or remote disk full, etc.
-	 */
-	public void writeInfoRefs() throws IOException {
-		final StringWriter w = new StringWriter();
-		final char[] tmp = new char[Constants.OBJECT_ID_STRING_LENGTH];
-		for (Ref r : refs) {
-			if (Constants.HEAD.equals(r.getName())) {
-				// Historically HEAD has never been published through
-				// the INFO_REFS file. This is a mistake, but its the
-				// way things are.
-				//
-				continue;
-			}
+    /**
+     * Rebuild the {@link Constants#INFO_REFS}.
+     * <p>
+     * This method rebuilds the contents of the
+     * {@link Constants#INFO_REFS} file to match the passed
+     * list of references.
+     *
+     * @throws IOException writing is not supported, or attempting to write the file
+     *                     failed, possibly due to permissions or remote disk full, etc.
+     */
+    public void writeInfoRefs() throws IOException {
+        final StringWriter w = new StringWriter();
+        final char[] tmp = new char[Constants.OBJECT_ID_STRING_LENGTH];
+        for (Ref r : refs) {
+            if (Constants.HEAD.equals(r.getName())) {
+                // Historically HEAD has never been published through
+                // the INFO_REFS file. This is a mistake, but its the
+                // way things are.
+                //
+                continue;
+            }
 
-			ObjectId objectId = r.getObjectId();
-			if (objectId == null) {
-				// Symrefs to unborn branches aren't advertised in the info/refs
-				// file.
-				continue;
-			}
-			objectId.copyTo(tmp, w);
-			w.write('\t');
-			w.write(r.getName());
-			w.write('\n');
+            ObjectId objectId = r.getObjectId();
+            if (objectId == null) {
+                // Symrefs to unborn branches aren't advertised in the info/refs
+                // file.
+                continue;
+            }
+            objectId.copyTo(tmp, w);
+            w.write('\t');
+            w.write(r.getName());
+            w.write('\n');
 
-			ObjectId peeledObjectId = r.getPeeledObjectId();
-			if (peeledObjectId != null) {
-				peeledObjectId.copyTo(tmp, w);
-				w.write('\t');
-				w.write(r.getName());
-				w.write("^{}\n"); //$NON-NLS-1$
-			}
-		}
-		writeFile(Constants.INFO_REFS, Constants.encode(w.toString()));
-	}
+            ObjectId peeledObjectId = r.getPeeledObjectId();
+            if (peeledObjectId != null) {
+                peeledObjectId.copyTo(tmp, w);
+                w.write('\t');
+                w.write(r.getName());
+                w.write("^{}\n"); //$NON-NLS-1$
+            }
+        }
+        writeFile(Constants.INFO_REFS, Constants.encode(w.toString()));
+    }
 
-	/**
-	 * Rebuild the {@link Constants#PACKED_REFS} file.
-	 * <p>
-	 * This method rebuilds the contents of the
-	 * {@link Constants#PACKED_REFS} file to match the
-	 * passed list of references, including only those refs that have a storage
-	 * type of {@link Ref.Storage#PACKED}.
-	 *
-	 * @throws IOException
-	 *             writing is not supported, or attempting to write the file
-	 *             failed, possibly due to permissions or remote disk full, etc.
-	 */
-	public void writePackedRefs() throws IOException {
-		boolean peeled = false;
-		for (Ref r : refs) {
-			if (r.getStorage().isPacked() && r.isPeeled()) {
-				peeled = true;
-				break;
-			}
-		}
+    /**
+     * Rebuild the {@link Constants#PACKED_REFS} file.
+     * <p>
+     * This method rebuilds the contents of the
+     * {@link Constants#PACKED_REFS} file to match the
+     * passed list of references, including only those refs that have a storage
+     * type of {@link Ref.Storage#PACKED}.
+     *
+     * @throws IOException writing is not supported, or attempting to write the file
+     *                     failed, possibly due to permissions or remote disk full, etc.
+     */
+    public void writePackedRefs() throws IOException {
+        boolean peeled = false;
+        for (Ref r : refs) {
+            if (r.getStorage().isPacked() && r.isPeeled()) {
+                peeled = true;
+                break;
+            }
+        }
 
-		final StringWriter w = new StringWriter();
-		if (peeled) {
-			w.write(RefDirectory.PACKED_REFS_HEADER);
-			w.write(RefDirectory.PACKED_REFS_PEELED);
-			w.write('\n');
-		}
+        final StringWriter w = new StringWriter();
+        if (peeled) {
+            w.write(RefDirectory.PACKED_REFS_HEADER);
+            w.write(RefDirectory.PACKED_REFS_PEELED);
+            w.write('\n');
+        }
 
-		final char[] tmp = new char[Constants.OBJECT_ID_STRING_LENGTH];
-		for (Ref r : refs) {
-			if (r.getStorage() != Ref.Storage.PACKED)
-				continue;
+        final char[] tmp = new char[Constants.OBJECT_ID_STRING_LENGTH];
+        for (Ref r : refs) {
+            if (r.getStorage() != Ref.Storage.PACKED)
+                continue;
 
-			ObjectId objectId = r.getObjectId();
-			if (objectId == null) {
-				// A packed ref cannot be a symref, let alone a symref
-				// to an unborn branch.
-				throw new NullPointerException();
-			}
-			objectId.copyTo(tmp, w);
-			w.write(' ');
-			w.write(r.getName());
-			w.write('\n');
+            ObjectId objectId = r.getObjectId();
+            if (objectId == null) {
+                // A packed ref cannot be a symref, let alone a symref
+                // to an unborn branch.
+                throw new NullPointerException();
+            }
+            objectId.copyTo(tmp, w);
+            w.write(' ');
+            w.write(r.getName());
+            w.write('\n');
 
-			ObjectId peeledObjectId = r.getPeeledObjectId();
-			if (peeledObjectId != null) {
-				w.write('^');
-				peeledObjectId.copyTo(tmp, w);
-				w.write('\n');
-			}
-		}
-		writeFile(Constants.PACKED_REFS, Constants.encode(w.toString()));
-	}
+            ObjectId peeledObjectId = r.getPeeledObjectId();
+            if (peeledObjectId != null) {
+                w.write('^');
+                peeledObjectId.copyTo(tmp, w);
+                w.write('\n');
+            }
+        }
+        writeFile(Constants.PACKED_REFS, Constants.encode(w.toString()));
+    }
 
-	/**
-	 * Handles actual writing of ref files to the git repository, which may
-	 * differ slightly depending on the destination and transport.
-	 *
-	 * @param file
-	 *            path to ref file.
-	 * @param content
-	 *            byte content of file to be written.
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	protected abstract void writeFile(String file, byte[] content)
-			throws IOException;
+    /**
+     * Handles actual writing of ref files to the git repository, which may
+     * differ slightly depending on the destination and transport.
+     *
+     * @param file    path to ref file.
+     * @param content byte content of file to be written.
+     * @throws IOException if an IO error occurred
+     */
+    protected abstract void writeFile(String file, byte[] content)
+            throws IOException;
 }

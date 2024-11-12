@@ -16,12 +16,18 @@ package org.eclipse.jgit.merge;
  */
 public enum ContentMergeStrategy {
 
-	/** Produce a conflict. */
-	CONFLICT,
+    /**
+     * Produce a conflict.
+     */
+    CONFLICT,
 
-	/** Resolve the conflict hunk using the ours version. */
-	OURS,
+    /**
+     * Resolve the conflict hunk using the ours version.
+     */
+    OURS,
 
-	/** Resolve the conflict hunk using the theirs version. */
-	THEIRS
+    /**
+     * Resolve the conflict hunk using the theirs version.
+     */
+    THEIRS
 }

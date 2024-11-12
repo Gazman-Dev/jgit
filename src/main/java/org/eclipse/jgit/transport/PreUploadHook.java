@@ -25,90 +25,78 @@ import org.eclipse.jgit.lib.ObjectId;
  * the end-user over the client's protocol connection.
  */
 public interface PreUploadHook {
-	/** A simple no-op hook. */
-	PreUploadHook NULL = new PreUploadHook() {
-		@Override
-		public void onBeginNegotiateRound(UploadPack up,
-				Collection<? extends ObjectId> wants, int cntOffered)
-				throws ServiceMayNotContinueException {
-			// Do nothing.
-		}
+    /**
+     * A simple no-op hook.
+     */
+    PreUploadHook NULL = new PreUploadHook() {
+        @Override
+        public void onBeginNegotiateRound(UploadPack up,
+                                          Collection<? extends ObjectId> wants, int cntOffered)
+                throws ServiceMayNotContinueException {
+            // Do nothing.
+        }
 
-		@Override
-		public void onEndNegotiateRound(UploadPack up,
-				Collection<? extends ObjectId> wants, int cntCommon,
-				int cntNotFound, boolean ready)
-				throws ServiceMayNotContinueException {
-			// Do nothing.
-		}
+        @Override
+        public void onEndNegotiateRound(UploadPack up,
+                                        Collection<? extends ObjectId> wants, int cntCommon,
+                                        int cntNotFound, boolean ready)
+                throws ServiceMayNotContinueException {
+            // Do nothing.
+        }
 
-		@Override
-		public void onSendPack(UploadPack up,
-				Collection<? extends ObjectId> wants,
-				Collection<? extends ObjectId> haves)
-				throws ServiceMayNotContinueException {
-			// Do nothing.
-		}
-	};
+        @Override
+        public void onSendPack(UploadPack up,
+                               Collection<? extends ObjectId> wants,
+                               Collection<? extends ObjectId> haves)
+                throws ServiceMayNotContinueException {
+            // Do nothing.
+        }
+    };
 
-	/**
-	 * Invoked before negotiation round is started.
-	 *
-	 * @param up
-	 *            the upload pack instance handling the connection.
-	 * @param wants
-	 *            the list of wanted objects.
-	 * @param cntOffered
-	 *            number of objects the client has offered.
-	 * @throws ServiceMayNotContinueException
-	 *             abort; the message will be sent to the user.
-	 */
-	void onBeginNegotiateRound(UploadPack up,
-			Collection<? extends ObjectId> wants, int cntOffered)
-			throws ServiceMayNotContinueException;
+    /**
+     * Invoked before negotiation round is started.
+     *
+     * @param up         the upload pack instance handling the connection.
+     * @param wants      the list of wanted objects.
+     * @param cntOffered number of objects the client has offered.
+     * @throws ServiceMayNotContinueException abort; the message will be sent to the user.
+     */
+    void onBeginNegotiateRound(UploadPack up,
+                               Collection<? extends ObjectId> wants, int cntOffered)
+            throws ServiceMayNotContinueException;
 
-	/**
-	 * Invoked after a negotiation round is completed.
-	 *
-	 * @param up
-	 *            the upload pack instance handling the connection.
-	 * @param wants
-	 *            the list of wanted objects.
-	 * @param cntCommon
-	 *            number of objects this round found to be common. In a smart
-	 *            HTTP transaction this includes the objects that were
-	 *            previously found to be common.
-	 * @param cntNotFound
-	 *            number of objects in this round the local repository does not
-	 *            have, but that were offered as potential common bases.
-	 * @param ready
-	 *            true if a pack is ready to be sent (the commit graph was
-	 *            successfully cut).
-	 * @throws ServiceMayNotContinueException
-	 *             abort; the message will be sent to the user.
-	 */
-	void onEndNegotiateRound(UploadPack up,
-			Collection<? extends ObjectId> wants, int cntCommon,
-			int cntNotFound, boolean ready)
-			throws ServiceMayNotContinueException;
+    /**
+     * Invoked after a negotiation round is completed.
+     *
+     * @param up          the upload pack instance handling the connection.
+     * @param wants       the list of wanted objects.
+     * @param cntCommon   number of objects this round found to be common. In a smart
+     *                    HTTP transaction this includes the objects that were
+     *                    previously found to be common.
+     * @param cntNotFound number of objects in this round the local repository does not
+     *                    have, but that were offered as potential common bases.
+     * @param ready       true if a pack is ready to be sent (the commit graph was
+     *                    successfully cut).
+     * @throws ServiceMayNotContinueException abort; the message will be sent to the user.
+     */
+    void onEndNegotiateRound(UploadPack up,
+                             Collection<? extends ObjectId> wants, int cntCommon,
+                             int cntNotFound, boolean ready)
+            throws ServiceMayNotContinueException;
 
-	/**
-	 * Invoked just before a pack will be sent to the client.
-	 *
-	 * @param up
-	 *            the upload pack instance handling the connection.
-	 * @param wants
-	 *            the list of wanted objects. These may be RevObject or
-	 *            RevCommit if the processed parsed them. Implementors should
-	 *            not rely on the values being parsed.
-	 * @param haves
-	 *            the list of common objects. Empty on an initial clone request.
-	 *            These may be RevObject or RevCommit if the processed parsed
-	 *            them. Implementors should not rely on the values being parsed.
-	 * @throws ServiceMayNotContinueException
-	 *             abort; the message will be sent to the user.
-	 */
-	void onSendPack(UploadPack up, Collection<? extends ObjectId> wants,
-			Collection<? extends ObjectId> haves)
-			throws ServiceMayNotContinueException;
+    /**
+     * Invoked just before a pack will be sent to the client.
+     *
+     * @param up    the upload pack instance handling the connection.
+     * @param wants the list of wanted objects. These may be RevObject or
+     *              RevCommit if the processed parsed them. Implementors should
+     *              not rely on the values being parsed.
+     * @param haves the list of common objects. Empty on an initial clone request.
+     *              These may be RevObject or RevCommit if the processed parsed
+     *              them. Implementors should not rely on the values being parsed.
+     * @throws ServiceMayNotContinueException abort; the message will be sent to the user.
+     */
+    void onSendPack(UploadPack up, Collection<? extends ObjectId> wants,
+                    Collection<? extends ObjectId> haves)
+            throws ServiceMayNotContinueException;
 }

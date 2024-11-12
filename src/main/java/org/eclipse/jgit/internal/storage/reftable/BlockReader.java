@@ -57,498 +57,493 @@ import org.eclipse.jgit.util.RawParseUtils;
  * an offset into the block.
  */
 class BlockReader {
-	private byte blockType;
-	private long endPosition;
+    private byte blockType;
+    private long endPosition;
 
-	private byte[] buf;
-	private int bufLen;
-	private int ptr;
+    private byte[] buf;
+    private int bufLen;
+    private int ptr;
 
-	private int keysStart;
-	private int keysEnd;
+    private int keysStart;
+    private int keysEnd;
 
-	private int restartCnt;
-	private int restartTbl;
+    private int restartCnt;
+    private int restartTbl;
 
-	private byte[] nameBuf = new byte[256];
-	private int nameLen;
-	private int valueType;
+    private byte[] nameBuf = new byte[256];
+    private int nameLen;
+    private int valueType;
 
-	byte type() {
-		return blockType;
-	}
+    byte type() {
+        return blockType;
+    }
 
-	long endPosition() {
-		return endPosition;
-	}
+    long endPosition() {
+        return endPosition;
+    }
 
-	boolean next() {
-		return ptr < keysEnd;
-	}
+    boolean next() {
+        return ptr < keysEnd;
+    }
 
-	void parseKey() {
-		int pfx = readVarint32();
-		valueType = readVarint32();
-		int sfx = valueType >>> 3;
-		if (pfx + sfx > nameBuf.length) {
-			int n = Math.max(pfx + sfx, nameBuf.length * 2);
-			nameBuf = Arrays.copyOf(nameBuf, n);
-		}
-		System.arraycopy(buf, ptr, nameBuf, pfx, sfx);
-		ptr += sfx;
-		nameLen = pfx + sfx;
-	}
+    void parseKey() {
+        int pfx = readVarint32();
+        valueType = readVarint32();
+        int sfx = valueType >>> 3;
+        if (pfx + sfx > nameBuf.length) {
+            int n = Math.max(pfx + sfx, nameBuf.length * 2);
+            nameBuf = Arrays.copyOf(nameBuf, n);
+        }
+        System.arraycopy(buf, ptr, nameBuf, pfx, sfx);
+        ptr += sfx;
+        nameLen = pfx + sfx;
+    }
 
-	String name() {
-		int len = nameLen;
-		if (blockType == LOG_BLOCK_TYPE) {
-			len -= 9;
-		}
-		return RawParseUtils.decode(UTF_8, nameBuf, 0, len);
-	}
+    String name() {
+        int len = nameLen;
+        if (blockType == LOG_BLOCK_TYPE) {
+            len -= 9;
+        }
+        return RawParseUtils.decode(UTF_8, nameBuf, 0, len);
+    }
 
-	// Matches the key against a name or a prefix. For reflogs, only the
-	// refname is matched, and the updateIndex suffix is ignored.
-	boolean match(byte[] match, boolean matchIsPrefix) {
-		int len = nameLen;
-		if (blockType == LOG_BLOCK_TYPE) {
-			len -= 9;
-		}
-		if (matchIsPrefix) {
-			return len >= match.length
-					&& compare(
-							match, 0, match.length,
-							nameBuf, 0, match.length) == 0;
-		}
-		return compare(match, 0, match.length, nameBuf, 0, len) == 0;
-	}
+    // Matches the key against a name or a prefix. For reflogs, only the
+    // refname is matched, and the updateIndex suffix is ignored.
+    boolean match(byte[] match, boolean matchIsPrefix) {
+        int len = nameLen;
+        if (blockType == LOG_BLOCK_TYPE) {
+            len -= 9;
+        }
+        if (matchIsPrefix) {
+            return len >= match.length
+                    && compare(
+                    match, 0, match.length,
+                    nameBuf, 0, match.length) == 0;
+        }
+        return compare(match, 0, match.length, nameBuf, 0, len) == 0;
+    }
 
-	long readPositionFromIndex() throws IOException {
-		if (blockType != INDEX_BLOCK_TYPE) {
-			throw invalidBlock();
-		}
+    long readPositionFromIndex() throws IOException {
+        if (blockType != INDEX_BLOCK_TYPE) {
+            throw invalidBlock();
+        }
 
-		readVarint32(); // skip prefix length
-		int n = readVarint32() >>> 3;
-		ptr += n; // skip name
-		return readVarint64();
-	}
+        readVarint32(); // skip prefix length
+        int n = readVarint32() >>> 3;
+        ptr += n; // skip name
+        return readVarint64();
+    }
 
-	long readUpdateIndexDelta() {
-		return readVarint64();
-	}
+    long readUpdateIndexDelta() {
+        return readVarint64();
+    }
 
-	Ref readRef(long minUpdateIndex) throws IOException {
-		long updateIndex = minUpdateIndex + readUpdateIndexDelta();
-		String name = RawParseUtils.decode(UTF_8, nameBuf, 0, nameLen);
-		switch (valueType & VALUE_TYPE_MASK) {
-		case VALUE_NONE: // delete
-			return newRef(name, updateIndex);
+    Ref readRef(long minUpdateIndex) throws IOException {
+        long updateIndex = minUpdateIndex + readUpdateIndexDelta();
+        String name = RawParseUtils.decode(UTF_8, nameBuf, 0, nameLen);
+        switch (valueType & VALUE_TYPE_MASK) {
+            case VALUE_NONE: // delete
+                return newRef(name, updateIndex);
 
-		case VALUE_1ID:
-			return new ObjectIdRef.PeeledNonTag(PACKED, name, readValueId(),
-					updateIndex);
+            case VALUE_1ID:
+                return new ObjectIdRef.PeeledNonTag(PACKED, name, readValueId(),
+                        updateIndex);
 
-		case VALUE_2ID: { // annotated tag
-			ObjectId id1 = readValueId();
-			ObjectId id2 = readValueId();
-			return new ObjectIdRef.PeeledTag(PACKED, name, id1, id2,
-					updateIndex);
-		}
+            case VALUE_2ID: { // annotated tag
+                ObjectId id1 = readValueId();
+                ObjectId id2 = readValueId();
+                return new ObjectIdRef.PeeledTag(PACKED, name, id1, id2,
+                        updateIndex);
+            }
 
-		case VALUE_SYMREF: {
-			String val = readValueString();
-			return new SymbolicRef(name, newRef(val, updateIndex), updateIndex);
-		}
+            case VALUE_SYMREF: {
+                String val = readValueString();
+                return new SymbolicRef(name, newRef(val, updateIndex), updateIndex);
+            }
 
-		default:
-			throw invalidBlock();
-		}
-	}
+            default:
+                throw invalidBlock();
+        }
+    }
 
-	@Nullable
-	LongList readBlockPositionList() {
-		int n = valueType & VALUE_TYPE_MASK;
-		if (n == 0) {
-			n = readVarint32();
-			if (n == 0) {
-				return null;
-			}
-		}
+    @Nullable
+    LongList readBlockPositionList() {
+        int n = valueType & VALUE_TYPE_MASK;
+        if (n == 0) {
+            n = readVarint32();
+            if (n == 0) {
+                return null;
+            }
+        }
 
-		LongList b = new LongList(n);
-		b.add(readVarint64());
-		for (int j = 1; j < n; j++) {
-			long prior = b.get(j - 1);
-			b.add(prior + readVarint64());
-		}
-		return b;
-	}
+        LongList b = new LongList(n);
+        b.add(readVarint64());
+        for (int j = 1; j < n; j++) {
+            long prior = b.get(j - 1);
+            b.add(prior + readVarint64());
+        }
+        return b;
+    }
 
-	long readLogUpdateIndex() {
-		return reverseUpdateIndex(NB.decodeUInt64(nameBuf, nameLen - 8));
-	}
+    long readLogUpdateIndex() {
+        return reverseUpdateIndex(NB.decodeUInt64(nameBuf, nameLen - 8));
+    }
 
-	@Nullable
-	ReflogEntry readLogEntry() {
-		if ((valueType & VALUE_TYPE_MASK) == LOG_NONE) {
-			return null;
-		}
+    @Nullable
+    ReflogEntry readLogEntry() {
+        if ((valueType & VALUE_TYPE_MASK) == LOG_NONE) {
+            return null;
+        }
 
-		ObjectId oldId = readValueId();
-		ObjectId newId = readValueId();
-		PersonIdent who = readPersonIdent();
-		String msg = readValueString();
+        ObjectId oldId = readValueId();
+        ObjectId newId = readValueId();
+        PersonIdent who = readPersonIdent();
+        String msg = readValueString();
 
-		return new ReflogEntry() {
-			@Override
-			public ObjectId getOldId() {
-				return oldId;
-			}
+        return new ReflogEntry() {
+            @Override
+            public ObjectId getOldId() {
+                return oldId;
+            }
 
-			@Override
-			public ObjectId getNewId() {
-				return newId;
-			}
+            @Override
+            public ObjectId getNewId() {
+                return newId;
+            }
 
-			@Override
-			public PersonIdent getWho() {
-				return who;
-			}
+            @Override
+            public PersonIdent getWho() {
+                return who;
+            }
 
-			@Override
-			public String getComment() {
-				return msg;
-			}
+            @Override
+            public String getComment() {
+                return msg;
+            }
 
-			@Override
-			public CheckoutEntry parseCheckout() {
-				return null;
-			}
-		};
-	}
+            @Override
+            public CheckoutEntry parseCheckout() {
+                return null;
+            }
+        };
+    }
 
-	private ObjectId readValueId() {
-		ObjectId id = ObjectId.fromRaw(buf, ptr);
-		ptr += OBJECT_ID_LENGTH;
-		return id;
-	}
+    private ObjectId readValueId() {
+        ObjectId id = ObjectId.fromRaw(buf, ptr);
+        ptr += OBJECT_ID_LENGTH;
+        return id;
+    }
 
-	private String readValueString() {
-		int len = readVarint32();
-		int end = ptr + len;
-		String s = RawParseUtils.decode(UTF_8, buf, ptr, end);
-		ptr = end;
-		return s;
-	}
+    private String readValueString() {
+        int len = readVarint32();
+        int end = ptr + len;
+        String s = RawParseUtils.decode(UTF_8, buf, ptr, end);
+        ptr = end;
+        return s;
+    }
 
-	private PersonIdent readPersonIdent() {
-		String name = readValueString();
-		String email = readValueString();
-		long ms = readVarint64() * 1000;
-		int tz = readInt16();
-		return new PersonIdent(name, email, ms, tz);
-	}
+    private PersonIdent readPersonIdent() {
+        String name = readValueString();
+        String email = readValueString();
+        long ms = readVarint64() * 1000;
+        int tz = readInt16();
+        return new PersonIdent(name, email, ms, tz);
+    }
 
-	void readBlock(BlockSource src, long pos, int fileBlockSize)
-			throws IOException {
-		readBlockIntoBuf(src, pos, fileBlockSize);
-		parseBlockStart(src, pos, fileBlockSize);
-	}
+    void readBlock(BlockSource src, long pos, int fileBlockSize)
+            throws IOException {
+        readBlockIntoBuf(src, pos, fileBlockSize);
+        parseBlockStart(src, pos, fileBlockSize);
+    }
 
-	private void readBlockIntoBuf(BlockSource src, long pos, int size)
-			throws IOException {
-		ByteBuffer b = src.read(pos, size);
-		bufLen = b.position();
-		if (bufLen <= 0) {
-			throw invalidBlock();
-		}
-		if (b.hasArray() && b.arrayOffset() == 0) {
-			buf = b.array();
-		} else {
-			buf = new byte[bufLen];
-			b.flip();
-			b.get(buf);
-		}
-		endPosition = pos + bufLen;
-	}
+    private void readBlockIntoBuf(BlockSource src, long pos, int size)
+            throws IOException {
+        ByteBuffer b = src.read(pos, size);
+        bufLen = b.position();
+        if (bufLen <= 0) {
+            throw invalidBlock();
+        }
+        if (b.hasArray() && b.arrayOffset() == 0) {
+            buf = b.array();
+        } else {
+            buf = new byte[bufLen];
+            b.flip();
+            b.get(buf);
+        }
+        endPosition = pos + bufLen;
+    }
 
-	private void parseBlockStart(BlockSource src, long pos, int fileBlockSize)
-			throws IOException {
-		ptr = 0;
-		if (pos == 0) {
-			if (bufLen == FILE_HEADER_LEN) {
-				setupEmptyFileBlock();
-				return;
-			}
-			ptr += FILE_HEADER_LEN; // first block begins with file header
-		}
+    private void parseBlockStart(BlockSource src, long pos, int fileBlockSize)
+            throws IOException {
+        ptr = 0;
+        if (pos == 0) {
+            if (bufLen == FILE_HEADER_LEN) {
+                setupEmptyFileBlock();
+                return;
+            }
+            ptr += FILE_HEADER_LEN; // first block begins with file header
+        }
 
-		int typeAndSize = NB.decodeInt32(buf, ptr);
-		ptr += 4;
+        int typeAndSize = NB.decodeInt32(buf, ptr);
+        ptr += 4;
 
-		blockType = (byte) (typeAndSize >>> 24);
-		int blockLen = decodeBlockLen(typeAndSize);
-		if (blockType == LOG_BLOCK_TYPE) {
-			// Log blocks must be inflated after the header.
-			long deflatedSize = inflateBuf(src, pos, blockLen, fileBlockSize);
-			endPosition = pos + 4 + deflatedSize;
-		} else if (bufLen < blockLen) {
-			readBlockIntoBuf(src, pos, blockLen);
-		} else if (bufLen > blockLen) {
-			bufLen = blockLen;
-		}
+        blockType = (byte) (typeAndSize >>> 24);
+        int blockLen = decodeBlockLen(typeAndSize);
+        if (blockType == LOG_BLOCK_TYPE) {
+            // Log blocks must be inflated after the header.
+            long deflatedSize = inflateBuf(src, pos, blockLen, fileBlockSize);
+            endPosition = pos + 4 + deflatedSize;
+        } else if (bufLen < blockLen) {
+            readBlockIntoBuf(src, pos, blockLen);
+        } else if (bufLen > blockLen) {
+            bufLen = blockLen;
+        }
 
-		if (blockType != FILE_BLOCK_TYPE) {
-			restartCnt = NB.decodeUInt16(buf, bufLen - 2);
-			restartTbl = bufLen - (restartCnt * 3 + 2);
-			keysStart = ptr;
-			keysEnd = restartTbl;
-		} else {
-			keysStart = ptr;
-			keysEnd = ptr;
-		}
-	}
+        if (blockType != FILE_BLOCK_TYPE) {
+            restartCnt = NB.decodeUInt16(buf, bufLen - 2);
+            restartTbl = bufLen - (restartCnt * 3 + 2);
+            keysStart = ptr;
+            keysEnd = restartTbl;
+        } else {
+            keysStart = ptr;
+            keysEnd = ptr;
+        }
+    }
 
-	static int decodeBlockLen(int typeAndSize) {
-		return typeAndSize & 0xffffff;
-	}
+    static int decodeBlockLen(int typeAndSize) {
+        return typeAndSize & 0xffffff;
+    }
 
-	private long inflateBuf(BlockSource src, long pos, int blockLen,
-			int fileBlockSize) throws IOException {
-		byte[] dst = new byte[blockLen];
-		System.arraycopy(buf, 0, dst, 0, 4);
+    private long inflateBuf(BlockSource src, long pos, int blockLen,
+                            int fileBlockSize) throws IOException {
+        byte[] dst = new byte[blockLen];
+        System.arraycopy(buf, 0, dst, 0, 4);
 
-		long deflatedSize = 0;
-		Inflater inf = InflaterCache.get();
-		try {
-			inf.setInput(buf, ptr, bufLen - ptr);
-			for (int o = 4;;) {
-				int n = inf.inflate(dst, o, dst.length - o);
-				o += n;
-				if (inf.finished()) {
-					deflatedSize = inf.getBytesRead();
-					break;
-				} else if (n <= 0 && inf.needsInput()) {
-					long p = pos + 4 + inf.getBytesRead();
-					readBlockIntoBuf(src, p, fileBlockSize);
-					inf.setInput(buf, 0, bufLen);
-				} else if (n <= 0) {
-					throw invalidBlock();
-				}
-			}
-		} catch (DataFormatException e) {
-			throw invalidBlock(e);
-		} finally {
-			InflaterCache.release(inf);
-		}
+        long deflatedSize = 0;
+        Inflater inf = InflaterCache.get();
+        try {
+            inf.setInput(buf, ptr, bufLen - ptr);
+            for (int o = 4; ; ) {
+                int n = inf.inflate(dst, o, dst.length - o);
+                o += n;
+                if (inf.finished()) {
+                    deflatedSize = inf.getBytesRead();
+                    break;
+                } else if (n <= 0 && inf.needsInput()) {
+                    long p = pos + 4 + inf.getBytesRead();
+                    readBlockIntoBuf(src, p, fileBlockSize);
+                    inf.setInput(buf, 0, bufLen);
+                } else if (n <= 0) {
+                    throw invalidBlock();
+                }
+            }
+        } catch (DataFormatException e) {
+            throw invalidBlock(e);
+        } finally {
+            InflaterCache.release(inf);
+        }
 
-		buf = dst;
-		bufLen = dst.length;
-		return deflatedSize;
-	}
+        buf = dst;
+        bufLen = dst.length;
+        return deflatedSize;
+    }
 
-	private void setupEmptyFileBlock() {
-		// An empty reftable has only the file header in first block.
-		blockType = FILE_BLOCK_TYPE;
-		ptr = FILE_HEADER_LEN;
-		restartCnt = 0;
-		restartTbl = bufLen;
-		keysStart = bufLen;
-		keysEnd = bufLen;
-	}
+    private void setupEmptyFileBlock() {
+        // An empty reftable has only the file header in first block.
+        blockType = FILE_BLOCK_TYPE;
+        ptr = FILE_HEADER_LEN;
+        restartCnt = 0;
+        restartTbl = bufLen;
+        keysStart = bufLen;
+        keysEnd = bufLen;
+    }
 
-	void verifyIndex() throws IOException {
-		if (blockType != INDEX_BLOCK_TYPE) {
-			throw invalidBlock();
-		}
-	}
+    void verifyIndex() throws IOException {
+        if (blockType != INDEX_BLOCK_TYPE) {
+            throw invalidBlock();
+        }
+    }
 
-	/**
-	 * Finds a key in the block and positions the current pointer on its record.
-	 * <p>
-	 * As a side-effect this method arranges for the current pointer to be near
-	 * or exactly on {@code key}, allowing other methods to access data from
-	 * that current record:
-	 * <ul>
-	 * <li>{@link #name()}
-	 * <li>{@link #match(byte[], boolean)}
-	 * <li>{@link #readRef(long)}
-	 * <li>{@link #readLogUpdateIndex()}
-	 * <li>{@link #readLogEntry()}
-	 * <li>{@link #readBlockPositionList()}
-	 * </ul>
-	 *
-	 * @param key
-	 *            key to find.
-	 * @return {@code <0} if the key occurs before the start of this block;
-	 *         {@code 0} if the block is positioned on the key; {@code >0} if
-	 *         the key occurs after the last key of this block.
-	 */
-	int seekKey(byte[] key) {
-		int low = 0;
-		int end = restartCnt;
-		for (;;) {
-			int mid = (low + end) >>> 1;
-			int p = NB.decodeUInt24(buf, restartTbl + mid * 3);
-			ptr = p + 1; // skip 0 prefix length
-			int n = readVarint32() >>> 3;
-			int cmp = compare(key, 0, key.length, buf, ptr, n);
-			if (cmp < 0) {
-				end = mid;
-			} else if (cmp == 0) {
-				ptr = p;
-				return 0;
-			} else /* if (cmp > 0) */ {
-				low = mid + 1;
-			}
-			if (low >= end) {
-				return scanToKey(key, p, low, cmp);
-			}
-		}
-	}
+    /**
+     * Finds a key in the block and positions the current pointer on its record.
+     * <p>
+     * As a side-effect this method arranges for the current pointer to be near
+     * or exactly on {@code key}, allowing other methods to access data from
+     * that current record:
+     * <ul>
+     * <li>{@link #name()}
+     * <li>{@link #match(byte[], boolean)}
+     * <li>{@link #readRef(long)}
+     * <li>{@link #readLogUpdateIndex()}
+     * <li>{@link #readLogEntry()}
+     * <li>{@link #readBlockPositionList()}
+     * </ul>
+     *
+     * @param key key to find.
+     * @return {@code <0} if the key occurs before the start of this block;
+     * {@code 0} if the block is positioned on the key; {@code >0} if
+     * the key occurs after the last key of this block.
+     */
+    int seekKey(byte[] key) {
+        int low = 0;
+        int end = restartCnt;
+        for (; ; ) {
+            int mid = (low + end) >>> 1;
+            int p = NB.decodeUInt24(buf, restartTbl + mid * 3);
+            ptr = p + 1; // skip 0 prefix length
+            int n = readVarint32() >>> 3;
+            int cmp = compare(key, 0, key.length, buf, ptr, n);
+            if (cmp < 0) {
+                end = mid;
+            } else if (cmp == 0) {
+                ptr = p;
+                return 0;
+            } else /* if (cmp > 0) */ {
+                low = mid + 1;
+            }
+            if (low >= end) {
+                return scanToKey(key, p, low, cmp);
+            }
+        }
+    }
 
-	/**
-	 * Performs the linear search step within a restart interval.
-	 * <p>
-	 * Starts at a restart position whose key sorts before (or equal to)
-	 * {@code key} and walks sequentially through the following prefix
-	 * compressed records to find {@code key}.
-	 *
-	 * @param key
-	 *            key the caller wants to find.
-	 * @param rPtr
-	 *            current record pointer from restart table binary search.
-	 * @param rIdx
-	 *            current restart table index.
-	 * @param rCmp
-	 *            result of compare from restart table binary search.
-	 * @return {@code <0} if the key occurs before the start of this block;
-	 *         {@code 0} if the block is positioned on the key; {@code >0} if
-	 *         the key occurs after the last key of this block.
-	 */
-	private int scanToKey(byte[] key, int rPtr, int rIdx, int rCmp) {
-		if (rCmp < 0) {
-			if (rIdx == 0) {
-				ptr = keysStart;
-				return -1;
-			}
-			ptr = NB.decodeUInt24(buf, restartTbl + (rIdx - 1) * 3);
-		} else {
-			ptr = rPtr;
-		}
+    /**
+     * Performs the linear search step within a restart interval.
+     * <p>
+     * Starts at a restart position whose key sorts before (or equal to)
+     * {@code key} and walks sequentially through the following prefix
+     * compressed records to find {@code key}.
+     *
+     * @param key  key the caller wants to find.
+     * @param rPtr current record pointer from restart table binary search.
+     * @param rIdx current restart table index.
+     * @param rCmp result of compare from restart table binary search.
+     * @return {@code <0} if the key occurs before the start of this block;
+     * {@code 0} if the block is positioned on the key; {@code >0} if
+     * the key occurs after the last key of this block.
+     */
+    private int scanToKey(byte[] key, int rPtr, int rIdx, int rCmp) {
+        if (rCmp < 0) {
+            if (rIdx == 0) {
+                ptr = keysStart;
+                return -1;
+            }
+            ptr = NB.decodeUInt24(buf, restartTbl + (rIdx - 1) * 3);
+        } else {
+            ptr = rPtr;
+        }
 
-		int cmp;
-		do {
-			int savePtr = ptr;
-			parseKey();
-			cmp = compare(key, 0, key.length, nameBuf, 0, nameLen);
-			if (cmp <= 0) {
-				// cmp < 0, name should be in this block, but is not.
-				// cmp = 0, block is positioned at name.
-				ptr = savePtr;
-				return cmp < 0 && savePtr == keysStart ? -1 : 0;
-			}
-			skipValue();
-		} while (ptr < keysEnd);
-		return cmp;
-	}
+        int cmp;
+        do {
+            int savePtr = ptr;
+            parseKey();
+            cmp = compare(key, 0, key.length, nameBuf, 0, nameLen);
+            if (cmp <= 0) {
+                // cmp < 0, name should be in this block, but is not.
+                // cmp = 0, block is positioned at name.
+                ptr = savePtr;
+                return cmp < 0 && savePtr == keysStart ? -1 : 0;
+            }
+            skipValue();
+        } while (ptr < keysEnd);
+        return cmp;
+    }
 
-	void skipValue() {
-		switch (blockType) {
-		case REF_BLOCK_TYPE:
-			readVarint64(); // update_index_delta
-			switch (valueType & VALUE_TYPE_MASK) {
-			case VALUE_NONE:
-				return;
-			case VALUE_1ID:
-				ptr += OBJECT_ID_LENGTH;
-				return;
-			case VALUE_2ID:
-				ptr += 2 * OBJECT_ID_LENGTH;
-				return;
-			case VALUE_SYMREF:
-				skipString();
-				return;
-			}
-			break;
+    void skipValue() {
+        switch (blockType) {
+            case REF_BLOCK_TYPE:
+                readVarint64(); // update_index_delta
+                switch (valueType & VALUE_TYPE_MASK) {
+                    case VALUE_NONE:
+                        return;
+                    case VALUE_1ID:
+                        ptr += OBJECT_ID_LENGTH;
+                        return;
+                    case VALUE_2ID:
+                        ptr += 2 * OBJECT_ID_LENGTH;
+                        return;
+                    case VALUE_SYMREF:
+                        skipString();
+                        return;
+                }
+                break;
 
-		case OBJ_BLOCK_TYPE: {
-			int n = valueType & VALUE_TYPE_MASK;
-			if (n == 0) {
-				n = readVarint32();
-			}
-			while (n-- > 0) {
-				readVarint32();
-			}
-			return;
-		}
+            case OBJ_BLOCK_TYPE: {
+                int n = valueType & VALUE_TYPE_MASK;
+                if (n == 0) {
+                    n = readVarint32();
+                }
+                while (n-- > 0) {
+                    readVarint32();
+                }
+                return;
+            }
 
-		case INDEX_BLOCK_TYPE:
-			readVarint32();
-			return;
+            case INDEX_BLOCK_TYPE:
+                readVarint32();
+                return;
 
-		case LOG_BLOCK_TYPE:
-			if ((valueType & VALUE_TYPE_MASK) == LOG_NONE) {
-				return;
-			} else if ((valueType & VALUE_TYPE_MASK) == LOG_DATA) {
-				ptr += 2 * OBJECT_ID_LENGTH; // oldId, newId
-				skipString(); // name
-				skipString(); // email
-				readVarint64(); // time
-				ptr += 2; // tz
-				skipString(); // msg
-				return;
-			}
-		}
+            case LOG_BLOCK_TYPE:
+                if ((valueType & VALUE_TYPE_MASK) == LOG_NONE) {
+                    return;
+                } else if ((valueType & VALUE_TYPE_MASK) == LOG_DATA) {
+                    ptr += 2 * OBJECT_ID_LENGTH; // oldId, newId
+                    skipString(); // name
+                    skipString(); // email
+                    readVarint64(); // time
+                    ptr += 2; // tz
+                    skipString(); // msg
+                    return;
+                }
+        }
 
-		throw new IllegalStateException();
-	}
+        throw new IllegalStateException();
+    }
 
-	private void skipString() {
-		int n = readVarint32(); // string length
-		ptr += n;
-	}
+    private void skipString() {
+        int n = readVarint32(); // string length
+        ptr += n;
+    }
 
-	private short readInt16() {
-		short result =(short) NB.decodeUInt16(buf, ptr);
-		ptr += 2;
-		return result;
-	}
+    private short readInt16() {
+        short result = (short) NB.decodeUInt16(buf, ptr);
+        ptr += 2;
+        return result;
+    }
 
-	private int readVarint32() {
-		byte c = buf[ptr++];
-		int val = c & 0x7f;
-		while ((c & 0x80) != 0) {
-			c = buf[ptr++];
-			val++;
-			val <<= 7;
-			val |= (c & 0x7f);
-		}
-		return val;
-	}
+    private int readVarint32() {
+        byte c = buf[ptr++];
+        int val = c & 0x7f;
+        while ((c & 0x80) != 0) {
+            c = buf[ptr++];
+            val++;
+            val <<= 7;
+            val |= (c & 0x7f);
+        }
+        return val;
+    }
 
-	private long readVarint64() {
-		byte c = buf[ptr++];
-		long val = c & 0x7f;
-		while ((c & 0x80) != 0) {
-			c = buf[ptr++];
-			val++;
-			val <<= 7;
-			val |= (c & 0x7f);
-		}
-		return val;
-	}
+    private long readVarint64() {
+        byte c = buf[ptr++];
+        long val = c & 0x7f;
+        while ((c & 0x80) != 0) {
+            c = buf[ptr++];
+            val++;
+            val <<= 7;
+            val |= (c & 0x7f);
+        }
+        return val;
+    }
 
-	private static Ref newRef(String name, long updateIndex) {
-		return new ObjectIdRef.Unpeeled(NEW, name, null, updateIndex);
-	}
+    private static Ref newRef(String name, long updateIndex) {
+        return new ObjectIdRef.Unpeeled(NEW, name, null, updateIndex);
+    }
 
-	private static IOException invalidBlock() {
-		return invalidBlock(null);
-	}
+    private static IOException invalidBlock() {
+        return invalidBlock(null);
+    }
 
-	private static IOException invalidBlock(Throwable cause) {
-		return new IOException(JGitText.get().invalidReftableBlock, cause);
-	}
+    private static IOException invalidBlock(Throwable cause) {
+        return new IOException(JGitText.get().invalidReftableBlock, cause);
+    }
 }

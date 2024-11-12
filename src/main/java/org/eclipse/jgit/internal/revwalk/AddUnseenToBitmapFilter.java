@@ -33,48 +33,48 @@ import org.eclipse.jgit.revwalk.RevFlag;
  * flag to prevent the walk from visiting its ancestors.
  */
 public class AddUnseenToBitmapFilter extends RevFilter {
-	private final BitmapBuilder seen;
-	private final BitmapBuilder bitmap;
+    private final BitmapBuilder seen;
+    private final BitmapBuilder bitmap;
 
-	/**
-	 * Create a filter that adds visited commits to the given bitmap, but does not walk
-	 * through the objects in {@code seen}.
-	 *
-	 * @param seen objects that are already seen
-	 * @param bitmap bitmap to write visited commits to
-	 */
-	public AddUnseenToBitmapFilter(BitmapBuilder seen, BitmapBuilder bitmap) {
-		this.seen = seen;
-		this.bitmap = bitmap;
-	}
+    /**
+     * Create a filter that adds visited commits to the given bitmap, but does not walk
+     * through the objects in {@code seen}.
+     *
+     * @param seen   objects that are already seen
+     * @param bitmap bitmap to write visited commits to
+     */
+    public AddUnseenToBitmapFilter(BitmapBuilder seen, BitmapBuilder bitmap) {
+        this.seen = seen;
+        this.bitmap = bitmap;
+    }
 
-	@Override
-	public final boolean include(RevWalk walker, RevCommit cmit) {
-		Bitmap visitedBitmap;
+    @Override
+    public final boolean include(RevWalk walker, RevCommit cmit) {
+        Bitmap visitedBitmap;
 
-		if (seen.contains(cmit) || bitmap.contains(cmit)) {
-			// already seen or included
-		} else if ((visitedBitmap = bitmap.getBitmapIndex()
-				.getBitmap(cmit)) != null) {
-			bitmap.or(visitedBitmap);
-		} else {
-			bitmap.addObject(cmit, Constants.OBJ_COMMIT);
-			return true;
-		}
+        if (seen.contains(cmit) || bitmap.contains(cmit)) {
+            // already seen or included
+        } else if ((visitedBitmap = bitmap.getBitmapIndex()
+                .getBitmap(cmit)) != null) {
+            bitmap.or(visitedBitmap);
+        } else {
+            bitmap.addObject(cmit, Constants.OBJ_COMMIT);
+            return true;
+        }
 
-		for (RevCommit p : cmit.getParents()) {
-			p.add(RevFlag.SEEN);
-		}
-		return false;
-	}
+        for (RevCommit p : cmit.getParents()) {
+            p.add(RevFlag.SEEN);
+        }
+        return false;
+    }
 
-	@Override
-	public final RevFilter clone() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public final RevFilter clone() {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public final boolean requiresCommitBody() {
-		return false;
-	}
+    @Override
+    public final boolean requiresCommitBody() {
+        return false;
+    }
 }

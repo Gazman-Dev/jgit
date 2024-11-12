@@ -14,6 +14,8 @@ package org.eclipse.jgit.util;
  * A boxed integer that can be modified.
  */
 public final class MutableInteger {
-	/** Current value of this boxed value. */
-	public int value;
+    /**
+     * Current value of this boxed value.
+     */
+    public int value;
 }

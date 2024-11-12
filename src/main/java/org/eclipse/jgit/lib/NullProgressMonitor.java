@@ -16,40 +16,42 @@ package org.eclipse.jgit.lib;
  * A NullProgressMonitor does not report progress anywhere.
  */
 public class NullProgressMonitor implements ProgressMonitor {
-	/** Immutable instance of a null progress monitor. */
-	public static final NullProgressMonitor INSTANCE = new NullProgressMonitor();
+    /**
+     * Immutable instance of a null progress monitor.
+     */
+    public static final NullProgressMonitor INSTANCE = new NullProgressMonitor();
 
-	private NullProgressMonitor() {
-		// Do not let others instantiate
-	}
+    private NullProgressMonitor() {
+        // Do not let others instantiate
+    }
 
-	@Override
-	public void start(int totalTasks) {
-		// Do not report.
-	}
+    @Override
+    public void start(int totalTasks) {
+        // Do not report.
+    }
 
-	@Override
-	public void beginTask(String title, int totalWork) {
-		// Do not report.
-	}
+    @Override
+    public void beginTask(String title, int totalWork) {
+        // Do not report.
+    }
 
-	@Override
-	public void update(int completed) {
-		// Do not report.
-	}
+    @Override
+    public void update(int completed) {
+        // Do not report.
+    }
 
-	@Override
-	public boolean isCancelled() {
-		return false;
-	}
+    @Override
+    public boolean isCancelled() {
+        return false;
+    }
 
-	@Override
-	public void endTask() {
-		// Do not report.
-	}
+    @Override
+    public void endTask() {
+        // Do not report.
+    }
 
-	@Override
-	public void showDuration(boolean enabled) {
-		// don't show
-	}
+    @Override
+    public void showDuration(boolean enabled) {
+        // don't show
+    }
 }

@@ -32,87 +32,83 @@ import org.eclipse.jgit.util.FS;
  */
 public class UserConfigFile extends FileBasedConfig {
 
-	private final FileBasedConfig parent;
+    private final FileBasedConfig parent;
 
-	/**
-	 * Creates a new {@link UserConfigFile}.
-	 *
-	 * @param parent
-	 *            parent {@link Config}; may be {@code null}
-	 * @param config
-	 *            {@link File} for {@code ~/.gitconfig}
-	 * @param xdgConfig
-	 *            {@link File} for {@code $XDG_CONFIG_HOME/.gitconfig}
-	 * @param fileSystem
-	 *            {@link FS} to use for the two files; normally
-	 *            {@link FS#DETECTED}
-	 */
-	public UserConfigFile(Config parent, @NonNull File config,
-			@NonNull File xdgConfig, @NonNull FS fileSystem) {
-		super(new FileBasedConfig(parent, xdgConfig, fileSystem), config,
-				fileSystem);
-		this.parent = (FileBasedConfig) getBaseConfig();
-	}
+    /**
+     * Creates a new {@link UserConfigFile}.
+     *
+     * @param parent     parent {@link Config}; may be {@code null}
+     * @param config     {@link File} for {@code ~/.gitconfig}
+     * @param xdgConfig  {@link File} for {@code $XDG_CONFIG_HOME/.gitconfig}
+     * @param fileSystem {@link FS} to use for the two files; normally
+     *                   {@link FS#DETECTED}
+     */
+    public UserConfigFile(Config parent, @NonNull File config,
+                          @NonNull File xdgConfig, @NonNull FS fileSystem) {
+        super(new FileBasedConfig(parent, xdgConfig, fileSystem), config,
+                fileSystem);
+        this.parent = (FileBasedConfig) getBaseConfig();
+    }
 
-	@Override
-	public void setStringList(String section, String subsection, String name,
-			List<String> values) {
-		if (exists() || !parent.exists()) {
-			super.setStringList(section, subsection, name, values);
-		} else {
-			parent.setStringList(section, subsection, name, values);
-		}
-	}
+    @Override
+    public void setStringList(String section, String subsection, String name,
+                              List<String> values) {
+        if (exists() || !parent.exists()) {
+            super.setStringList(section, subsection, name, values);
+        } else {
+            parent.setStringList(section, subsection, name, values);
+        }
+    }
 
-	@Override
-	public void unset(String section, String subsection, String name) {
-		if (exists() || !parent.exists()) {
-			super.unset(section, subsection, name);
-		} else {
-			parent.unset(section, subsection, name);
-		}
-	}
+    @Override
+    public void unset(String section, String subsection, String name) {
+        if (exists() || !parent.exists()) {
+            super.unset(section, subsection, name);
+        } else {
+            parent.unset(section, subsection, name);
+        }
+    }
 
-	@Override
-	public void unsetSection(String section, String subsection) {
-		if (exists() || !parent.exists()) {
-			super.unsetSection(section, subsection);
-		} else {
-			parent.unsetSection(section, subsection);
-		}
-	}
+    @Override
+    public void unsetSection(String section, String subsection) {
+        if (exists() || !parent.exists()) {
+            super.unsetSection(section, subsection);
+        } else {
+            parent.unsetSection(section, subsection);
+        }
+    }
 
-	@Override
-	public boolean removeSection(String section, String subsection) {
-		if (exists() || !parent.exists()) {
-			return super.removeSection(section, subsection);
-		}
-		return parent.removeSection(section, subsection);
-	}
+    @Override
+    public boolean removeSection(String section, String subsection) {
+        if (exists() || !parent.exists()) {
+            return super.removeSection(section, subsection);
+        }
+        return parent.removeSection(section, subsection);
+    }
 
-	@Override
-	public boolean isOutdated() {
-		return super.isOutdated() || parent.isOutdated();
-	}
+    @Override
+    public boolean isOutdated() {
+        return super.isOutdated() || parent.isOutdated();
+    }
 
-	@Override
-	public void load() throws IOException, ConfigInvalidException {
-		if (super.isOutdated()) {
-			super.load();
-		}
-		if (parent.isOutdated()) {
-			parent.load();
-		}
-	}
+    @Override
+    public void load() throws IOException, ConfigInvalidException {
+        if (super.isOutdated()) {
+            super.load();
+        }
+        if (parent.isOutdated()) {
+            parent.load();
+        }
+    }
 
-	@Override
-	public void save() throws IOException {
-		if (exists() || !parent.exists()) {
-			if (exists() || !toText().strip().isEmpty()) {
-				super.save();
-			}
-		} else {
-			parent.save();
-		}
-	}
+    @Override
+    public void save() throws IOException {
+        if (exists() || !parent.exists()) {
+            if (exists() || !toText().strip().isEmpty()) {
+                super.save();
+            }
+        } else {
+            parent.save();
+        }
+    }
 }

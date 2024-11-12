@@ -20,81 +20,97 @@ package org.eclipse.jgit.lib;
 
 import org.eclipse.jgit.util.StringUtils;
 
-/** A line in a Git {@link Config} file. */
+/**
+ * A line in a Git {@link Config} file.
+ */
 class ConfigLine {
-	/** The text content before entry. */
-	String prefix;
+    /**
+     * The text content before entry.
+     */
+    String prefix;
 
-	/** The section name for the entry. */
-	String section;
+    /**
+     * The section name for the entry.
+     */
+    String section;
 
-	/** Subsection name. */
-	String subsection;
+    /**
+     * Subsection name.
+     */
+    String subsection;
 
-	/** The key name. */
-	String name;
+    /**
+     * The key name.
+     */
+    String name;
 
-	/** The value. */
-	String value;
+    /**
+     * The value.
+     */
+    String value;
 
-	/** The text content after entry. */
-	String suffix;
+    /**
+     * The text content after entry.
+     */
+    String suffix;
 
-	/** The source from which this line was included from. */
-	String includedFrom;
+    /**
+     * The source from which this line was included from.
+     */
+    String includedFrom;
 
-	ConfigLine forValue(String newValue) {
-		final ConfigLine e = new ConfigLine();
-		e.prefix = prefix;
-		e.section = section;
-		e.subsection = subsection;
-		e.name = name;
-		e.value = newValue;
-		e.suffix = suffix;
-		e.includedFrom = includedFrom;
-		return e;
-	}
+    ConfigLine forValue(String newValue) {
+        final ConfigLine e = new ConfigLine();
+        e.prefix = prefix;
+        e.section = section;
+        e.subsection = subsection;
+        e.name = name;
+        e.value = newValue;
+        e.suffix = suffix;
+        e.includedFrom = includedFrom;
+        return e;
+    }
 
-	boolean match(final String aSection, final String aSubsection,
-			final String aKey) {
-		return eqIgnoreCase(section, aSection)
-				&& eqSameCase(subsection, aSubsection)
-				&& eqIgnoreCase(name, aKey);
-	}
+    boolean match(final String aSection, final String aSubsection,
+                  final String aKey) {
+        return eqIgnoreCase(section, aSection)
+                && eqSameCase(subsection, aSubsection)
+                && eqIgnoreCase(name, aKey);
+    }
 
-	boolean match(String aSection, String aSubsection) {
-		return eqIgnoreCase(section, aSection)
-				&& eqSameCase(subsection, aSubsection);
-	}
+    boolean match(String aSection, String aSubsection) {
+        return eqIgnoreCase(section, aSection)
+                && eqSameCase(subsection, aSubsection);
+    }
 
-	private static boolean eqIgnoreCase(String a, String b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
-		return StringUtils.equalsIgnoreCase(a, b);
-	}
+    private static boolean eqIgnoreCase(String a, String b) {
+        if (a == null && b == null)
+            return true;
+        if (a == null || b == null)
+            return false;
+        return StringUtils.equalsIgnoreCase(a, b);
+    }
 
-	private static boolean eqSameCase(String a, String b) {
-		if (a == null && b == null)
-			return true;
-		if (a == null || b == null)
-			return false;
-		return a.equals(b);
-	}
+    private static boolean eqSameCase(String a, String b) {
+        if (a == null && b == null)
+            return true;
+        if (a == null || b == null)
+            return false;
+        return a.equals(b);
+    }
 
-	@SuppressWarnings("nls")
-	@Override
-	public String toString() {
-		if (section == null)
-			return "<empty>";
-		StringBuilder b = new StringBuilder(section);
-		if (subsection != null)
-			b.append(".").append(subsection);
-		if (name != null)
-			b.append(".").append(name);
-		if (value != null)
-			b.append("=").append(value);
-		return b.toString();
-	}
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        if (section == null)
+            return "<empty>";
+        StringBuilder b = new StringBuilder(section);
+        if (subsection != null)
+            b.append(".").append(subsection);
+        if (name != null)
+            b.append(".").append(name);
+        if (value != null)
+            b.append("=").append(value);
+        return b.toString();
+    }
 }

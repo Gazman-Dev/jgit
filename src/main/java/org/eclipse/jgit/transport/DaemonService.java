@@ -26,120 +26,117 @@ import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
  * <code>git://</code>.
  */
 public abstract class DaemonService {
-	private final String command;
+    private final String command;
 
-	private final SectionParser<ServiceConfig> configKey;
+    private final SectionParser<ServiceConfig> configKey;
 
-	private boolean enabled;
+    private boolean enabled;
 
-	private boolean overridable;
+    private boolean overridable;
 
-	DaemonService(String cmdName, String cfgName) {
-		command = cmdName.startsWith("git-") ? cmdName : "git-" + cmdName; //$NON-NLS-1$ //$NON-NLS-2$
-		configKey = cfg -> new ServiceConfig(DaemonService.this, cfg, cfgName);
-		overridable = true;
-	}
+    DaemonService(String cmdName, String cfgName) {
+        command = cmdName.startsWith("git-") ? cmdName : "git-" + cmdName; //$NON-NLS-1$ //$NON-NLS-2$
+        configKey = cfg -> new ServiceConfig(DaemonService.this, cfg, cfgName);
+        overridable = true;
+    }
 
-	private static class ServiceConfig {
-		final boolean enabled;
+    private static class ServiceConfig {
+        final boolean enabled;
 
-		ServiceConfig(final DaemonService service, final Config cfg,
-				final String name) {
-			enabled = cfg.getBoolean("daemon", name, service.isEnabled()); //$NON-NLS-1$
-		}
-	}
+        ServiceConfig(final DaemonService service, final Config cfg,
+                      final String name) {
+            enabled = cfg.getBoolean("daemon", name, service.isEnabled()); //$NON-NLS-1$
+        }
+    }
 
-	/**
-	 * Whether this service is enabled for invocation.
-	 *
-	 * @return whether this service is enabled for invocation.
-	 */
-	public boolean isEnabled() {
-		return enabled;
-	}
+    /**
+     * Whether this service is enabled for invocation.
+     *
+     * @return whether this service is enabled for invocation.
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-	/**
-	 * Set if it is allowed to use this service
-	 *
-	 * @param on
-	 *            {@code true} to allow this service to be used; {@code false}
-	 *            to deny it.
-	 */
-	public void setEnabled(boolean on) {
-		enabled = on;
-	}
+    /**
+     * Set if it is allowed to use this service
+     *
+     * @param on {@code true} to allow this service to be used; {@code false}
+     *           to deny it.
+     */
+    public void setEnabled(boolean on) {
+        enabled = on;
+    }
 
-	/** @return can this service be configured in the repository config file? */
-	/**
-	 * Whether this service can be configured in the repository config file
-	 *
-	 * @return whether this service can be configured in the repository config
-	 *         file
-	 */
-	public boolean isOverridable() {
-		return overridable;
-	}
+    /** @return can this service be configured in the repository config file? */
+    /**
+     * Whether this service can be configured in the repository config file
+     *
+     * @return whether this service can be configured in the repository config
+     * file
+     */
+    public boolean isOverridable() {
+        return overridable;
+    }
 
-	/**
-	 * Whether to permit repositories to override this service's enabled state
-	 * with the <code>daemon.servicename</code> config setting.
-	 *
-	 * @param on
-	 *            {@code true} to permit repositories to override this service's
-	 *            enabled state with the <code>daemon.servicename</code> config
-	 *            setting.
-	 */
-	public void setOverridable(boolean on) {
-		overridable = on;
-	}
+    /**
+     * Whether to permit repositories to override this service's enabled state
+     * with the <code>daemon.servicename</code> config setting.
+     *
+     * @param on {@code true} to permit repositories to override this service's
+     *           enabled state with the <code>daemon.servicename</code> config
+     *           setting.
+     */
+    public void setOverridable(boolean on) {
+        overridable = on;
+    }
 
-	/**
-	 * Get name of the command requested by clients.
-	 *
-	 * @return name of the command requested by clients.
-	 */
-	public String getCommandName() {
-		return command;
-	}
+    /**
+     * Get name of the command requested by clients.
+     *
+     * @return name of the command requested by clients.
+     */
+    public String getCommandName() {
+        return command;
+    }
 
-	/**
-	 * Determine if this service can handle the requested command.
-	 *
-	 * @param commandLine
-	 *            input line from the client.
-	 * @return true if this command can accept the given command line.
-	 */
-	public boolean handles(String commandLine) {
-		return command.length() + 1 < commandLine.length()
-				&& commandLine.charAt(command.length()) == ' '
-				&& commandLine.startsWith(command);
-	}
+    /**
+     * Determine if this service can handle the requested command.
+     *
+     * @param commandLine input line from the client.
+     * @return true if this command can accept the given command line.
+     */
+    public boolean handles(String commandLine) {
+        return command.length() + 1 < commandLine.length()
+                && commandLine.charAt(command.length()) == ' '
+                && commandLine.startsWith(command);
+    }
 
-	void execute(DaemonClient client, String commandLine,
-			@Nullable Collection<String> extraParameters)
-			throws IOException, ServiceNotEnabledException,
-			ServiceNotAuthorizedException {
-		final String name = commandLine.substring(command.length() + 1);
-		try (Repository db = client.getDaemon().openRepository(client, name)) {
-			if (isEnabledFor(db)) {
-				execute(client, db, extraParameters);
-			}
-		} catch (ServiceMayNotContinueException e) {
-			// An error when opening the repo means the client is expecting a ref
-			// advertisement, so use that style of error.
-			PacketLineOut pktOut = new PacketLineOut(client.getOutputStream());
-			pktOut.writeString("ERR " + e.getMessage() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
+    void execute(DaemonClient client, String commandLine,
+                 @Nullable Collection<String> extraParameters)
+            throws IOException, ServiceNotEnabledException,
+            ServiceNotAuthorizedException {
+        final String name = commandLine.substring(command.length() + 1);
+        try (Repository db = client.getDaemon().openRepository(client, name)) {
+            if (isEnabledFor(db)) {
+                execute(client, db, extraParameters);
+            }
+        } catch (ServiceMayNotContinueException e) {
+            // An error when opening the repo means the client is expecting a ref
+            // advertisement, so use that style of error.
+            PacketLineOut pktOut = new PacketLineOut(client.getOutputStream());
+            pktOut.writeString("ERR " + e.getMessage() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+    }
 
-	private boolean isEnabledFor(Repository db) {
-		if (isOverridable())
-			return db.getConfig().get(configKey).enabled;
-		return isEnabled();
-	}
+    private boolean isEnabledFor(Repository db) {
+        if (isOverridable())
+            return db.getConfig().get(configKey).enabled;
+        return isEnabled();
+    }
 
-	abstract void execute(DaemonClient client, Repository db,
-			@Nullable Collection<String> extraParameters)
-			throws IOException, ServiceNotEnabledException,
-			ServiceNotAuthorizedException;
+    abstract void execute(DaemonClient client, Repository db,
+                          @Nullable Collection<String> extraParameters)
+            throws IOException, ServiceNotEnabledException,
+            ServiceNotAuthorizedException;
 }

@@ -17,52 +17,50 @@ import org.eclipse.jgit.util.NB;
  */
 class GraphChangedPathFilterData {
 
-	private static final int BIDX_BYTES_PER_ENTRY = 4;
+    private static final int BIDX_BYTES_PER_ENTRY = 4;
 
-	private static final int BDAT_HEADER_BYTES = 12;
+    private static final int BDAT_HEADER_BYTES = 12;
 
-	private final byte[] bloomFilterIndex;
+    private final byte[] bloomFilterIndex;
 
-	private final byte[] bloomFilterData;
+    private final byte[] bloomFilterData;
 
-	/**
-	 * Initialize the GraphChangedPathFilterData.
-	 *
-	 * @param bloomFilterIndex
-	 *            content of BIDX chunk, if it exists
-	 * @param bloomFilterData
-	 *            content of BDAT chunk, if it exists
-	 */
-	GraphChangedPathFilterData(byte[] bloomFilterIndex,
-			byte[] bloomFilterData) {
+    /**
+     * Initialize the GraphChangedPathFilterData.
+     *
+     * @param bloomFilterIndex content of BIDX chunk, if it exists
+     * @param bloomFilterData  content of BDAT chunk, if it exists
+     */
+    GraphChangedPathFilterData(byte[] bloomFilterIndex,
+                               byte[] bloomFilterData) {
 
-		if ((bloomFilterIndex == null) != (bloomFilterData == null)) {
-			bloomFilterIndex = null;
-			bloomFilterData = null;
-		}
-		if (bloomFilterData != null
-				&& (NB.decodeUInt32(bloomFilterData,
-						4) != ChangedPathFilter.PATH_HASH_COUNT
-						|| NB.decodeUInt32(bloomFilterData,
-								8) != ChangedPathFilter.BITS_PER_ENTRY)) {
-			bloomFilterIndex = null;
-			bloomFilterData = null;
-		}
+        if ((bloomFilterIndex == null) != (bloomFilterData == null)) {
+            bloomFilterIndex = null;
+            bloomFilterData = null;
+        }
+        if (bloomFilterData != null
+                && (NB.decodeUInt32(bloomFilterData,
+                4) != ChangedPathFilter.PATH_HASH_COUNT
+                || NB.decodeUInt32(bloomFilterData,
+                8) != ChangedPathFilter.BITS_PER_ENTRY)) {
+            bloomFilterIndex = null;
+            bloomFilterData = null;
+        }
 
-		this.bloomFilterIndex = bloomFilterIndex;
-		this.bloomFilterData = bloomFilterData;
-	}
+        this.bloomFilterIndex = bloomFilterIndex;
+        this.bloomFilterData = bloomFilterData;
+    }
 
-	ChangedPathFilter getChangedPathFilter(int graphPos) {
-		if (bloomFilterIndex == null) {
-			return null;
-		}
-		int priorCumul = graphPos == 0 ? 0
-				: NB.decodeInt32(bloomFilterIndex,
-						graphPos * BIDX_BYTES_PER_ENTRY - BIDX_BYTES_PER_ENTRY);
-		int cumul = NB.decodeInt32(bloomFilterIndex, graphPos * BIDX_BYTES_PER_ENTRY);
-		return ChangedPathFilter.fromFile(bloomFilterData,
-				priorCumul + BDAT_HEADER_BYTES,
-				cumul - priorCumul);
-	}
+    ChangedPathFilter getChangedPathFilter(int graphPos) {
+        if (bloomFilterIndex == null) {
+            return null;
+        }
+        int priorCumul = graphPos == 0 ? 0
+                : NB.decodeInt32(bloomFilterIndex,
+                graphPos * BIDX_BYTES_PER_ENTRY - BIDX_BYTES_PER_ENTRY);
+        int cumul = NB.decodeInt32(bloomFilterIndex, graphPos * BIDX_BYTES_PER_ENTRY);
+        return ChangedPathFilter.fromFile(bloomFilterData,
+                priorCumul + BDAT_HEADER_BYTES,
+                cumul - priorCumul);
+    }
 }

@@ -20,88 +20,94 @@ import org.eclipse.jgit.util.RawParseUtils;
  * An error in a patch script
  */
 public class FormatError {
-	/** Classification of an error. */
-	public enum Severity {
-		/** The error is unexpected, but can be worked around. */
-		WARNING,
+    /**
+     * Classification of an error.
+     */
+    public enum Severity {
+        /**
+         * The error is unexpected, but can be worked around.
+         */
+        WARNING,
 
-		/** The error indicates the script is severely flawed. */
-		ERROR;
-	}
+        /**
+         * The error indicates the script is severely flawed.
+         */
+        ERROR;
+    }
 
-	private final byte[] buf;
+    private final byte[] buf;
 
-	private final int offset;
+    private final int offset;
 
-	private final Severity severity;
+    private final Severity severity;
 
-	private final String message;
+    private final String message;
 
-	FormatError(final byte[] buffer, final int ptr, final Severity sev,
-			final String msg) {
-		buf = buffer;
-		offset = ptr;
-		severity = sev;
-		message = msg;
-	}
+    FormatError(final byte[] buffer, final int ptr, final Severity sev,
+                final String msg) {
+        buf = buffer;
+        offset = ptr;
+        severity = sev;
+        message = msg;
+    }
 
-	/**
-	 * Get the severity of the error.
-	 *
-	 * @return the severity of the error.
-	 */
-	public Severity getSeverity() {
-		return severity;
-	}
+    /**
+     * Get the severity of the error.
+     *
+     * @return the severity of the error.
+     */
+    public Severity getSeverity() {
+        return severity;
+    }
 
-	/**
-	 * Get a message describing the error.
-	 *
-	 * @return a message describing the error.
-	 */
-	public String getMessage() {
-		return message;
-	}
+    /**
+     * Get a message describing the error.
+     *
+     * @return a message describing the error.
+     */
+    public String getMessage() {
+        return message;
+    }
 
-	/**
-	 * Get the byte buffer holding the patch script.
-	 *
-	 * @return the byte buffer holding the patch script.
-	 */
-	public byte[] getBuffer() {
-		return buf;
-	}
+    /**
+     * Get the byte buffer holding the patch script.
+     *
+     * @return the byte buffer holding the patch script.
+     */
+    public byte[] getBuffer() {
+        return buf;
+    }
 
-	/**
-	 * Get byte offset within {@link #getBuffer()} where the error is.
-	 *
-	 * @return byte offset within {@link #getBuffer()} where the error is.
-	 */
-	public int getOffset() {
-		return offset;
-	}
+    /**
+     * Get byte offset within {@link #getBuffer()} where the error is.
+     *
+     * @return byte offset within {@link #getBuffer()} where the error is.
+     */
+    public int getOffset() {
+        return offset;
+    }
 
-	/**
-	 * Get line of the patch script the error appears on.
-	 *
-	 * @return line of the patch script the error appears on.
-	 */
-	public String getLineText() {
-		final int eol = RawParseUtils.nextLF(buf, offset);
-		return RawParseUtils.decode(UTF_8, buf, offset, eol);
-	}
+    /**
+     * Get line of the patch script the error appears on.
+     *
+     * @return line of the patch script the error appears on.
+     */
+    public String getLineText() {
+        final int eol = RawParseUtils.nextLF(buf, offset);
+        return RawParseUtils.decode(UTF_8, buf, offset, eol);
+    }
 
-	@Override
-	public String toString() {
-		final StringBuilder r = new StringBuilder();
-		r.append(getSeverity().name().toLowerCase(Locale.ROOT));
-		r.append(": at offset "); //$NON-NLS-1$
-		r.append(getOffset());
-		r.append(": "); //$NON-NLS-1$
-		r.append(getMessage());
-		r.append("\n"); //$NON-NLS-1$
-		r.append("  in "); //$NON-NLS-1$
-		r.append(getLineText());
-		return r.toString();
-	}
+    @Override
+    public String toString() {
+        final StringBuilder r = new StringBuilder();
+        r.append(getSeverity().name().toLowerCase(Locale.ROOT));
+        r.append(": at offset "); //$NON-NLS-1$
+        r.append(getOffset());
+        r.append(": "); //$NON-NLS-1$
+        r.append(getMessage());
+        r.append("\n"); //$NON-NLS-1$
+        r.append("  in "); //$NON-NLS-1$
+        r.append(getLineText());
+        return r.toString();
+    }
 }

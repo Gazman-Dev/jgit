@@ -33,68 +33,68 @@ import org.eclipse.jgit.util.HttpSupport;
  */
 public class JDKHttpConnectionFactory implements HttpConnectionFactory2 {
 
-	@Override
-	public HttpConnection create(URL url) throws IOException {
-		return new JDKHttpConnection(url);
-	}
+    @Override
+    public HttpConnection create(URL url) throws IOException {
+        return new JDKHttpConnection(url);
+    }
 
-	@Override
-	public HttpConnection create(URL url, Proxy proxy)
-			throws IOException {
-		return new JDKHttpConnection(url, proxy);
-	}
+    @Override
+    public HttpConnection create(URL url, Proxy proxy)
+            throws IOException {
+        return new JDKHttpConnection(url, proxy);
+    }
 
-	@Override
-	public GitSession newSession() {
-		return new JdkConnectionSession();
-	}
+    @Override
+    public GitSession newSession() {
+        return new JdkConnectionSession();
+    }
 
-	private static class JdkConnectionSession implements GitSession {
+    private static class JdkConnectionSession implements GitSession {
 
-		private SSLContext securityContext;
+        private SSLContext securityContext;
 
-		private SSLSocketFactory socketFactory;
+        private SSLSocketFactory socketFactory;
 
-		@Override
-		public JDKHttpConnection configure(HttpConnection connection,
-				boolean sslVerify) throws GeneralSecurityException {
-			if (!(connection instanceof JDKHttpConnection)) {
-				throw new IllegalArgumentException(MessageFormat.format(
-						JGitText.get().httpWrongConnectionType,
-						JDKHttpConnection.class.getName(),
-						connection.getClass().getName()));
-			}
-			JDKHttpConnection conn = (JDKHttpConnection) connection;
-			String scheme = conn.getURL().getProtocol();
-			if (!"https".equals(scheme) || sslVerify) { //$NON-NLS-1$
-				// sslVerify == true: use the JDK defaults
-				return conn;
-			}
-			if (securityContext == null) {
-				securityContext = SSLContext.getInstance("TLS"); //$NON-NLS-1$
-				TrustManager[] trustAllCerts = {
-						new NoCheckX509TrustManager() };
-				securityContext.init(null, trustAllCerts, null);
-				socketFactory = new DelegatingSSLSocketFactory(
-						securityContext.getSocketFactory()) {
+        @Override
+        public JDKHttpConnection configure(HttpConnection connection,
+                                           boolean sslVerify) throws GeneralSecurityException {
+            if (!(connection instanceof JDKHttpConnection)) {
+                throw new IllegalArgumentException(MessageFormat.format(
+                        JGitText.get().httpWrongConnectionType,
+                        JDKHttpConnection.class.getName(),
+                        connection.getClass().getName()));
+            }
+            JDKHttpConnection conn = (JDKHttpConnection) connection;
+            String scheme = conn.getURL().getProtocol();
+            if (!"https".equals(scheme) || sslVerify) { //$NON-NLS-1$
+                // sslVerify == true: use the JDK defaults
+                return conn;
+            }
+            if (securityContext == null) {
+                securityContext = SSLContext.getInstance("TLS"); //$NON-NLS-1$
+                TrustManager[] trustAllCerts = {
+                        new NoCheckX509TrustManager()};
+                securityContext.init(null, trustAllCerts, null);
+                socketFactory = new DelegatingSSLSocketFactory(
+                        securityContext.getSocketFactory()) {
 
-					@Override
-					protected void configure(SSLSocket socket) {
-						HttpSupport.configureTLS(socket);
-					}
-				};
-			}
-			conn.setHostnameVerifier((name, session) -> true);
-			((HttpsURLConnection) conn.wrappedUrlConnection)
-					.setSSLSocketFactory(socketFactory);
-			return conn;
-		}
+                    @Override
+                    protected void configure(SSLSocket socket) {
+                        HttpSupport.configureTLS(socket);
+                    }
+                };
+            }
+            conn.setHostnameVerifier((name, session) -> true);
+            ((HttpsURLConnection) conn.wrappedUrlConnection)
+                    .setSSLSocketFactory(socketFactory);
+            return conn;
+        }
 
-		@Override
-		public void close() {
-			securityContext = null;
-			socketFactory = null;
-		}
-	}
+        @Override
+        public void close() {
+            securityContext = null;
+            socketFactory = null;
+        }
+    }
 
 }

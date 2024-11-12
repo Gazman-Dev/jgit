@@ -20,50 +20,50 @@ import java.io.OutputStream;
  */
 public class TeeOutputStream extends OutputStream {
 
-	private final OutputStream stream1;
-	private final OutputStream stream2;
+    private final OutputStream stream1;
+    private final OutputStream stream2;
 
-	/**
-	 * Initialize a tee output stream.
-	 *
-	 * @param stream1 first output stream
-	 * @param stream2 second output stream
-	 */
-	public TeeOutputStream(OutputStream stream1, OutputStream stream2) {
-		this.stream1 = stream1;
-		this.stream2 = stream2;
-	}
+    /**
+     * Initialize a tee output stream.
+     *
+     * @param stream1 first output stream
+     * @param stream2 second output stream
+     */
+    public TeeOutputStream(OutputStream stream1, OutputStream stream2) {
+        this.stream1 = stream1;
+        this.stream2 = stream2;
+    }
 
-	@Override
-	public void write(byte[] buf) throws IOException {
-		this.stream1.write(buf);
-		this.stream2.write(buf);
-	}
+    @Override
+    public void write(byte[] buf) throws IOException {
+        this.stream1.write(buf);
+        this.stream2.write(buf);
+    }
 
-	@Override
-	public void write(byte[] buf, int off, int len) throws IOException {
-		this.stream1.write(buf, off, len);
-		this.stream2.write(buf, off, len);
-	}
+    @Override
+    public void write(byte[] buf, int off, int len) throws IOException {
+        this.stream1.write(buf, off, len);
+        this.stream2.write(buf, off, len);
+    }
 
-	@Override
-	public void write(int b) throws IOException {
-		this.stream1.write(b);
-		this.stream2.write(b);
-	}
+    @Override
+    public void write(int b) throws IOException {
+        this.stream1.write(b);
+        this.stream2.write(b);
+    }
 
-	@Override
-	public void flush() throws IOException {
-		this.stream1.flush();
-		this.stream2.flush();
-	}
+    @Override
+    public void flush() throws IOException {
+        this.stream1.flush();
+        this.stream2.flush();
+    }
 
-	@Override
-	public void close() throws IOException {
-		try {
-			this.stream1.close();
-		} finally {
-			this.stream2.close();
-		}
-	}
+    @Override
+    public void close() throws IOException {
+        try {
+            this.stream1.close();
+        } finally {
+            this.stream2.close();
+        }
+    }
 }

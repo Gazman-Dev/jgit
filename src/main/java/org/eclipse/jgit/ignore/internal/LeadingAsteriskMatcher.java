@@ -14,35 +14,35 @@ package org.eclipse.jgit.ignore.internal;
  */
 public class LeadingAsteriskMatcher extends NameMatcher {
 
-	LeadingAsteriskMatcher(String pattern, Character pathSeparator, boolean dirOnly) {
-		super(pattern, pathSeparator, dirOnly, true);
+    LeadingAsteriskMatcher(String pattern, Character pathSeparator, boolean dirOnly) {
+        super(pattern, pathSeparator, dirOnly, true);
 
-		if (subPattern.charAt(0) != '*')
-			throw new IllegalArgumentException(
-					"Pattern must have leading asterisk: " + pattern); //$NON-NLS-1$
-	}
+        if (subPattern.charAt(0) != '*')
+            throw new IllegalArgumentException(
+                    "Pattern must have leading asterisk: " + pattern); //$NON-NLS-1$
+    }
 
-	@Override
-	public boolean matches(String segment, int startIncl, int endExcl) {
-		// faster local access, same as in string.indexOf()
-		String s = subPattern;
+    @Override
+    public boolean matches(String segment, int startIncl, int endExcl) {
+        // faster local access, same as in string.indexOf()
+        String s = subPattern;
 
-		// we don't need to count '*' character itself
-		int subLength = s.length() - 1;
-		// simple /*/ pattern
-		if (subLength == 0)
-			return true;
+        // we don't need to count '*' character itself
+        int subLength = s.length() - 1;
+        // simple /*/ pattern
+        if (subLength == 0)
+            return true;
 
-		if (subLength > (endExcl - startIncl))
-			return false;
+        if (subLength > (endExcl - startIncl))
+            return false;
 
-		for (int i = subLength, j = endExcl - 1; i > 0; i--, j--) {
-			char c1 = s.charAt(i);
-			char c2 = segment.charAt(j);
-			if (c1 != c2)
-				return false;
-		}
-		return true;
-	}
+        for (int i = subLength, j = endExcl - 1; i > 0; i--, j--) {
+            char c1 = s.charAt(i);
+            char c2 = segment.charAt(j);
+            if (c1 != c2)
+                return false;
+        }
+        return true;
+    }
 
 }

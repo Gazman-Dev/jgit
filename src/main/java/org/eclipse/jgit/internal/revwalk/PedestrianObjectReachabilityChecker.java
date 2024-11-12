@@ -28,60 +28,59 @@ import org.eclipse.jgit.revwalk.RevSort;
  * walk.
  */
 public class PedestrianObjectReachabilityChecker
-		implements ObjectReachabilityChecker {
-	private final ObjectWalk walk;
+        implements ObjectReachabilityChecker {
+    private final ObjectWalk walk;
 
-	/**
-	 * New instance of the reachability checker using a existing walk.
-	 *
-	 * @param walk
-	 *            ObjectWalk instance to reuse. Caller retains ownership.
-	 */
-	public PedestrianObjectReachabilityChecker(ObjectWalk walk) {
-		this.walk = walk;
-	}
+    /**
+     * New instance of the reachability checker using a existing walk.
+     *
+     * @param walk ObjectWalk instance to reuse. Caller retains ownership.
+     */
+    public PedestrianObjectReachabilityChecker(ObjectWalk walk) {
+        this.walk = walk;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Optional<RevObject> areAllReachable(Collection<RevObject> targets,
-			Stream<RevObject> starters) throws IOException {
-		try {
-			walk.reset();
-			walk.sort(RevSort.TOPO);
-			for (RevObject target : targets) {
-				walk.markStart(target);
-			}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<RevObject> areAllReachable(Collection<RevObject> targets,
+                                               Stream<RevObject> starters) throws IOException {
+        try {
+            walk.reset();
+            walk.sort(RevSort.TOPO);
+            for (RevObject target : targets) {
+                walk.markStart(target);
+            }
 
-			Iterator<RevObject> iterator = starters.iterator();
-			while (iterator.hasNext()) {
-				RevObject o = iterator.next();
-				walk.markUninteresting(o);
+            Iterator<RevObject> iterator = starters.iterator();
+            while (iterator.hasNext()) {
+                RevObject o = iterator.next();
+                walk.markUninteresting(o);
 
-				RevObject peeled = walk.peel(o);
-				if (peeled instanceof RevCommit) {
-					// By default, for performance reasons, ObjectWalk does not
-					// mark
-					// a tree as uninteresting when we mark a commit. Mark it
-					// ourselves so that we can determine reachability exactly.
-					walk.markUninteresting(((RevCommit) peeled).getTree());
-				}
-			}
+                RevObject peeled = walk.peel(o);
+                if (peeled instanceof RevCommit) {
+                    // By default, for performance reasons, ObjectWalk does not
+                    // mark
+                    // a tree as uninteresting when we mark a commit. Mark it
+                    // ourselves so that we can determine reachability exactly.
+                    walk.markUninteresting(((RevCommit) peeled).getTree());
+                }
+            }
 
-			RevCommit commit = walk.next();
-			if (commit != null) {
-				return Optional.of(commit);
-			}
+            RevCommit commit = walk.next();
+            if (commit != null) {
+                return Optional.of(commit);
+            }
 
-			RevObject object = walk.nextObject();
-			if (object != null) {
-				return Optional.of(object);
-			}
+            RevObject object = walk.nextObject();
+            if (object != null) {
+                return Optional.of(object);
+            }
 
-			return Optional.empty();
-		} catch (MissingObjectException | InvalidObjectException e) {
-			throw new IllegalStateException(e);
-		}
-	}
+            return Optional.empty();
+        } catch (MissingObjectException | InvalidObjectException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }

@@ -28,48 +28,47 @@ import org.eclipse.jgit.lib.ObjectIdSet;
  * Lazily loads a set of ObjectIds, one per line.
  */
 public class LazyObjectIdSetFile implements ObjectIdSet {
-	private final File src;
-	private ObjectIdOwnerMap<Entry> set;
+    private final File src;
+    private ObjectIdOwnerMap<Entry> set;
 
-	/**
-	 * Create a new lazy set from a file.
-	 *
-	 * @param src
-	 *            the source file.
-	 */
-	public LazyObjectIdSetFile(File src) {
-		this.src = src;
-	}
+    /**
+     * Create a new lazy set from a file.
+     *
+     * @param src the source file.
+     */
+    public LazyObjectIdSetFile(File src) {
+        this.src = src;
+    }
 
-	@Override
-	public boolean contains(AnyObjectId objectId) {
-		if (set == null) {
-			set = load();
-		}
-		return set.contains(objectId);
-	}
+    @Override
+    public boolean contains(AnyObjectId objectId) {
+        if (set == null) {
+            set = load();
+        }
+        return set.contains(objectId);
+    }
 
-	private ObjectIdOwnerMap<Entry> load() {
-		ObjectIdOwnerMap<Entry> r = new ObjectIdOwnerMap<>();
-		try (FileInputStream fin = new FileInputStream(src);
-				Reader rin = new InputStreamReader(fin, UTF_8);
-				BufferedReader br = new BufferedReader(rin)) {
-			MutableObjectId id = new MutableObjectId();
-			for (String line; (line = br.readLine()) != null;) {
-				id.fromString(line);
-				if (!r.contains(id)) {
-					r.add(new Entry(id));
-				}
-			}
-		} catch (IOException e) {
-			// Ignore IO errors accessing the lazy set.
-		}
-		return r;
-	}
+    private ObjectIdOwnerMap<Entry> load() {
+        ObjectIdOwnerMap<Entry> r = new ObjectIdOwnerMap<>();
+        try (FileInputStream fin = new FileInputStream(src);
+             Reader rin = new InputStreamReader(fin, UTF_8);
+             BufferedReader br = new BufferedReader(rin)) {
+            MutableObjectId id = new MutableObjectId();
+            for (String line; (line = br.readLine()) != null; ) {
+                id.fromString(line);
+                if (!r.contains(id)) {
+                    r.add(new Entry(id));
+                }
+            }
+        } catch (IOException e) {
+            // Ignore IO errors accessing the lazy set.
+        }
+        return r;
+    }
 
-	static class Entry extends ObjectIdOwnerMap.Entry {
-		Entry(AnyObjectId id) {
-			super(id);
-		}
-	}
+    static class Entry extends ObjectIdOwnerMap.Entry {
+        Entry(AnyObjectId id) {
+            super(id);
+        }
+    }
 }

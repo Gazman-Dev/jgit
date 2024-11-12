@@ -21,122 +21,115 @@ import org.eclipse.jgit.transport.Transport;
  * a {@link CredentialsProvider}, a timeout, and a
  * {@link TransportConfigCallback}.
  *
- * @param <C>
- *            concrete type of this {@code GitCommand}
- * @param <T>
- *            the return type of the {@code GitCommand}'s {@code call()} method
+ * @param <C> concrete type of this {@code GitCommand}
+ * @param <T> the return type of the {@code GitCommand}'s {@code call()} method
  */
 public abstract class TransportCommand<C extends GitCommand, T> extends
-		GitCommand<T> {
+        GitCommand<T> {
 
-	/**
-	 * Configured credentials provider
-	 */
-	protected CredentialsProvider credentialsProvider;
+    /**
+     * Configured credentials provider
+     */
+    protected CredentialsProvider credentialsProvider;
 
-	/**
-	 * Configured transport timeout
-	 */
-	protected int timeout;
+    /**
+     * Configured transport timeout
+     */
+    protected int timeout;
 
-	/**
-	 * Configured callback for transport configuration
-	 */
-	protected TransportConfigCallback transportConfigCallback;
+    /**
+     * Configured callback for transport configuration
+     */
+    protected TransportConfigCallback transportConfigCallback;
 
-	/**
-	 * <p>Constructor for TransportCommand.</p>
-	 *
-	 * @param repo a {@link Repository} object.
-	 */
-	protected TransportCommand(Repository repo) {
-		super(repo);
-		setCredentialsProvider(CredentialsProvider.getDefault());
-	}
+    /**
+     * <p>Constructor for TransportCommand.</p>
+     *
+     * @param repo a {@link Repository} object.
+     */
+    protected TransportCommand(Repository repo) {
+        super(repo);
+        setCredentialsProvider(CredentialsProvider.getDefault());
+    }
 
-	/**
-	 * Set the <code>credentialsProvider</code>.
-	 *
-	 * @param credentialsProvider
-	 *            the {@link CredentialsProvider} to
-	 *            use
-	 * @return {@code this}
-	 */
-	public C setCredentialsProvider(
-			final CredentialsProvider credentialsProvider) {
-		this.credentialsProvider = credentialsProvider;
-		return self();
-	}
+    /**
+     * Set the <code>credentialsProvider</code>.
+     *
+     * @param credentialsProvider the {@link CredentialsProvider} to
+     *                            use
+     * @return {@code this}
+     */
+    public C setCredentialsProvider(
+            final CredentialsProvider credentialsProvider) {
+        this.credentialsProvider = credentialsProvider;
+        return self();
+    }
 
-	/**
-	 * Set <code>timeout</code>.
-	 *
-	 * @param timeout
-	 *            the timeout (in seconds) used for the transport step
-	 * @return {@code this}
-	 */
-	public C setTimeout(int timeout) {
-		this.timeout = timeout;
-		return self();
-	}
+    /**
+     * Set <code>timeout</code>.
+     *
+     * @param timeout the timeout (in seconds) used for the transport step
+     * @return {@code this}
+     */
+    public C setTimeout(int timeout) {
+        this.timeout = timeout;
+        return self();
+    }
 
-	/**
-	 * Set the <code>TransportConfigCallback</code>.
-	 *
-	 * @param transportConfigCallback
-	 *            if set, the callback will be invoked after the
-	 *            {@link Transport} has created, but
-	 *            before the {@link Transport} is
-	 *            used. The callback can use this opportunity to set additional
-	 *            type-specific configuration on the
-	 *            {@link Transport} instance.
-	 * @return {@code this}
-	 */
-	public C setTransportConfigCallback(
-			final TransportConfigCallback transportConfigCallback) {
-		this.transportConfigCallback = transportConfigCallback;
-		return self();
-	}
+    /**
+     * Set the <code>TransportConfigCallback</code>.
+     *
+     * @param transportConfigCallback if set, the callback will be invoked after the
+     *                                {@link Transport} has created, but
+     *                                before the {@link Transport} is
+     *                                used. The callback can use this opportunity to set additional
+     *                                type-specific configuration on the
+     *                                {@link Transport} instance.
+     * @return {@code this}
+     */
+    public C setTransportConfigCallback(
+            final TransportConfigCallback transportConfigCallback) {
+        this.transportConfigCallback = transportConfigCallback;
+        return self();
+    }
 
-	/**
-	 * Return this command cast to {@code C}
-	 *
-	 * @return {@code this} cast to {@code C}
-	 */
-	@SuppressWarnings("unchecked")
-	protected final C self() {
-		return (C) this;
-	}
+    /**
+     * Return this command cast to {@code C}
+     *
+     * @return {@code this} cast to {@code C}
+     */
+    @SuppressWarnings("unchecked")
+    protected final C self() {
+        return (C) this;
+    }
 
-	/**
-	 * Configure transport with credentials provider, timeout, and config
-	 * callback
-	 *
-	 * @param transport
-	 *            a {@link Transport} object.
-	 * @return {@code this}
-	 */
-	protected C configure(Transport transport) {
-		if (credentialsProvider != null)
-			transport.setCredentialsProvider(credentialsProvider);
-		transport.setTimeout(timeout);
-		if (transportConfigCallback != null)
-			transportConfigCallback.configure(transport);
-		return self();
-	}
+    /**
+     * Configure transport with credentials provider, timeout, and config
+     * callback
+     *
+     * @param transport a {@link Transport} object.
+     * @return {@code this}
+     */
+    protected C configure(Transport transport) {
+        if (credentialsProvider != null)
+            transport.setCredentialsProvider(credentialsProvider);
+        transport.setTimeout(timeout);
+        if (transportConfigCallback != null)
+            transportConfigCallback.configure(transport);
+        return self();
+    }
 
-	/**
-	 * Configure a child command with the current configuration set in
-	 * {@code this} command
-	 *
-	 * @param childCommand
-	 *            a {@link TransportCommand} object.
-	 * @return {@code this}
-	 */
-	protected C configure(TransportCommand childCommand) {
-		childCommand.setCredentialsProvider(credentialsProvider);
-		childCommand.setTimeout(timeout);
-		childCommand.setTransportConfigCallback(transportConfigCallback);
-		return self();
-	}
+    /**
+     * Configure a child command with the current configuration set in
+     * {@code this} command
+     *
+     * @param childCommand a {@link TransportCommand} object.
+     * @return {@code this}
+     */
+    protected C configure(TransportCommand childCommand) {
+        childCommand.setCredentialsProvider(credentialsProvider);
+        childCommand.setTimeout(timeout);
+        childCommand.setTransportConfigCallback(transportConfigCallback);
+        return self();
+    }
 }

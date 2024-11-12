@@ -28,83 +28,83 @@ import org.eclipse.jgit.lib.ObjectId;
  */
 class RevCommitCG extends RevCommit {
 
-	private final int graphPosition;
+    private final int graphPosition;
 
-	private int generation = Constants.COMMIT_GENERATION_UNKNOWN;
+    private int generation = Constants.COMMIT_GENERATION_UNKNOWN;
 
-	/**
-	 * Create a new commit reference.
-	 *
-	 * @param id
-	 *            object name for the commit.
-	 * @param graphPosition
-	 *            the position in the commit-graph of the object.
-	 */
-	protected RevCommitCG(AnyObjectId id, int graphPosition) {
-		super(id);
-		this.graphPosition = graphPosition;
-	}
+    /**
+     * Create a new commit reference.
+     *
+     * @param id            object name for the commit.
+     * @param graphPosition the position in the commit-graph of the object.
+     */
+    protected RevCommitCG(AnyObjectId id, int graphPosition) {
+        super(id);
+        this.graphPosition = graphPosition;
+    }
 
-	@Override
-	void parseCanonical(RevWalk walk, byte[] raw) throws IOException {
-		if (walk.isRetainBody()) {
-			buffer = raw;
-		}
-		parseInGraph(walk);
-	}
+    @Override
+    void parseCanonical(RevWalk walk, byte[] raw) throws IOException {
+        if (walk.isRetainBody()) {
+            buffer = raw;
+        }
+        parseInGraph(walk);
+    }
 
-	@Override
-	void parseHeaders(RevWalk walk) throws MissingObjectException,
-			IncorrectObjectTypeException, IOException {
-		if (walk.isRetainBody()) {
-			super.parseBody(walk); // This parses header and body
-			return;
-		}
-		parseInGraph(walk);
-	}
+    @Override
+    void parseHeaders(RevWalk walk) throws MissingObjectException,
+            IncorrectObjectTypeException, IOException {
+        if (walk.isRetainBody()) {
+            super.parseBody(walk); // This parses header and body
+            return;
+        }
+        parseInGraph(walk);
+    }
 
-	private void parseInGraph(RevWalk walk) throws IOException {
-		CommitGraph graph = walk.commitGraph();
-		CommitGraph.CommitData data = graph.getCommitData(graphPosition);
-		if (data == null) {
-			// RevCommitCG was created because we got its graphPosition from
-			// commit-graph. If now the commit-graph doesn't know about it,
-			// something went wrong.
-			throw new IllegalStateException();
-		}
-		if (!walk.shallowCommitsInitialized) {
-			walk.initializeShallowCommits(this);
-		}
+    private void parseInGraph(RevWalk walk) throws IOException {
+        CommitGraph graph = walk.commitGraph();
+        CommitGraph.CommitData data = graph.getCommitData(graphPosition);
+        if (data == null) {
+            // RevCommitCG was created because we got its graphPosition from
+            // commit-graph. If now the commit-graph doesn't know about it,
+            // something went wrong.
+            throw new IllegalStateException();
+        }
+        if (!walk.shallowCommitsInitialized) {
+            walk.initializeShallowCommits(this);
+        }
 
-		this.tree = walk.lookupTree(data.getTree());
-		this.commitTime = (int) data.getCommitTime();
-		this.generation = data.getGeneration();
+        this.tree = walk.lookupTree(data.getTree());
+        this.commitTime = (int) data.getCommitTime();
+        this.generation = data.getGeneration();
 
-		if (getParents() == null) {
-			int[] pGraphList = data.getParents();
-			if (pGraphList.length == 0) {
-				this.parents = RevCommit.NO_PARENTS;
-			} else {
-				RevCommit[] pList = new RevCommit[pGraphList.length];
-				for (int i = 0; i < pList.length; i++) {
-					int graphPos = pGraphList[i];
-					ObjectId objId = graph.getObjectId(graphPos);
-					pList[i] = walk.lookupCommit(objId, graphPos);
-				}
-				this.parents = pList;
-			}
-		}
-		flags |= PARSED;
-	}
+        if (getParents() == null) {
+            int[] pGraphList = data.getParents();
+            if (pGraphList.length == 0) {
+                this.parents = RevCommit.NO_PARENTS;
+            } else {
+                RevCommit[] pList = new RevCommit[pGraphList.length];
+                for (int i = 0; i < pList.length; i++) {
+                    int graphPos = pGraphList[i];
+                    ObjectId objId = graph.getObjectId(graphPos);
+                    pList[i] = walk.lookupCommit(objId, graphPos);
+                }
+                this.parents = pList;
+            }
+        }
+        flags |= PARSED;
+    }
 
-	@Override
-	int getGeneration() {
-		return generation;
-	}
+    @Override
+    int getGeneration() {
+        return generation;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public ChangedPathFilter getChangedPathFilter(RevWalk rw) {
-		return rw.commitGraph().getChangedPathFilter(graphPosition);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ChangedPathFilter getChangedPathFilter(RevWalk rw) {
+        return rw.commitGraph().getChangedPathFilter(graphPosition);
+    }
 }

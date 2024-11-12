@@ -54,124 +54,123 @@ import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
  * </pre>
  *
  * @see <a href="http://www.kernel.org/pub/software/scm/git/docs/git-rm.html"
- *      >Git documentation about Rm</a>
+ * >Git documentation about Rm</a>
  */
 public class RmCommand extends GitCommand<DirCache> {
 
-	private Collection<String> filepatterns;
+    private Collection<String> filepatterns;
 
-	/** Only remove files from index, not from working directory */
-	private boolean cached = false;
+    /**
+     * Only remove files from index, not from working directory
+     */
+    private boolean cached = false;
 
-	/**
-	 * Constructor for RmCommand.
-	 *
-	 * @param repo
-	 *            the {@link Repository}
-	 */
-	public RmCommand(Repository repo) {
-		super(repo);
-		filepatterns = new LinkedList<>();
-	}
+    /**
+     * Constructor for RmCommand.
+     *
+     * @param repo the {@link Repository}
+     */
+    public RmCommand(Repository repo) {
+        super(repo);
+        filepatterns = new LinkedList<>();
+    }
 
-	/**
-	 * Add file name pattern of files to be removed
-	 *
-	 * @param filepattern
-	 *            repository-relative path of file to remove (with
-	 *            <code>/</code> as separator)
-	 * @return {@code this}
-	 */
-	public RmCommand addFilepattern(String filepattern) {
-		checkCallable();
-		filepatterns.add(filepattern);
-		return this;
-	}
+    /**
+     * Add file name pattern of files to be removed
+     *
+     * @param filepattern repository-relative path of file to remove (with
+     *                    <code>/</code> as separator)
+     * @return {@code this}
+     */
+    public RmCommand addFilepattern(String filepattern) {
+        checkCallable();
+        filepatterns.add(filepattern);
+        return this;
+    }
 
-	/**
-	 * Only remove the specified files from the index.
-	 *
-	 * @param cached
-	 *            {@code true} if files should only be removed from index,
-	 *            {@code false} if files should also be deleted from the working
-	 *            directory
-	 * @return {@code this}
-	 * @since 2.2
-	 */
-	public RmCommand setCached(boolean cached) {
-		checkCallable();
-		this.cached = cached;
-		return this;
-	}
+    /**
+     * Only remove the specified files from the index.
+     *
+     * @param cached {@code true} if files should only be removed from index,
+     *               {@code false} if files should also be deleted from the working
+     *               directory
+     * @return {@code this}
+     * @since 2.2
+     */
+    public RmCommand setCached(boolean cached) {
+        checkCallable();
+        this.cached = cached;
+        return this;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * Executes the {@code Rm} command. Each instance of this class should only
-	 * be used for one invocation of the command. Don't call this method twice
-	 * on an instance.
-	 */
-	@Override
-	public DirCache call() throws GitAPIException,
-			NoFilepatternException {
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Executes the {@code Rm} command. Each instance of this class should only
+     * be used for one invocation of the command. Don't call this method twice
+     * on an instance.
+     */
+    @Override
+    public DirCache call() throws GitAPIException,
+            NoFilepatternException {
 
-		if (filepatterns.isEmpty())
-			throw new NoFilepatternException(JGitText.get().atLeastOnePatternIsRequired);
-		checkCallable();
-		DirCache dc = null;
+        if (filepatterns.isEmpty())
+            throw new NoFilepatternException(JGitText.get().atLeastOnePatternIsRequired);
+        checkCallable();
+        DirCache dc = null;
 
-		List<String> actuallyDeletedFiles = new ArrayList<>();
-		try (TreeWalk tw = new TreeWalk(repo)) {
-			dc = repo.lockDirCache();
-			DirCacheBuilder builder = dc.builder();
-			tw.reset(); // drop the first empty tree, which we do not need here
-			tw.setRecursive(true);
-			tw.setFilter(PathFilterGroup.createFromStrings(filepatterns));
-			tw.addTree(new DirCacheBuildIterator(builder));
+        List<String> actuallyDeletedFiles = new ArrayList<>();
+        try (TreeWalk tw = new TreeWalk(repo)) {
+            dc = repo.lockDirCache();
+            DirCacheBuilder builder = dc.builder();
+            tw.reset(); // drop the first empty tree, which we do not need here
+            tw.setRecursive(true);
+            tw.setFilter(PathFilterGroup.createFromStrings(filepatterns));
+            tw.addTree(new DirCacheBuildIterator(builder));
 
-			while (tw.next()) {
-				if (!cached) {
-					final FileMode mode = tw.getFileMode(0);
-					if (mode.getObjectType() == Constants.OBJ_BLOB) {
-						String relativePath = tw.getPathString();
-						final File path = new File(repo.getWorkTree(),
-								relativePath);
-						// Deleting a blob is simply a matter of removing
-						// the file or symlink named by the tree entry.
-						if (delete(path)) {
-							actuallyDeletedFiles.add(relativePath);
-						}
-					}
-				}
-			}
-			builder.commit();
-			setCallable(false);
-		} catch (IOException e) {
-			throw new JGitInternalException(
-					JGitText.get().exceptionCaughtDuringExecutionOfRmCommand, e);
-		} finally {
-			try {
-				if (dc != null) {
-					dc.unlock();
-				}
-			} finally {
-				if (!actuallyDeletedFiles.isEmpty()) {
-					repo.fireEvent(new WorkingTreeModifiedEvent(null,
-							actuallyDeletedFiles));
-				}
-			}
-		}
+            while (tw.next()) {
+                if (!cached) {
+                    final FileMode mode = tw.getFileMode(0);
+                    if (mode.getObjectType() == Constants.OBJ_BLOB) {
+                        String relativePath = tw.getPathString();
+                        final File path = new File(repo.getWorkTree(),
+                                relativePath);
+                        // Deleting a blob is simply a matter of removing
+                        // the file or symlink named by the tree entry.
+                        if (delete(path)) {
+                            actuallyDeletedFiles.add(relativePath);
+                        }
+                    }
+                }
+            }
+            builder.commit();
+            setCallable(false);
+        } catch (IOException e) {
+            throw new JGitInternalException(
+                    JGitText.get().exceptionCaughtDuringExecutionOfRmCommand, e);
+        } finally {
+            try {
+                if (dc != null) {
+                    dc.unlock();
+                }
+            } finally {
+                if (!actuallyDeletedFiles.isEmpty()) {
+                    repo.fireEvent(new WorkingTreeModifiedEvent(null,
+                            actuallyDeletedFiles));
+                }
+            }
+        }
 
-		return dc;
-	}
+        return dc;
+    }
 
-	private boolean delete(File p) {
-		boolean deleted = false;
-		while (p != null && !p.equals(repo.getWorkTree()) && p.delete()) {
-			deleted = true;
-			p = p.getParentFile();
-		}
-		return deleted;
-	}
+    private boolean delete(File p) {
+        boolean deleted = false;
+        while (p != null && !p.equals(repo.getWorkTree()) && p.delete()) {
+            deleted = true;
+            p = p.getParentFile();
+        }
+        return deleted;
+    }
 
 }

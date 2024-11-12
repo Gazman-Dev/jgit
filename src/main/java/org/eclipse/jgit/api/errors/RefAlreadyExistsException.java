@@ -17,45 +17,42 @@ import org.eclipse.jgit.lib.RefUpdate;
  * name as an existing one
  */
 public class RefAlreadyExistsException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final RefUpdate.Result updateResult;
+    private final RefUpdate.Result updateResult;
 
-	/**
-	 * Creates a new instance with the given message.
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public RefAlreadyExistsException(String message) {
-		this(message, null);
-	}
+    /**
+     * Creates a new instance with the given message.
+     *
+     * @param message error message
+     */
+    public RefAlreadyExistsException(String message) {
+        this(message, null);
+    }
 
-	/**
-	 * Constructor for RefAlreadyExistsException
-	 *
-	 * @param message
-	 *            error message
-	 * @param updateResult
-	 *            that caused the exception; may be {@code null}
-	 * @since 5.11
-	 */
-	public RefAlreadyExistsException(String message,
-			@Nullable RefUpdate.Result updateResult) {
-		super(message);
-		this.updateResult = updateResult;
-	}
+    /**
+     * Constructor for RefAlreadyExistsException
+     *
+     * @param message      error message
+     * @param updateResult that caused the exception; may be {@code null}
+     * @since 5.11
+     */
+    public RefAlreadyExistsException(String message,
+                                     @Nullable RefUpdate.Result updateResult) {
+        super(message);
+        this.updateResult = updateResult;
+    }
 
-	/**
-	 * Retrieves the {@link RefUpdate.Result
-	 * RefUpdate.Result} that caused the exception.
-	 *
-	 * @return the {@link RefUpdate.Result
-	 *         RefUpdate.Result} or {@code null} if unknown
-	 * @since 5.11
-	 */
-	@Nullable
-	public RefUpdate.Result getUpdateResult() {
-		return updateResult;
-	}
+    /**
+     * Retrieves the {@link RefUpdate.Result
+     * RefUpdate.Result} that caused the exception.
+     *
+     * @return the {@link RefUpdate.Result
+     * RefUpdate.Result} or {@code null} if unknown
+     * @since 5.11
+     */
+    @Nullable
+    public RefUpdate.Result getUpdateResult() {
+        return updateResult;
+    }
 }

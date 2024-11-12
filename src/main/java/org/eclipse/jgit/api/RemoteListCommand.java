@@ -9,54 +9,53 @@
  */
 package org.eclipse.jgit.api;
 
-import java.net.URISyntaxException;
-import java.util.List;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.RemoteConfig;
 
+import java.net.URISyntaxException;
+import java.util.List;
+
 /**
  * Used to obtain the list of remotes.
- *
+ * <p>
  * This class has setters for all supported options and arguments of this
  * command and a {@link #call()} method to finally execute the command.
  *
  * @see <a href=
- *      "http://www.kernel.org/pub/software/scm/git/docs/git-remote.html" > Git
- *      documentation about Remote</a>
+ * "http://www.kernel.org/pub/software/scm/git/docs/git-remote.html" > Git
+ * documentation about Remote</a>
  * @since 4.2
  */
 public class RemoteListCommand extends GitCommand<List<RemoteConfig>> {
 
-	/**
-	 * <p>
-	 * Constructor for RemoteListCommand.
-	 * </p>
-	 *
-	 * @param repo
-	 *            the {@link Repository}
-	 */
-	protected RemoteListCommand(Repository repo) {
-		super(repo);
-	}
+    /**
+     * <p>
+     * Constructor for RemoteListCommand.
+     * </p>
+     *
+     * @param repo the {@link Repository}
+     */
+    protected RemoteListCommand(Repository repo) {
+        super(repo);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * Executes the {@code remote} command with all the options and parameters
-	 * collected by the setter methods of this class.
-	 */
-	@Override
-	public List<RemoteConfig> call() throws GitAPIException {
-		checkCallable();
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Executes the {@code remote} command with all the options and parameters
+     * collected by the setter methods of this class.
+     */
+    @Override
+    public List<RemoteConfig> call() throws GitAPIException {
+        checkCallable();
 
-		try {
-			return RemoteConfig.getAllRemoteConfigs(repo.getConfig());
-		} catch (URISyntaxException e) {
-			throw new JGitInternalException(e.getMessage(), e);
-		}
-	}
+        try {
+            return RemoteConfig.getAllRemoteConfigs(repo.getConfig());
+        } catch (URISyntaxException e) {
+            throw new JGitInternalException(e.getMessage(), e);
+        }
+    }
 
 }

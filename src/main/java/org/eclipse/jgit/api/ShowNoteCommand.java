@@ -9,8 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.lib.Constants;
@@ -22,74 +20,73 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevWalk;
 
+import java.io.IOException;
+
 /**
  * Show an object note.
  *
  * @see <a href="http://www.kernel.org/pub/software/scm/git/docs/git-notes.html"
- *      >Git documentation about Notes</a>
+ * >Git documentation about Notes</a>
  */
 public class ShowNoteCommand extends GitCommand<Note> {
 
-	private RevObject id;
+    private RevObject id;
 
-	private String notesRef = Constants.R_NOTES_COMMITS;
+    private String notesRef = Constants.R_NOTES_COMMITS;
 
-	/**
-	 * Constructor for ShowNoteCommand.
-	 *
-	 * @param repo
-	 *            the {@link Repository}
-	 */
-	protected ShowNoteCommand(Repository repo) {
-		super(repo);
-	}
+    /**
+     * Constructor for ShowNoteCommand.
+     *
+     * @param repo the {@link Repository}
+     */
+    protected ShowNoteCommand(Repository repo) {
+        super(repo);
+    }
 
-	@Override
-	public Note call() throws GitAPIException {
-		checkCallable();
-		NoteMap map = NoteMap.newEmptyMap();
-		RevCommit notesCommit = null;
-		try (RevWalk walk = new RevWalk(repo)) {
-			Ref ref = repo.exactRef(notesRef);
-			// if we have a notes ref, use it
-			if (ref != null) {
-				notesCommit = walk.parseCommit(ref.getObjectId());
-				map = NoteMap.read(walk.getObjectReader(), notesCommit);
-			}
-			return map.getNote(id);
-		} catch (IOException e) {
-			throw new JGitInternalException(e.getMessage(), e);
-		}
-	}
+    @Override
+    public Note call() throws GitAPIException {
+        checkCallable();
+        NoteMap map = NoteMap.newEmptyMap();
+        RevCommit notesCommit = null;
+        try (RevWalk walk = new RevWalk(repo)) {
+            Ref ref = repo.exactRef(notesRef);
+            // if we have a notes ref, use it
+            if (ref != null) {
+                notesCommit = walk.parseCommit(ref.getObjectId());
+                map = NoteMap.read(walk.getObjectReader(), notesCommit);
+            }
+            return map.getNote(id);
+        } catch (IOException e) {
+            throw new JGitInternalException(e.getMessage(), e);
+        }
+    }
 
-	/**
-	 * Sets the object id of object you want a note on
-	 *
-	 * @param id
-	 *            the {@link RevObject} to show notes
-	 *            for.
-	 * @return {@code this}
-	 */
-	public ShowNoteCommand setObjectId(RevObject id) {
-		checkCallable();
-		this.id = id;
-		return this;
-	}
+    /**
+     * Sets the object id of object you want a note on
+     *
+     * @param id the {@link RevObject} to show notes
+     *           for.
+     * @return {@code this}
+     */
+    public ShowNoteCommand setObjectId(RevObject id) {
+        checkCallable();
+        this.id = id;
+        return this;
+    }
 
-	/**
-	 * Set the {@code Ref} to read notes from.
-	 *
-	 * @param notesRef
-	 *            the ref to read notes from. Note, the default value of
-	 *            {@link Constants#R_NOTES_COMMITS} will be
-	 *            used if nothing is set
-	 * @return {@code this}
-	 * @see Constants#R_NOTES_COMMITS
-	 */
-	public ShowNoteCommand setNotesRef(String notesRef) {
-		checkCallable();
-		this.notesRef = notesRef;
-		return this;
-	}
+    /**
+     * Set the {@code Ref} to read notes from.
+     *
+     * @param notesRef the ref to read notes from. Note, the default value of
+     *                 {@link Constants#R_NOTES_COMMITS} will be
+     *                 used if nothing is set
+     * @return {@code this}
+     * @see Constants#R_NOTES_COMMITS
+     */
+    public ShowNoteCommand setNotesRef(String notesRef) {
+        checkCallable();
+        this.notesRef = notesRef;
+        return this;
+    }
 
 }

@@ -38,40 +38,38 @@ import org.eclipse.jgit.lib.Repository;
  * </pre>
  */
 public class FileRepositoryBuilder extends
-		BaseRepositoryBuilder<FileRepositoryBuilder, Repository> {
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * Create a repository matching the configuration in this builder.
-	 * <p>
-	 * If an option was not set, the build method will try to default the option
-	 * based on other options. If insufficient information is available, an
-	 * exception is thrown to the caller.
-	 *
-	 * @since 3.0
-	 */
-	@Override
-	public Repository build() throws IOException {
-		FileRepository repo = new FileRepository(setup());
-		if (isMustExist() && !repo.getObjectDatabase().exists())
-			throw new RepositoryNotFoundException(getGitDir());
-		return repo;
-	}
+        BaseRepositoryBuilder<FileRepositoryBuilder, Repository> {
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Create a repository matching the configuration in this builder.
+     * <p>
+     * If an option was not set, the build method will try to default the option
+     * based on other options. If insufficient information is available, an
+     * exception is thrown to the caller.
+     *
+     * @since 3.0
+     */
+    @Override
+    public Repository build() throws IOException {
+        FileRepository repo = new FileRepository(setup());
+        if (isMustExist() && !repo.getObjectDatabase().exists())
+            throw new RepositoryNotFoundException(getGitDir());
+        return repo;
+    }
 
-	/**
-	 * Convenience factory method to construct a
-	 * {@link FileRepository}.
-	 *
-	 * @param gitDir
-	 *            {@code GIT_DIR}, the repository meta directory.
-	 * @return a repository matching this configuration.
-	 * @throws IOException
-	 *             the repository could not be accessed to configure the rest of
-	 *             the builder's parameters.
-	 * @since 3.0
-	 */
-	public static Repository create(File gitDir) throws IOException {
-		return new FileRepositoryBuilder().setGitDir(gitDir).readEnvironment()
-				.build();
-	}
+    /**
+     * Convenience factory method to construct a
+     * {@link FileRepository}.
+     *
+     * @param gitDir {@code GIT_DIR}, the repository meta directory.
+     * @return a repository matching this configuration.
+     * @throws IOException the repository could not be accessed to configure the rest of
+     *                     the builder's parameters.
+     * @since 3.0
+     */
+    public static Repository create(File gitDir) throws IOException {
+        return new FileRepositoryBuilder().setGitDir(gitDir).readEnvironment()
+                .build();
+    }
 }

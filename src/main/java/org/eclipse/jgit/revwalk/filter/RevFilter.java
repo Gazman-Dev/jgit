@@ -65,212 +65,212 @@ import org.eclipse.jgit.revwalk.RevWalk;
  * </ul>
  */
 public abstract class RevFilter {
-	/** Default filter that always returns true (thread safe). */
-	public static final RevFilter ALL = new AllFilter();
+    /**
+     * Default filter that always returns true (thread safe).
+     */
+    public static final RevFilter ALL = new AllFilter();
 
-	private static final class AllFilter extends RevFilter {
-		@Override
-		public boolean include(RevWalk walker, RevCommit c) {
-			return true;
-		}
+    private static final class AllFilter extends RevFilter {
+        @Override
+        public boolean include(RevWalk walker, RevCommit c) {
+            return true;
+        }
 
-		@Override
-		public RevFilter clone() {
-			return this;
-		}
+        @Override
+        public RevFilter clone() {
+            return this;
+        }
 
-		@Override
-		public boolean requiresCommitBody() {
-			return false;
-		}
+        @Override
+        public boolean requiresCommitBody() {
+            return false;
+        }
 
-		@Override
-		public String toString() {
-			return "ALL"; //$NON-NLS-1$
-		}
-	}
+        @Override
+        public String toString() {
+            return "ALL"; //$NON-NLS-1$
+        }
+    }
 
-	/** Default filter that always returns false (thread safe). */
-	public static final RevFilter NONE = new NoneFilter();
+    /**
+     * Default filter that always returns false (thread safe).
+     */
+    public static final RevFilter NONE = new NoneFilter();
 
-	private static final class NoneFilter extends RevFilter {
-		@Override
-		public boolean include(RevWalk walker, RevCommit c) {
-			return false;
-		}
+    private static final class NoneFilter extends RevFilter {
+        @Override
+        public boolean include(RevWalk walker, RevCommit c) {
+            return false;
+        }
 
-		@Override
-		public RevFilter clone() {
-			return this;
-		}
+        @Override
+        public RevFilter clone() {
+            return this;
+        }
 
-		@Override
-		public boolean requiresCommitBody() {
-			return false;
-		}
+        @Override
+        public boolean requiresCommitBody() {
+            return false;
+        }
 
-		@Override
-		public String toString() {
-			return "NONE"; //$NON-NLS-1$
-		}
-	}
+        @Override
+        public String toString() {
+            return "NONE"; //$NON-NLS-1$
+        }
+    }
 
-	/**
-	 * Filter including only merge commits, excluding all commits with less than
-	 * two parents (thread safe).
-	 *
-	 * @since 4.4
-	 */
-	public static final RevFilter ONLY_MERGES = new OnlyMergesFilter();
+    /**
+     * Filter including only merge commits, excluding all commits with less than
+     * two parents (thread safe).
+     *
+     * @since 4.4
+     */
+    public static final RevFilter ONLY_MERGES = new OnlyMergesFilter();
 
-	private static final class OnlyMergesFilter extends RevFilter {
+    private static final class OnlyMergesFilter extends RevFilter {
 
-		@Override
-		public boolean include(RevWalk walker, RevCommit c) {
-			return c.getParentCount() >= 2;
-		}
+        @Override
+        public boolean include(RevWalk walker, RevCommit c) {
+            return c.getParentCount() >= 2;
+        }
 
-		@Override
-		public RevFilter clone() {
-			return this;
-		}
+        @Override
+        public RevFilter clone() {
+            return this;
+        }
 
-		@Override
-		public boolean requiresCommitBody() {
-			return false;
-		}
+        @Override
+        public boolean requiresCommitBody() {
+            return false;
+        }
 
-		@Override
-		public String toString() {
-			return "ONLY_MERGES"; //$NON-NLS-1$
-		}
-	}
+        @Override
+        public String toString() {
+            return "ONLY_MERGES"; //$NON-NLS-1$
+        }
+    }
 
-	/** Excludes commits with more than one parent (thread safe). */
-	public static final RevFilter NO_MERGES = new NoMergesFilter();
+    /**
+     * Excludes commits with more than one parent (thread safe).
+     */
+    public static final RevFilter NO_MERGES = new NoMergesFilter();
 
-	private static final class NoMergesFilter extends RevFilter {
-		@Override
-		public boolean include(RevWalk walker, RevCommit c) {
-			return c.getParentCount() < 2;
-		}
+    private static final class NoMergesFilter extends RevFilter {
+        @Override
+        public boolean include(RevWalk walker, RevCommit c) {
+            return c.getParentCount() < 2;
+        }
 
-		@Override
-		public RevFilter clone() {
-			return this;
-		}
+        @Override
+        public RevFilter clone() {
+            return this;
+        }
 
-		@Override
-		public boolean requiresCommitBody() {
-			return false;
-		}
+        @Override
+        public boolean requiresCommitBody() {
+            return false;
+        }
 
-		@Override
-		public String toString() {
-			return "NO_MERGES"; //$NON-NLS-1$
-		}
-	}
+        @Override
+        public String toString() {
+            return "NO_MERGES"; //$NON-NLS-1$
+        }
+    }
 
-	/**
-	 * Selects only merge bases of the starting points (thread safe).
-	 * <p>
-	 * This is a special case filter that cannot be combined with any other
-	 * filter. Its include method always throws an exception as context
-	 * information beyond the arguments is necessary to determine if the
-	 * supplied commit is a merge base.
-	 */
-	public static final RevFilter MERGE_BASE = new MergeBaseFilter();
+    /**
+     * Selects only merge bases of the starting points (thread safe).
+     * <p>
+     * This is a special case filter that cannot be combined with any other
+     * filter. Its include method always throws an exception as context
+     * information beyond the arguments is necessary to determine if the
+     * supplied commit is a merge base.
+     */
+    public static final RevFilter MERGE_BASE = new MergeBaseFilter();
 
-	private static final class MergeBaseFilter extends RevFilter {
-		@Override
-		public boolean include(RevWalk walker, RevCommit c) {
-			throw new UnsupportedOperationException(JGitText.get().cannotBeCombined);
-		}
+    private static final class MergeBaseFilter extends RevFilter {
+        @Override
+        public boolean include(RevWalk walker, RevCommit c) {
+            throw new UnsupportedOperationException(JGitText.get().cannotBeCombined);
+        }
 
-		@Override
-		public RevFilter clone() {
-			return this;
-		}
+        @Override
+        public RevFilter clone() {
+            return this;
+        }
 
-		@Override
-		public boolean requiresCommitBody() {
-			return false;
-		}
+        @Override
+        public boolean requiresCommitBody() {
+            return false;
+        }
 
-		@Override
-		public String toString() {
-			return "MERGE_BASE"; //$NON-NLS-1$
-		}
-	}
+        @Override
+        public String toString() {
+            return "MERGE_BASE"; //$NON-NLS-1$
+        }
+    }
 
-	/**
-	 * Create a new filter that does the opposite of this filter.
-	 *
-	 * @return a new filter that includes commits this filter rejects.
-	 */
-	public RevFilter negate() {
-		return NotRevFilter.create(this);
-	}
+    /**
+     * Create a new filter that does the opposite of this filter.
+     *
+     * @return a new filter that includes commits this filter rejects.
+     */
+    public RevFilter negate() {
+        return NotRevFilter.create(this);
+    }
 
-	/**
-	 * Whether the filter needs the commit body to be parsed.
-	 *
-	 * @return true if the filter needs the commit body to be parsed.
-	 */
-	public boolean requiresCommitBody() {
-		// Assume true to be backward compatible with prior behavior.
-		return true;
-	}
+    /**
+     * Whether the filter needs the commit body to be parsed.
+     *
+     * @return true if the filter needs the commit body to be parsed.
+     */
+    public boolean requiresCommitBody() {
+        // Assume true to be backward compatible with prior behavior.
+        return true;
+    }
 
-	/**
-	 * Determine if the supplied commit should be included in results.
-	 *
-	 * @param walker
-	 *            the active walker this filter is being invoked from within.
-	 * @param cmit
-	 *            the commit currently being tested. The commit has been parsed
-	 *            and its body is available for inspection only if the filter
-	 *            returns true from {@link #requiresCommitBody()}.
-	 * @return true to include this commit in the results; false to have this
-	 *         commit be omitted entirely from the results.
-	 * @throws StopWalkException
-	 *             the filter knows for certain that no additional commits can
-	 *             ever match, and the current commit doesn't match either. The
-	 *             walk is halted and no more results are provided.
-	 * @throws MissingObjectException
-	 *             an object the filter needs to consult to determine its answer
-	 *             does not exist in the Git repository the walker is operating
-	 *             on. Filtering this commit is impossible without the object.
-	 * @throws IncorrectObjectTypeException
-	 *             an object the filter needed to consult was not of the
-	 *             expected object type. This usually indicates a corrupt
-	 *             repository, as an object link is referencing the wrong type.
-	 * @throws IOException
-	 *             a loose object or pack file could not be read to obtain data
-	 *             necessary for the filter to make its decision.
-	 */
-	public abstract boolean include(RevWalk walker, RevCommit cmit)
-			throws StopWalkException, MissingObjectException,
-			IncorrectObjectTypeException, IOException;
+    /**
+     * Determine if the supplied commit should be included in results.
+     *
+     * @param walker the active walker this filter is being invoked from within.
+     * @param cmit   the commit currently being tested. The commit has been parsed
+     *               and its body is available for inspection only if the filter
+     *               returns true from {@link #requiresCommitBody()}.
+     * @return true to include this commit in the results; false to have this
+     * commit be omitted entirely from the results.
+     * @throws StopWalkException            the filter knows for certain that no additional commits can
+     *                                      ever match, and the current commit doesn't match either. The
+     *                                      walk is halted and no more results are provided.
+     * @throws MissingObjectException       an object the filter needs to consult to determine its answer
+     *                                      does not exist in the Git repository the walker is operating
+     *                                      on. Filtering this commit is impossible without the object.
+     * @throws IncorrectObjectTypeException an object the filter needed to consult was not of the
+     *                                      expected object type. This usually indicates a corrupt
+     *                                      repository, as an object link is referencing the wrong type.
+     * @throws IOException                  a loose object or pack file could not be read to obtain data
+     *                                      necessary for the filter to make its decision.
+     */
+    public abstract boolean include(RevWalk walker, RevCommit cmit)
+            throws StopWalkException, MissingObjectException,
+            IncorrectObjectTypeException, IOException;
 
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * Clone this revision filter, including its parameters.
-	 * <p>
-	 * This is a deep clone. If this filter embeds objects or other filters it
-	 * must also clone those, to ensure the instances do not share mutable data.
-	 */
-	@Override
-	public abstract RevFilter clone();
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Clone this revision filter, including its parameters.
+     * <p>
+     * This is a deep clone. If this filter embeds objects or other filters it
+     * must also clone those, to ensure the instances do not share mutable data.
+     */
+    @Override
+    public abstract RevFilter clone();
 
-	@Override
-	public String toString() {
-		String n = getClass().getName();
-		int lastDot = n.lastIndexOf('.');
-		if (lastDot >= 0) {
-			n = n.substring(lastDot + 1);
-		}
-		return n.replace('$', '.');
-	}
+    @Override
+    public String toString() {
+        String n = getClass().getName();
+        int lastDot = n.lastIndexOf('.');
+        if (lastDot >= 0) {
+            n = n.substring(lastDot + 1);
+        }
+        return n.replace('$', '.');
+    }
 }

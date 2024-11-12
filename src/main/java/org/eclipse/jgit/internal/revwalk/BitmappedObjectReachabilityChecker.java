@@ -31,53 +31,52 @@ import org.eclipse.jgit.revwalk.RevObject;
  * bitmaps.
  */
 public class BitmappedObjectReachabilityChecker
-		implements ObjectReachabilityChecker {
+        implements ObjectReachabilityChecker {
 
-	private final ObjectWalk walk;
+    private final ObjectWalk walk;
 
-	/**
-	 * New instance of the reachability checker using a existing walk.
-	 *
-	 * @param walk
-	 *            ObjectWalk instance to reuse. Caller retains ownership.
-	 */
-	public BitmappedObjectReachabilityChecker(ObjectWalk walk) {
-		this.walk = walk;
-	}
+    /**
+     * New instance of the reachability checker using a existing walk.
+     *
+     * @param walk ObjectWalk instance to reuse. Caller retains ownership.
+     */
+    public BitmappedObjectReachabilityChecker(ObjectWalk walk) {
+        this.walk = walk;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * This implementation tries to shortcut the check adding starters
-	 * incrementally. Ordering the starters by relevance can improve performance
-	 * in the average case.
-	 */
-	@Override
-	public Optional<RevObject> areAllReachable(Collection<RevObject> targets,
-			Stream<RevObject> starters) throws IOException {
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This implementation tries to shortcut the check adding starters
+     * incrementally. Ordering the starters by relevance can improve performance
+     * in the average case.
+     */
+    @Override
+    public Optional<RevObject> areAllReachable(Collection<RevObject> targets,
+                                               Stream<RevObject> starters) throws IOException {
 
-		try {
-			List<RevObject> remainingTargets = new ArrayList<>(targets);
-			BitmapWalker bitmapWalker = new BitmapWalker(walk,
-					walk.getObjectReader().getBitmapIndex(), null);
+        try {
+            List<RevObject> remainingTargets = new ArrayList<>(targets);
+            BitmapWalker bitmapWalker = new BitmapWalker(walk,
+                    walk.getObjectReader().getBitmapIndex(), null);
 
-			Iterator<RevObject> starterIt = starters.iterator();
-			BitmapBuilder seen = null;
-			while (starterIt.hasNext()) {
-				List<RevObject> asList = Arrays.asList(starterIt.next());
-				BitmapBuilder visited = bitmapWalker.findObjects(asList, seen,
-						true);
-				seen = seen == null ? visited : seen.or(visited);
+            Iterator<RevObject> starterIt = starters.iterator();
+            BitmapBuilder seen = null;
+            while (starterIt.hasNext()) {
+                List<RevObject> asList = Arrays.asList(starterIt.next());
+                BitmapBuilder visited = bitmapWalker.findObjects(asList, seen,
+                        true);
+                seen = seen == null ? visited : seen.or(visited);
 
-				remainingTargets.removeIf(seen::contains);
-				if (remainingTargets.isEmpty()) {
-					return Optional.empty();
-				}
-			}
+                remainingTargets.removeIf(seen::contains);
+                if (remainingTargets.isEmpty()) {
+                    return Optional.empty();
+                }
+            }
 
-			return Optional.of(remainingTargets.get(0));
-		} catch (MissingObjectException | IncorrectObjectTypeException e) {
-			throw new IllegalStateException(e);
-		}
-	}
+            return Optional.of(remainingTargets.get(0));
+        } catch (MissingObjectException | IncorrectObjectTypeException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }

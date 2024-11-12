@@ -42,15 +42,14 @@ package org.eclipse.jgit.api.errors;
  * null), such as bad~tag.
  */
 public class InvalidTagNameException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for InvalidTagNameException.
-	 *
-	 * @param msg
-	 *            error message
-	 */
-	public InvalidTagNameException(String msg) {
-		super(msg);
-	}
+    /**
+     * Constructor for InvalidTagNameException.
+     *
+     * @param msg error message
+     */
+    public InvalidTagNameException(String msg) {
+        super(msg);
+    }
 }

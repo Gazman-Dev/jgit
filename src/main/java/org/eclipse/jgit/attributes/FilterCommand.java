@@ -22,48 +22,45 @@ import java.io.OutputStream;
  * @since 4.6
  */
 public abstract class FilterCommand {
-	/**
-	 * The {@link InputStream} this command should read from
-	 */
-	protected InputStream in;
+    /**
+     * The {@link InputStream} this command should read from
+     */
+    protected InputStream in;
 
-	/**
-	 * The {@link OutputStream} this command should write to
-	 */
-	protected OutputStream out;
+    /**
+     * The {@link OutputStream} this command should write to
+     */
+    protected OutputStream out;
 
-	/**
-	 * Constructor for FilterCommand
-	 * <p>
-	 * FilterCommand implementors are required to manage the in and out streams
-	 * (close on success and/or exception).
-	 *
-	 * @param in
-	 *            The {@link InputStream} this command should read from
-	 * @param out
-	 *            The {@link OutputStream} this command should write to
-	 */
-	public FilterCommand(InputStream in, OutputStream out) {
-		this.in = in;
-		this.out = out;
-	}
+    /**
+     * Constructor for FilterCommand
+     * <p>
+     * FilterCommand implementors are required to manage the in and out streams
+     * (close on success and/or exception).
+     *
+     * @param in  The {@link InputStream} this command should read from
+     * @param out The {@link OutputStream} this command should write to
+     */
+    public FilterCommand(InputStream in, OutputStream out) {
+        this.in = in;
+        this.out = out;
+    }
 
-	/**
-	 * Execute the command. The command is supposed to read data from
-	 * {@link #in} and to write the result to {@link #out}. It returns the
-	 * number of bytes it read from {@link #in}. It should be called in a loop
-	 * until it returns -1 signaling that the {@link InputStream} is
-	 * completely processed.
-	 * <p>
-	 * On successful completion (return -1) or on Exception, the streams
-	 * {@link #in} and {@link #out} are closed by the implementation.
-	 *
-	 * @return the number of bytes read from the {@link InputStream} or
-	 *         -1. -1 means that the {@link InputStream} is completely
-	 *         processed.
-	 * @throws IOException
-	 *             when {@link IOException} occurred while reading from
-	 *             {@link #in} or writing to {@link #out}
-	 */
-	public abstract int run() throws IOException;
+    /**
+     * Execute the command. The command is supposed to read data from
+     * {@link #in} and to write the result to {@link #out}. It returns the
+     * number of bytes it read from {@link #in}. It should be called in a loop
+     * until it returns -1 signaling that the {@link InputStream} is
+     * completely processed.
+     * <p>
+     * On successful completion (return -1) or on Exception, the streams
+     * {@link #in} and {@link #out} are closed by the implementation.
+     *
+     * @return the number of bytes read from the {@link InputStream} or
+     * -1. -1 means that the {@link InputStream} is completely
+     * processed.
+     * @throws IOException when {@link IOException} occurred while reading from
+     *                     {@link #in} or writing to {@link #out}
+     */
+    public abstract int run() throws IOException;
 }

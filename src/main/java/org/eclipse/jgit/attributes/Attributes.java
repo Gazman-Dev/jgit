@@ -57,207 +57,196 @@ import org.eclipse.jgit.lib.Constants;
  * @since 4.2
  */
 public final class Attributes {
-	private final Map<String, Attribute> map = new LinkedHashMap<>();
+    private final Map<String, Attribute> map = new LinkedHashMap<>();
 
-	/**
-	 * Creates a new instance
-	 *
-	 * @param attributes
-	 *            a {@link Attribute}
-	 */
-	public Attributes(Attribute... attributes) {
-		if (attributes != null) {
-			for (Attribute a : attributes) {
-				put(a);
-			}
-		}
-	}
+    /**
+     * Creates a new instance
+     *
+     * @param attributes a {@link Attribute}
+     */
+    public Attributes(Attribute... attributes) {
+        if (attributes != null) {
+            for (Attribute a : attributes) {
+                put(a);
+            }
+        }
+    }
 
-	/**
-	 * Whether the set of attributes is empty
-	 *
-	 * @return true if the set does not contain any attributes
-	 */
-	public boolean isEmpty() {
-		return map.isEmpty();
-	}
+    /**
+     * Whether the set of attributes is empty
+     *
+     * @return true if the set does not contain any attributes
+     */
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
 
-	/**
-	 * Get the attribute with the given key
-	 *
-	 * @param key
-	 *            a {@link String} object.
-	 * @return the attribute or null
-	 */
-	public Attribute get(String key) {
-		return map.get(key);
-	}
+    /**
+     * Get the attribute with the given key
+     *
+     * @param key a {@link String} object.
+     * @return the attribute or null
+     */
+    public Attribute get(String key) {
+        return map.get(key);
+    }
 
-	/**
-	 * Get all attributes
-	 *
-	 * @return all attributes
-	 */
-	public Collection<Attribute> getAll() {
-		return new ArrayList<>(map.values());
-	}
+    /**
+     * Get all attributes
+     *
+     * @return all attributes
+     */
+    public Collection<Attribute> getAll() {
+        return new ArrayList<>(map.values());
+    }
 
-	/**
-	 * Put an attribute
-	 *
-	 * @param a
-	 *            an {@link Attribute}
-	 */
-	public void put(Attribute a) {
-		map.put(a.getKey(), a);
-	}
+    /**
+     * Put an attribute
+     *
+     * @param a an {@link Attribute}
+     */
+    public void put(Attribute a) {
+        map.put(a.getKey(), a);
+    }
 
-	/**
-	 * Remove attribute with given key
-	 *
-	 * @param key
-	 *            an attribute name
-	 */
-	public void remove(String key) {
-		map.remove(key);
-	}
+    /**
+     * Remove attribute with given key
+     *
+     * @param key an attribute name
+     */
+    public void remove(String key) {
+        map.remove(key);
+    }
 
-	/**
-	 * Whether there is an attribute with this key
-	 *
-	 * @param key
-	 *            key of an attribute
-	 * @return true if the {@link Attributes}
-	 *         contains this key
-	 */
-	public boolean containsKey(String key) {
-		return map.containsKey(key);
-	}
+    /**
+     * Whether there is an attribute with this key
+     *
+     * @param key key of an attribute
+     * @return true if the {@link Attributes}
+     * contains this key
+     */
+    public boolean containsKey(String key) {
+        return map.containsKey(key);
+    }
 
-	/**
-	 * Return the state.
-	 *
-	 * @param key
-	 *            key of an attribute
-	 * @return the state (never returns <code>null</code>)
-	 */
-	public State getState(String key) {
-		Attribute a = map.get(key);
-		return a != null ? a.getState() : State.UNSPECIFIED;
-	}
+    /**
+     * Return the state.
+     *
+     * @param key key of an attribute
+     * @return the state (never returns <code>null</code>)
+     */
+    public State getState(String key) {
+        Attribute a = map.get(key);
+        return a != null ? a.getState() : State.UNSPECIFIED;
+    }
 
-	/**
-	 * Whether the attribute is set
-	 *
-	 * @param key
-	 *            a {@link String} object.
-	 * @return true if the key is
-	 *         {@link State#SET}, false in
-	 *         all other cases
-	 */
-	public boolean isSet(String key) {
-		return (getState(key) == State.SET);
-	}
+    /**
+     * Whether the attribute is set
+     *
+     * @param key a {@link String} object.
+     * @return true if the key is
+     * {@link State#SET}, false in
+     * all other cases
+     */
+    public boolean isSet(String key) {
+        return (getState(key) == State.SET);
+    }
 
-	/**
-	 * Whether the attribute is unset
-	 *
-	 * @param key
-	 *            a {@link String} object.
-	 * @return true if the key is
-	 *         {@link State#UNSET}, false
-	 *         in all other cases
-	 */
-	public boolean isUnset(String key) {
-		return (getState(key) == State.UNSET);
-	}
+    /**
+     * Whether the attribute is unset
+     *
+     * @param key a {@link String} object.
+     * @return true if the key is
+     * {@link State#UNSET}, false
+     * in all other cases
+     */
+    public boolean isUnset(String key) {
+        return (getState(key) == State.UNSET);
+    }
 
-	/**
-	 * Whether the attribute with the given key is unspecified
-	 *
-	 * @param key
-	 *            a {@link String} object.
-	 * @return true if the key is
-	 *         {@link State#UNSPECIFIED},
-	 *         false in all other cases
-	 */
-	public boolean isUnspecified(String key) {
-		return (getState(key) == State.UNSPECIFIED);
-	}
+    /**
+     * Whether the attribute with the given key is unspecified
+     *
+     * @param key a {@link String} object.
+     * @return true if the key is
+     * {@link State#UNSPECIFIED},
+     * false in all other cases
+     */
+    public boolean isUnspecified(String key) {
+        return (getState(key) == State.UNSPECIFIED);
+    }
 
-	/**
-	 * Is this a custom attribute
-	 *
-	 * @param key
-	 *            a {@link String} object.
-	 * @return true if the key is
-	 *         {@link State#CUSTOM}, false
-	 *         in all other cases see {@link #getValue(String)} for the value of
-	 *         the key
-	 */
-	public boolean isCustom(String key) {
-		return (getState(key) == State.CUSTOM);
-	}
+    /**
+     * Is this a custom attribute
+     *
+     * @param key a {@link String} object.
+     * @return true if the key is
+     * {@link State#CUSTOM}, false
+     * in all other cases see {@link #getValue(String)} for the value of
+     * the key
+     */
+    public boolean isCustom(String key) {
+        return (getState(key) == State.CUSTOM);
+    }
 
-	/**
-	 * Get attribute value
-	 *
-	 * @param key
-	 *            an attribute key
-	 * @return the attribute value (may be <code>null</code>)
-	 */
-	public String getValue(String key) {
-		Attribute a = map.get(key);
-		return a != null ? a.getValue() : null;
-	}
+    /**
+     * Get attribute value
+     *
+     * @param key an attribute key
+     * @return the attribute value (may be <code>null</code>)
+     */
+    public String getValue(String key) {
+        Attribute a = map.get(key);
+        return a != null ? a.getValue() : null;
+    }
 
-	/**
-	 * Test if the given attributes implies to handle the related entry as a
-	 * binary file (i.e. if the entry has an -merge or a merge=binary attribute)
-	 * or if it can be content merged.
-	 *
-	 * @return <code>true</code> if the entry can be content merged,
-	 *         <code>false</code> otherwise
-	 * @since 4.9
-	 */
-	public boolean canBeContentMerged() {
-		if (isUnset(Constants.ATTR_MERGE)) {
-			return false;
-		} else if (isCustom(Constants.ATTR_MERGE)
-				&& getValue(Constants.ATTR_MERGE)
-						.equals(Constants.ATTR_BUILTIN_BINARY_MERGER)) {
-			return false;
-		}
-		return true;
-	}
+    /**
+     * Test if the given attributes implies to handle the related entry as a
+     * binary file (i.e. if the entry has an -merge or a merge=binary attribute)
+     * or if it can be content merged.
+     *
+     * @return <code>true</code> if the entry can be content merged,
+     * <code>false</code> otherwise
+     * @since 4.9
+     */
+    public boolean canBeContentMerged() {
+        if (isUnset(Constants.ATTR_MERGE)) {
+            return false;
+        } else if (isCustom(Constants.ATTR_MERGE)
+                && getValue(Constants.ATTR_MERGE)
+                .equals(Constants.ATTR_BUILTIN_BINARY_MERGER)) {
+            return false;
+        }
+        return true;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder buf = new StringBuilder();
-		buf.append(getClass().getSimpleName());
-		buf.append("["); //$NON-NLS-1$
-		buf.append(" "); //$NON-NLS-1$
-		for (Attribute a : map.values()) {
-			buf.append(a.toString());
-			buf.append(" "); //$NON-NLS-1$
-		}
-		buf.append("]"); //$NON-NLS-1$
-		return buf.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuilder buf = new StringBuilder();
+        buf.append(getClass().getSimpleName());
+        buf.append("["); //$NON-NLS-1$
+        buf.append(" "); //$NON-NLS-1$
+        for (Attribute a : map.values()) {
+            buf.append(a.toString());
+            buf.append(" "); //$NON-NLS-1$
+        }
+        buf.append("]"); //$NON-NLS-1$
+        return buf.toString();
+    }
 
-	@Override
-	public int hashCode() {
-		return map.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return map.hashCode();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Attributes))
-			return false;
-		Attributes other = (Attributes) obj;
-		return this.map.equals(other.map);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof Attributes))
+            return false;
+        Attributes other = (Attributes) obj;
+        return this.map.equals(other.map);
+    }
 
 }

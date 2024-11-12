@@ -54,13 +54,13 @@ import java.lang.annotation.Target;
  * annotation on arrays altogether.
  *
  * @see <a href=
- *      "http://types.cs.washington.edu/checker-framework/current/checker-framework-manual.html#faq-array-syntax-meaning">
- *      The checker-framework manual</a>
+ * "http://types.cs.washington.edu/checker-framework/current/checker-framework-manual.html#faq-array-syntax-meaning">
+ * The checker-framework manual</a>
  * @since 4.2
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ FIELD, METHOD, PARAMETER, LOCAL_VARIABLE })
+@Target({FIELD, METHOD, PARAMETER, LOCAL_VARIABLE})
 public @interface Nullable {
-	// marker annotation with no members
+    // marker annotation with no members
 }

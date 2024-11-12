@@ -22,37 +22,36 @@ import org.eclipse.jgit.internal.JGitText;
  * Thrown when an invalid object id is passed in as an argument.
  */
 public class InvalidObjectIdException extends IllegalArgumentException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Create exception with bytes of the invalid object id.
-	 *
-	 * @param bytes containing the invalid id.
-	 * @param offset in the byte array where the error occurred.
-	 * @param length of the sequence of invalid bytes.
-	 */
-	public InvalidObjectIdException(byte[] bytes, int offset, int length) {
-		super(msg(bytes, offset, length));
-	}
+    /**
+     * Create exception with bytes of the invalid object id.
+     *
+     * @param bytes  containing the invalid id.
+     * @param offset in the byte array where the error occurred.
+     * @param length of the sequence of invalid bytes.
+     */
+    public InvalidObjectIdException(byte[] bytes, int offset, int length) {
+        super(msg(bytes, offset, length));
+    }
 
-	/**
-	 * Constructor for InvalidObjectIdException
-	 *
-	 * @param id
-	 *            the invalid id.
-	 * @since 4.1
-	 */
-	public InvalidObjectIdException(String id) {
-		super(MessageFormat.format(JGitText.get().invalidId, id));
-	}
+    /**
+     * Constructor for InvalidObjectIdException
+     *
+     * @param id the invalid id.
+     * @since 4.1
+     */
+    public InvalidObjectIdException(String id) {
+        super(MessageFormat.format(JGitText.get().invalidId, id));
+    }
 
-	private static String msg(byte[] bytes, int offset, int length) {
-		try {
-			return MessageFormat.format(
-					JGitText.get().invalidId,
-					new String(bytes, offset, length, US_ASCII));
-		} catch (StringIndexOutOfBoundsException e) {
-			return JGitText.get().invalidId0;
-		}
-	}
+    private static String msg(byte[] bytes, int offset, int length) {
+        try {
+            return MessageFormat.format(
+                    JGitText.get().invalidId,
+                    new String(bytes, offset, length, US_ASCII));
+        } catch (StringIndexOutOfBoundsException e) {
+            return JGitText.get().invalidId0;
+        }
+    }
 }

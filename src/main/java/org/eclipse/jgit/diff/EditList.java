@@ -16,41 +16,39 @@ import java.util.ArrayList;
  * Specialized list of {@link Edit}s in a document.
  */
 public class EditList extends ArrayList<Edit> {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct an edit list containing a single edit.
-	 *
-	 * @param edit
-	 *            the edit to return in the list.
-	 * @return list containing only {@code edit}.
-	 */
-	public static EditList singleton(Edit edit) {
-		EditList res = new EditList(1);
-		res.add(edit);
-		return res;
-	}
+    /**
+     * Construct an edit list containing a single edit.
+     *
+     * @param edit the edit to return in the list.
+     * @return list containing only {@code edit}.
+     */
+    public static EditList singleton(Edit edit) {
+        EditList res = new EditList(1);
+        res.add(edit);
+        return res;
+    }
 
-	/**
-	 * Create a new, empty edit list.
-	 */
-	public EditList() {
-		super(16);
-	}
+    /**
+     * Create a new, empty edit list.
+     */
+    public EditList() {
+        super(16);
+    }
 
-	/**
-	 * Create an empty edit list with the specified capacity.
-	 *
-	 * @param capacity
-	 *            the initial capacity of the edit list. If additional edits are
-	 *            added to the list, it will be grown to support them.
-	 */
-	public EditList(int capacity) {
-		super(capacity);
-	}
+    /**
+     * Create an empty edit list with the specified capacity.
+     *
+     * @param capacity the initial capacity of the edit list. If additional edits are
+     *                 added to the list, it will be grown to support them.
+     */
+    public EditList(int capacity) {
+        super(capacity);
+    }
 
-	@Override
-	public String toString() {
-		return "EditList" + super.toString(); //$NON-NLS-1$
-	}
+    @Override
+    public String toString() {
+        return "EditList" + super.toString(); //$NON-NLS-1$
+    }
 }

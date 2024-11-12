@@ -22,35 +22,33 @@ import org.eclipse.jgit.util.FS;
  * Attribute node loaded from the $GIT_DIR/info/attributes file.
  */
 public class InfoAttributesNode extends AttributesNode {
-	final Repository repository;
+    final Repository repository;
 
-	/**
-	 * Constructor for InfoAttributesNode.
-	 *
-	 * @param repository
-	 *            the {@link Repository}.
-	 */
-	public InfoAttributesNode(Repository repository) {
-		this.repository = repository;
-	}
+    /**
+     * Constructor for InfoAttributesNode.
+     *
+     * @param repository the {@link Repository}.
+     */
+    public InfoAttributesNode(Repository repository) {
+        this.repository = repository;
+    }
 
-	/**
-	 * Load the attributes node
-	 *
-	 * @return the attributes node
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	public AttributesNode load() throws IOException {
-		AttributesNode r = new AttributesNode();
+    /**
+     * Load the attributes node
+     *
+     * @return the attributes node
+     * @throws IOException if an IO error occurred
+     */
+    public AttributesNode load() throws IOException {
+        AttributesNode r = new AttributesNode();
 
-		FS fs = repository.getFS();
+        FS fs = repository.getFS();
 
-		File attributes = fs.resolve(repository.getDirectory(),
-				Constants.INFO_ATTRIBUTES);
-		FileRepository.AttributesNodeProviderImpl.loadRulesFromFile(r, attributes);
+        File attributes = fs.resolve(repository.getDirectory(),
+                Constants.INFO_ATTRIBUTES);
+        FileRepository.AttributesNodeProviderImpl.loadRulesFromFile(r, attributes);
 
-		return r.getRules().isEmpty() ? null : r;
-	}
+        return r.getRules().isEmpty() ? null : r;
+    }
 
 }

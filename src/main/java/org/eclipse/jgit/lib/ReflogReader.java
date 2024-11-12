@@ -20,44 +20,38 @@ import java.util.List;
  */
 public interface ReflogReader {
 
-	/**
-	 * Get the last entry in the reflog
-	 *
-	 * @return the latest reflog entry, or null if no log
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	ReflogEntry getLastEntry() throws IOException;
+    /**
+     * Get the last entry in the reflog
+     *
+     * @return the latest reflog entry, or null if no log
+     * @throws IOException if an IO error occurred
+     */
+    ReflogEntry getLastEntry() throws IOException;
 
-	/**
-	 * Get all reflog entries in reverse order
-	 *
-	 * @return all reflog entries in reverse order
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	List<ReflogEntry> getReverseEntries() throws IOException;
+    /**
+     * Get all reflog entries in reverse order
+     *
+     * @return all reflog entries in reverse order
+     * @throws IOException if an IO error occurred
+     */
+    List<ReflogEntry> getReverseEntries() throws IOException;
 
-	/**
-	 * Get specific entry in the reflog relative to the last entry which is
-	 * considered entry zero.
-	 *
-	 * @param number
-	 *            a int.
-	 * @return reflog entry or null if not found
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	ReflogEntry getReverseEntry(int number) throws IOException;
+    /**
+     * Get specific entry in the reflog relative to the last entry which is
+     * considered entry zero.
+     *
+     * @param number a int.
+     * @return reflog entry or null if not found
+     * @throws IOException if an IO error occurred
+     */
+    ReflogEntry getReverseEntry(int number) throws IOException;
 
-	/**
-	 * Get all reflog entries in reverse order
-	 *
-	 * @param max
-	 *            max number of entries to read
-	 * @return all reflog entries in reverse order
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	List<ReflogEntry> getReverseEntries(int max) throws IOException;
+    /**
+     * Get all reflog entries in reverse order
+     *
+     * @param max max number of entries to read
+     * @return all reflog entries in reverse order
+     * @throws IOException if an IO error occurred
+     */
+    List<ReflogEntry> getReverseEntries(int max) throws IOException;
 }

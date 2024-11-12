@@ -22,26 +22,25 @@ package org.eclipse.jgit.diff;
  * To construct an instance of this type use
  * {@link HashedSequencePair}.
  *
- * @param <S>
- *            the base sequence type.
+ * @param <S> the base sequence type.
  */
 public final class HashedSequenceComparator<S extends Sequence> extends
-		SequenceComparator<HashedSequence<S>> {
-	private final SequenceComparator<? super S> cmp;
+        SequenceComparator<HashedSequence<S>> {
+    private final SequenceComparator<? super S> cmp;
 
-	HashedSequenceComparator(SequenceComparator<? super S> cmp) {
-		this.cmp = cmp;
-	}
+    HashedSequenceComparator(SequenceComparator<? super S> cmp) {
+        this.cmp = cmp;
+    }
 
-	@Override
-	public boolean equals(HashedSequence<S> a, int ai, //
-			HashedSequence<S> b, int bi) {
-		return a.hashes[ai] == b.hashes[bi]
-				&& cmp.equals(a.base, ai, b.base, bi);
-	}
+    @Override
+    public boolean equals(HashedSequence<S> a, int ai, //
+                          HashedSequence<S> b, int bi) {
+        return a.hashes[ai] == b.hashes[bi]
+                && cmp.equals(a.base, ai, b.base, bi);
+    }
 
-	@Override
-	public int hash(HashedSequence<S> seq, int ptr) {
-		return seq.hashes[ptr];
-	}
+    @Override
+    public int hash(HashedSequence<S> seq, int ptr) {
+        return seq.hashes[ptr];
+    }
 }

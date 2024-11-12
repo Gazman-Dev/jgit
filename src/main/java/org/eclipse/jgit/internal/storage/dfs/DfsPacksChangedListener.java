@@ -16,11 +16,10 @@ import org.eclipse.jgit.events.RepositoryListener;
  * Receives {@link DfsPacksChangedEvent}s.
  */
 public interface DfsPacksChangedListener extends RepositoryListener {
-	/**
-	 * Invoked when all packs in a repository are listed.
-	 *
-	 * @param event
-	 *            information about the packs.
-	 */
-	void onPacksChanged(DfsPacksChangedEvent event);
+    /**
+     * Invoked when all packs in a repository are listed.
+     *
+     * @param event information about the packs.
+     */
+    void onPacksChanged(DfsPacksChangedEvent event);
 }

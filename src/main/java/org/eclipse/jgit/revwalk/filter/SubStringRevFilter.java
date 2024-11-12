@@ -23,79 +23,76 @@ import org.eclipse.jgit.util.RawSubStringPattern;
  * Abstract filter that searches text using only substring search.
  */
 public abstract class SubStringRevFilter extends RevFilter {
-	/**
-	 * Can this string be safely handled by a substring filter?
-	 *
-	 * @param pattern
-	 *            the pattern text proposed by the user.
-	 * @return true if a substring filter can perform this pattern match; false
-	 *         if {@link PatternMatchRevFilter}
-	 *         must be used instead.
-	 */
-	public static boolean safe(String pattern) {
-		for (int i = 0; i < pattern.length(); i++) {
-			final char c = pattern.charAt(i);
-			switch (c) {
-			case '.':
-			case '?':
-			case '*':
-			case '+':
-			case '{':
-			case '}':
-			case '(':
-			case ')':
-			case '[':
-			case ']':
-			case '\\':
-				return false;
-			}
-		}
-		return true;
-	}
+    /**
+     * Can this string be safely handled by a substring filter?
+     *
+     * @param pattern the pattern text proposed by the user.
+     * @return true if a substring filter can perform this pattern match; false
+     * if {@link PatternMatchRevFilter}
+     * must be used instead.
+     */
+    public static boolean safe(String pattern) {
+        for (int i = 0; i < pattern.length(); i++) {
+            final char c = pattern.charAt(i);
+            switch (c) {
+                case '.':
+                case '?':
+                case '*':
+                case '+':
+                case '{':
+                case '}':
+                case '(':
+                case ')':
+                case '[':
+                case ']':
+                case '\\':
+                    return false;
+            }
+        }
+        return true;
+    }
 
-	private final RawSubStringPattern pattern;
+    private final RawSubStringPattern pattern;
 
-	/**
-	 * Construct a new matching filter.
-	 *
-	 * @param patternText
-	 *            text to locate. This should be a safe string as described by
-	 *            the {@link #safe(String)} as regular expression meta
-	 *            characters are treated as literals.
-	 */
-	protected SubStringRevFilter(String patternText) {
-		pattern = new RawSubStringPattern(patternText);
-	}
+    /**
+     * Construct a new matching filter.
+     *
+     * @param patternText text to locate. This should be a safe string as described by
+     *                    the {@link #safe(String)} as regular expression meta
+     *                    characters are treated as literals.
+     */
+    protected SubStringRevFilter(String patternText) {
+        pattern = new RawSubStringPattern(patternText);
+    }
 
-	@Override
-	public boolean include(RevWalk walker, RevCommit cmit)
-			throws MissingObjectException, IncorrectObjectTypeException,
-			IOException {
-		return pattern.match(text(cmit)) >= 0;
-	}
+    @Override
+    public boolean include(RevWalk walker, RevCommit cmit)
+            throws MissingObjectException, IncorrectObjectTypeException,
+            IOException {
+        return pattern.match(text(cmit)) >= 0;
+    }
 
-	@Override
-	public boolean requiresCommitBody() {
-		return true;
-	}
+    @Override
+    public boolean requiresCommitBody() {
+        return true;
+    }
 
-	/**
-	 * Obtain the raw text to match against.
-	 *
-	 * @param cmit
-	 *            current commit being evaluated.
-	 * @return sequence for the commit's content that we need to match on.
-	 */
-	protected abstract RawCharSequence text(RevCommit cmit);
+    /**
+     * Obtain the raw text to match against.
+     *
+     * @param cmit current commit being evaluated.
+     * @return sequence for the commit's content that we need to match on.
+     */
+    protected abstract RawCharSequence text(RevCommit cmit);
 
-	@Override
-	public RevFilter clone() {
-		return this; // Typically we are actually thread-safe.
-	}
+    @Override
+    public RevFilter clone() {
+        return this; // Typically we are actually thread-safe.
+    }
 
-	@SuppressWarnings("nls")
-	@Override
-	public String toString() {
-		return super.toString() + "(\"" + pattern.pattern() + "\")";
-	}
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        return super.toString() + "(\"" + pattern.pattern() + "\")";
+    }
 }

@@ -19,16 +19,16 @@ import org.eclipse.jgit.nls.TranslationBundle;
 @SuppressWarnings("MissingSummary")
 public class RepoText extends TranslationBundle {
 
-	/**
-	 * Get an instance of this translation bundle
-	 *
-	 * @return an instance of this translation bundle
-	 */
-	public static RepoText get() {
-		return NLS.getBundleFor(RepoText.class);
-	}
+    /**
+     * Get an instance of this translation bundle
+     *
+     * @return an instance of this translation bundle
+     */
+    public static RepoText get() {
+        return NLS.getBundleFor(RepoText.class);
+    }
 
-	// @formatter:off
+    // @formatter:off
 	/***/ public String errorIncludeFile;
 	/***/ public String errorIncludeNotImplemented;
 	/***/ public String errorNoDefault;

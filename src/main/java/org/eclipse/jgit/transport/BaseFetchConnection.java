@@ -30,50 +30,46 @@ import org.eclipse.jgit.lib.Ref;
  * </p>
  */
 abstract class BaseFetchConnection extends BaseConnection implements
-		FetchConnection {
-	@Override
-	public final void fetch(final ProgressMonitor monitor,
-			final Collection<Ref> want, final Set<ObjectId> have)
-			throws TransportException {
-		fetch(monitor, want, have, null);
-	}
+        FetchConnection {
+    @Override
+    public final void fetch(final ProgressMonitor monitor,
+                            final Collection<Ref> want, final Set<ObjectId> have)
+            throws TransportException {
+        fetch(monitor, want, have, null);
+    }
 
-	@Override
-	public final void fetch(final ProgressMonitor monitor,
-			final Collection<Ref> want, final Set<ObjectId> have,
-			OutputStream out) throws TransportException {
-		markStartedOperation();
-		doFetch(monitor, want, have);
-	}
+    @Override
+    public final void fetch(final ProgressMonitor monitor,
+                            final Collection<Ref> want, final Set<ObjectId> have,
+                            OutputStream out) throws TransportException {
+        markStartedOperation();
+        doFetch(monitor, want, have);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * Default implementation of {@link FetchConnection#didFetchIncludeTags()} -
-	 * returning false.
-	 */
-	@Override
-	public boolean didFetchIncludeTags() {
-		return false;
-	}
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Default implementation of {@link FetchConnection#didFetchIncludeTags()} -
+     * returning false.
+     */
+    @Override
+    public boolean didFetchIncludeTags() {
+        return false;
+    }
 
-	/**
-	 * Implementation of {@link #fetch(ProgressMonitor, Collection, Set)}
-	 * without checking for multiple fetch.
-	 *
-	 * @param monitor
-	 *            as in {@link #fetch(ProgressMonitor, Collection, Set)}
-	 * @param want
-	 *            as in {@link #fetch(ProgressMonitor, Collection, Set)}
-	 * @param have
-	 *            as in {@link #fetch(ProgressMonitor, Collection, Set)}
-	 * @throws TransportException
-	 *             as in {@link #fetch(ProgressMonitor, Collection, Set)}, but
-	 *             implementation doesn't have to care about multiple
-	 *             {@link #fetch(ProgressMonitor, Collection, Set)} calls, as it
-	 *             is checked in this class.
-	 */
-	protected abstract void doFetch(final ProgressMonitor monitor,
-			final Collection<Ref> want, final Set<ObjectId> have)
-			throws TransportException;
+    /**
+     * Implementation of {@link #fetch(ProgressMonitor, Collection, Set)}
+     * without checking for multiple fetch.
+     *
+     * @param monitor as in {@link #fetch(ProgressMonitor, Collection, Set)}
+     * @param want    as in {@link #fetch(ProgressMonitor, Collection, Set)}
+     * @param have    as in {@link #fetch(ProgressMonitor, Collection, Set)}
+     * @throws TransportException as in {@link #fetch(ProgressMonitor, Collection, Set)}, but
+     *                            implementation doesn't have to care about multiple
+     *                            {@link #fetch(ProgressMonitor, Collection, Set)} calls, as it
+     *                            is checked in this class.
+     */
+    protected abstract void doFetch(final ProgressMonitor monitor,
+                                    final Collection<Ref> want, final Set<ObjectId> have)
+            throws TransportException;
 }

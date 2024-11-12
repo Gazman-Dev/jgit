@@ -22,21 +22,17 @@ import org.eclipse.jgit.lib.Repository;
  * @since 4.6
  */
 public interface FilterCommandFactory {
-	/**
-	 * Create a new {@link FilterCommand}.
-	 *
-	 * @param db
-	 *            the repository this command should work on
-	 * @param in
-	 *            the {@link InputStream} this command should read from
-	 * @param out
-	 *            the {@link OutputStream} this command should write to
-	 * @return the created {@link FilterCommand}
-	 * @throws IOException
-	 *             thrown when the command constructor throws an
-	 *             java.io.IOException
-	 */
-	FilterCommand create(Repository db, InputStream in, OutputStream out)
-			throws IOException;
+    /**
+     * Create a new {@link FilterCommand}.
+     *
+     * @param db  the repository this command should work on
+     * @param in  the {@link InputStream} this command should read from
+     * @param out the {@link OutputStream} this command should write to
+     * @return the created {@link FilterCommand}
+     * @throws IOException thrown when the command constructor throws an
+     *                     java.io.IOException
+     */
+    FilterCommand create(Repository db, InputStream in, OutputStream out)
+            throws IOException;
 
 }

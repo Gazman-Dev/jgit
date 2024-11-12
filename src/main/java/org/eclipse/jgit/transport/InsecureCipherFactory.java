@@ -25,8 +25,8 @@ import javax.crypto.NoSuchPaddingException;
  * >InsecureCryptoUsage</a>), which is not secure.
  */
 class InsecureCipherFactory {
-	static Cipher create(String algo)
-			throws NoSuchAlgorithmException, NoSuchPaddingException {
-		return Cipher.getInstance(algo);
-	}
+    static Cipher create(String algo)
+            throws NoSuchAlgorithmException, NoSuchPaddingException {
+        return Cipher.getInstance(algo);
+    }
 }

@@ -19,249 +19,229 @@ import org.eclipse.jgit.annotations.Nullable;
  * {@link ObjectId}.
  */
 public abstract class ObjectIdRef implements Ref {
-	/** Any reference whose peeled value is not yet known. */
-	public static class Unpeeled extends ObjectIdRef {
-		/**
-		 * Create a new ref pairing.
-		 *
-		 * @param st
-		 *            method used to store this ref.
-		 * @param name
-		 *            name of this ref.
-		 * @param id
-		 *            current value of the ref. May be {@code null} to indicate
-		 *            a ref that does not exist yet.
-		 */
-		public Unpeeled(@NonNull Storage st, @NonNull String name,
-				@Nullable ObjectId id) {
-			super(st, name, id, UNDEFINED_UPDATE_INDEX);
-		}
+    /**
+     * Any reference whose peeled value is not yet known.
+     */
+    public static class Unpeeled extends ObjectIdRef {
+        /**
+         * Create a new ref pairing.
+         *
+         * @param st   method used to store this ref.
+         * @param name name of this ref.
+         * @param id   current value of the ref. May be {@code null} to indicate
+         *             a ref that does not exist yet.
+         */
+        public Unpeeled(@NonNull Storage st, @NonNull String name,
+                        @Nullable ObjectId id) {
+            super(st, name, id, UNDEFINED_UPDATE_INDEX);
+        }
 
-		/**
-		 * Create a new ref pairing with update index.
-		 *
-		 * @param st
-		 *            method used to store this ref.
-		 * @param name
-		 *            name of this ref.
-		 * @param id
-		 *            current value of the ref. May be {@code null} to indicate
-		 *            a ref that does not exist yet.
-		 * @param updateIndex
-		 *            number increasing with each update to the reference.
-		 * @since 5.3
-		 */
-		public Unpeeled(@NonNull Storage st, @NonNull String name,
-				@Nullable ObjectId id, long updateIndex) {
-			super(st, name, id, updateIndex);
-		}
+        /**
+         * Create a new ref pairing with update index.
+         *
+         * @param st          method used to store this ref.
+         * @param name        name of this ref.
+         * @param id          current value of the ref. May be {@code null} to indicate
+         *                    a ref that does not exist yet.
+         * @param updateIndex number increasing with each update to the reference.
+         * @since 5.3
+         */
+        public Unpeeled(@NonNull Storage st, @NonNull String name,
+                        @Nullable ObjectId id, long updateIndex) {
+            super(st, name, id, updateIndex);
+        }
 
-		@Override
-		@Nullable
-		public ObjectId getPeeledObjectId() {
-			return null;
-		}
+        @Override
+        @Nullable
+        public ObjectId getPeeledObjectId() {
+            return null;
+        }
 
-		@Override
-		public boolean isPeeled() {
-			return false;
-		}
-	}
+        @Override
+        public boolean isPeeled() {
+            return false;
+        }
+    }
 
-	/** An annotated tag whose peeled object has been cached. */
-	public static class PeeledTag extends ObjectIdRef {
-		private final ObjectId peeledObjectId;
+    /**
+     * An annotated tag whose peeled object has been cached.
+     */
+    public static class PeeledTag extends ObjectIdRef {
+        private final ObjectId peeledObjectId;
 
-		/**
-		 * Create a new ref pairing.
-		 *
-		 * @param st
-		 *            method used to store this ref.
-		 * @param name
-		 *            name of this ref.
-		 * @param id
-		 *            current value of the ref.
-		 * @param p
-		 *            the first non-tag object that tag {@code id} points to.
-		 */
-		public PeeledTag(@NonNull Storage st, @NonNull String name,
-				@Nullable ObjectId id, @NonNull ObjectId p) {
-			super(st, name, id, UNDEFINED_UPDATE_INDEX);
-			peeledObjectId = p;
-		}
+        /**
+         * Create a new ref pairing.
+         *
+         * @param st   method used to store this ref.
+         * @param name name of this ref.
+         * @param id   current value of the ref.
+         * @param p    the first non-tag object that tag {@code id} points to.
+         */
+        public PeeledTag(@NonNull Storage st, @NonNull String name,
+                         @Nullable ObjectId id, @NonNull ObjectId p) {
+            super(st, name, id, UNDEFINED_UPDATE_INDEX);
+            peeledObjectId = p;
+        }
 
-		/**
-		 * Create a new ref pairing with update index.
-		 *
-		 * @param st
-		 *            method used to store this ref.
-		 * @param name
-		 *            name of this ref.
-		 * @param id
-		 *            current value of the ref. May be {@code null} to indicate
-		 *            a ref that does not exist yet.
-		 * @param p
-		 *            the first non-tag object that tag {@code id} points to.
-		 * @param updateIndex
-		 *            number increasing with each update to the reference.
-		 * @since 5.3
-		 */
-		public PeeledTag(@NonNull Storage st, @NonNull String name,
-				@Nullable ObjectId id, @NonNull ObjectId p, long updateIndex) {
-			super(st, name, id, updateIndex);
-			peeledObjectId = p;
-		}
+        /**
+         * Create a new ref pairing with update index.
+         *
+         * @param st          method used to store this ref.
+         * @param name        name of this ref.
+         * @param id          current value of the ref. May be {@code null} to indicate
+         *                    a ref that does not exist yet.
+         * @param p           the first non-tag object that tag {@code id} points to.
+         * @param updateIndex number increasing with each update to the reference.
+         * @since 5.3
+         */
+        public PeeledTag(@NonNull Storage st, @NonNull String name,
+                         @Nullable ObjectId id, @NonNull ObjectId p, long updateIndex) {
+            super(st, name, id, updateIndex);
+            peeledObjectId = p;
+        }
 
-		@Override
-		@NonNull
-		public ObjectId getPeeledObjectId() {
-			return peeledObjectId;
-		}
+        @Override
+        @NonNull
+        public ObjectId getPeeledObjectId() {
+            return peeledObjectId;
+        }
 
-		@Override
-		public boolean isPeeled() {
-			return true;
-		}
-	}
+        @Override
+        public boolean isPeeled() {
+            return true;
+        }
+    }
 
-	/** A reference to a non-tag object coming from a cached source. */
-	public static class PeeledNonTag extends ObjectIdRef {
-		/**
-		 * Create a new ref pairing.
-		 *
-		 * @param st
-		 *            method used to store this ref.
-		 * @param name
-		 *            name of this ref.
-		 * @param id
-		 *            current value of the ref. May be {@code null} to indicate
-		 *            a ref that does not exist yet.
-		 */
-		public PeeledNonTag(@NonNull Storage st, @NonNull String name,
-				@Nullable ObjectId id) {
-			super(st, name, id, UNDEFINED_UPDATE_INDEX);
-		}
+    /**
+     * A reference to a non-tag object coming from a cached source.
+     */
+    public static class PeeledNonTag extends ObjectIdRef {
+        /**
+         * Create a new ref pairing.
+         *
+         * @param st   method used to store this ref.
+         * @param name name of this ref.
+         * @param id   current value of the ref. May be {@code null} to indicate
+         *             a ref that does not exist yet.
+         */
+        public PeeledNonTag(@NonNull Storage st, @NonNull String name,
+                            @Nullable ObjectId id) {
+            super(st, name, id, UNDEFINED_UPDATE_INDEX);
+        }
 
-		/**
-		 * Create a new ref pairing with update index.
-		 *
-		 * @param st
-		 *            method used to store this ref.
-		 * @param name
-		 *            name of this ref.
-		 * @param id
-		 *            current value of the ref. May be {@code null} to indicate
-		 *            a ref that does not exist yet.
-		 * @param updateIndex
-		 *            number increasing with each update to the reference.
-		 * @since 5.3
-		 */
-		public PeeledNonTag(@NonNull Storage st, @NonNull String name,
-				@Nullable ObjectId id, long updateIndex) {
-			super(st, name, id, updateIndex);
-		}
+        /**
+         * Create a new ref pairing with update index.
+         *
+         * @param st          method used to store this ref.
+         * @param name        name of this ref.
+         * @param id          current value of the ref. May be {@code null} to indicate
+         *                    a ref that does not exist yet.
+         * @param updateIndex number increasing with each update to the reference.
+         * @since 5.3
+         */
+        public PeeledNonTag(@NonNull Storage st, @NonNull String name,
+                            @Nullable ObjectId id, long updateIndex) {
+            super(st, name, id, updateIndex);
+        }
 
-		@Override
-		@Nullable
-		public ObjectId getPeeledObjectId() {
-			return null;
-		}
+        @Override
+        @Nullable
+        public ObjectId getPeeledObjectId() {
+            return null;
+        }
 
-		@Override
-		public boolean isPeeled() {
-			return true;
-		}
-	}
+        @Override
+        public boolean isPeeled() {
+            return true;
+        }
+    }
 
-	private final String name;
+    private final String name;
 
-	private final Storage storage;
+    private final Storage storage;
 
-	private final ObjectId objectId;
+    private final ObjectId objectId;
 
-	private final long updateIndex;
+    private final long updateIndex;
 
-	/**
-	 * Create a new ref pairing.
-	 *
-	 * @param st
-	 *            method used to store this ref.
-	 * @param name
-	 *            name of this ref.
-	 * @param id
-	 *            current value of the ref. May be {@code null} to indicate a
-	 *            ref that does not exist yet.
-	 * @param updateIndex
-	 *            number that increases with each ref update. Set to -1 if the
-	 *            storage doesn't support versioning.
-	 * @since 5.3
-	 */
-	protected ObjectIdRef(@NonNull Storage st, @NonNull String name,
-			@Nullable ObjectId id, long updateIndex) {
-		this.name = name;
-		this.storage = st;
-		this.objectId = id;
-		this.updateIndex = updateIndex;
-	}
+    /**
+     * Create a new ref pairing.
+     *
+     * @param st          method used to store this ref.
+     * @param name        name of this ref.
+     * @param id          current value of the ref. May be {@code null} to indicate a
+     *                    ref that does not exist yet.
+     * @param updateIndex number that increases with each ref update. Set to -1 if the
+     *                    storage doesn't support versioning.
+     * @since 5.3
+     */
+    protected ObjectIdRef(@NonNull Storage st, @NonNull String name,
+                          @Nullable ObjectId id, long updateIndex) {
+        this.name = name;
+        this.storage = st;
+        this.objectId = id;
+        this.updateIndex = updateIndex;
+    }
 
-	@Override
-	@NonNull
-	public String getName() {
-		return name;
-	}
+    @Override
+    @NonNull
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public boolean isSymbolic() {
-		return false;
-	}
+    @Override
+    public boolean isSymbolic() {
+        return false;
+    }
 
-	@Override
-	@NonNull
-	public Ref getLeaf() {
-		return this;
-	}
+    @Override
+    @NonNull
+    public Ref getLeaf() {
+        return this;
+    }
 
-	@Override
-	@NonNull
-	public Ref getTarget() {
-		return this;
-	}
+    @Override
+    @NonNull
+    public Ref getTarget() {
+        return this;
+    }
 
-	@Override
-	@Nullable
-	public ObjectId getObjectId() {
-		return objectId;
-	}
+    @Override
+    @Nullable
+    public ObjectId getObjectId() {
+        return objectId;
+    }
 
-	@Override
-	@NonNull
-	public Storage getStorage() {
-		return storage;
-	}
+    @Override
+    @NonNull
+    public Storage getStorage() {
+        return storage;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * @since 5.3
-	 */
-	@Override
-	public long getUpdateIndex() {
-		if (updateIndex == UNDEFINED_UPDATE_INDEX) {
-			throw new UnsupportedOperationException();
-		}
-		return updateIndex;
-	}
+    /**
+     * {@inheritDoc}
+     *
+     * @since 5.3
+     */
+    @Override
+    public long getUpdateIndex() {
+        if (updateIndex == UNDEFINED_UPDATE_INDEX) {
+            throw new UnsupportedOperationException();
+        }
+        return updateIndex;
+    }
 
-	@NonNull
-	@Override
-	public String toString() {
-		StringBuilder r = new StringBuilder();
-		r.append("Ref["); //$NON-NLS-1$
-		r.append(getName());
-		r.append('=');
-		r.append(ObjectId.toString(getObjectId()));
-		r.append('(');
-		r.append(updateIndex); // Print value, even if -1
-		r.append(")]"); //$NON-NLS-1$
-		return r.toString();
-	}
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder r = new StringBuilder();
+        r.append("Ref["); //$NON-NLS-1$
+        r.append(getName());
+        r.append('=');
+        r.append(ObjectId.toString(getObjectId()));
+        r.append('(');
+        r.append(updateIndex); // Print value, even if -1
+        r.append(")]"); //$NON-NLS-1$
+        return r.toString();
+    }
 }

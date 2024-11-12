@@ -23,16 +23,16 @@ import org.eclipse.jgit.errors.InvalidPatternException;
  */
 public class WildCardMatcher extends NameMatcher {
 
-	final Pattern p;
+    final Pattern p;
 
-	WildCardMatcher(String pattern, Character pathSeparator, boolean dirOnly)
-			throws InvalidPatternException {
-		super(pattern, pathSeparator, dirOnly, false);
-		p = convertGlob(subPattern);
-	}
+    WildCardMatcher(String pattern, Character pathSeparator, boolean dirOnly)
+            throws InvalidPatternException {
+        super(pattern, pathSeparator, dirOnly, false);
+        p = convertGlob(subPattern);
+    }
 
-	@Override
-	public boolean matches(String segment, int startIncl, int endExcl) {
-		return p.matcher(segment.substring(startIncl, endExcl)).matches();
-	}
+    @Override
+    public boolean matches(String segment, int startIncl, int endExcl) {
+        return p.matcher(segment.substring(startIncl, endExcl)).matches();
+    }
 }

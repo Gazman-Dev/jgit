@@ -15,59 +15,55 @@ package org.eclipse.jgit.api;
  * @since 4.10
  */
 public class SubmoduleDeinitResult {
-	private String path;
+    private String path;
 
-	private SubmoduleDeinitCommand.SubmoduleDeinitStatus status;
+    private SubmoduleDeinitCommand.SubmoduleDeinitStatus status;
 
-	/**
-	 * Constructor for SubmoduleDeinitResult
-	 *
-	 * @param path
-	 *            path of the submodule
-	 * @param status
-	 *            effect of a SubmoduleDeinitCommand's execution
-	 */
-	public SubmoduleDeinitResult(String path,
-			SubmoduleDeinitCommand.SubmoduleDeinitStatus status) {
-		this.path = path;
-		this.status = status;
-	}
+    /**
+     * Constructor for SubmoduleDeinitResult
+     *
+     * @param path   path of the submodule
+     * @param status effect of a SubmoduleDeinitCommand's execution
+     */
+    public SubmoduleDeinitResult(String path,
+                                 SubmoduleDeinitCommand.SubmoduleDeinitStatus status) {
+        this.path = path;
+        this.status = status;
+    }
 
-	/**
-	 * Get the path of the submodule
-	 *
-	 * @return path of the submodule
-	 */
-	public String getPath() {
-		return path;
-	}
+    /**
+     * Get the path of the submodule
+     *
+     * @return path of the submodule
+     */
+    public String getPath() {
+        return path;
+    }
 
-	/**
-	 * Set the path of the submodule
-	 *
-	 * @param path
-	 *            path of the submodule
-	 */
-	public void setPath(String path) {
-		this.path = path;
-	}
+    /**
+     * Set the path of the submodule
+     *
+     * @param path path of the submodule
+     */
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-	/**
-	 * Get the status of the command
-	 *
-	 * @return the status of the command
-	 */
-	public SubmoduleDeinitCommand.SubmoduleDeinitStatus getStatus() {
-		return status;
-	}
+    /**
+     * Get the status of the command
+     *
+     * @return the status of the command
+     */
+    public SubmoduleDeinitCommand.SubmoduleDeinitStatus getStatus() {
+        return status;
+    }
 
-	/**
-	 * Set the status of the command
-	 *
-	 * @param status
-	 *            the status of the command
-	 */
-	public void setStatus(SubmoduleDeinitCommand.SubmoduleDeinitStatus status) {
-		this.status = status;
-	}
+    /**
+     * Set the status of the command
+     *
+     * @param status the status of the command
+     */
+    public void setStatus(SubmoduleDeinitCommand.SubmoduleDeinitStatus status) {
+        this.status = status;
+    }
 }

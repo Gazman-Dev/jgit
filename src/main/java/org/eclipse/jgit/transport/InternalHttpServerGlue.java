@@ -18,30 +18,26 @@ package org.eclipse.jgit.transport;
  * @since 4.0
  */
 public class InternalHttpServerGlue {
-	/**
-	 * Apply a default user agent for a request.
-	 *
-	 * @param up
-	 *            current UploadPack instance.
-	 * @param agent
-	 *            user agent string from the HTTP headers.
-	 */
-	public static void setPeerUserAgent(UploadPack up, String agent) {
-		up.userAgent = agent;
-	}
+    /**
+     * Apply a default user agent for a request.
+     *
+     * @param up    current UploadPack instance.
+     * @param agent user agent string from the HTTP headers.
+     */
+    public static void setPeerUserAgent(UploadPack up, String agent) {
+        up.userAgent = agent;
+    }
 
-	/**
-	 * Apply a default user agent for a request.
-	 *
-	 * @param rp
-	 *            current ReceivePack instance.
-	 * @param agent
-	 *            user agent string from the HTTP headers.
-	 */
-	public static void setPeerUserAgent(ReceivePack rp, String agent) {
-		rp.userAgent = agent;
-	}
+    /**
+     * Apply a default user agent for a request.
+     *
+     * @param rp    current ReceivePack instance.
+     * @param agent user agent string from the HTTP headers.
+     */
+    public static void setPeerUserAgent(ReceivePack rp, String agent) {
+        rp.userAgent = agent;
+    }
 
-	private InternalHttpServerGlue() {
-	}
+    private InternalHttpServerGlue() {
+    }
 }

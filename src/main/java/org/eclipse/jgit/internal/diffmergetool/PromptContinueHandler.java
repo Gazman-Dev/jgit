@@ -15,13 +15,12 @@ package org.eclipse.jgit.internal.diffmergetool;
  * whether to continue
  */
 public interface PromptContinueHandler {
-	/**
-	 * Prompt the user whether to continue with the next file by opening a given
-	 * tool.
-	 *
-	 * @param toolName
-	 *            The name of the tool to open
-	 * @return Whether the user wants to continue
-	 */
-	boolean prompt(String toolName);
+    /**
+     * Prompt the user whether to continue with the next file by opening a given
+     * tool.
+     *
+     * @param toolName The name of the tool to open
+     * @return Whether the user wants to continue
+     */
+    boolean prompt(String toolName);
 }

@@ -43,27 +43,24 @@ package org.eclipse.jgit.api.errors;
  * @since 5.0
  */
 public class EmptyCommitException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for EmptyCommitException
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable}
-	 */
-	public EmptyCommitException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for EmptyCommitException
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable}
+     */
+    public EmptyCommitException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for EmptyCommitException.
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public EmptyCommitException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for EmptyCommitException.
+     *
+     * @param message error message
+     */
+    public EmptyCommitException(String message) {
+        super(message);
+    }
 }

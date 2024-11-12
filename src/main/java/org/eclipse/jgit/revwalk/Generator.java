@@ -27,56 +27,62 @@ import org.eclipse.jgit.errors.MissingObjectException;
  * @see StartGenerator
  */
 abstract class Generator {
-	/** Commits are sorted by commit date and time, descending. */
-	static final int SORT_COMMIT_TIME_DESC = 1 << 0;
+    /**
+     * Commits are sorted by commit date and time, descending.
+     */
+    static final int SORT_COMMIT_TIME_DESC = 1 << 0;
 
-	/** Output may have {@link RevWalk#REWRITE} marked on it. */
-	static final int HAS_REWRITE = 1 << 1;
+    /**
+     * Output may have {@link RevWalk#REWRITE} marked on it.
+     */
+    static final int HAS_REWRITE = 1 << 1;
 
-	/** Output needs {@link RewriteGenerator}. */
-	static final int NEEDS_REWRITE = 1 << 2;
+    /**
+     * Output needs {@link RewriteGenerator}.
+     */
+    static final int NEEDS_REWRITE = 1 << 2;
 
-	/** Topological ordering is enforced (all children before parents). */
-	static final int SORT_TOPO = 1 << 3;
+    /**
+     * Topological ordering is enforced (all children before parents).
+     */
+    static final int SORT_TOPO = 1 << 3;
 
-	/** Output may have {@link RevWalk#UNINTERESTING} marked on it. */
-	static final int HAS_UNINTERESTING = 1 << 4;
+    /**
+     * Output may have {@link RevWalk#UNINTERESTING} marked on it.
+     */
+    static final int HAS_UNINTERESTING = 1 << 4;
 
-	protected final boolean firstParent;
+    protected final boolean firstParent;
 
-	protected Generator(boolean firstParent) {
-		this.firstParent = firstParent;
-	}
+    protected Generator(boolean firstParent) {
+        this.firstParent = firstParent;
+    }
 
-	/**
-	 * Connect the supplied queue to this generator's own free list (if any).
-	 *
-	 * @param q
-	 *            another FIFO queue that wants to share our queue's free list.
-	 */
-	void shareFreeList(BlockRevQueue q) {
-		// Do nothing by default.
-	}
+    /**
+     * Connect the supplied queue to this generator's own free list (if any).
+     *
+     * @param q another FIFO queue that wants to share our queue's free list.
+     */
+    void shareFreeList(BlockRevQueue q) {
+        // Do nothing by default.
+    }
 
-	/**
-	 * Obtain flags describing the output behavior of this generator.
-	 *
-	 * @return one or more of the constants declared in this class, describing
-	 *         how this generator produces its results.
-	 */
-	abstract int outputType();
+    /**
+     * Obtain flags describing the output behavior of this generator.
+     *
+     * @return one or more of the constants declared in this class, describing
+     * how this generator produces its results.
+     */
+    abstract int outputType();
 
-	/**
-	 * Return the next commit to the application, or the next generator.
-	 *
-	 * @return next available commit; null if no more are to be returned.
-	 * @throws MissingObjectException
-	 *             if an object is missing
-	 * @throws IncorrectObjectTypeException
-	 *             if an object has an unexpected type
-	 * @throws IOException
-	 *             if an IO error occurred
-	 */
-	abstract RevCommit next() throws MissingObjectException,
-			IncorrectObjectTypeException, IOException;
+    /**
+     * Return the next commit to the application, or the next generator.
+     *
+     * @return next available commit; null if no more are to be returned.
+     * @throws MissingObjectException       if an object is missing
+     * @throws IncorrectObjectTypeException if an object has an unexpected type
+     * @throws IOException                  if an IO error occurred
+     */
+    abstract RevCommit next() throws MissingObjectException,
+            IncorrectObjectTypeException, IOException;
 }

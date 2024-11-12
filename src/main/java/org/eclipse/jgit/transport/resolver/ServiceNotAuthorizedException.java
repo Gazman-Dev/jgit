@@ -20,36 +20,33 @@ import org.eclipse.jgit.internal.JGitText;
  * {@code HttpServletResponse.SC_UNAUTHORIZED}.
  */
 public class ServiceNotAuthorizedException extends Exception {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for ServiceNotAuthorizedException.
-	 *
-	 * @param message
-	 *            error message
-	 * @param cause
-	 *            a {@link Throwable} object.
-	 * @since 4.1
-	 */
-	public ServiceNotAuthorizedException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor for ServiceNotAuthorizedException.
+     *
+     * @param message error message
+     * @param cause   a {@link Throwable} object.
+     * @since 4.1
+     */
+    public ServiceNotAuthorizedException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor for ServiceNotAuthorizedException.
-	 *
-	 * @param message
-	 *            error message
-	 * @since 4.1
-	 */
-	public ServiceNotAuthorizedException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for ServiceNotAuthorizedException.
+     *
+     * @param message error message
+     * @since 4.1
+     */
+    public ServiceNotAuthorizedException(String message) {
+        super(message);
+    }
 
-	/**
-	 * Indicates that the requested service requires authentication.
-	 */
-	public ServiceNotAuthorizedException() {
-		super(JGitText.get().unauthorized);
-	}
+    /**
+     * Indicates that the requested service requires authentication.
+     */
+    public ServiceNotAuthorizedException() {
+        super(JGitText.get().unauthorized);
+    }
 }

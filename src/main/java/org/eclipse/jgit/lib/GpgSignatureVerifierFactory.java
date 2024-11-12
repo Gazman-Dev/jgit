@@ -23,70 +23,68 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class GpgSignatureVerifierFactory {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(GpgSignatureVerifierFactory.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(GpgSignatureVerifierFactory.class);
 
-	private static class DefaultFactory {
+    private static class DefaultFactory {
 
-		private static volatile GpgSignatureVerifierFactory defaultFactory = loadDefault();
+        private static volatile GpgSignatureVerifierFactory defaultFactory = loadDefault();
 
-		private static GpgSignatureVerifierFactory loadDefault() {
-			try {
-				ServiceLoader<GpgSignatureVerifierFactory> loader = ServiceLoader
-						.load(GpgSignatureVerifierFactory.class);
-				Iterator<GpgSignatureVerifierFactory> iter = loader.iterator();
-				if (iter.hasNext()) {
-					return iter.next();
-				}
-			} catch (ServiceConfigurationError e) {
-				LOG.error(e.getMessage(), e);
-			}
-			return null;
-		}
+        private static GpgSignatureVerifierFactory loadDefault() {
+            try {
+                ServiceLoader<GpgSignatureVerifierFactory> loader = ServiceLoader
+                        .load(GpgSignatureVerifierFactory.class);
+                Iterator<GpgSignatureVerifierFactory> iter = loader.iterator();
+                if (iter.hasNext()) {
+                    return iter.next();
+                }
+            } catch (ServiceConfigurationError e) {
+                LOG.error(e.getMessage(), e);
+            }
+            return null;
+        }
 
-		private DefaultFactory() {
-			// No instantiation
-		}
+        private DefaultFactory() {
+            // No instantiation
+        }
 
-		public static GpgSignatureVerifierFactory getDefault() {
-			return defaultFactory;
-		}
+        public static GpgSignatureVerifierFactory getDefault() {
+            return defaultFactory;
+        }
 
-		/**
-		 * Sets the default factory.
-		 *
-		 * @param factory
-		 *            the new default factory
-		 */
-		public static void setDefault(GpgSignatureVerifierFactory factory) {
-			defaultFactory = factory;
-		}
-	}
+        /**
+         * Sets the default factory.
+         *
+         * @param factory the new default factory
+         */
+        public static void setDefault(GpgSignatureVerifierFactory factory) {
+            defaultFactory = factory;
+        }
+    }
 
-	/**
-	 * Retrieves the default factory.
-	 *
-	 * @return the default factory or {@code null} if none set
-	 */
-	public static GpgSignatureVerifierFactory getDefault() {
-		return DefaultFactory.getDefault();
-	}
+    /**
+     * Retrieves the default factory.
+     *
+     * @return the default factory or {@code null} if none set
+     */
+    public static GpgSignatureVerifierFactory getDefault() {
+        return DefaultFactory.getDefault();
+    }
 
-	/**
-	 * Sets the default factory.
-	 *
-	 * @param factory
-	 *            the new default factory
-	 */
-	public static void setDefault(GpgSignatureVerifierFactory factory) {
-		DefaultFactory.setDefault(factory);
-	}
+    /**
+     * Sets the default factory.
+     *
+     * @param factory the new default factory
+     */
+    public static void setDefault(GpgSignatureVerifierFactory factory) {
+        DefaultFactory.setDefault(factory);
+    }
 
-	/**
-	 * Creates a new {@link GpgSignatureVerifier}.
-	 *
-	 * @return the new {@link GpgSignatureVerifier}
-	 */
-	public abstract GpgSignatureVerifier getVerifier();
+    /**
+     * Creates a new {@link GpgSignatureVerifier}.
+     *
+     * @return the new {@link GpgSignatureVerifier}
+     */
+    public abstract GpgSignatureVerifier getVerifier();
 
 }

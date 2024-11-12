@@ -25,52 +25,49 @@ import org.eclipse.jgit.util.LRUMap;
  * Java process.
  *
  * @see NetscapeCookieFile
- *
  */
 public class NetscapeCookieFileCache {
 
-	private final LRUMap<Path, NetscapeCookieFile> cookieFileMap;
+    private final LRUMap<Path, NetscapeCookieFile> cookieFileMap;
 
-	private static NetscapeCookieFileCache instance;
+    private static NetscapeCookieFileCache instance;
 
-	private NetscapeCookieFileCache(HttpConfig config) {
-		cookieFileMap = new LRUMap<>(config.getCookieFileCacheLimit(),
-				config.getCookieFileCacheLimit());
-	}
+    private NetscapeCookieFileCache(HttpConfig config) {
+        cookieFileMap = new LRUMap<>(config.getCookieFileCacheLimit(),
+                config.getCookieFileCacheLimit());
+    }
 
-	/**
-	 * Get singleton instance
-	 *
-	 * @param config
-	 *            the config which defines the limit for this cache
-	 * @return the singleton instance of the cookie file cache. If the cache has
-	 *         already been created the given config is ignored (even if it
-	 *         differs from the config, with which the cache has originally been
-	 *         created)
-	 */
-	public static NetscapeCookieFileCache getInstance(HttpConfig config) {
-		if (instance == null) {
-			return new NetscapeCookieFileCache(config);
-		}
-		return instance;
-	}
+    /**
+     * Get singleton instance
+     *
+     * @param config the config which defines the limit for this cache
+     * @return the singleton instance of the cookie file cache. If the cache has
+     * already been created the given config is ignored (even if it
+     * differs from the config, with which the cache has originally been
+     * created)
+     */
+    public static NetscapeCookieFileCache getInstance(HttpConfig config) {
+        if (instance == null) {
+            return new NetscapeCookieFileCache(config);
+        }
+        return instance;
+    }
 
-	/**
-	 * Get a cache entry
-	 *
-	 * @param path
-	 *            the path of the cookie file to retrieve
-	 * @return the cache entry belonging to the requested file
-	 */
-	public NetscapeCookieFile getEntry(Path path) {
-		if (!cookieFileMap.containsKey(path)) {
-			synchronized (NetscapeCookieFileCache.class) {
-				if (!cookieFileMap.containsKey(path)) {
-					cookieFileMap.put(path, new NetscapeCookieFile(path));
-				}
-			}
-		}
-		return cookieFileMap.get(path);
-	}
+    /**
+     * Get a cache entry
+     *
+     * @param path the path of the cookie file to retrieve
+     * @return the cache entry belonging to the requested file
+     */
+    public NetscapeCookieFile getEntry(Path path) {
+        if (!cookieFileMap.containsKey(path)) {
+            synchronized (NetscapeCookieFileCache.class) {
+                if (!cookieFileMap.containsKey(path)) {
+                    cookieFileMap.put(path, new NetscapeCookieFile(path));
+                }
+            }
+        }
+        return cookieFileMap.get(path);
+    }
 
 }

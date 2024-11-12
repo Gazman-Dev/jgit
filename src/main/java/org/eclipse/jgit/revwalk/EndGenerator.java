@@ -11,19 +11,19 @@
 package org.eclipse.jgit.revwalk;
 
 class EndGenerator extends Generator {
-	static final EndGenerator INSTANCE = new EndGenerator();
+    static final EndGenerator INSTANCE = new EndGenerator();
 
-	private EndGenerator() {
-		super(false);
-	}
+    private EndGenerator() {
+        super(false);
+    }
 
-	@Override
-	RevCommit next() {
-		return null;
-	}
+    @Override
+    RevCommit next() {
+        return null;
+    }
 
-	@Override
-	int outputType() {
-		return 0;
-	}
+    @Override
+    int outputType() {
+        return 0;
+    }
 }

@@ -23,32 +23,25 @@ import org.eclipse.jgit.lib.ObjectReader;
  */
 public interface NoteMerger {
 
-	/**
-	 * Merges the conflicting note changes.
-	 * <p>
-	 * base, ours and their are all notes on the same object.
-	 *
-	 * @param base
-	 *            version of the Note
-	 * @param ours
-	 *            version of the Note
-	 * @param their
-	 *            version of the Note
-	 * @param reader
-	 *            the object reader that must be used to read Git objects
-	 * @param inserter
-	 *            the object inserter that must be used to insert Git objects
-	 * @return the merge result
-	 * @throws NotesMergeConflictException
-	 *             in case there was a merge conflict which this note merger
-	 *             couldn't resolve
-	 * @throws IOException
-	 *             in case the reader or the inserter would throw an
-	 *             java.io.IOException the implementor will most likely want to
-	 *             propagate it as it can't do much to recover from it
-	 */
-	Note merge(Note base, Note ours, Note their, ObjectReader reader,
-			ObjectInserter inserter) throws NotesMergeConflictException,
-			IOException;
+    /**
+     * Merges the conflicting note changes.
+     * <p>
+     * base, ours and their are all notes on the same object.
+     *
+     * @param base     version of the Note
+     * @param ours     version of the Note
+     * @param their    version of the Note
+     * @param reader   the object reader that must be used to read Git objects
+     * @param inserter the object inserter that must be used to insert Git objects
+     * @return the merge result
+     * @throws NotesMergeConflictException in case there was a merge conflict which this note merger
+     *                                     couldn't resolve
+     * @throws IOException                 in case the reader or the inserter would throw an
+     *                                     java.io.IOException the implementor will most likely want to
+     *                                     propagate it as it can't do much to recover from it
+     */
+    Note merge(Note base, Note ours, Note their, ObjectReader reader,
+               ObjectInserter inserter) throws NotesMergeConflictException,
+            IOException;
 }
 

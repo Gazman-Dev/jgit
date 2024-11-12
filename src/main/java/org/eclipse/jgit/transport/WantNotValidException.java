@@ -26,32 +26,29 @@ import org.eclipse.jgit.lib.AnyObjectId;
  * @since 4.3
  */
 public class WantNotValidException extends PackProtocolException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct a {@code "want $id not valid"} exception.
-	 *
-	 * @param id
-	 *            invalid object identifier received from the client.
-	 */
-	public WantNotValidException(AnyObjectId id) {
-		super(msg(id));
-	}
+    /**
+     * Construct a {@code "want $id not valid"} exception.
+     *
+     * @param id invalid object identifier received from the client.
+     */
+    public WantNotValidException(AnyObjectId id) {
+        super(msg(id));
+    }
 
-	/**
-	 * Construct a {@code "want $id not valid"} exception.
-	 *
-	 * @param id
-	 *            invalid object identifier received from the client.
-	 * @param cause
-	 *            root cause of the object being invalid, such as an IOException
-	 *            from the storage system.
-	 */
-	public WantNotValidException(AnyObjectId id, Throwable cause) {
-		super(msg(id), cause);
-	}
+    /**
+     * Construct a {@code "want $id not valid"} exception.
+     *
+     * @param id    invalid object identifier received from the client.
+     * @param cause root cause of the object being invalid, such as an IOException
+     *              from the storage system.
+     */
+    public WantNotValidException(AnyObjectId id, Throwable cause) {
+        super(msg(id), cause);
+    }
 
-	private static String msg(AnyObjectId id) {
-		return MessageFormat.format(JGitText.get().wantNotValid, id.name());
-	}
+    private static String msg(AnyObjectId id) {
+        return MessageFormat.format(JGitText.get().wantNotValid, id.name());
+    }
 }

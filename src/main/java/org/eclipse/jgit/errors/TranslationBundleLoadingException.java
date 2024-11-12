@@ -16,25 +16,22 @@ import java.util.Locale;
  * fails.
  */
 public class TranslationBundleLoadingException extends TranslationBundleException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct a
-	 * {@link TranslationBundleLoadingException} for the
-	 * specified bundle class and locale.
-	 *
-	 * @param bundleClass
-	 *            the bundle class for which the loading failed
-	 * @param locale
-	 *            the locale for which the loading failed
-	 * @param cause
-	 *            the original exception thrown from the
-	 *            {@link java.util.ResourceBundle#getBundle(String, Locale)}
-	 *            method.
-	 */
-	public TranslationBundleLoadingException(Class bundleClass, Locale locale, Exception cause) {
-		super("Loading of translation bundle failed for [" //$NON-NLS-1$
-				+ bundleClass.getName() + ", " + locale.toString() + "]", //$NON-NLS-1$ //$NON-NLS-2$
-				bundleClass, locale, cause);
-	}
+    /**
+     * Construct a
+     * {@link TranslationBundleLoadingException} for the
+     * specified bundle class and locale.
+     *
+     * @param bundleClass the bundle class for which the loading failed
+     * @param locale      the locale for which the loading failed
+     * @param cause       the original exception thrown from the
+     *                    {@link java.util.ResourceBundle#getBundle(String, Locale)}
+     *                    method.
+     */
+    public TranslationBundleLoadingException(Class bundleClass, Locale locale, Exception cause) {
+        super("Loading of translation bundle failed for [" //$NON-NLS-1$
+                        + bundleClass.getName() + ", " + locale.toString() + "]", //$NON-NLS-1$ //$NON-NLS-2$
+                bundleClass, locale, cause);
+    }
 }

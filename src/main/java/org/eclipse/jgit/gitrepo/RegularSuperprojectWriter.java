@@ -32,73 +32,73 @@ import org.eclipse.jgit.revwalk.RevCommit;
 /**
  * Writes .gitmodules and gitlinks of parsed manifest projects into a regular
  * repository (using git submodule commands)
- *
+ * <p>
  * To write on a bare repository, use {@link BareSuperprojectWriter}
  */
 class RegularSuperprojectWriter {
 
-	private Repository repo;
+    private Repository repo;
 
-	private ProgressMonitor monitor;
+    private ProgressMonitor monitor;
 
-	RegularSuperprojectWriter(Repository repo, ProgressMonitor monitor) {
-		this.repo = repo;
-		this.monitor = monitor;
-	}
+    RegularSuperprojectWriter(Repository repo, ProgressMonitor monitor) {
+        this.repo = repo;
+        this.monitor = monitor;
+    }
 
-	RevCommit write(List<RepoProject> repoProjects)
-			throws GitAPIException {
-		try (Git git = new Git(repo)) {
-			for (RepoProject proj : repoProjects) {
-				addSubmodule(proj.getName(), proj.getUrl(), proj.getPath(),
-						proj.getRevision(), proj.getCopyFiles(),
-						proj.getLinkFiles(), git);
-			}
-			return git.commit().setMessage(RepoText.get().repoCommitMessage)
-					.call();
-		} catch (IOException e) {
-			throw new ManifestErrorException(e);
-		}
-	}
+    RevCommit write(List<RepoProject> repoProjects)
+            throws GitAPIException {
+        try (Git git = new Git(repo)) {
+            for (RepoProject proj : repoProjects) {
+                addSubmodule(proj.getName(), proj.getUrl(), proj.getPath(),
+                        proj.getRevision(), proj.getCopyFiles(),
+                        proj.getLinkFiles(), git);
+            }
+            return git.commit().setMessage(RepoText.get().repoCommitMessage)
+                    .call();
+        } catch (IOException e) {
+            throw new ManifestErrorException(e);
+        }
+    }
 
-	private void addSubmodule(String name, String url, String path,
-			String revision, List<CopyFile> copyfiles, List<LinkFile> linkfiles,
-			Git git) throws GitAPIException, IOException {
-		assert !repo.isBare();
-		assert git != null;
-		if (!linkfiles.isEmpty()) {
-			throw new UnsupportedOperationException(
-					JGitText.get().nonBareLinkFilesNotSupported);
-		}
+    private void addSubmodule(String name, String url, String path,
+                              String revision, List<CopyFile> copyfiles, List<LinkFile> linkfiles,
+                              Git git) throws GitAPIException, IOException {
+        assert !repo.isBare();
+        assert git != null;
+        if (!linkfiles.isEmpty()) {
+            throw new UnsupportedOperationException(
+                    JGitText.get().nonBareLinkFilesNotSupported);
+        }
 
-		SubmoduleAddCommand add = git.submoduleAdd().setName(name).setPath(path)
-				.setURI(url);
-		if (monitor != null) {
-			add.setProgressMonitor(monitor);
-		}
+        SubmoduleAddCommand add = git.submoduleAdd().setName(name).setPath(path)
+                .setURI(url);
+        if (monitor != null) {
+            add.setProgressMonitor(monitor);
+        }
 
-		Repository subRepo = add.call();
-		if (revision != null) {
-			try (Git sub = new Git(subRepo)) {
-				sub.checkout().setName(findRef(revision, subRepo)).call();
-			}
-			subRepo.close();
-			git.add().addFilepattern(path).call();
-		}
-		for (CopyFile copyfile : copyfiles) {
-			copyfile.copy();
-			git.add().addFilepattern(copyfile.dest).call();
-		}
-	}
+        Repository subRepo = add.call();
+        if (revision != null) {
+            try (Git sub = new Git(subRepo)) {
+                sub.checkout().setName(findRef(revision, subRepo)).call();
+            }
+            subRepo.close();
+            git.add().addFilepattern(path).call();
+        }
+        for (CopyFile copyfile : copyfiles) {
+            copyfile.copy();
+            git.add().addFilepattern(copyfile.dest).call();
+        }
+    }
 
-	private static String findRef(String ref, Repository repo)
-			throws IOException {
-		if (!ObjectId.isId(ref)) {
-			Ref r = repo.exactRef(R_REMOTES + DEFAULT_REMOTE_NAME + "/" + ref); //$NON-NLS-1$
-			if (r != null) {
-				return r.getName();
-			}
-		}
-		return ref;
-	}
+    private static String findRef(String ref, Repository repo)
+            throws IOException {
+        if (!ObjectId.isId(ref)) {
+            Ref r = repo.exactRef(R_REMOTES + DEFAULT_REMOTE_NAME + "/" + ref); //$NON-NLS-1$
+            if (r != null) {
+                return r.getName();
+            }
+        }
+        return ref;
+    }
 }

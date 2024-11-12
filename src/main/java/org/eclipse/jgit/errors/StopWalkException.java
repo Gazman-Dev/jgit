@@ -17,12 +17,14 @@ package org.eclipse.jgit.errors;
  * @see org.eclipse.jgit.revwalk.filter.RevFilter
  */
 public class StopWalkException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/** Singleton instance for throwing within a filter. */
-	public static final StopWalkException INSTANCE = new StopWalkException();
+    /**
+     * Singleton instance for throwing within a filter.
+     */
+    public static final StopWalkException INSTANCE = new StopWalkException();
 
-	private StopWalkException() {
-		// Nothing.
-	}
+    private StopWalkException() {
+        // Nothing.
+    }
 }

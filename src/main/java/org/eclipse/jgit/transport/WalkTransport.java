@@ -27,5 +27,5 @@ package org.eclipse.jgit.transport;
  * @see WalkFetchConnection
  */
 public interface WalkTransport {
-	// no methods in marker interface
+    // no methods in marker interface
 }

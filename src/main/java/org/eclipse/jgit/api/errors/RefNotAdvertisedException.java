@@ -43,15 +43,14 @@ package org.eclipse.jgit.api.errors;
  * @since 4.0
  */
 public class RefNotAdvertisedException extends GitAPIException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for RefNotAdvertisedException
-	 *
-	 * @param message
-	 *            error message
-	 */
-	public RefNotAdvertisedException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor for RefNotAdvertisedException
+     *
+     * @param message error message
+     */
+    public RefNotAdvertisedException(String message) {
+        super(message);
+    }
 }

@@ -24,37 +24,36 @@ import java.util.Map;
  * @see Transport#push(org.eclipse.jgit.lib.ProgressMonitor, Collection)
  */
 public class PushResult extends OperationResult {
-	private Map<String, RemoteRefUpdate> remoteUpdates = Collections.emptyMap();
+    private Map<String, RemoteRefUpdate> remoteUpdates = Collections.emptyMap();
 
-	/**
-	 * Get status of remote refs updates. Together with
-	 * {@link #getAdvertisedRefs()} it provides full description/status of each
-	 * ref update.
-	 * <p>
-	 * Returned collection is not sorted in any order.
-	 * </p>
-	 *
-	 * @return collection of remote refs updates
-	 */
-	public Collection<RemoteRefUpdate> getRemoteUpdates() {
-		return Collections.unmodifiableCollection(remoteUpdates.values());
-	}
+    /**
+     * Get status of remote refs updates. Together with
+     * {@link #getAdvertisedRefs()} it provides full description/status of each
+     * ref update.
+     * <p>
+     * Returned collection is not sorted in any order.
+     * </p>
+     *
+     * @return collection of remote refs updates
+     */
+    public Collection<RemoteRefUpdate> getRemoteUpdates() {
+        return Collections.unmodifiableCollection(remoteUpdates.values());
+    }
 
-	/**
-	 * Get status of specific remote ref update by remote ref name. Together
-	 * with {@link #getAdvertisedRef(String)} it provide full description/status
-	 * of this ref update.
-	 *
-	 * @param refName
-	 *            remote ref name
-	 * @return status of remote ref update
-	 */
-	public RemoteRefUpdate getRemoteUpdate(String refName) {
-		return remoteUpdates.get(refName);
-	}
+    /**
+     * Get status of specific remote ref update by remote ref name. Together
+     * with {@link #getAdvertisedRef(String)} it provide full description/status
+     * of this ref update.
+     *
+     * @param refName remote ref name
+     * @return status of remote ref update
+     */
+    public RemoteRefUpdate getRemoteUpdate(String refName) {
+        return remoteUpdates.get(refName);
+    }
 
-	void setRemoteUpdates(
-			final Map<String, RemoteRefUpdate> remoteUpdates) {
-		this.remoteUpdates = remoteUpdates;
-	}
+    void setRemoteUpdates(
+            final Map<String, RemoteRefUpdate> remoteUpdates) {
+        this.remoteUpdates = remoteUpdates;
+    }
 }
