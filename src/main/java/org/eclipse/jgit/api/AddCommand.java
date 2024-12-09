@@ -15,12 +15,6 @@ import static org.eclipse.jgit.lib.FileMode.GITLINK;
 import static org.eclipse.jgit.lib.FileMode.TYPE_GITLINK;
 import static org.eclipse.jgit.lib.FileMode.TYPE_TREE;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jgit.api.errors.FilterFailedException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
@@ -43,6 +37,12 @@ import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
 import org.eclipse.jgit.treewalk.filter.IndexDiffFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class used to execute a {@code Add} command. It has setters for all

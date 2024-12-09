@@ -21,13 +21,6 @@ import static org.eclipse.jgit.lib.Constants.GIT_INDEX_FILE_KEY;
 import static org.eclipse.jgit.lib.Constants.GIT_OBJECT_DIRECTORY_KEY;
 import static org.eclipse.jgit.lib.Constants.GIT_WORK_TREE_KEY;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.errors.ConfigInvalidException;
@@ -42,6 +35,13 @@ import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.RawParseUtils;
 import org.eclipse.jgit.util.StringUtils;
 import org.eclipse.jgit.util.SystemReader;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Base builder to customize repository construction.

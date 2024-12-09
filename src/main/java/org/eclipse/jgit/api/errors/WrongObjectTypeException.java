@@ -9,11 +9,11 @@
  */
 package org.eclipse.jgit.api.errors;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.text.MessageFormat;
 
 /**
  * A given object is not of an expected object type.

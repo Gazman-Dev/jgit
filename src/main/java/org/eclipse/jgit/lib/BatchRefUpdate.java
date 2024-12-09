@@ -14,6 +14,14 @@ package org.eclipse.jgit.lib;
 import static org.eclipse.jgit.transport.ReceiveCommand.Result.NOT_ATTEMPTED;
 import static org.eclipse.jgit.transport.ReceiveCommand.Result.REJECTED_OTHER_REASON;
 
+import org.eclipse.jgit.annotations.Nullable;
+import org.eclipse.jgit.errors.MissingObjectException;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.transport.PushCertificate;
+import org.eclipse.jgit.transport.ReceiveCommand;
+import org.eclipse.jgit.util.time.ProposedTimestamp;
+
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.time.Duration;
@@ -24,14 +32,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
-
-import org.eclipse.jgit.annotations.Nullable;
-import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.transport.PushCertificate;
-import org.eclipse.jgit.transport.ReceiveCommand;
-import org.eclipse.jgit.util.time.ProposedTimestamp;
 
 /**
  * Batch of reference updates to be applied to a repository.

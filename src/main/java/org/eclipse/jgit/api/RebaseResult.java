@@ -9,11 +9,11 @@
  */
 package org.eclipse.jgit.api;
 
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.jgit.merge.ResolveMerger.MergeFailureReason;
 import org.eclipse.jgit.revwalk.RevCommit;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * The result of a {@link RebaseCommand} execution

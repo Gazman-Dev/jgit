@@ -9,6 +9,10 @@
  */
 package org.eclipse.jgit.lib;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.util.FS;
+import org.eclipse.jgit.util.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
@@ -18,10 +22,6 @@ import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.util.FS;
-import org.eclipse.jgit.util.FileUtils;
 
 /**
  * A hierarchical cache of {@link FileMode}s per git path.

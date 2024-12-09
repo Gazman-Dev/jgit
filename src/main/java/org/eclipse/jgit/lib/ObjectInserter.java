@@ -13,14 +13,14 @@
 
 package org.eclipse.jgit.lib;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.transport.PackParser;
+import org.eclipse.jgit.util.sha1.SHA1;
+
 import java.io.ByteArrayInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.transport.PackParser;
-import org.eclipse.jgit.util.sha1.SHA1;
 
 /**
  * Inserts objects into an existing {@code ObjectDatabase}.

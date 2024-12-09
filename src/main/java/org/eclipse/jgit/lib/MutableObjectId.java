@@ -13,12 +13,12 @@
 
 package org.eclipse.jgit.lib;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.errors.InvalidObjectIdException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.util.NB;
 import org.eclipse.jgit.util.RawParseUtils;
+
+import java.text.MessageFormat;
 
 /**
  * A mutable SHA-1 abstraction.

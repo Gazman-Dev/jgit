@@ -10,16 +10,6 @@
 
 package org.eclipse.jgit.lib;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.StandardCharsets;
-import java.nio.charset.UnsupportedCharsetException;
-import java.text.MessageFormat;
-import java.util.Locale;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.errors.ConfigInvalidException;
@@ -30,6 +20,16 @@ import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.RawParseUtils;
 import org.eclipse.jgit.util.StringUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
+import java.text.MessageFormat;
+import java.util.Locale;
 
 /**
  * The standard "commit" configuration parameters.

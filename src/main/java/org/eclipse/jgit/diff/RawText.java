@@ -11,6 +11,13 @@
 
 package org.eclipse.jgit.diff;
 
+import org.eclipse.jgit.errors.BinaryBlobException;
+import org.eclipse.jgit.errors.LargeObjectException;
+import org.eclipse.jgit.lib.ObjectLoader;
+import org.eclipse.jgit.util.IO;
+import org.eclipse.jgit.util.IntList;
+import org.eclipse.jgit.util.RawParseUtils;
+
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
@@ -18,13 +25,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.eclipse.jgit.errors.BinaryBlobException;
-import org.eclipse.jgit.errors.LargeObjectException;
-import org.eclipse.jgit.lib.ObjectLoader;
-import org.eclipse.jgit.util.IO;
-import org.eclipse.jgit.util.IntList;
-import org.eclipse.jgit.util.RawParseUtils;
 
 /**
  * A Sequence supporting UNIX formatted text in byte[] format.

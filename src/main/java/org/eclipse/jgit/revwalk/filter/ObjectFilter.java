@@ -27,7 +27,9 @@ import org.eclipse.jgit.revwalk.ObjectWalk;
  * @since 4.0
  */
 public abstract class ObjectFilter {
-    /** Default filter that always returns true. */
+    /**
+     * Default filter that always returns true.
+     */
     public static final ObjectFilter ALL = new AllFilter();
 
     private static final class AllFilter extends ObjectFilter {
@@ -40,20 +42,15 @@ public abstract class ObjectFilter {
     /**
      * Determine if the named object should be included in the walk.
      *
-     * @param walker
-     *            the active walker this filter is being invoked from within.
-     * @param objid
-     *            the object currently being tested.
+     * @param walker the active walker this filter is being invoked from within.
+     * @param objid  the object currently being tested.
      * @return {@code true} if the named object should be included in the walk.
-     * @throws MissingObjectException
-     *             an object the filter needed to consult to determine its
-     *             answer was missing
-     * @throws IncorrectObjectTypeException
-     *             an object the filter needed to consult to determine its
-     *             answer was of the wrong type
-     * @throws IOException
-     *             an object the filter needed to consult to determine its
-     *             answer could not be read.
+     * @throws MissingObjectException       an object the filter needed to consult to determine its
+     *                                      answer was missing
+     * @throws IncorrectObjectTypeException an object the filter needed to consult to determine its
+     *                                      answer was of the wrong type
+     * @throws IOException                  an object the filter needed to consult to determine its
+     *                                      answer could not be read.
      */
     public abstract boolean include(ObjectWalk walker, AnyObjectId objid)
             throws MissingObjectException, IncorrectObjectTypeException,

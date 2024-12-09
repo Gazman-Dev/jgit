@@ -9,11 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.PatchApplyException;
 import org.eclipse.jgit.api.errors.PatchFormatException;
@@ -22,6 +17,11 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.patch.Patch;
 import org.eclipse.jgit.patch.PatchApplier;
 import org.eclipse.jgit.patch.PatchApplier.Result;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.MessageFormat;
 
 /**
  * Apply a patch to files and/or to the index.

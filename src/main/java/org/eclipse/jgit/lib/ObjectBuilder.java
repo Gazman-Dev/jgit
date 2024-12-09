@@ -11,6 +11,11 @@ package org.eclipse.jgit.lib;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.annotations.Nullable;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.util.References;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -18,11 +23,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Objects;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.annotations.Nullable;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.util.References;
 
 /**
  * Common base class for {@link CommitBuilder} and {@link TagBuilder}.

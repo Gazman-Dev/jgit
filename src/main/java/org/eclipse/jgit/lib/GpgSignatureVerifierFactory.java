@@ -9,12 +9,12 @@
  */
 package org.eclipse.jgit.lib;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Iterator;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A {@code GpgSignatureVerifierFactory} creates {@link GpgSignatureVerifier} instances.

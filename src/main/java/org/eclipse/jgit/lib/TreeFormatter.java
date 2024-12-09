@@ -17,8 +17,6 @@ import static org.eclipse.jgit.lib.FileMode.GITLINK;
 import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
 import static org.eclipse.jgit.lib.FileMode.TREE;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.revwalk.RevBlob;
@@ -26,6 +24,8 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.util.TemporaryBuffer;
+
+import java.io.IOException;
 
 /**
  * Mutable formatter to construct a single tree object.

@@ -9,13 +9,13 @@
  */
 package org.eclipse.jgit.lib;
 
-import java.io.IOException;
-import java.util.Date;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.revwalk.RevObject;
+
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * A {@code GpgSignatureVerifier} can verify GPG signatures on git commits and

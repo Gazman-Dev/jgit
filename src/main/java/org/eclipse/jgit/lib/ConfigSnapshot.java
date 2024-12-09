@@ -21,6 +21,8 @@ import static org.eclipse.jgit.util.StringUtils.compareIgnoreCase;
 import static org.eclipse.jgit.util.StringUtils.compareWithCase;
 import static org.eclipse.jgit.util.StringUtils.toLowerCase;
 
+import org.eclipse.jgit.util.StringUtils;
+
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,8 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.eclipse.jgit.util.StringUtils;
 
 class ConfigSnapshot {
     final List<ConfigLine> entryList;

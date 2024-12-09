@@ -12,6 +12,10 @@
 
 package org.eclipse.jgit.lib;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.util.SystemReader;
+import org.eclipse.jgit.util.time.ProposedTimestamp;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -19,10 +23,6 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.util.SystemReader;
-import org.eclipse.jgit.util.time.ProposedTimestamp;
 
 /**
  * A combination of a person identity and time in Git.

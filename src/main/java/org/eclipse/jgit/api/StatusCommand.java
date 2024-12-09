@@ -9,10 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
@@ -24,6 +20,10 @@ import org.eclipse.jgit.submodule.SubmoduleWalk.IgnoreSubmoduleMode;
 import org.eclipse.jgit.treewalk.FileTreeIterator;
 import org.eclipse.jgit.treewalk.WorkingTreeIterator;
 import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A class used to execute a {@code Status} command. It has setters for all

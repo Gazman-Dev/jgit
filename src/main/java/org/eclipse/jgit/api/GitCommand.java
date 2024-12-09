@@ -37,13 +37,13 @@
  */
 package org.eclipse.jgit.api;
 
-import java.text.MessageFormat;
-import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Repository;
+
+import java.text.MessageFormat;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Common superclass of all commands in the package {@code org.eclipse.jgit.api}

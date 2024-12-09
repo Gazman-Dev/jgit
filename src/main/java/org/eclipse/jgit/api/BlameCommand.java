@@ -9,11 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.blame.BlameGenerator;
@@ -23,6 +18,11 @@ import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Blame command for building a {@link BlameResult} for a

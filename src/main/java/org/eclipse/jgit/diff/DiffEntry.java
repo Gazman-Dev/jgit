@@ -10,11 +10,6 @@
 
 package org.eclipse.jgit.diff;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.eclipse.jgit.attributes.Attribute;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.AbbreviatedObjectId;
@@ -26,6 +21,11 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilterMarker;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A value class representing a change to a file

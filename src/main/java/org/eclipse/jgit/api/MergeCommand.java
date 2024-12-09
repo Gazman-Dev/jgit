@@ -11,15 +11,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.api.MergeResult.MergeStatus;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
@@ -59,6 +50,15 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.RevWalkUtils;
 import org.eclipse.jgit.treewalk.FileTreeIterator;
 import org.eclipse.jgit.util.StringUtils;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * A class used to execute a {@code Merge} command. It has setters for all

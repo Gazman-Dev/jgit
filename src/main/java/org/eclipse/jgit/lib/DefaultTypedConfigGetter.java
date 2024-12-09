@@ -10,18 +10,18 @@
 
 package org.eclipse.jgit.lib;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Config.ConfigEnum;
+import org.eclipse.jgit.transport.RefSpec;
+import org.eclipse.jgit.util.StringUtils;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Config.ConfigEnum;
-import org.eclipse.jgit.transport.RefSpec;
-import org.eclipse.jgit.util.StringUtils;
 
 /**
  * An {@link TypedConfigGetter} that throws

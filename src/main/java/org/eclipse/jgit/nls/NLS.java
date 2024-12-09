@@ -10,12 +10,12 @@
 
 package org.eclipse.jgit.nls;
 
+import org.eclipse.jgit.errors.TranslationBundleLoadingException;
+import org.eclipse.jgit.errors.TranslationStringMissingException;
+
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.eclipse.jgit.errors.TranslationBundleLoadingException;
-import org.eclipse.jgit.errors.TranslationStringMissingException;
 
 /**
  * The purpose of this class is to provide NLS (National Language Support)

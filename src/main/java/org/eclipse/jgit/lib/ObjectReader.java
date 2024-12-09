@@ -12,14 +12,6 @@ package org.eclipse.jgit.lib;
 
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_ABBREV_STRING_LENGTH;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
@@ -33,6 +25,14 @@ import org.eclipse.jgit.revwalk.ObjectReachabilityChecker;
 import org.eclipse.jgit.revwalk.ObjectWalk;
 import org.eclipse.jgit.revwalk.ReachabilityChecker;
 import org.eclipse.jgit.revwalk.RevWalk;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Reads an {@link ObjectDatabase} for a single thread.

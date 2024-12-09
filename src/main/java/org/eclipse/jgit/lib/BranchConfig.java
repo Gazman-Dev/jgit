@@ -11,10 +11,10 @@
 
 package org.eclipse.jgit.lib;
 
-import java.net.URISyntaxException;
-
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.RemoteConfig;
+
+import java.net.URISyntaxException;
 
 /**
  * Branch section of a Git configuration file.

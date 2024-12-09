@@ -911,16 +911,16 @@ public abstract class FS {
      * resolution of file system paths.
      *
      * @param cygwinUsed <ul>
-     *                              <li><code>Boolean.TRUE</code> to assume that Cygwin is used in
-     *                              combination with jgit</li>
-     *                              <li><code>Boolean.FALSE</code> to assume that Cygwin is
-     *                              <b>not</b> used with jgit</li>
-     *                              <li><code>null</code> to auto-detect whether a Cygwin
-     *                              installation is present on the system and in this case assume
-     *                              that Cygwin is used</li>
-     *                              </ul>
+     *                   <li><code>Boolean.TRUE</code> to assume that Cygwin is used in
+     *                   combination with jgit</li>
+     *                   <li><code>Boolean.FALSE</code> to assume that Cygwin is
+     *                   <b>not</b> used with jgit</li>
+     *                   <li><code>null</code> to auto-detect whether a Cygwin
+     *                   installation is present on the system and in this case assume
+     *                   that Cygwin is used</li>
+     *                   </ul>
      *                   <p>
-     *                              Note: this parameter is only relevant on Windows.
+     *                   Note: this parameter is only relevant on Windows.
      * @return detected file system abstraction
      */
     public static FS detect(Boolean cygwinUsed) {

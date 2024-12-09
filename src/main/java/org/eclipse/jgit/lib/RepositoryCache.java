@@ -10,16 +10,6 @@
 
 package org.eclipse.jgit.lib;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
@@ -29,6 +19,16 @@ import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.RawParseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Cache of active {@link Repository} instances.

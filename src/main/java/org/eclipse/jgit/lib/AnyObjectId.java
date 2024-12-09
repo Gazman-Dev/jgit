@@ -10,13 +10,13 @@
 
 package org.eclipse.jgit.lib;
 
+import org.eclipse.jgit.util.NB;
+import org.eclipse.jgit.util.References;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.nio.ByteBuffer;
-
-import org.eclipse.jgit.util.NB;
-import org.eclipse.jgit.util.References;
 
 /**
  * A (possibly mutable) SHA-1 abstraction.

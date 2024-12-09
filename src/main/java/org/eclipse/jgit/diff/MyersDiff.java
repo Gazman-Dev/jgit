@@ -13,14 +13,14 @@ package org.eclipse.jgit.diff;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.errors.DiffInterruptedException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.util.IntList;
 import org.eclipse.jgit.util.LongList;
+
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.text.MessageFormat;
 
 /**
  * Diff algorithm, based on "An O(ND) Difference Algorithm and its Variations",

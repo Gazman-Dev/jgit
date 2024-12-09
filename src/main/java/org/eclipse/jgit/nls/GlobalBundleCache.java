@@ -10,13 +10,13 @@
 
 package org.eclipse.jgit.nls;
 
+import org.eclipse.jgit.errors.TranslationBundleLoadingException;
+import org.eclipse.jgit.errors.TranslationStringMissingException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import org.eclipse.jgit.errors.TranslationBundleLoadingException;
-import org.eclipse.jgit.errors.TranslationStringMissingException;
 
 /**
  * Global cache of translation bundles.

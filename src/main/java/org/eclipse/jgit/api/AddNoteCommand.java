@@ -9,8 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.lib.CommitBuilder;
@@ -26,6 +24,8 @@ import org.eclipse.jgit.notes.NoteMap;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevWalk;
+
+import java.io.IOException;
 
 /**
  * Add object notes.

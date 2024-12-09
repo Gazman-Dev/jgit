@@ -11,9 +11,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.api.MergeCommand.FastForwardMode;
 import org.eclipse.jgit.api.MergeCommand.FastForwardMode.Merge;
@@ -49,6 +46,9 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.transport.FetchResult;
 import org.eclipse.jgit.transport.TagOpt;
+
+import java.io.IOException;
+import java.text.MessageFormat;
 
 /**
  * The Pull command

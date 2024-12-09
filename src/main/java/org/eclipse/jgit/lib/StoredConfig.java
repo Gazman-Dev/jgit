@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.lib;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.ConfigInvalidException;
+
+import java.io.IOException;
 
 /**
  * Persistent configuration that can be stored and loaded from a location.

@@ -10,17 +10,17 @@
  */
 package org.eclipse.jgit.api;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.merge.MergeChunk;
 import org.eclipse.jgit.merge.MergeChunk.ConflictState;
 import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.merge.ResolveMerger.MergeFailureReason;
+
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Encapsulates the result of a {@link MergeCommand}.

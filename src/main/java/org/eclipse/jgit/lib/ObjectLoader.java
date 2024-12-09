@@ -14,13 +14,13 @@
 
 package org.eclipse.jgit.lib;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.OutputStream;
-
 import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.util.IO;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Base class for a set of loaders for different representations of Git objects.

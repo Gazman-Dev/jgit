@@ -9,11 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.concurrent.Callable;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
@@ -26,6 +21,11 @@ import org.eclipse.jgit.lib.RepositoryBuilder;
 import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.StringUtils;
 import org.eclipse.jgit.util.SystemReader;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.concurrent.Callable;
 
 /**
  * Create an empty git repository or reinitalize an existing one

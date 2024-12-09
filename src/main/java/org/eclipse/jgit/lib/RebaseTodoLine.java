@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.lib;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.errors.IllegalTodoFileModification;
 import org.eclipse.jgit.internal.JGitText;
+
+import java.text.MessageFormat;
 
 /**
  * Describes a single line in a file formatted like the git-rebase-todo file.

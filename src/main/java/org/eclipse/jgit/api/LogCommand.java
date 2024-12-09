@@ -9,11 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.NoHeadException;
@@ -35,6 +30,11 @@ import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class used to execute a {@code Log} command. It has setters for all

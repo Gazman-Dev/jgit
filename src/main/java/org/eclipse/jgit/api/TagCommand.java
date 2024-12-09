@@ -9,9 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidTagNameException;
@@ -37,6 +34,9 @@ import org.eclipse.jgit.lib.TagBuilder;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.transport.CredentialsProvider;
+
+import java.io.IOException;
+import java.text.MessageFormat;
 
 /**
  * Create/update an annotated tag object or a simple unannotated tag

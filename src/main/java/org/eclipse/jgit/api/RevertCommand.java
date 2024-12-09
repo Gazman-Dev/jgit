@@ -11,12 +11,6 @@ package org.eclipse.jgit.api;
 
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_ABBREV_STRING_LENGTH;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.jgit.api.MergeResult.MergeStatus;
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -46,6 +40,12 @@ import org.eclipse.jgit.merge.ResolveMerger.MergeFailureReason;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.FileTreeIterator;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A class used to execute a {@code revert} command. It has setters for all

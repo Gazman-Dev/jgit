@@ -50,6 +50,14 @@ import static org.eclipse.jgit.util.Paths.compareSameName;
 import static org.eclipse.jgit.util.RawParseUtils.nextLF;
 import static org.eclipse.jgit.util.RawParseUtils.parseBase10;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.annotations.Nullable;
+import org.eclipse.jgit.errors.CorruptObjectException;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.util.MutableInteger;
+import org.eclipse.jgit.util.RawParseUtils;
+import org.eclipse.jgit.util.StringUtils;
+
 import java.text.MessageFormat;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -58,14 +66,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.annotations.Nullable;
-import org.eclipse.jgit.errors.CorruptObjectException;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.util.MutableInteger;
-import org.eclipse.jgit.util.RawParseUtils;
-import org.eclipse.jgit.util.StringUtils;
 
 /**
  * Verifies that an object is formatted correctly.

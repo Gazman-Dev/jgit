@@ -9,10 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Collection;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.api.errors.RefNotFoundException;
@@ -21,6 +17,10 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ReflogEntry;
 import org.eclipse.jgit.lib.ReflogReader;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.Collection;
 
 /**
  * The reflog command

@@ -10,15 +10,15 @@
 
 package org.eclipse.jgit.lib;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.transport.RefSpec;
+import org.eclipse.jgit.util.FS;
+
 import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.transport.RefSpec;
-import org.eclipse.jgit.util.FS;
 
 /**
  * Something that knows how to convert plain strings from a git {@link Config}

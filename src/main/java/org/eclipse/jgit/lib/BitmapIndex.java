@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.lib;
 
-import java.util.Iterator;
+import com.googlecode.javaewah.EWAHCompressedBitmap;
 
 import org.eclipse.jgit.internal.storage.file.PackBitmapIndex;
 
-import com.googlecode.javaewah.EWAHCompressedBitmap;
+import java.util.Iterator;
 
 /**
  * A compressed bitmap representation of the entire object graph.

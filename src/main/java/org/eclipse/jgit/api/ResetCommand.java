@@ -9,11 +9,6 @@
  */
 package org.eclipse.jgit.api;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.LinkedList;
-
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
@@ -39,6 +34,11 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * A class used to execute a {@code Reset} command. It has setters for all

@@ -10,13 +10,13 @@
 
 package org.eclipse.jgit.diff;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Config.SectionParser;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.util.StringUtils;
+
+import java.text.MessageFormat;
 
 /**
  * Keeps track of diff related configuration options.

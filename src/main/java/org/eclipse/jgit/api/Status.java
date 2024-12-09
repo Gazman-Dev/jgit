@@ -9,13 +9,13 @@
  */
 package org.eclipse.jgit.api;
 
+import org.eclipse.jgit.lib.IndexDiff;
+import org.eclipse.jgit.lib.IndexDiff.StageState;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import org.eclipse.jgit.lib.IndexDiff;
-import org.eclipse.jgit.lib.IndexDiff.StageState;
 
 /**
  * A class telling where the working-tree, the index and the current HEAD differ

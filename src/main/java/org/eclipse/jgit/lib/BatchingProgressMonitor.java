@@ -10,13 +10,13 @@
 
 package org.eclipse.jgit.lib;
 
+import org.eclipse.jgit.lib.internal.WorkQueue;
+import org.eclipse.jgit.util.SystemReader;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
-import org.eclipse.jgit.lib.internal.WorkQueue;
-import org.eclipse.jgit.util.SystemReader;
 
 /**
  * ProgressMonitor that batches update events.

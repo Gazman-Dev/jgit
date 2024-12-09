@@ -14,10 +14,6 @@ package org.eclipse.jgit.lib;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -27,6 +23,10 @@ import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.RawParseUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.MessageFormat;
 
 /**
  * Configuration file based on the blobs stored in the repository.

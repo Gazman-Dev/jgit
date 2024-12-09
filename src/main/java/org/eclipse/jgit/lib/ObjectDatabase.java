@@ -10,12 +10,12 @@
 
 package org.eclipse.jgit.lib;
 
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.MissingObjectException;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
-
-import org.eclipse.jgit.errors.IncorrectObjectTypeException;
-import org.eclipse.jgit.errors.MissingObjectException;
 
 /**
  * Abstraction of arbitrary object storage.

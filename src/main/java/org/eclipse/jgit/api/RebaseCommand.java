@@ -12,23 +12,6 @@ package org.eclipse.jgit.api;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.api.RebaseResult.Status;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
@@ -80,6 +63,23 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.FileUtils;
 import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.RawParseUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A class used to execute a {@code Rebase} command. It has setters for all

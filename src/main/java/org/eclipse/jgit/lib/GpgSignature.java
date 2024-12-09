@@ -11,9 +11,9 @@ package org.eclipse.jgit.lib;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
-import java.io.Serializable;
-
 import org.eclipse.jgit.annotations.NonNull;
+
+import java.io.Serializable;
 
 /**
  * A structure for holding GPG signature together with additional related data.

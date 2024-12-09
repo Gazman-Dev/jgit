@@ -11,12 +11,12 @@
 
 package org.eclipse.jgit.lib;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.RevWalkUtils;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+
+import java.io.IOException;
 
 /**
  * Status of a branch's relation to its remote-tracking branch.
