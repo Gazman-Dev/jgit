@@ -9,6 +9,8 @@
  */
 package org.eclipse.jgit.transport.http;
 
+import org.eclipse.jgit.annotations.NonNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,8 +26,6 @@ import java.util.Map;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.TrustManager;
-
-import org.eclipse.jgit.annotations.NonNull;
 
 /**
  * The interface of connections used during HTTP communication. This interface

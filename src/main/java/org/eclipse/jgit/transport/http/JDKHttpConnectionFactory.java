@@ -9,6 +9,10 @@
  */
 package org.eclipse.jgit.transport.http;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.internal.transport.http.DelegatingSSLSocketFactory;
+import org.eclipse.jgit.util.HttpSupport;
+
 import java.io.IOException;
 import java.net.Proxy;
 import java.net.URL;
@@ -20,10 +24,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.internal.transport.http.DelegatingSSLSocketFactory;
-import org.eclipse.jgit.util.HttpSupport;
 
 /**
  * A factory returning instances of

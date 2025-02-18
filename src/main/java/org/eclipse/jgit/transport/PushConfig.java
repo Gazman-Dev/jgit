@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.transport;
 
-import java.util.Locale;
-
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.util.StringUtils;
+
+import java.util.Locale;
 
 /**
  * Push section of a Git configuration file.

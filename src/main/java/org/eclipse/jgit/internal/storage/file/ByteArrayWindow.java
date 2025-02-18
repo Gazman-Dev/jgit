@@ -12,12 +12,12 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
+import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
+
 import java.io.IOException;
 import java.util.zip.CRC32;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
-
-import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
 
 /**
  * A {@link ByteWindow} with an underlying byte array for storage.

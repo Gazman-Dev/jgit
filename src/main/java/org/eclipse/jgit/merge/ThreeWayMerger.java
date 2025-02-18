@@ -11,8 +11,6 @@
 
 package org.eclipse.jgit.merge;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.AnyObjectId;
@@ -23,6 +21,8 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
+
+import java.io.IOException;
 
 /**
  * A merge of 2 trees, using a common base ancestor tree.

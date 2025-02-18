@@ -9,15 +9,15 @@
  */
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.transport.PackedObjectInfo;
 import org.eclipse.jgit.util.NB;
+
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Write an object index in the output stream

@@ -10,18 +10,18 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
+import com.googlecode.javaewah.EWAHCompressedBitmap;
+
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.internal.storage.file.PackBitmapIndexBuilder.StoredEntry;
+import org.eclipse.jgit.lib.Constants;
+
 import java.io.BufferedOutputStream;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.DigestOutputStream;
 import java.text.MessageFormat;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.internal.storage.file.PackBitmapIndexBuilder.StoredEntry;
-import org.eclipse.jgit.lib.Constants;
-
-import com.googlecode.javaewah.EWAHCompressedBitmap;
 
 /**
  * Creates the version 1 pack bitmap index files.

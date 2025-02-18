@@ -11,6 +11,12 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.storage.file.WindowCacheConfig;
+import org.eclipse.jgit.storage.file.WindowCacheStats;
+import org.eclipse.jgit.util.Monitoring;
+
 import java.io.IOException;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
@@ -25,12 +31,6 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.storage.file.WindowCacheConfig;
-import org.eclipse.jgit.storage.file.WindowCacheStats;
-import org.eclipse.jgit.util.Monitoring;
 
 /**
  * Caches slices of a {@link Pack} in

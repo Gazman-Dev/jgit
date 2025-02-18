@@ -10,11 +10,11 @@
  */
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
+
+import java.io.IOException;
 
 /**
  * A queue of commits sorted by commit time order.

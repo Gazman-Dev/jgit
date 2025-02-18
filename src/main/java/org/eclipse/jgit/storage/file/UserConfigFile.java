@@ -9,14 +9,14 @@
  */
 package org.eclipse.jgit.storage.file;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.util.FS;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * User (global) git config based on two possible locations,

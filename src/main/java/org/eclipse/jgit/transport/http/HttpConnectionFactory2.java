@@ -9,10 +9,10 @@
  */
 package org.eclipse.jgit.transport.http;
 
+import org.eclipse.jgit.annotations.NonNull;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-
-import org.eclipse.jgit.annotations.NonNull;
 
 /**
  * A {@link HttpConnectionFactory} that supports client-side sessions that can

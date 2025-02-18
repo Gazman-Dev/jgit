@@ -11,9 +11,9 @@
 
 package org.eclipse.jgit.transport;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.text.MessageFormat;
 
 /**
  * Specification of annotated tag behavior during fetch.

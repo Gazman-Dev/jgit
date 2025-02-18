@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.errors;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.File;
 import java.text.MessageFormat;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * Indicates a local repository does not exist.

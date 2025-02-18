@@ -11,11 +11,11 @@
 
 package org.eclipse.jgit.errors;
 
-import java.util.Map;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.transport.URIish;
+
+import java.util.Map;
 
 /**
  * Indicates a base/common object was required, but is not found.

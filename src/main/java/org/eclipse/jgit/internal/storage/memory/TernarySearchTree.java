@@ -9,6 +9,10 @@
  */
 package org.eclipse.jgit.internal.storage.memory;
 
+import org.eclipse.jgit.annotations.Nullable;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,10 +23,6 @@ import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import org.eclipse.jgit.annotations.Nullable;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.util.StringUtils;
 
 /**
  * A ternary search tree with String keys and generic values.

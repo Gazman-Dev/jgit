@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.internal.storage.io;
 
-import java.security.MessageDigest;
-
 import org.eclipse.jgit.lib.Constants;
+
+import java.security.MessageDigest;
 
 /**
  * Dummy message digest consisting of only null bytes with the length of an

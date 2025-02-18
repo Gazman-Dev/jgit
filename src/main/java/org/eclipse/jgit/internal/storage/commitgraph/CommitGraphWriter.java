@@ -26,18 +26,6 @@ import static org.eclipse.jgit.lib.Constants.COMMIT_GENERATION_NOT_COMPUTED;
 import static org.eclipse.jgit.lib.Constants.COMMIT_GENERATION_UNKNOWN;
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Stack;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.errors.CorruptObjectException;
@@ -53,6 +41,18 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.NB;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Stack;
 
 /**
  * Writes a commit-graph formatted file.

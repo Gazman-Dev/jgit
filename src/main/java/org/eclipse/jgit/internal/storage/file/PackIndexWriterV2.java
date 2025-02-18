@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import org.eclipse.jgit.transport.PackedObjectInfo;
 import org.eclipse.jgit.util.NB;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Creates the version 2 pack table of contents files.

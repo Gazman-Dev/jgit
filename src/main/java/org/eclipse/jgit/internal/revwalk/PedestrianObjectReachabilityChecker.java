@@ -9,19 +9,19 @@
  */
 package org.eclipse.jgit.internal.revwalk;
 
-import java.io.IOException;
-import java.io.InvalidObjectException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.revwalk.ObjectReachabilityChecker;
 import org.eclipse.jgit.revwalk.ObjectWalk;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevSort;
+
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Checks if all objects are reachable from certain starting points doing a

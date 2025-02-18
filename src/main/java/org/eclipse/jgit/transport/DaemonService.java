@@ -11,15 +11,15 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.IOException;
-import java.util.Collection;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Config.SectionParser;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.resolver.ServiceNotAuthorizedException;
 import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
+
+import java.io.IOException;
+import java.util.Collection;
 
 /**
  * A service exposed by {@link Daemon} over anonymous

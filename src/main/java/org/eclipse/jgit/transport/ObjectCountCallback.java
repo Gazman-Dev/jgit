@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.OutputStream;
-
 import org.eclipse.jgit.lib.ProgressMonitor;
+
+import java.io.OutputStream;
 
 /**
  * A callback to tell caller the count of objects ASAP.

@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
+
+import java.io.IOException;
 
 /**
  * Replaces a RevCommit's parents until not colored with REWRITE.

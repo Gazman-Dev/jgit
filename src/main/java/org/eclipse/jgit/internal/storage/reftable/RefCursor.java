@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.internal.storage.reftable;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.lib.Ref;
+
+import java.io.IOException;
 
 /**
  * Iterator over references inside a

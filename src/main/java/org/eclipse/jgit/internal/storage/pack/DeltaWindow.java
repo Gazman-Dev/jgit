@@ -10,11 +10,6 @@
 
 package org.eclipse.jgit.internal.storage.pack;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.zip.Deflater;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -22,6 +17,11 @@ import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.storage.pack.PackConfig;
 import org.eclipse.jgit.util.TemporaryBuffer;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.zip.Deflater;
 
 final class DeltaWindow {
     private static final boolean NEXT_RES = false;

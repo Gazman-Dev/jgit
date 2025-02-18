@@ -13,10 +13,6 @@ package org.eclipse.jgit.dircache;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
-
 import org.eclipse.jgit.attributes.AttributesNode;
 import org.eclipse.jgit.attributes.AttributesRule;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
@@ -28,6 +24,10 @@ import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.util.RawParseUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
 
 /**
  * Iterate a {@link DirCache} as part of a

@@ -11,13 +11,6 @@ package org.eclipse.jgit.internal.storage.file;
 
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
 
-import java.io.DataInput;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.security.DigestInputStream;
-import java.text.MessageFormat;
-import java.util.Arrays;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.PackMismatchException;
 import org.eclipse.jgit.internal.JGitText;
@@ -25,6 +18,13 @@ import org.eclipse.jgit.internal.storage.pack.PackExt;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.util.Hex;
 import org.eclipse.jgit.util.IO;
+
+import java.io.DataInput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.security.DigestInputStream;
+import java.text.MessageFormat;
+import java.util.Arrays;
 
 /**
  * Reverse index for forward pack index which is parsed from a version 1 file.

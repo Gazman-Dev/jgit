@@ -9,10 +9,10 @@
  */
 package org.eclipse.jgit.internal.storage.pack;
 
+import org.eclipse.jgit.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.Collection;
-
-import org.eclipse.jgit.annotations.Nullable;
 
 /**
  * Provider of URIs corresponding to cached packs. For use with the

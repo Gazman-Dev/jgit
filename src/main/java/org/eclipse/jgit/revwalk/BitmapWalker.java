@@ -10,9 +10,6 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.internal.revwalk.AddToBitmapFilter;
@@ -26,6 +23,9 @@ import org.eclipse.jgit.lib.NullProgressMonitor;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.revwalk.filter.ObjectFilter;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Helper class to do ObjectWalks with pack index bitmaps.

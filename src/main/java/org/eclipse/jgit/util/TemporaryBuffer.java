@@ -11,6 +11,10 @@
 
 package org.eclipse.jgit.util;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.NullProgressMonitor;
+import org.eclipse.jgit.lib.ProgressMonitor;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,10 +24,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.NullProgressMonitor;
-import org.eclipse.jgit.lib.ProgressMonitor;
 
 /**
  * A fully buffered output stream.

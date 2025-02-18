@@ -12,9 +12,9 @@
 
 package org.eclipse.jgit.errors;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.text.MessageFormat;
 
 /**
  * Thrown when a pattern contains a character group which is open to the right

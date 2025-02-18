@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.util.io;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * An OutputStream which always throws IllegalStateExeption during write.

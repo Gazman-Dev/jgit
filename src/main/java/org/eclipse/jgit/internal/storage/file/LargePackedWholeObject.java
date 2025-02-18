@@ -10,16 +10,16 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.zip.InflaterInputStream;
-
 import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.ObjectStream;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.InflaterInputStream;
 
 class LargePackedWholeObject extends ObjectLoader {
     private final int type;

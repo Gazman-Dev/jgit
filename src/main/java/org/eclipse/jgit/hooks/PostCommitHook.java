@@ -9,12 +9,12 @@
  */
 package org.eclipse.jgit.hooks;
 
-import java.io.IOException;
-import java.io.PrintStream;
-
 import org.eclipse.jgit.api.errors.AbortedByHookException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.util.ProcessResult;
+
+import java.io.IOException;
+import java.io.PrintStream;
 
 /**
  * The <code>post-commit</code> hook implementation. This hook is run after the

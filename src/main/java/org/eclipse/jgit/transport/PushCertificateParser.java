@@ -13,6 +13,12 @@ package org.eclipse.jgit.transport;
 import static org.eclipse.jgit.transport.GitProtocolConstants.CAPABILITY_PUSH_CERT;
 import static org.eclipse.jgit.transport.ReceivePack.parseCommand;
 
+import org.eclipse.jgit.errors.PackProtocolException;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.transport.PushCertificate.NonceStatus;
+import org.eclipse.jgit.util.IO;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
@@ -21,12 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import org.eclipse.jgit.errors.PackProtocolException;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.transport.PushCertificate.NonceStatus;
-import org.eclipse.jgit.util.IO;
 
 /**
  * Parser for signed push certificates.

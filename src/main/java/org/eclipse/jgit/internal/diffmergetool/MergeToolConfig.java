@@ -22,13 +22,13 @@ import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_WRITE_TO_TEMP;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_MERGETOOL_SECTION;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_MERGE_SECTION;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Config.SectionParser;
 import org.eclipse.jgit.lib.internal.BooleanTriState;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Keeps track of merge tool related configuration options.

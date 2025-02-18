@@ -10,13 +10,13 @@
 
 package org.eclipse.jgit.merge;
 
+import org.eclipse.jgit.diff.RawText;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.jgit.diff.RawText;
 
 /**
  * A class to convert merge results into a Git conformant textual presentation

@@ -10,12 +10,6 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
-
 import org.eclipse.jgit.internal.storage.commitgraph.CommitGraph;
 import org.eclipse.jgit.internal.storage.pack.ObjectToPack;
 import org.eclipse.jgit.internal.storage.pack.PackWriter;
@@ -27,6 +21,12 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.util.FS;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
 
 abstract class FileObjectDatabase extends ObjectDatabase {
     enum InsertLooseObjectResult {

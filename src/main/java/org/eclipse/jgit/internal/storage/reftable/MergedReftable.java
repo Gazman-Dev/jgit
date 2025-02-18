@@ -10,14 +10,14 @@
 
 package org.eclipse.jgit.internal.storage.reftable;
 
+import org.eclipse.jgit.lib.AnyObjectId;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.ReflogEntry;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
-
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.ReflogEntry;
 
 /**
  * Merges multiple reference tables together.

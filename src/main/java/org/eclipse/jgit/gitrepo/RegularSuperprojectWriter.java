@@ -12,9 +12,6 @@ package org.eclipse.jgit.gitrepo;
 import static org.eclipse.jgit.lib.Constants.DEFAULT_REMOTE_NAME;
 import static org.eclipse.jgit.lib.Constants.R_REMOTES;
 
-import java.io.IOException;
-import java.util.List;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.SubmoduleAddCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -28,6 +25,9 @@ import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Writes .gitmodules and gitlinks of parsed manifest projects into a regular

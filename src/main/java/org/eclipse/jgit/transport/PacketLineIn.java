@@ -14,12 +14,6 @@ package org.eclipse.jgit.transport;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.text.MessageFormat;
-import java.util.Iterator;
-
 import org.eclipse.jgit.errors.PackProtocolException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.MutableObjectId;
@@ -27,6 +21,12 @@ import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.RawParseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.text.MessageFormat;
+import java.util.Iterator;
 
 /**
  * Read Git style pkt-line formatting from an input stream.

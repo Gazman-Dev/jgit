@@ -16,14 +16,14 @@ import static org.eclipse.jgit.transport.GitProtocolConstants.PACKET_DEEPEN_SINC
 import static org.eclipse.jgit.transport.GitProtocolConstants.PACKET_SHALLOW;
 import static org.eclipse.jgit.transport.GitProtocolConstants.PACKET_WANT;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.errors.PackProtocolException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.internal.transport.parser.FirstWant;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.text.MessageFormat;
 
 /**
  * Parser for git protocol versions 0 and 1.

@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.util;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.text.MessageFormat;
 
 /**
  * Encodes and decodes to and from hexadecimal notation.

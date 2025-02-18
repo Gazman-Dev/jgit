@@ -10,13 +10,13 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.Serializable;
-import java.text.MessageFormat;
-import java.util.Objects;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
+
+import java.io.Serializable;
+import java.text.MessageFormat;
+import java.util.Objects;
 
 /**
  * Describes how refs in one repository copy into another repository.

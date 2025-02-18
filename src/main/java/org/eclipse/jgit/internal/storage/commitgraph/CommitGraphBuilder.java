@@ -18,9 +18,9 @@ import static org.eclipse.jgit.internal.storage.commitgraph.CommitGraphConstants
 import static org.eclipse.jgit.internal.storage.commitgraph.CommitGraphConstants.CHUNK_ID_OID_LOOKUP;
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.text.MessageFormat;
 
 /**
  * Builder for {@link CommitGraph}.

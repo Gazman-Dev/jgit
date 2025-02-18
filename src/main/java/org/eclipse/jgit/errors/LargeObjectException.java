@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.errors;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.text.MessageFormat;
 
 /**
  * An object is too big to load into memory as a single byte array.

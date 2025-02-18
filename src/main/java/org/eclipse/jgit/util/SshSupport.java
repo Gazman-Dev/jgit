@@ -9,10 +9,6 @@
  */
 package org.eclipse.jgit.util;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.concurrent.TimeUnit;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.errors.CommandFailedException;
 import org.eclipse.jgit.internal.JGitText;
@@ -22,6 +18,10 @@ import org.eclipse.jgit.transport.SshSessionFactory;
 import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.util.io.MessageWriter;
 import org.eclipse.jgit.util.io.StreamCopyThread;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Extra utilities to support usage of SSH.

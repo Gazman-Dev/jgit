@@ -11,11 +11,11 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.io.IOException;
 
 /**
  * Only produce commits which are below a specified depth.

@@ -10,12 +10,6 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import org.eclipse.jgit.internal.storage.commitgraph.ChangedPathFilter;
 import org.eclipse.jgit.diff.DiffConfig;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
@@ -24,10 +18,16 @@ import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.StopWalkException;
+import org.eclipse.jgit.internal.storage.commitgraph.ChangedPathFilter;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Filter applying a {@link TreeFilter} against

@@ -9,6 +9,20 @@
  */
 package org.eclipse.jgit.gitrepo;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.gitrepo.RepoProject.CopyFile;
+import org.eclipse.jgit.gitrepo.RepoProject.LinkFile;
+import org.eclipse.jgit.gitrepo.RepoProject.ReferenceFile;
+import org.eclipse.jgit.gitrepo.internal.RepoText;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Repository;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,20 +40,6 @@ import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.gitrepo.RepoProject.CopyFile;
-import org.eclipse.jgit.gitrepo.RepoProject.LinkFile;
-import org.eclipse.jgit.gitrepo.RepoProject.ReferenceFile;
-import org.eclipse.jgit.gitrepo.internal.RepoText;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Repository;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Repo XML manifest parser.

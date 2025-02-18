@@ -11,7 +11,6 @@
 
 package org.eclipse.jgit.internal.storage.pack;
 
-import static java.util.Objects.requireNonNull;
 import static org.eclipse.jgit.internal.storage.pack.StoredObjectRepresentation.PACK_DELTA;
 import static org.eclipse.jgit.internal.storage.pack.StoredObjectRepresentation.PACK_WHOLE;
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
@@ -19,35 +18,7 @@ import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
 import static org.eclipse.jgit.lib.Constants.OBJ_COMMIT;
 import static org.eclipse.jgit.lib.Constants.OBJ_TAG;
 import static org.eclipse.jgit.lib.Constants.OBJ_TREE;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.ref.WeakReference;
-import java.security.MessageDigest;
-import java.text.MessageFormat;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.zip.CRC32;
-import java.util.zip.CheckedOutputStream;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
+import static java.util.Objects.requireNonNull;
 
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.annotations.Nullable;
@@ -97,6 +68,35 @@ import org.eclipse.jgit.transport.PacketLineOut;
 import org.eclipse.jgit.transport.WriteAbortedException;
 import org.eclipse.jgit.util.BlockList;
 import org.eclipse.jgit.util.TemporaryBuffer;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.ref.WeakReference;
+import java.security.MessageDigest;
+import java.text.MessageFormat;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.zip.CRC32;
+import java.util.zip.CheckedOutputStream;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 
 /**
  * <p>

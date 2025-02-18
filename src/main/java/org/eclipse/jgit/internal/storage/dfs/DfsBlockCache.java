@@ -11,6 +11,9 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.internal.storage.pack.PackExt;
+
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
@@ -22,9 +25,6 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.stream.LongStream;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.internal.storage.pack.PackExt;
 
 /**
  * Caches slices of a

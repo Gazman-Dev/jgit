@@ -13,13 +13,13 @@ import static org.eclipse.jgit.internal.storage.file.PackReverseIndex.MAGIC;
 import static org.eclipse.jgit.internal.storage.file.PackReverseIndex.VERSION_1;
 import static org.eclipse.jgit.internal.storage.file.PackReverseIndexV1.OID_VERSION_SHA1;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-
 import org.eclipse.jgit.transport.PackedObjectInfo;
 import org.eclipse.jgit.util.IntList;
 import org.eclipse.jgit.util.IntList.IntComparator;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Writes reverse index files following the version 1 format.

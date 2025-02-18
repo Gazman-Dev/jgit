@@ -13,6 +13,12 @@
 
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.errors.NotSupportedException;
+import org.eclipse.jgit.errors.TransportException;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.util.FS;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,12 +27,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import org.eclipse.jgit.errors.NotSupportedException;
-import org.eclipse.jgit.errors.TransportException;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.util.FS;
 
 class TransportBundleFile extends Transport implements TransportBundle {
     static final TransportProtocol PROTO_BUNDLE = new TransportProtocol() {

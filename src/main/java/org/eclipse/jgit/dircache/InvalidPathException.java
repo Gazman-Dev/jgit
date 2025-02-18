@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.dircache;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.text.MessageFormat;
 
 /**
  * Thrown when JGit detects and refuses to use an invalid path

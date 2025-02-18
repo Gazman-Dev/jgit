@@ -9,10 +9,10 @@
  */
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.lib.ObjectId;
+
 import java.util.Collections;
 import java.util.List;
-
-import org.eclipse.jgit.lib.ObjectId;
 
 /**
  * object-info request.

@@ -13,13 +13,13 @@
 
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.lib.Ref;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import org.eclipse.jgit.lib.Ref;
 
 /**
  * Class holding result of operation on remote repository. This includes refs

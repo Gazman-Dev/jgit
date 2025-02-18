@@ -11,10 +11,10 @@
 
 package org.eclipse.jgit.util.io;
 
+import org.eclipse.jgit.diff.RawText;
+
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.eclipse.jgit.diff.RawText;
 
 /**
  * An InputStream that expands LF to CRLF.

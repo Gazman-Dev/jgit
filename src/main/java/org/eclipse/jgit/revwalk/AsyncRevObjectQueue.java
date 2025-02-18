@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.AsyncOperation;
+
+import java.io.IOException;
 
 /**
  * Queue to lookup and parse objects asynchronously.

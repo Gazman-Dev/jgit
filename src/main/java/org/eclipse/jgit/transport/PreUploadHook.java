@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.transport;
 
-import java.util.Collection;
-
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.util.Collection;
 
 /**
  * Hook invoked by {@link UploadPack} before during

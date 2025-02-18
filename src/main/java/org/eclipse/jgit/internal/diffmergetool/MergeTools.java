@@ -10,6 +10,15 @@
  */
 package org.eclipse.jgit.internal.diffmergetool;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
+import org.eclipse.jgit.lib.internal.BooleanTriState;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.util.FS;
+import org.eclipse.jgit.util.FS.ExecutionResult;
+import org.eclipse.jgit.util.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,15 +33,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.StoredConfig;
-import org.eclipse.jgit.lib.internal.BooleanTriState;
-import org.eclipse.jgit.treewalk.TreeWalk;
-import org.eclipse.jgit.util.FS;
-import org.eclipse.jgit.util.FS.ExecutionResult;
-import org.eclipse.jgit.util.StringUtils;
 
 /**
  * Manages merge tools.

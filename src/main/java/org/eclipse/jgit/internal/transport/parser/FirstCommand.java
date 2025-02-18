@@ -10,11 +10,11 @@
 package org.eclipse.jgit.internal.transport.parser;
 
 
+import org.eclipse.jgit.annotations.NonNull;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.eclipse.jgit.annotations.NonNull;
 
 /**
  * In a push, the client sends a list of commands. The first command

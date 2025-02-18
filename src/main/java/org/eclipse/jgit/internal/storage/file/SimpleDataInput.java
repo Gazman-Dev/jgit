@@ -10,12 +10,12 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
+import org.eclipse.jgit.util.IO;
+import org.eclipse.jgit.util.NB;
+
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.eclipse.jgit.util.IO;
-import org.eclipse.jgit.util.NB;
 
 /**
  * An implementation of DataInput that only handles readInt() and readLong()

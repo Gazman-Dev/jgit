@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.internal.storage.reftable;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.lib.ReflogEntry;
+
+import java.io.IOException;
 
 /**
  * Empty {@link LogCursor} with no results.

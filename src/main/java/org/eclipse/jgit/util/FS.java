@@ -13,6 +13,27 @@ package org.eclipse.jgit.util;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.Instant.EPOCH;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.annotations.Nullable;
+import org.eclipse.jgit.api.errors.JGitInternalException;
+import org.eclipse.jgit.errors.CommandFailedException;
+import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.errors.LockFailedException;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.internal.storage.file.FileSnapshot;
+import org.eclipse.jgit.internal.util.ShutdownHook;
+import org.eclipse.jgit.lib.Config;
+import org.eclipse.jgit.lib.ConfigConstants;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
+import org.eclipse.jgit.treewalk.FileTreeIterator.FileEntry;
+import org.eclipse.jgit.treewalk.FileTreeIterator.FileModeStrategy;
+import org.eclipse.jgit.treewalk.WorkingTreeIterator.Entry;
+import org.eclipse.jgit.util.ProcessResult.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
@@ -58,27 +79,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.annotations.Nullable;
-import org.eclipse.jgit.api.errors.JGitInternalException;
-import org.eclipse.jgit.errors.CommandFailedException;
-import org.eclipse.jgit.errors.ConfigInvalidException;
-import org.eclipse.jgit.errors.LockFailedException;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.internal.storage.file.FileSnapshot;
-import org.eclipse.jgit.internal.util.ShutdownHook;
-import org.eclipse.jgit.lib.Config;
-import org.eclipse.jgit.lib.ConfigConstants;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.StoredConfig;
-import org.eclipse.jgit.treewalk.FileTreeIterator.FileEntry;
-import org.eclipse.jgit.treewalk.FileTreeIterator.FileModeStrategy;
-import org.eclipse.jgit.treewalk.WorkingTreeIterator.Entry;
-import org.eclipse.jgit.util.ProcessResult.Status;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Abstraction to support various file system operations not in Java.

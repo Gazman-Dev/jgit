@@ -14,23 +14,6 @@ package org.eclipse.jgit.dircache;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.DigestOutputStream;
-import java.security.MessageDigest;
-import java.text.MessageFormat;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.IndexReadException;
 import org.eclipse.jgit.errors.LockFailedException;
@@ -60,6 +43,23 @@ import org.eclipse.jgit.util.MutableInteger;
 import org.eclipse.jgit.util.NB;
 import org.eclipse.jgit.util.TemporaryBuffer;
 import org.eclipse.jgit.util.io.SilentFileInputStream;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.DigestOutputStream;
+import java.security.MessageDigest;
+import java.text.MessageFormat;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Support for the Git dircache (aka index file).

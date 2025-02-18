@@ -9,14 +9,14 @@
  */
 package org.eclipse.jgit.diff;
 
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.util.io.NullOutputStream;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
-
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.util.io.NullOutputStream;
 
 /**
  * A DiffFormatter used to calculate the patch-id of the diff.

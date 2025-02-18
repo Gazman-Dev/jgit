@@ -10,14 +10,6 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.AbbreviatedObjectId;
@@ -26,6 +18,14 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.NB;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 /**
  * Support for the pack index v2 format.

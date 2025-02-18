@@ -11,12 +11,12 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.File;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.internal.storage.pack.PackExt;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.io.File;
+import java.text.MessageFormat;
 
 /**
  * A pack file (or pack related) File.

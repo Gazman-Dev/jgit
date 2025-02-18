@@ -10,15 +10,15 @@
 
 package org.eclipse.jgit.fnmatch;
 
+import org.eclipse.jgit.errors.InvalidPatternException;
+import org.eclipse.jgit.errors.NoClosingBracketException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.eclipse.jgit.errors.InvalidPatternException;
-import org.eclipse.jgit.errors.NoClosingBracketException;
 
 /**
  * This class can be used to match filenames against fnmatch like patterns. It

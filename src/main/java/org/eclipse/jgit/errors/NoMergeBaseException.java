@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.errors;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.merge.RecursiveMerger;
+
+import java.io.IOException;
+import java.text.MessageFormat;
 
 /**
  * Exception thrown if a merge fails because no merge base could be determined.

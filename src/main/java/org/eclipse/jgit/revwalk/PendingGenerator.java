@@ -11,13 +11,13 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+
+import java.io.IOException;
 
 /**
  * Default (and first pass) RevCommit Generator implementation for RevWalk.

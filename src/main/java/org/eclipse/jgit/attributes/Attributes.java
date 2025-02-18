@@ -43,13 +43,13 @@
 
 package org.eclipse.jgit.attributes;
 
+import org.eclipse.jgit.attributes.Attribute.State;
+import org.eclipse.jgit.lib.Constants;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.eclipse.jgit.attributes.Attribute.State;
-import org.eclipse.jgit.lib.Constants;
 
 /**
  * Represents a set of attributes for a path

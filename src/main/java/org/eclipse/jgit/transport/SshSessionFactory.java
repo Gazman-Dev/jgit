@@ -11,15 +11,15 @@
 
 package org.eclipse.jgit.transport;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.util.Iterator;
-import java.util.ServiceLoader;
-
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.SystemReader;
+
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 /**
  * Creates and destroys SSH connections to a remote system.

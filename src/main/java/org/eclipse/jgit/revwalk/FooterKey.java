@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.util.Locale;
-
 import org.eclipse.jgit.lib.Constants;
+
+import java.util.Locale;
 
 /**
  * Case insensitive key for a {@link FooterLine}.

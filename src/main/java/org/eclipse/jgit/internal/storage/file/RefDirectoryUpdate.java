@@ -13,12 +13,12 @@ package org.eclipse.jgit.internal.storage.file;
 
 import static org.eclipse.jgit.lib.Constants.encode;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.RefUpdate;
 import org.eclipse.jgit.lib.ReflogEntry;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.IOException;
 
 /**
  * Updates any reference stored by {@link RefDirectory}.

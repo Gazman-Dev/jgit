@@ -12,9 +12,9 @@ package org.eclipse.jgit.transport;
 
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_AGENT;
 
-import java.util.Set;
-
 import org.eclipse.jgit.util.StringUtils;
+
+import java.util.Set;
 
 /**
  * User agent to be reported by this JGit client and server on the network.

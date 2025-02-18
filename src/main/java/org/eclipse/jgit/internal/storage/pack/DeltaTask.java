@@ -10,6 +10,10 @@
 
 package org.eclipse.jgit.internal.storage.pack;
 
+import org.eclipse.jgit.lib.ObjectReader;
+import org.eclipse.jgit.lib.ThreadSafeProgressMonitor;
+import org.eclipse.jgit.storage.pack.PackConfig;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,10 +21,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
-
-import org.eclipse.jgit.lib.ObjectReader;
-import org.eclipse.jgit.lib.ThreadSafeProgressMonitor;
-import org.eclipse.jgit.storage.pack.PackConfig;
 
 final class DeltaTask implements Callable<Object> {
     static final long MAX_METER = 9 << 20;

@@ -14,14 +14,6 @@ import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
 import static org.eclipse.jgit.lib.FileMode.TYPE_FILE;
 import static org.eclipse.jgit.lib.FileMode.TYPE_MASK;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.blame.Candidate.BlobCandidate;
@@ -59,6 +51,14 @@ import org.eclipse.jgit.treewalk.TreeWalk.OperationType;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.IO;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Generate author information for lines based on a provided file.

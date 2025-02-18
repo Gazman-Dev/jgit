@@ -12,18 +12,6 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
-import java.util.zip.ZipException;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -37,6 +25,18 @@ import org.eclipse.jgit.lib.ObjectStream;
 import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.MutableInteger;
 import org.eclipse.jgit.util.RawParseUtils;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
+import java.util.zip.ZipException;
 
 /**
  * Loose object loader. This class loads an object not stored in a pack.

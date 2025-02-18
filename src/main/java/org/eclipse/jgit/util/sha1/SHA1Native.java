@@ -9,11 +9,11 @@
  */
 package org.eclipse.jgit.util.sha1;
 
-import java.security.MessageDigest;
-
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.MutableObjectId;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.security.MessageDigest;
 
 /**
  * SHA1 implementation using native implementation from JDK. It doesn't support

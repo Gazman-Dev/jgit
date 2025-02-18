@@ -10,13 +10,6 @@
 
 package org.eclipse.jgit.transport;
 
-import java.net.URISyntaxException;
-import java.text.MessageFormat;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Set;
-
 import org.eclipse.jgit.errors.NotSupportedException;
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.internal.JGitText;
@@ -24,6 +17,13 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.BasePackFetchConnection.FetchConfig;
 import org.eclipse.jgit.transport.resolver.ReceivePackFactory;
 import org.eclipse.jgit.transport.resolver.UploadPackFactory;
+
+import java.net.URISyntaxException;
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Protocol for transport between manually-specified repositories in tests.

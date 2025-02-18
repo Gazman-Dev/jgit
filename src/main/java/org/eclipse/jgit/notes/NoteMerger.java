@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.notes;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.ObjectReader;
+
+import java.io.IOException;
 
 /**
  * Three-way note merge operation.

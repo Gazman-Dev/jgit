@@ -10,15 +10,6 @@
 
 package org.eclipse.jgit.internal.fsck;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.zip.CRC32;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.CorruptPackIndexException;
 import org.eclipse.jgit.errors.CorruptPackIndexException.ErrorType;
@@ -33,6 +24,15 @@ import org.eclipse.jgit.lib.ObjectDatabase;
 import org.eclipse.jgit.lib.ObjectIdOwnerMap;
 import org.eclipse.jgit.transport.PackParser;
 import org.eclipse.jgit.transport.PackedObjectInfo;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.zip.CRC32;
 
 /**
  * A read-only pack parser for object validity checking.

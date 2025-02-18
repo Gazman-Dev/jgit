@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
+
+import java.io.IOException;
 
 /**
  * Produces commits for RevWalk to return to applications.

@@ -9,12 +9,12 @@
  */
 package org.eclipse.jgit.util.io;
 
+import org.eclipse.jgit.util.SystemReader;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
-import org.eclipse.jgit.util.SystemReader;
 
 /**
  * An alternative PrintWriter that doesn't catch exceptions.

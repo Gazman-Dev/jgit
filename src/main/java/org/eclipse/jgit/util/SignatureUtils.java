@@ -9,13 +9,13 @@
  */
 package org.eclipse.jgit.util;
 
-import java.text.MessageFormat;
-import java.util.Locale;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.GpgSignatureVerifier.SignatureVerification;
 import org.eclipse.jgit.lib.GpgSignatureVerifier.TrustLevel;
 import org.eclipse.jgit.lib.PersonIdent;
+
+import java.text.MessageFormat;
+import java.util.Locale;
 
 /**
  * Utilities for signature verification.

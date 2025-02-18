@@ -12,9 +12,9 @@ package org.eclipse.jgit.patch;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.util.Locale;
-
 import org.eclipse.jgit.util.RawParseUtils;
+
+import java.util.Locale;
 
 /**
  * An error in a patch script

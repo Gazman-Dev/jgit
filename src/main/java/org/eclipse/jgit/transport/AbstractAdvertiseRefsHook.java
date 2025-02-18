@@ -42,14 +42,14 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevWalk;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Implementation of {@link AdvertiseRefsHook} that advertises the same refs for

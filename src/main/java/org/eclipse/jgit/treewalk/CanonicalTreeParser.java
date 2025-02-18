@@ -18,11 +18,6 @@ import static org.eclipse.jgit.lib.Constants.OBJ_TREE;
 import static org.eclipse.jgit.lib.Constants.TYPE_TREE;
 import static org.eclipse.jgit.lib.Constants.encode;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
-
 import org.eclipse.jgit.attributes.AttributesNode;
 import org.eclipse.jgit.attributes.AttributesRule;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
@@ -32,6 +27,11 @@ import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.MutableObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Parses raw Git trees from the canonical semi-text/semi-binary format.

@@ -12,6 +12,12 @@ package org.eclipse.jgit.internal.storage.dfs;
 
 import static java.util.stream.Collectors.joining;
 
+import org.eclipse.jgit.internal.storage.pack.PackExt;
+import org.eclipse.jgit.lib.AnyObjectId;
+import org.eclipse.jgit.lib.ObjectDatabase;
+import org.eclipse.jgit.lib.ObjectInserter;
+import org.eclipse.jgit.lib.ObjectReader;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,12 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.eclipse.jgit.internal.storage.pack.PackExt;
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.ObjectDatabase;
-import org.eclipse.jgit.lib.ObjectInserter;
-import org.eclipse.jgit.lib.ObjectReader;
 
 /**
  * Manages objects stored in

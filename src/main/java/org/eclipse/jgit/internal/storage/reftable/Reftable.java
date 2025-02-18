@@ -12,15 +12,15 @@ package org.eclipse.jgit.internal.storage.reftable;
 
 import static org.eclipse.jgit.lib.RefDatabase.MAX_SYMBOLIC_REF_DEPTH;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Collection;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.internal.storage.io.BlockSource;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.SymbolicRef;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Abstract table of references.

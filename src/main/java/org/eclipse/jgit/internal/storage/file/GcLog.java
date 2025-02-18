@@ -12,6 +12,12 @@ package org.eclipse.jgit.internal.storage.file;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import org.eclipse.jgit.api.errors.JGitInternalException;
+import org.eclipse.jgit.lib.ConfigConstants;
+import org.eclipse.jgit.util.FileUtils;
+import org.eclipse.jgit.util.GitDateParser;
+import org.eclipse.jgit.util.SystemReader;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,12 +25,6 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.attribute.FileTime;
 import java.text.ParseException;
 import java.time.Instant;
-
-import org.eclipse.jgit.api.errors.JGitInternalException;
-import org.eclipse.jgit.lib.ConfigConstants;
-import org.eclipse.jgit.util.FileUtils;
-import org.eclipse.jgit.util.GitDateParser;
-import org.eclipse.jgit.util.SystemReader;
 
 /**
  * This class manages the gc.log file for a {@link FileRepository}.

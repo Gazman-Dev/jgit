@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.errors;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.transport.URIish;
+
+import java.text.MessageFormat;
 
 /**
  * Thrown when a pack exceeds a given size limit

@@ -9,14 +9,14 @@
  */
 package org.eclipse.jgit.internal.storage.dfs;
 
+import org.eclipse.jgit.internal.storage.pack.CachedPack;
+import org.eclipse.jgit.lib.ProgressMonitor;
+import org.eclipse.jgit.transport.BundleWriter;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.jgit.internal.storage.pack.CachedPack;
-import org.eclipse.jgit.lib.ProgressMonitor;
-import org.eclipse.jgit.transport.BundleWriter;
 
 /**
  * Writes {@link DfsRepository} to a Git bundle.

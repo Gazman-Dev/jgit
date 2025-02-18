@@ -10,15 +10,15 @@
 
 package org.eclipse.jgit.internal.storage.pack;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.StoredObjectRepresentationNotAvailableException;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.BitmapIndex.BitmapBuilder;
 import org.eclipse.jgit.lib.ProgressMonitor;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Extension of {@link org.eclipse.jgit.lib.ObjectReader} that supports reusing

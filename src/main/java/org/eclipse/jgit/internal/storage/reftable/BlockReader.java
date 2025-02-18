@@ -10,7 +10,6 @@
 
 package org.eclipse.jgit.internal.storage.reftable;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.eclipse.jgit.internal.storage.reftable.BlockWriter.compare;
 import static org.eclipse.jgit.internal.storage.reftable.ReftableConstants.FILE_BLOCK_TYPE;
 import static org.eclipse.jgit.internal.storage.reftable.ReftableConstants.FILE_HEADER_LEN;
@@ -29,12 +28,7 @@ import static org.eclipse.jgit.internal.storage.reftable.ReftableConstants.rever
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
 import static org.eclipse.jgit.lib.Ref.Storage.NEW;
 import static org.eclipse.jgit.lib.Ref.Storage.PACKED;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.internal.JGitText;
@@ -50,6 +44,12 @@ import org.eclipse.jgit.lib.SymbolicRef;
 import org.eclipse.jgit.util.LongList;
 import org.eclipse.jgit.util.NB;
 import org.eclipse.jgit.util.RawParseUtils;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 
 /**
  * Reads a single block for {@link ReftableReader}. Instances are tied to a

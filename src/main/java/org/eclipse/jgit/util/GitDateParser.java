@@ -9,6 +9,8 @@
  */
 package org.eclipse.jgit.util;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,8 +20,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * Parses strings with time and date specifications into {@link Date}.

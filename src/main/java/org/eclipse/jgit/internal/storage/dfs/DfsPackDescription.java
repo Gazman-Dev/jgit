@@ -13,15 +13,15 @@ package org.eclipse.jgit.internal.storage.dfs;
 import static org.eclipse.jgit.internal.storage.pack.PackExt.PACK;
 import static org.eclipse.jgit.internal.storage.pack.PackExt.REFTABLE;
 
-import java.util.Arrays;
-import java.util.Comparator;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.internal.storage.commitgraph.CommitGraphWriter;
 import org.eclipse.jgit.internal.storage.dfs.DfsObjDatabase.PackSource;
 import org.eclipse.jgit.internal.storage.pack.PackExt;
 import org.eclipse.jgit.internal.storage.reftable.ReftableWriter;
 import org.eclipse.jgit.storage.pack.PackStatistics;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Description of a DFS stored pack/index file.

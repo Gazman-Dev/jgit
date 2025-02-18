@@ -37,9 +37,9 @@
  */
 package org.eclipse.jgit.errors;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.io.IOException;
 
 /**
  * Cannot read the index. This is a serious error that users need to be made

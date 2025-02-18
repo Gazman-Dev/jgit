@@ -10,14 +10,14 @@
 
 package org.eclipse.jgit.util.io;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.InvalidMarkException;
 import java.util.Objects;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * An {@link InputStream} backed by a {@link ByteBuffer}.

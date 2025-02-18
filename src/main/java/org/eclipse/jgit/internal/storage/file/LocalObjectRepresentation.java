@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.internal.storage.pack.StoredObjectRepresentation;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.io.IOException;
 
 class LocalObjectRepresentation extends StoredObjectRepresentation {
     static LocalObjectRepresentation newWhole(Pack pack, long offset, long length) {

@@ -12,13 +12,13 @@
 
 package org.eclipse.jgit.merge;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.Repository;
+
+import java.text.MessageFormat;
+import java.util.HashMap;
 
 /**
  * A method of combining two or more trees together to form an output tree.

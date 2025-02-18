@@ -9,9 +9,9 @@
  */
 package org.eclipse.jgit.attributes;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.lib.CoreConfig;
+
+import java.io.IOException;
 
 /**
  * An interface used to retrieve the global and info

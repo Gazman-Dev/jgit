@@ -19,13 +19,13 @@ import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_PROMPT;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_TOOL;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_TRUST_EXIT_CODE;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Config.SectionParser;
 import org.eclipse.jgit.lib.internal.BooleanTriState;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Keeps track of difftool related configuration options.

@@ -9,11 +9,11 @@
  */
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.lib.Config;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.eclipse.jgit.lib.Config;
 
 /**
  * Support for URL translations via git configs {@code url.<base>.insteadOf} and

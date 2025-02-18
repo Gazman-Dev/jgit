@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.BaseRepositoryBuilder;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Constructs a {@link DfsRepository}.

@@ -11,8 +11,6 @@
 
 package org.eclipse.jgit.util;
 
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.eclipse.jgit.lib.ObjectChecker.author;
 import static org.eclipse.jgit.lib.ObjectChecker.committer;
 import static org.eclipse.jgit.lib.ObjectChecker.encoding;
@@ -22,6 +20,14 @@ import static org.eclipse.jgit.lib.ObjectChecker.tag;
 import static org.eclipse.jgit.lib.ObjectChecker.tagger;
 import static org.eclipse.jgit.lib.ObjectChecker.tree;
 import static org.eclipse.jgit.lib.ObjectChecker.type;
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import org.eclipse.jgit.annotations.Nullable;
+import org.eclipse.jgit.diff.RawText;
+import org.eclipse.jgit.errors.BinaryBlobException;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.PersonIdent;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -33,12 +39,6 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.eclipse.jgit.annotations.Nullable;
-import org.eclipse.jgit.diff.RawText;
-import org.eclipse.jgit.errors.BinaryBlobException;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.PersonIdent;
 
 /**
  * Handy utility functions to parse raw object contents.

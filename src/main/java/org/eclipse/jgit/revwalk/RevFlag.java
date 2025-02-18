@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.text.MessageFormat;
 
 /**
  * Application level mark bit for {@link RevObject}s.

@@ -9,14 +9,14 @@
  */
 package org.eclipse.jgit.internal.fsck;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.errors.CorruptPackIndexException;
 import org.eclipse.jgit.errors.CorruptPackIndexException.ErrorType;
 import org.eclipse.jgit.lib.ObjectChecker;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Holds all fsck errors of a git repository.

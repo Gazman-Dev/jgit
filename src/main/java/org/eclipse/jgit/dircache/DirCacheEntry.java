@@ -15,17 +15,6 @@ package org.eclipse.jgit.dircache;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.ByteArrayOutputStream;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.text.MessageFormat;
-import java.time.Instant;
-import java.util.Arrays;
-
 import org.eclipse.jgit.dircache.DirCache.DirCacheVersion;
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.internal.JGitText;
@@ -37,6 +26,17 @@ import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.MutableInteger;
 import org.eclipse.jgit.util.NB;
 import org.eclipse.jgit.util.SystemReader;
+
+import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.text.MessageFormat;
+import java.time.Instant;
+import java.util.Arrays;
 
 /**
  * A single file (or stage of a file) in a

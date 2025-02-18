@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.transport;
 
-import java.util.Arrays;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.util.Arrays;
 
 /**
  * A credential requested from a

@@ -9,14 +9,14 @@
  */
 package org.eclipse.jgit.util.sha1;
 
-import java.io.IOException;
-import java.security.MessageDigest;
-
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.MutableObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.util.SystemReader;
+
+import java.io.IOException;
+import java.security.MessageDigest;
 
 /**
  * SHA-1 interface from FIPS 180-1 / RFC 3174 with optional collision detection.

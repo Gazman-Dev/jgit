@@ -12,6 +12,20 @@ package org.eclipse.jgit.transport;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.NullProgressMonitor;
+import org.eclipse.jgit.lib.ProgressMonitor;
+import org.eclipse.jgit.util.Base64;
+import org.eclipse.jgit.util.HttpSupport;
+import org.eclipse.jgit.util.StringUtils;
+import org.eclipse.jgit.util.TemporaryBuffer;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,20 +66,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.NullProgressMonitor;
-import org.eclipse.jgit.lib.ProgressMonitor;
-import org.eclipse.jgit.util.Base64;
-import org.eclipse.jgit.util.HttpSupport;
-import org.eclipse.jgit.util.StringUtils;
-import org.eclipse.jgit.util.TemporaryBuffer;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * A simple HTTP REST client for the Amazon S3 service.

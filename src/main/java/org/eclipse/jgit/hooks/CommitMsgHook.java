@@ -9,13 +9,13 @@
  */
 package org.eclipse.jgit.hooks;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-
 import org.eclipse.jgit.api.errors.AbortedByHookException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 
 /**
  * The <code>commit-msg</code> hook implementation. This hook is run before the

@@ -17,16 +17,6 @@ import static org.eclipse.jgit.internal.storage.pack.PackExt.PACK;
 import static org.eclipse.jgit.internal.storage.pack.PackExt.REFTABLE;
 import static org.eclipse.jgit.internal.storage.pack.StoredObjectRepresentation.PACK_DELTA;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.internal.storage.file.PackIndex;
@@ -46,6 +36,16 @@ import org.eclipse.jgit.storage.pack.PackConfig;
 import org.eclipse.jgit.storage.pack.PackStatistics;
 import org.eclipse.jgit.util.BlockList;
 import org.eclipse.jgit.util.io.CountingOutputStream;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Combine several pack files into one pack.

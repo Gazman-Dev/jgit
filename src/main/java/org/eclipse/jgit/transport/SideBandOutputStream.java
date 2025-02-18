@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.MessageFormat;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * Multiplexes data and progress messages.

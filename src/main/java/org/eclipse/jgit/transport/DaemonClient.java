@@ -10,6 +10,9 @@
 
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.transport.resolver.ServiceNotAuthorizedException;
+import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -19,9 +22,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Collection;
-
-import org.eclipse.jgit.transport.resolver.ServiceNotAuthorizedException;
-import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
 
 /**
  * Active network client of {@link Daemon}.

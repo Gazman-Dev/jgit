@@ -10,20 +10,20 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.internal.storage.commitgraph.CommitGraph;
+import org.eclipse.jgit.internal.storage.commitgraph.CommitGraphFormatException;
+import org.eclipse.jgit.internal.storage.commitgraph.CommitGraphLoader;
+import org.eclipse.jgit.lib.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.internal.storage.commitgraph.CommitGraphFormatException;
-import org.eclipse.jgit.internal.storage.commitgraph.CommitGraphLoader;
-import org.eclipse.jgit.internal.storage.commitgraph.CommitGraph;
-import org.eclipse.jgit.lib.Constants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Traditional file system for commit-graph.

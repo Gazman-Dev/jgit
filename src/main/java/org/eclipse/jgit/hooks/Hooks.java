@@ -9,12 +9,12 @@
  */
 package org.eclipse.jgit.hooks;
 
-import java.io.PrintStream;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.util.LfsFactory;
+
+import java.io.PrintStream;
+import java.text.MessageFormat;
 
 /**
  * Factory class for instantiating supported hooks.

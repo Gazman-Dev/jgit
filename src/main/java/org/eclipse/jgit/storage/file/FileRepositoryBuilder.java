@@ -10,13 +10,13 @@
 
 package org.eclipse.jgit.storage.file;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.BaseRepositoryBuilder;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Constructs a {@link FileRepository}.

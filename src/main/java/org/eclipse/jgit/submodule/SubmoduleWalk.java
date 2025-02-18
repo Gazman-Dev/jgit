@@ -9,12 +9,6 @@
  */
 package org.eclipse.jgit.submodule;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.dircache.DirCacheIterator;
 import org.eclipse.jgit.errors.ConfigInvalidException;
@@ -43,6 +37,12 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.FS;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Walker that visits all submodule entries found in a tree

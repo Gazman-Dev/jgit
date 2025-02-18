@@ -11,11 +11,11 @@
 
 package org.eclipse.jgit.util.io;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * Wraps a {@link InputStream}, limiting the number of bytes which can

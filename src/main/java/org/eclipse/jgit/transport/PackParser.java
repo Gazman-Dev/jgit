@@ -12,19 +12,6 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.MessageDigest;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.TooLargeObjectInPackException;
@@ -51,6 +38,19 @@ import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.LongMap;
 import org.eclipse.jgit.util.NB;
 import org.eclipse.jgit.util.sha1.SHA1;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 
 /**
  * Parses a pack stream and imports it for an

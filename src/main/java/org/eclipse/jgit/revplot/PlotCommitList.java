@@ -12,16 +12,16 @@
 
 package org.eclipse.jgit.revplot;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.revwalk.RevCommitList;
+import org.eclipse.jgit.revwalk.RevWalk;
+
 import java.text.MessageFormat;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeSet;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.revwalk.RevCommitList;
-import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
  * An ordered list of {@link PlotCommit} subclasses.

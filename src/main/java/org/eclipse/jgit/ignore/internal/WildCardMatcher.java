@@ -11,9 +11,9 @@ package org.eclipse.jgit.ignore.internal;
 
 import static org.eclipse.jgit.ignore.internal.Strings.convertGlob;
 
-import java.util.regex.Pattern;
-
 import org.eclipse.jgit.errors.InvalidPatternException;
+
+import java.util.regex.Pattern;
 
 /**
  * Matcher built from path segments containing wildcards. This matcher converts

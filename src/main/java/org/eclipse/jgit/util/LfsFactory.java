@@ -9,12 +9,6 @@
  */
 package org.eclipse.jgit.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.text.MessageFormat;
-import java.util.concurrent.Callable;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.attributes.Attribute;
 import org.eclipse.jgit.attributes.Attributes;
@@ -26,6 +20,12 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.FileTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.text.MessageFormat;
+import java.util.concurrent.Callable;
 
 /**
  * Represents an optionally present LFS support implementation

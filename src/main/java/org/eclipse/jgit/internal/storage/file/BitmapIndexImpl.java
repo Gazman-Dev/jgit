@@ -10,9 +10,8 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.text.MessageFormat;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import com.googlecode.javaewah.EWAHCompressedBitmap;
+import com.googlecode.javaewah.IntIterator;
 
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.AnyObjectId;
@@ -23,8 +22,9 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectIdOwnerMap;
 import org.eclipse.jgit.util.BlockList;
 
-import com.googlecode.javaewah.EWAHCompressedBitmap;
-import com.googlecode.javaewah.IntIterator;
+import java.text.MessageFormat;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * A compressed bitmap representation of the entire object graph.

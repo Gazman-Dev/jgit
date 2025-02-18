@@ -9,18 +9,18 @@
  */
 package org.eclipse.jgit.internal.revwalk;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.revwalk.ReachabilityChecker;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Checks the reachability walking the graph from the starters towards the

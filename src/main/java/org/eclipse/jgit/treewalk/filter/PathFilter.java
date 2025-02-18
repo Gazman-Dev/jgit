@@ -11,13 +11,13 @@
 
 package org.eclipse.jgit.treewalk.filter;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.treewalk.TreeWalk;
+
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Includes tree entries only if they match the configured path.

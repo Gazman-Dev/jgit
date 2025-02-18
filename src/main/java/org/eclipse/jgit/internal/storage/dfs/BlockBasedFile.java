@@ -10,13 +10,13 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
+import org.eclipse.jgit.errors.PackInvalidException;
+import org.eclipse.jgit.internal.storage.pack.PackExt;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.MessageFormat;
-
-import org.eclipse.jgit.errors.PackInvalidException;
-import org.eclipse.jgit.internal.storage.pack.PackExt;
 
 /**
  * Block based file stored in {@link DfsBlockCache}.

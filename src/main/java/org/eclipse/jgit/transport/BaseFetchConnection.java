@@ -12,14 +12,14 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.OutputStream;
-import java.util.Collection;
-import java.util.Set;
-
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.Ref;
+
+import java.io.OutputStream;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Base helper class for fetch connection implementations. Provides some common

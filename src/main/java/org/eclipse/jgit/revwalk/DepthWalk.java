@@ -11,17 +11,17 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Interface for revision walkers that perform depth filtering.

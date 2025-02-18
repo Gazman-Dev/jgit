@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.errors;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.IOException;
 import java.text.MessageFormat;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * Thrown when a Pack uses a pack version not supported by JGit.

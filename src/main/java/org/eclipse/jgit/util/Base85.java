@@ -9,11 +9,11 @@
  */
 package org.eclipse.jgit.util;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Arrays;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * Base-85 encoder/decoder.

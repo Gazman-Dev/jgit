@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
+import org.eclipse.jgit.util.NB;
+
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.eclipse.jgit.util.NB;
 
 /**
  * An implementation of {@link DataOutput} that only handles

@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.transport;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.errors.PackProtocolException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.AnyObjectId;
+
+import java.text.MessageFormat;
 
 /**
  * Indicates client requested an object the server does not want to serve.

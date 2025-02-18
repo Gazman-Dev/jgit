@@ -10,6 +10,16 @@
 
 package org.eclipse.jgit.internal.storage.reftable;
 
+import static org.eclipse.jgit.lib.Ref.Storage.NEW;
+import static org.eclipse.jgit.lib.Ref.Storage.PACKED;
+import static org.eclipse.jgit.transport.ReceiveCommand.Result.LOCK_FAILURE;
+import static org.eclipse.jgit.transport.ReceiveCommand.Result.NOT_ATTEMPTED;
+import static org.eclipse.jgit.transport.ReceiveCommand.Result.OK;
+import static org.eclipse.jgit.transport.ReceiveCommand.Result.REJECTED_MISSING_OBJECT;
+import static org.eclipse.jgit.transport.ReceiveCommand.Result.REJECTED_NONFASTFORWARD;
+import static org.eclipse.jgit.transport.ReceiveCommand.Type.DELETE;
+import static org.eclipse.jgit.transport.ReceiveCommand.Type.UPDATE_NONFASTFORWARD;
+
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.internal.JGitText;
@@ -39,17 +49,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
-
-import static org.eclipse.jgit.lib.Ref.Storage.NEW;
-import static org.eclipse.jgit.lib.Ref.Storage.PACKED;
-
-import static org.eclipse.jgit.transport.ReceiveCommand.Result.LOCK_FAILURE;
-import static org.eclipse.jgit.transport.ReceiveCommand.Result.NOT_ATTEMPTED;
-import static org.eclipse.jgit.transport.ReceiveCommand.Result.OK;
-import static org.eclipse.jgit.transport.ReceiveCommand.Result.REJECTED_MISSING_OBJECT;
-import static org.eclipse.jgit.transport.ReceiveCommand.Result.REJECTED_NONFASTFORWARD;
-import static org.eclipse.jgit.transport.ReceiveCommand.Type.DELETE;
-import static org.eclipse.jgit.transport.ReceiveCommand.Type.UPDATE_NONFASTFORWARD;
 
 /**
  * {@link BatchRefUpdate} for Reftable based RefDatabase.

@@ -10,13 +10,13 @@
  */
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.eclipse.jgit.attributes.AttributesNode;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.util.FS;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Attribute node loaded from the $GIT_DIR/info/attributes file.

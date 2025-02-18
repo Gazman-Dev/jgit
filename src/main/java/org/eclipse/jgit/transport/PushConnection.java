@@ -11,11 +11,11 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.OutputStream;
-import java.util.Map;
-
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.lib.ProgressMonitor;
+
+import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * Lists known refs from the remote and sends objects to the remote.

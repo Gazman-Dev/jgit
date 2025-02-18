@@ -11,12 +11,12 @@
 
 package org.eclipse.jgit.merge;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.IOException;
 
 /**
  * Trivial merge strategy to make the resulting tree exactly match an input.

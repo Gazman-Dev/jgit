@@ -10,13 +10,13 @@
 
 package org.eclipse.jgit.notes;
 
-import java.io.IOException;
-import java.util.Iterator;
-
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.ObjectReader;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * A tree that stores note objects.

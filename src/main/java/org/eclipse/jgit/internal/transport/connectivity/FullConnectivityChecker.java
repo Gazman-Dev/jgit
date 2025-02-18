@@ -10,9 +10,6 @@
 
 package org.eclipse.jgit.internal.transport.connectivity;
 
-import java.io.IOException;
-import java.util.Set;
-
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Constants;
@@ -29,6 +26,9 @@ import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.transport.ConnectivityChecker;
 import org.eclipse.jgit.transport.ReceiveCommand;
 import org.eclipse.jgit.transport.ReceiveCommand.Result;
+
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * A connectivity checker that uses the entire reference database to perform

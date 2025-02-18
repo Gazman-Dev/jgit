@@ -10,10 +10,6 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Collection;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.ObjectId;
@@ -21,6 +17,10 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.RefUpdate;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevWalk;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.Collection;
 
 /**
  * Represent request and status of a remote ref update. Specification is

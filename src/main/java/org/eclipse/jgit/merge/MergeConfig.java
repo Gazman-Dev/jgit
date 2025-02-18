@@ -9,13 +9,13 @@
  *******************************************************************************/
 package org.eclipse.jgit.merge;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.api.MergeCommand.FastForwardMode;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Config.SectionParser;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.IOException;
 
 /**
  * Holds configuration for merging into a given branch

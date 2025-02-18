@@ -11,6 +11,10 @@ package org.eclipse.jgit.internal.storage.file;
 
 import static org.eclipse.jgit.internal.storage.file.PackReverseIndex.VERSION_1;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.transport.PackedObjectInfo;
+
 import java.io.BufferedOutputStream;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -18,10 +22,6 @@ import java.io.OutputStream;
 import java.security.DigestOutputStream;
 import java.text.MessageFormat;
 import java.util.List;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.transport.PackedObjectInfo;
 
 /**
  * Writes reverse index files conforming to the requested version.

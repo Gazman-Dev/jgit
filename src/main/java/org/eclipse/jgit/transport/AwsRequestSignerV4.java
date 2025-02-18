@@ -12,6 +12,10 @@ package org.eclipse.jgit.transport;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.util.Hex;
+import org.eclipse.jgit.util.HttpSupport;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -26,10 +30,6 @@ import java.util.stream.Collectors;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.util.Hex;
-import org.eclipse.jgit.util.HttpSupport;
 
 /**
  * Utility class for signing requests to AWS service endpoints using the V4

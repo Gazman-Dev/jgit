@@ -10,17 +10,17 @@
 
 package org.eclipse.jgit.transport;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.eclipse.jgit.util.RawParseUtils.lastIndexOfTrim;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.util.MutableInteger;
+import org.eclipse.jgit.util.RawParseUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import org.eclipse.jgit.lib.PersonIdent;
-import org.eclipse.jgit.util.MutableInteger;
-import org.eclipse.jgit.util.RawParseUtils;
 
 /**
  * Identity in a push certificate.

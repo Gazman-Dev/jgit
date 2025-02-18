@@ -11,15 +11,6 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.internal.JGitText;
@@ -29,6 +20,15 @@ import org.eclipse.jgit.util.StringUtils;
 import org.eclipse.jgit.util.SystemReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * A representation of the "http.*" config values in a git

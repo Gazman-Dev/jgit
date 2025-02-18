@@ -14,9 +14,9 @@ package org.eclipse.jgit.dircache;
 import static org.eclipse.jgit.lib.FileMode.TYPE_TREE;
 import static org.eclipse.jgit.util.Paths.compareSameName;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.DirCacheNameConflictException;
+
+import java.io.IOException;
 
 /**
  * Generic update/editing support for {@link DirCache}.

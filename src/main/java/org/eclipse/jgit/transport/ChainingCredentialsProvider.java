@@ -9,11 +9,11 @@
  */
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.errors.UnsupportedCredentialItem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 
 /**
  * A credentials provider chaining multiple credentials providers

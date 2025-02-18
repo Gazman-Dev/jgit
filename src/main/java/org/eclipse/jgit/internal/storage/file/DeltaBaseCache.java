@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.lang.ref.SoftReference;
-
 import org.eclipse.jgit.storage.file.WindowCacheConfig;
+
+import java.lang.ref.SoftReference;
 
 class DeltaBaseCache {
     private static final int CACHE_SZ = 1024;

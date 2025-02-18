@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.internal.storage.pack;
 
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.eclipse.jgit.storage.pack.PackConfig;
+
+import java.util.concurrent.locks.ReentrantLock;
 
 class ThreadSafeDeltaCache extends DeltaCache {
     private final ReentrantLock lock;

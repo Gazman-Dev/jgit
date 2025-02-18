@@ -15,10 +15,10 @@ import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_DELTA_BASE_CACHE_L
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_PACKED_GIT_LIMIT;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_PACKED_GIT_MMAP;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_PACKED_GIT_OPENFILES;
-import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_PACKED_GIT_WINDOWSIZE;
-import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_STREAM_FILE_THRESHOLD;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_PACKED_GIT_USE_STRONGREFS;
+import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_PACKED_GIT_WINDOWSIZE;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_PACKED_INDEX_GIT_USE_STRONGREFS;
+import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_STREAM_FILE_THRESHOLD;
 
 import org.eclipse.jgit.internal.storage.file.WindowCache;
 import org.eclipse.jgit.lib.Config;

@@ -11,9 +11,9 @@
 
 package org.eclipse.jgit.transport;
 
-import java.util.List;
-
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
+
+import java.util.List;
 
 /**
  * Provide credentials for use in connecting to Git repositories.

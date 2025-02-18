@@ -10,6 +10,15 @@
 
 package org.eclipse.jgit.internal.diffmergetool;
 
+import org.eclipse.jgit.errors.NoWorkTreeException;
+import org.eclipse.jgit.util.FS;
+import org.eclipse.jgit.util.FS.ExecutionResult;
+import org.eclipse.jgit.util.FS_POSIX;
+import org.eclipse.jgit.util.FS_Win32;
+import org.eclipse.jgit.util.FS_Win32_Cygwin;
+import org.eclipse.jgit.util.StringUtils;
+import org.eclipse.jgit.util.SystemReader;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,15 +28,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Map;
-
-import org.eclipse.jgit.errors.NoWorkTreeException;
-import org.eclipse.jgit.util.FS;
-import org.eclipse.jgit.util.FS.ExecutionResult;
-import org.eclipse.jgit.util.FS_POSIX;
-import org.eclipse.jgit.util.FS_Win32;
-import org.eclipse.jgit.util.FS_Win32_Cygwin;
-import org.eclipse.jgit.util.StringUtils;
-import org.eclipse.jgit.util.SystemReader;
 
 /**
  * Runs a command with help of FS.

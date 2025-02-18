@@ -10,9 +10,6 @@
 
 package org.eclipse.jgit.notes;
 
-import java.io.IOException;
-import java.util.Iterator;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.LargeObjectException;
@@ -26,6 +23,9 @@ import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Index of notes from a note branch.

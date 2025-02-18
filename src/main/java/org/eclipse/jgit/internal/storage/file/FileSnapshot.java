@@ -13,6 +13,12 @@ package org.eclipse.jgit.internal.storage.file;
 import static org.eclipse.jgit.util.FS.FileStoreAttributes.FALLBACK_FILESTORE_ATTRIBUTES;
 import static org.eclipse.jgit.util.FS.FileStoreAttributes.FALLBACK_TIMESTAMP_RESOLUTION;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.util.FS;
+import org.eclipse.jgit.util.FS.FileStoreAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
@@ -24,12 +30,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.util.FS;
-import org.eclipse.jgit.util.FS.FileStoreAttributes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Caches when a file was last read, making it possible to detect future edits.

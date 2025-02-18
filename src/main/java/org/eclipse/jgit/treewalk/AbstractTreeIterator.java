@@ -14,10 +14,6 @@ package org.eclipse.jgit.treewalk;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-
 import org.eclipse.jgit.attributes.AttributesHandler;
 import org.eclipse.jgit.attributes.AttributesNode;
 import org.eclipse.jgit.errors.CorruptObjectException;
@@ -28,6 +24,10 @@ import org.eclipse.jgit.lib.MutableObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.util.Paths;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 
 /**
  * Walks a Git tree (directory) in Git sort order.

@@ -12,13 +12,13 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
+import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.zip.CRC32;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
-
-import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
 
 /**
  * A cached slice of a {@link BlockBasedFile}.

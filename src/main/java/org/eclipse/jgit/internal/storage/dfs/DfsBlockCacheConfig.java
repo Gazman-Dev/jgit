@@ -17,15 +17,15 @@ import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_BLOCK_SIZE;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_CONCURRENCY_LEVEL;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_STREAM_RATIO;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.internal.storage.pack.PackExt;
+import org.eclipse.jgit.lib.Config;
+
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.internal.storage.pack.PackExt;
-import org.eclipse.jgit.lib.Config;
 
 /**
  * Configuration parameters for

@@ -10,6 +10,8 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
+import static org.eclipse.jgit.internal.storage.pack.PackExt.REFTABLE;
+
 import org.eclipse.jgit.internal.storage.dfs.DfsObjDatabase.PackSource;
 import org.eclipse.jgit.internal.storage.io.BlockSource;
 import org.eclipse.jgit.internal.storage.pack.PackExt;
@@ -28,8 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import static org.eclipse.jgit.internal.storage.pack.PackExt.REFTABLE;
 
 /**
  * {@link org.eclipse.jgit.lib.BatchRefUpdate} for

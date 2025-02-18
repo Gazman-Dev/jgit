@@ -10,11 +10,6 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.Collections;
-
 import org.eclipse.jgit.attributes.AttributesNode;
 import org.eclipse.jgit.attributes.AttributesNodeProvider;
 import org.eclipse.jgit.attributes.AttributesRule;
@@ -24,6 +19,11 @@ import org.eclipse.jgit.lib.RefUpdate;
 import org.eclipse.jgit.lib.ReflogReader;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.Collections;
 
 /**
  * A Git repository on a DFS.

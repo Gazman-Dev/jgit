@@ -17,13 +17,13 @@ import static org.eclipse.jgit.patch.FileHeader.isHunkHdr;
 import static org.eclipse.jgit.util.RawParseUtils.match;
 import static org.eclipse.jgit.util.RawParseUtils.nextLF;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.util.TemporaryBuffer;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.util.TemporaryBuffer;
 
 /**
  * A parsed collection of {@link FileHeader}s from a

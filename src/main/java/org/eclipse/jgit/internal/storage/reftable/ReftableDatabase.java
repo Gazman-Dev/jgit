@@ -10,6 +10,13 @@
 
 package org.eclipse.jgit.internal.storage.reftable;
 
+import org.eclipse.jgit.annotations.Nullable;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.RefDatabase;
+import org.eclipse.jgit.lib.ReflogReader;
+import org.eclipse.jgit.transport.ReceiveCommand;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,13 +27,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
-
-import org.eclipse.jgit.annotations.Nullable;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.RefDatabase;
-import org.eclipse.jgit.lib.ReflogReader;
-import org.eclipse.jgit.transport.ReceiveCommand;
 
 /**
  * Operations on {@link MergedReftable} that is common to various reftable-using

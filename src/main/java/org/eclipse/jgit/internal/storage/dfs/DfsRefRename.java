@@ -10,12 +10,12 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.RefRename;
 import org.eclipse.jgit.lib.RefUpdate;
 import org.eclipse.jgit.lib.RefUpdate.Result;
+
+import java.io.IOException;
 
 final class DfsRefRename extends RefRename {
     DfsRefRename(RefUpdate src, RefUpdate dst) {

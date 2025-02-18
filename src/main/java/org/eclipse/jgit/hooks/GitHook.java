@@ -9,17 +9,17 @@
  */
 package org.eclipse.jgit.hooks;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.concurrent.Callable;
-
 import org.eclipse.jgit.api.errors.AbortedByHookException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.ProcessResult;
 import org.eclipse.jgit.util.SystemReader;
 import org.eclipse.jgit.util.io.TeeOutputStream;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.concurrent.Callable;
 
 /**
  * Git can fire off custom scripts when certain important actions occur. These

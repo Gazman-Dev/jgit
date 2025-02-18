@@ -11,8 +11,6 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.Serializable;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.CheckoutEntry;
 import org.eclipse.jgit.lib.Constants;
@@ -20,6 +18,8 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.ReflogEntry;
 import org.eclipse.jgit.util.RawParseUtils;
+
+import java.io.Serializable;
 
 /**
  * Parsed reflog entry

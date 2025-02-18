@@ -10,8 +10,6 @@
 
 package org.eclipse.jgit.notes;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.lib.AnyObjectId;
@@ -23,6 +21,8 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.merge.Merger;
 import org.eclipse.jgit.merge.ThreeWayMerger;
+
+import java.io.IOException;
 
 /**
  * Three-way note tree merge.

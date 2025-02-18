@@ -11,13 +11,13 @@
 
 package org.eclipse.jgit.merge;
 
+import org.eclipse.jgit.diff.RawText;
+import org.eclipse.jgit.merge.MergeChunk.ConflictState;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.List;
-
-import org.eclipse.jgit.diff.RawText;
-import org.eclipse.jgit.merge.MergeChunk.ConflictState;
 
 class MergeFormatterPass {
 

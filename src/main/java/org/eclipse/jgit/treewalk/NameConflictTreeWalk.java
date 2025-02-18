@@ -10,13 +10,13 @@
 
 package org.eclipse.jgit.treewalk;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.IOException;
 
 /**
  * Specialized TreeWalk to detect directory-file (D/F) name conflicts.

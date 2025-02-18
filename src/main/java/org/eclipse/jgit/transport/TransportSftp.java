@@ -14,6 +14,18 @@ import static org.eclipse.jgit.lib.Constants.INFO_ALTERNATES;
 import static org.eclipse.jgit.lib.Constants.LOCK_SUFFIX;
 import static org.eclipse.jgit.lib.Constants.OBJECTS;
 
+import org.eclipse.jgit.errors.NotSupportedException;
+import org.eclipse.jgit.errors.TransportException;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectIdRef;
+import org.eclipse.jgit.lib.ProgressMonitor;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Ref.Storage;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.SymbolicRef;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,18 +42,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import org.eclipse.jgit.errors.NotSupportedException;
-import org.eclipse.jgit.errors.TransportException;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.ObjectIdRef;
-import org.eclipse.jgit.lib.ProgressMonitor;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Ref.Storage;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.SymbolicRef;
 
 /**
  * Transport over the non-Git aware SFTP (SSH based FTP) protocol.

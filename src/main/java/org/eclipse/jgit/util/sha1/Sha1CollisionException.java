@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.util.sha1;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.text.MessageFormat;
 
 /**
  * Thrown by {@link SHA1Java} if it detects a likely hash

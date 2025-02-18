@@ -43,33 +43,10 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
 import static org.eclipse.jgit.lib.Constants.OBJ_OFS_DELTA;
 import static org.eclipse.jgit.lib.Constants.OBJ_REF_DELTA;
-
-import java.io.BufferedInputStream;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.nio.channels.Channels;
-import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.zip.CRC32;
-import java.util.zip.DataFormatException;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
+import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
 
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
@@ -96,6 +73,29 @@ import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.NB;
 import org.eclipse.jgit.util.io.CountingOutputStream;
 import org.eclipse.jgit.util.sha1.SHA1;
+
+import java.io.BufferedInputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.channels.Channels;
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.zip.CRC32;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 /**
  * Object inserter that inserts one pack per call to {@link #flush()}, and never

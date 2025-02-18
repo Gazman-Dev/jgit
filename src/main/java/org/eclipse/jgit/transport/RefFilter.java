@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.transport;
 
-import java.util.Map;
-
 import org.eclipse.jgit.lib.Ref;
+
+import java.util.Map;
 
 /**
  * Filters the list of refs that are advertised to the client.

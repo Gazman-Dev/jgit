@@ -9,10 +9,10 @@
  */
 package org.eclipse.jgit.events;
 
+import org.eclipse.jgit.annotations.NonNull;
+
 import java.util.Collection;
 import java.util.Collections;
-
-import org.eclipse.jgit.annotations.NonNull;
 
 /**
  * A {@link RepositoryEvent} describing changes to the

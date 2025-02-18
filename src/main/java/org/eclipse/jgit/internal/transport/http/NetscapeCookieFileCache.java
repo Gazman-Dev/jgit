@@ -9,10 +9,10 @@
  */
 package org.eclipse.jgit.internal.transport.http;
 
-import java.nio.file.Path;
-
 import org.eclipse.jgit.transport.HttpConfig;
 import org.eclipse.jgit.util.LRUMap;
+
+import java.nio.file.Path;
 
 /**
  * A cache of all known cookie files ({@link NetscapeCookieFile}). May contain

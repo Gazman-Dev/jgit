@@ -11,9 +11,6 @@
 
 package org.eclipse.jgit.merge;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.NoMergeBaseException;
@@ -33,6 +30,9 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
+
+import java.io.IOException;
+import java.text.MessageFormat;
 
 /**
  * Instance of a specific {@link MergeStrategy} for a

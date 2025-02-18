@@ -9,13 +9,6 @@
  */
 package org.eclipse.jgit.attributes;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.function.Supplier;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.attributes.Attribute.State;
 import org.eclipse.jgit.dircache.DirCacheIterator;
@@ -25,6 +18,13 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.TreeWalk.OperationType;
 import org.eclipse.jgit.treewalk.WorkingTreeIterator;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * The attributes handler knows how to retrieve, parse and merge attributes from

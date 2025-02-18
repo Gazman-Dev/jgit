@@ -11,14 +11,14 @@
 
 package org.eclipse.jgit.revwalk.filter;
 
-import java.io.IOException;
-import java.util.Date;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * Selects commits based upon the commit time field.

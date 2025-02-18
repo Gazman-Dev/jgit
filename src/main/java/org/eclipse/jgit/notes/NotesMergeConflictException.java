@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.notes;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.IOException;
 import java.text.MessageFormat;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * This exception will be thrown from the

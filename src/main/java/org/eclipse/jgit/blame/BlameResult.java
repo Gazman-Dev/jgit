@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.blame;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
+
+import java.io.IOException;
 
 /**
  * Collects line annotations for inspection by applications.

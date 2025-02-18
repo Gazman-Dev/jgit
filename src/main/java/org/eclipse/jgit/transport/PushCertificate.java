@@ -15,11 +15,11 @@ import static org.eclipse.jgit.transport.PushCertificateParser.PUSHEE;
 import static org.eclipse.jgit.transport.PushCertificateParser.PUSHER;
 import static org.eclipse.jgit.transport.PushCertificateParser.VERSION;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * The required information to verify the push.

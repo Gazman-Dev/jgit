@@ -10,18 +10,18 @@
 
 package org.eclipse.jgit.internal.diff;
 
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffEntry.ChangeType;
+import org.eclipse.jgit.diff.RenameDetector;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.DiffEntry.ChangeType;
-import org.eclipse.jgit.diff.RenameDetector;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 /**
  * Provides rename detection in special cases such as blame, where only a subset

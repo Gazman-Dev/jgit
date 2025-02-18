@@ -10,16 +10,16 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-
 import org.eclipse.jgit.internal.storage.pack.CachedPack;
 import org.eclipse.jgit.internal.storage.pack.ObjectToPack;
 import org.eclipse.jgit.internal.storage.pack.PackExt;
 import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
 import org.eclipse.jgit.internal.storage.pack.StoredObjectRepresentation;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
 
 class LocalCachedPack extends CachedPack {
     private final ObjectDirectory odb;

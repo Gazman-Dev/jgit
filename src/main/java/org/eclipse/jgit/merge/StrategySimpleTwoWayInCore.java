@@ -10,8 +10,6 @@
 
 package org.eclipse.jgit.merge;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.dircache.DirCacheBuilder;
 import org.eclipse.jgit.dircache.DirCacheEntry;
@@ -23,6 +21,8 @@ import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.NameConflictTreeWalk;
+
+import java.io.IOException;
 
 /**
  * Merges two commits together in-memory, ignoring any working directory.

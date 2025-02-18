@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.internal.storage.pack;
 
+import org.eclipse.jgit.lib.Constants;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.eclipse.jgit.lib.Constants;
 
 /**
  * Encodes an instruction stream for

@@ -10,6 +10,8 @@
 
 package org.eclipse.jgit.util.io;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
@@ -24,8 +26,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * OutputStream isolated from interrupts.

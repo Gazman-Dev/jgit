@@ -10,6 +10,17 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
+import com.googlecode.javaewah.EWAHCompressedBitmap;
+
+import org.eclipse.jgit.annotations.Nullable;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.AnyObjectId;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectIdOwnerMap;
+import org.eclipse.jgit.util.IO;
+import org.eclipse.jgit.util.NB;
+
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,17 +34,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.eclipse.jgit.annotations.Nullable;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.ObjectIdOwnerMap;
-import org.eclipse.jgit.util.IO;
-import org.eclipse.jgit.util.NB;
-
-import com.googlecode.javaewah.EWAHCompressedBitmap;
 
 /**
  * Support for the pack bitmap index v1 format.

@@ -10,12 +10,12 @@
 
 package org.eclipse.jgit.merge;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.jgit.diff.Sequence;
 import org.eclipse.jgit.merge.MergeChunk.ConflictState;
 import org.eclipse.jgit.util.IntList;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The result of merging a number of {@link Sequence}

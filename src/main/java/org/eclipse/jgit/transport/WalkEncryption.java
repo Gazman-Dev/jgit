@@ -10,6 +10,10 @@
 
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.util.Base64;
+import org.eclipse.jgit.util.Hex;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,10 +37,6 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.util.Base64;
-import org.eclipse.jgit.util.Hex;
 
 abstract class WalkEncryption {
     static final WalkEncryption NONE = new NoEncryption();

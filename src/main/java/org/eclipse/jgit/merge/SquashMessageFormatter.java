@@ -9,13 +9,13 @@
  */
 package org.eclipse.jgit.merge;
 
-import java.util.List;
-
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.util.GitDateFormatter;
 import org.eclipse.jgit.util.GitDateFormatter.Format;
+
+import java.util.List;
 
 /**
  * Formatter for constructing the commit message for a squashed commit.

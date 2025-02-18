@@ -9,15 +9,15 @@
  */
 package org.eclipse.jgit.merge;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.util.ChangeIdUtil;
 import org.eclipse.jgit.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Formatter for constructing the commit message for a merge commit.

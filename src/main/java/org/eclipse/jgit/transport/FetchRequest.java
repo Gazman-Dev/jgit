@@ -11,12 +11,12 @@ package org.eclipse.jgit.transport;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Common fields between v0/v1/v2 fetch requests.

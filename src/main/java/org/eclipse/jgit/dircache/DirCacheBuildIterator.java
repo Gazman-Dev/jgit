@@ -12,13 +12,13 @@
 
 package org.eclipse.jgit.dircache;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
+
+import java.io.IOException;
 
 /**
  * Iterate and update a {@link DirCache} as part of a

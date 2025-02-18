@@ -9,12 +9,12 @@
  */
 package org.eclipse.jgit.treewalk.filter;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.WorkingTreeIterator;
+
+import java.io.IOException;
 
 /**
  * Skip {@link WorkingTreeIterator} entries that

@@ -15,12 +15,12 @@ import static org.eclipse.jgit.ignore.internal.Strings.getPathSeparator;
 import static org.eclipse.jgit.ignore.internal.Strings.isWildCard;
 import static org.eclipse.jgit.ignore.internal.Strings.split;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jgit.errors.InvalidPatternException;
 import org.eclipse.jgit.ignore.IMatcher;
 import org.eclipse.jgit.ignore.internal.Strings.PatternState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Matcher built by patterns consists of multiple path segments.

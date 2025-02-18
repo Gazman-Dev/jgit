@@ -11,10 +11,10 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
+
+import java.io.IOException;
 
 class BoundaryGenerator extends Generator {
     static final int UNINTERESTING = RevWalk.UNINTERESTING;

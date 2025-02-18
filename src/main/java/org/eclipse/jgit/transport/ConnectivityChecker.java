@@ -10,14 +10,14 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevWalk;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Checks that a received pack only depends on objects which are reachable from

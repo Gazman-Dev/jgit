@@ -10,8 +10,6 @@
 
 package org.eclipse.jgit.internal.storage.reftable;
 
-import static java.lang.Math.log;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.eclipse.jgit.internal.storage.reftable.BlockWriter.padBetweenBlocks;
 import static org.eclipse.jgit.internal.storage.reftable.ReftableConstants.FILE_FOOTER_LEN;
 import static org.eclipse.jgit.internal.storage.reftable.ReftableConstants.FILE_HEADER_LEN;
@@ -24,18 +22,8 @@ import static org.eclipse.jgit.internal.storage.reftable.ReftableConstants.OBJ_B
 import static org.eclipse.jgit.internal.storage.reftable.ReftableConstants.REF_BLOCK_TYPE;
 import static org.eclipse.jgit.internal.storage.reftable.ReftableConstants.VERSION_1;
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.zip.CRC32;
+import static java.lang.Math.log;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.internal.JGitText;
@@ -54,6 +42,18 @@ import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.util.LongList;
 import org.eclipse.jgit.util.NB;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.zip.CRC32;
 
 /**
  * Writes a reftable formatted file.

@@ -11,13 +11,13 @@ package org.eclipse.jgit.internal.storage.file;
 
 import static org.eclipse.jgit.util.IO.readFully;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Arrays;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * Chooses the specific implementation of the object-size index based on the

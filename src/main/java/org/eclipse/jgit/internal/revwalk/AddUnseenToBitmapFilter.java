@@ -13,10 +13,10 @@ package org.eclipse.jgit.internal.revwalk;
 import org.eclipse.jgit.lib.BitmapIndex.Bitmap;
 import org.eclipse.jgit.lib.BitmapIndex.BitmapBuilder;
 import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevFlag;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
  * A RevFilter that adds the visited commits to {@code bitmap} as a side

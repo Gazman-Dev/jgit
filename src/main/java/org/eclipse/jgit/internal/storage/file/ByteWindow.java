@@ -11,11 +11,11 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
+import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
+
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
-
-import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
 
 /**
  * A window of data currently stored within a cache.

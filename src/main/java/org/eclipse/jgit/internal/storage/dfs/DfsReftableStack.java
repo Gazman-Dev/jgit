@@ -10,12 +10,12 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
+import org.eclipse.jgit.internal.storage.reftable.ReftableReader;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.eclipse.jgit.internal.storage.reftable.ReftableReader;
 
 /**
  * Tracks multiple open

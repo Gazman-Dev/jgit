@@ -11,10 +11,10 @@
 
 package org.eclipse.jgit.errors;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.IOException;
 import java.text.MessageFormat;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * Attempt to add an entry to a tree that already exists.

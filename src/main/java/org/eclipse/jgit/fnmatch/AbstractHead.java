@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.fnmatch;
 
-import java.util.List;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.util.List;
 
 abstract class AbstractHead implements Head {
     private List<Head> newHeads = null;

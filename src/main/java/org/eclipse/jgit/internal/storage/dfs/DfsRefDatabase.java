@@ -10,14 +10,8 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
-import static org.eclipse.jgit.lib.Ref.UNDEFINED_UPDATE_INDEX;
 import static org.eclipse.jgit.lib.Ref.Storage.NEW;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
+import static org.eclipse.jgit.lib.Ref.UNDEFINED_UPDATE_INDEX;
 
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectIdRef;
@@ -31,6 +25,12 @@ import org.eclipse.jgit.revwalk.RevTag;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.util.RefList;
 import org.eclipse.jgit.util.RefMap;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Abstract DfsRefDatabase class.

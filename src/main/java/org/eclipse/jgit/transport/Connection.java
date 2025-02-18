@@ -12,10 +12,10 @@
 
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.lib.Ref;
+
 import java.util.Collection;
 import java.util.Map;
-
-import org.eclipse.jgit.lib.Ref;
 
 /**
  * Represent connection for operation on a remote repository.

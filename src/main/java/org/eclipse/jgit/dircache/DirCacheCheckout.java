@@ -18,20 +18,6 @@ package org.eclipse.jgit.dircache;
 
 import static org.eclipse.jgit.treewalk.TreeWalk.OperationType.CHECKOUT_OP;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.MessageFormat;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.jgit.api.errors.CanceledException;
 import org.eclipse.jgit.api.errors.FilterFailedException;
 import org.eclipse.jgit.attributes.FilterCommand;
@@ -71,6 +57,20 @@ import org.eclipse.jgit.util.SystemReader;
 import org.eclipse.jgit.util.io.EolStreamTypeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.MessageFormat;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class handles checking out one or two trees merging with the index.

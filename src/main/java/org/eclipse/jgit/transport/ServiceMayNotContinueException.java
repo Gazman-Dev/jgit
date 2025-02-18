@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.io.IOException;
 
 /**
  * Indicates a transport service may not continue execution.

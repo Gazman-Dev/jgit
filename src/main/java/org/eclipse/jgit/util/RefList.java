@@ -10,6 +10,10 @@
 
 package org.eclipse.jgit.util;
 
+import org.eclipse.jgit.annotations.Nullable;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.RefComparator;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -17,10 +21,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collector;
-
-import org.eclipse.jgit.annotations.Nullable;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.RefComparator;
 
 /**
  * Specialized variant of an ArrayList to support a {@code RefDatabase}.

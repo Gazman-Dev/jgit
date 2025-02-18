@@ -9,11 +9,11 @@
  */
 package org.eclipse.jgit.hooks;
 
-import java.io.IOException;
-import java.io.PrintStream;
-
 import org.eclipse.jgit.api.errors.AbortedByHookException;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.IOException;
+import java.io.PrintStream;
 
 /**
  * The <code>pre-commit</code> hook implementation. This hook is run before the

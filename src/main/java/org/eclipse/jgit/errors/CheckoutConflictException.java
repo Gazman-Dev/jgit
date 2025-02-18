@@ -12,10 +12,10 @@
 
 package org.eclipse.jgit.errors;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.IOException;
 import java.text.MessageFormat;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * Exception thrown if a conflict occurs during a merge checkout.

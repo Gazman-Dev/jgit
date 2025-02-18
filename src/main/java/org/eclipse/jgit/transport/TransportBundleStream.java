@@ -13,13 +13,13 @@
 
 package org.eclipse.jgit.transport;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.eclipse.jgit.errors.NotSupportedException;
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Repository;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Single shot fetch from a streamed Git bundle.

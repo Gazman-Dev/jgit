@@ -9,13 +9,8 @@
  */
 package org.eclipse.jgit.gitrepo;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.eclipse.jgit.lib.Constants.R_TAGS;
-
-import java.io.IOException;
-import java.net.URI;
-import java.text.MessageFormat;
-import java.util.List;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -45,6 +40,11 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.util.FileUtils;
+
+import java.io.IOException;
+import java.net.URI;
+import java.text.MessageFormat;
+import java.util.List;
 
 /**
  * Writes .gitmodules and gitlinks of parsed manifest projects into a bare

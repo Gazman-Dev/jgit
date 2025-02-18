@@ -15,16 +15,16 @@ import static org.eclipse.jgit.dircache.DirCache.cmp;
 import static org.eclipse.jgit.dircache.DirCacheTree.peq;
 import static org.eclipse.jgit.lib.FileMode.TYPE_TREE;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.util.Paths;
+
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.util.Paths;
 
 /**
  * Updates a {@link DirCache} by supplying discrete

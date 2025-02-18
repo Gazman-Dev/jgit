@@ -11,12 +11,12 @@ package org.eclipse.jgit.transport;
 
 import static java.util.Objects.requireNonNull;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.annotations.Nullable;
 
 /**
  * ls-refs protocol v2 request.

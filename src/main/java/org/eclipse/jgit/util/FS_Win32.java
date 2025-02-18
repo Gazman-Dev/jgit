@@ -11,6 +11,13 @@
 
 package org.eclipse.jgit.util;
 
+import org.eclipse.jgit.errors.CommandFailedException;
+import org.eclipse.jgit.treewalk.FileTreeIterator.FileEntry;
+import org.eclipse.jgit.treewalk.FileTreeIterator.FileModeStrategy;
+import org.eclipse.jgit.treewalk.WorkingTreeIterator.Entry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
@@ -24,13 +31,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-
-import org.eclipse.jgit.errors.CommandFailedException;
-import org.eclipse.jgit.treewalk.FileTreeIterator.FileEntry;
-import org.eclipse.jgit.treewalk.FileTreeIterator.FileModeStrategy;
-import org.eclipse.jgit.treewalk.WorkingTreeIterator.Entry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

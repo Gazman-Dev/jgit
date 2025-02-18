@@ -12,12 +12,12 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
+import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
-
-import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
 
 /**
  * A window for accessing git packs using a {@link ByteBuffer} for storage.

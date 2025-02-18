@@ -13,13 +13,6 @@ package org.eclipse.jgit.treewalk;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.attributes.Attribute;
@@ -50,6 +43,13 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.QuotedString;
 import org.eclipse.jgit.util.RawParseUtils;
 import org.eclipse.jgit.util.io.EolStreamTypeUtil;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
 
 /**
  * Walks one or more {@link AbstractTreeIterator}s in

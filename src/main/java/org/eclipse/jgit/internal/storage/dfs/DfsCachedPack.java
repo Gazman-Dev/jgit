@@ -10,12 +10,12 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.internal.storage.pack.CachedPack;
 import org.eclipse.jgit.internal.storage.pack.ObjectToPack;
 import org.eclipse.jgit.internal.storage.pack.PackOutputStream;
 import org.eclipse.jgit.internal.storage.pack.StoredObjectRepresentation;
+
+import java.io.IOException;
 
 /**
  * A DfsPackFile available for reuse as-is.

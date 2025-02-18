@@ -12,11 +12,11 @@ package org.eclipse.jgit.internal.storage.dfs;
 
 import static org.eclipse.jgit.internal.storage.pack.PackExt.REFTABLE;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
 import org.eclipse.jgit.internal.storage.io.BlockSource;
 import org.eclipse.jgit.internal.storage.reftable.ReftableReader;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * A reftable stored in {@link DfsBlockCache}.

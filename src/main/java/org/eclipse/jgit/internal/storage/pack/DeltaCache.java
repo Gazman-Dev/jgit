@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.internal.storage.pack;
 
+import org.eclipse.jgit.storage.pack.PackConfig;
+
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
-
-import org.eclipse.jgit.storage.pack.PackConfig;
 
 class DeltaCache {
     private final long size;

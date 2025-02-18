@@ -45,14 +45,14 @@ import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_WRITE_REVERSE_INDE
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_PACK_SECTION;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_REPACK_SECTION;
 
+import org.eclipse.jgit.internal.storage.file.PackIndexWriter;
+import org.eclipse.jgit.lib.Config;
+import org.eclipse.jgit.lib.Repository;
+
 import java.time.Duration;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.Deflater;
-
-import org.eclipse.jgit.internal.storage.file.PackIndexWriter;
-import org.eclipse.jgit.lib.Config;
-import org.eclipse.jgit.lib.Repository;
 
 /**
  * Configuration used by a pack writer when constructing the stream.

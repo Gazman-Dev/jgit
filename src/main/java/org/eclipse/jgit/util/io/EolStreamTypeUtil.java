@@ -10,16 +10,16 @@
 
 package org.eclipse.jgit.util.io;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.EnumSet;
-
 import org.eclipse.jgit.attributes.Attributes;
 import org.eclipse.jgit.lib.CoreConfig.EolStreamType;
 import org.eclipse.jgit.treewalk.TreeWalk.OperationType;
 import org.eclipse.jgit.treewalk.WorkingTreeOptions;
 import org.eclipse.jgit.util.SystemReader;
 import org.eclipse.jgit.util.io.AutoLFInputStream.StreamFlag;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.EnumSet;
 
 /**
  * Utility used to create input and output stream wrappers for

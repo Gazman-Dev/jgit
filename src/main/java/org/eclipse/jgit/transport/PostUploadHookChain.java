@@ -42,11 +42,11 @@
 
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.storage.pack.PackStatistics;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.eclipse.jgit.storage.pack.PackStatistics;
 
 /**
  * {@link PostUploadHook} that delegates to a list of

@@ -10,14 +10,14 @@
 
 package org.eclipse.jgit.fnmatch;
 
+import org.eclipse.jgit.errors.InvalidPatternException;
+import org.eclipse.jgit.internal.JGitText;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.eclipse.jgit.errors.InvalidPatternException;
-import org.eclipse.jgit.internal.JGitText;
 
 final class GroupHead extends AbstractHead {
     private final List<CharacterPattern> characterClasses;

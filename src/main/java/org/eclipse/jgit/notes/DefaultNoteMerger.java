@@ -10,14 +10,14 @@
 
 package org.eclipse.jgit.notes;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.util.io.UnionInputStream;
+
+import java.io.IOException;
 
 /**
  * Default implementation of the {@link NoteMerger}.

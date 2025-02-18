@@ -9,14 +9,6 @@
  */
 package org.eclipse.jgit.internal.diffmergetool;
 
-import java.util.TreeMap;
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
 import org.eclipse.jgit.attributes.Attributes;
 import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.eclipse.jgit.lib.Constants;
@@ -26,6 +18,14 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.WorkingTreeIterator;
 import org.eclipse.jgit.treewalk.filter.NotIgnoredFilter;
 import org.eclipse.jgit.util.FS;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Utilities for diff- and merge-tools.

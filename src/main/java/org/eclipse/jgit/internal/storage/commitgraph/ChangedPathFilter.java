@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.internal.storage.commitgraph;
 
+import org.apache.commons.codec.digest.MurmurHash3;
+
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.Set;
-
-import org.apache.commons.codec.digest.MurmurHash3;
 
 /**
  * A changed path filter for a commit.

@@ -10,9 +10,9 @@
 
 package org.eclipse.jgit.errors;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.internal.JGitText;
+
+import java.io.IOException;
 
 /**
  * Indicates a ReceivePack failure while scanning the pack stream.

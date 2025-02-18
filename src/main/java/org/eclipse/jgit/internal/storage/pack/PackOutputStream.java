@@ -15,12 +15,12 @@ import static org.eclipse.jgit.lib.Constants.OBJ_OFS_DELTA;
 import static org.eclipse.jgit.lib.Constants.OBJ_REF_DELTA;
 import static org.eclipse.jgit.lib.Constants.PACK_SIGNATURE;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import org.eclipse.jgit.internal.storage.io.CancellableDigestOutputStream;
 import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.util.NB;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Custom output stream to support

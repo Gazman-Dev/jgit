@@ -10,12 +10,12 @@
 
 package org.eclipse.jgit.util.io;
 
+import org.eclipse.jgit.internal.JGitText;
+
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.text.MessageFormat;
-
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * OutputStream with a configurable timeout.

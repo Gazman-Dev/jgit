@@ -10,10 +10,29 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.eclipse.jgit.internal.storage.pack.PackExt.PACK;
 import static org.eclipse.jgit.internal.storage.pack.PackExt.BITMAP_INDEX;
 import static org.eclipse.jgit.internal.storage.pack.PackExt.INDEX;
+import static org.eclipse.jgit.internal.storage.pack.PackExt.PACK;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import org.eclipse.jgit.errors.PackMismatchException;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.internal.storage.commitgraph.CommitGraph;
+import org.eclipse.jgit.internal.storage.pack.ObjectToPack;
+import org.eclipse.jgit.internal.storage.pack.PackExt;
+import org.eclipse.jgit.internal.storage.pack.PackWriter;
+import org.eclipse.jgit.lib.AbbreviatedObjectId;
+import org.eclipse.jgit.lib.AnyObjectId;
+import org.eclipse.jgit.lib.Config;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.CoreConfig;
+import org.eclipse.jgit.lib.ObjectDatabase;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectLoader;
+import org.eclipse.jgit.lib.RepositoryCache;
+import org.eclipse.jgit.lib.RepositoryCache.FileKey;
+import org.eclipse.jgit.util.FS;
+import org.eclipse.jgit.util.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,25 +50,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.eclipse.jgit.errors.PackMismatchException;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.internal.storage.pack.ObjectToPack;
-import org.eclipse.jgit.internal.storage.pack.PackExt;
-import org.eclipse.jgit.internal.storage.pack.PackWriter;
-import org.eclipse.jgit.lib.AbbreviatedObjectId;
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.internal.storage.commitgraph.CommitGraph;
-import org.eclipse.jgit.lib.Config;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.CoreConfig;
-import org.eclipse.jgit.lib.ObjectDatabase;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.ObjectLoader;
-import org.eclipse.jgit.lib.RepositoryCache;
-import org.eclipse.jgit.lib.RepositoryCache.FileKey;
-import org.eclipse.jgit.util.FS;
-import org.eclipse.jgit.util.FileUtils;
 
 /**
  * Traditional file system based {@link ObjectDatabase}.

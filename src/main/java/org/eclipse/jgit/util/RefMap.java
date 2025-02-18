@@ -10,6 +10,11 @@
 
 package org.eclipse.jgit.util;
 
+import org.eclipse.jgit.lib.AnyObjectId;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.RefComparator;
+
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -19,11 +24,6 @@ import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.RefComparator;
 
 /**
  * Specialized Map to present a {@code RefDatabase} namespace.

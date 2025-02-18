@@ -12,12 +12,12 @@
 
 package org.eclipse.jgit.treewalk;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
+
+import java.io.IOException;
 
 /**
  * Iterator over an empty tree (a directory with no files).

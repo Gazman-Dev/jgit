@@ -16,14 +16,14 @@ import static org.eclipse.jgit.internal.storage.commitgraph.CommitGraphConstants
 import static org.eclipse.jgit.internal.storage.commitgraph.CommitGraphConstants.GRAPH_LAST_EDGE;
 import static org.eclipse.jgit.internal.storage.commitgraph.CommitGraphConstants.GRAPH_NO_PARENT;
 
-import java.text.MessageFormat;
-import java.util.Arrays;
-
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.internal.storage.commitgraph.CommitGraph.CommitData;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.util.NB;
+
+import java.text.MessageFormat;
+import java.util.Arrays;
 
 /**
  * Represent the collection of {@link CommitData}.

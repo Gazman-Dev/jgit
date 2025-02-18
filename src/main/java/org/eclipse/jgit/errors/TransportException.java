@@ -12,9 +12,9 @@
 
 package org.eclipse.jgit.errors;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.transport.URIish;
+
+import java.io.IOException;
 
 /**
  * Indicates a protocol error has occurred while fetching/pushing objects.

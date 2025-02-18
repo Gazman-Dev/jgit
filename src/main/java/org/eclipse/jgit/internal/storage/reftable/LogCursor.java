@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.internal.storage.reftable;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.lib.ReflogEntry;
+
+import java.io.IOException;
 
 /**
  * Iterator over logs inside a

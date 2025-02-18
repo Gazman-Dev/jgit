@@ -13,13 +13,13 @@ package org.eclipse.jgit.patch;
 import static org.eclipse.jgit.util.RawParseUtils.nextLF;
 import static org.eclipse.jgit.util.RawParseUtils.parseBase10;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.util.MutableInteger;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.MessageFormat;
 
 /**
  * Hunk header for a hunk appearing in a "diff --cc" style patch.

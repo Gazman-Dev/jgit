@@ -9,13 +9,13 @@
  */
 package org.eclipse.jgit.internal.storage.file;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.PackMismatchException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.internal.storage.file.PackIndex.MutableEntry;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.text.MessageFormat;
 
 /**
  * Reverse index for forward pack index which is computed from the forward pack

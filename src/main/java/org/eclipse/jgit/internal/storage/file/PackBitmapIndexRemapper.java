@@ -10,17 +10,17 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import com.googlecode.javaewah.EWAHCompressedBitmap;
+import com.googlecode.javaewah.IntIterator;
 
 import org.eclipse.jgit.internal.storage.file.BasePackBitmapIndex.StoredBitmap;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.BitmapIndex;
 import org.eclipse.jgit.lib.ObjectId;
 
-import com.googlecode.javaewah.EWAHCompressedBitmap;
-import com.googlecode.javaewah.IntIterator;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * A PackBitmapIndex that remaps the bitmaps in the previous index to the

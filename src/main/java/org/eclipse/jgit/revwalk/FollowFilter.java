@@ -10,16 +10,16 @@
 
 package org.eclipse.jgit.revwalk;
 
-import java.io.IOException;
-import java.util.Optional;
-import java.util.Set;
-
 import org.eclipse.jgit.diff.DiffConfig;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
+
+import java.io.IOException;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Updates the internal path filter to follow copy/renames.

@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.util.concurrent.atomic.AtomicReferenceArray;
-
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  * Remembers objects that are currently unpacked.

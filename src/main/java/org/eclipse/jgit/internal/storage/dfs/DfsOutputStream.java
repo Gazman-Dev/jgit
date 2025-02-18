@@ -10,11 +10,11 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
+import org.eclipse.jgit.internal.storage.pack.PackExt;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-
-import org.eclipse.jgit.internal.storage.pack.PackExt;
 
 /**
  * Output stream to create a file on the DFS.

@@ -18,29 +18,6 @@ import static org.eclipse.jgit.internal.storage.pack.PackExt.REVERSE_INDEX;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_CORE_SECTION;
 import static org.eclipse.jgit.lib.ConfigConstants.CONFIG_KEY_PACKED_INDEX_GIT_USE_STRONGREFS;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel.MapMode;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.NoSuchFileException;
-import java.text.MessageFormat;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.zip.CRC32;
-import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.LargeObjectException;
@@ -70,6 +47,29 @@ import org.eclipse.jgit.util.NB;
 import org.eclipse.jgit.util.RawParseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel.MapMode;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.NoSuchFileException;
+import java.text.MessageFormat;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.zip.CRC32;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 
 /**
  * A Git version 2 pack file representation. A pack file contains Git objects in

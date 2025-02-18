@@ -23,13 +23,6 @@ import static org.eclipse.jgit.lib.Constants.encode;
 import static org.eclipse.jgit.lib.Constants.encodeASCII;
 import static org.eclipse.jgit.lib.FileMode.GITLINK;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.jgit.api.errors.CanceledException;
 import org.eclipse.jgit.diff.DiffAlgorithm.SupportedAlgorithm;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
@@ -69,6 +62,13 @@ import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.LfsFactory;
 import org.eclipse.jgit.util.QuotedString;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Format a Git style patch script.

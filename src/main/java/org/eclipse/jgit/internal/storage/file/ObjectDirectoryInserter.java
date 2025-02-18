@@ -12,18 +12,6 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FilterOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.channels.Channels;
-import java.text.MessageFormat;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
-
 import org.eclipse.jgit.errors.ObjectWritingException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Config;
@@ -35,6 +23,18 @@ import org.eclipse.jgit.transport.PackParser;
 import org.eclipse.jgit.util.FileUtils;
 import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.sha1.SHA1;
+
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.Channels;
+import java.text.MessageFormat;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 
 /**
  * Creates loose objects in a {@link ObjectDirectory}.

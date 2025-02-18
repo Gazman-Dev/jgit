@@ -11,10 +11,10 @@
 
 package org.eclipse.jgit.util.io;
 
+import org.eclipse.jgit.diff.RawText;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.eclipse.jgit.diff.RawText;
 
 /**
  * An OutputStream that reduces CRLF to LF.

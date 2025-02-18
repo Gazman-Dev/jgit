@@ -12,19 +12,6 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.nio.file.StandardCopyOption;
-import java.security.MessageDigest;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.zip.CRC32;
-import java.util.zip.Deflater;
-
 import org.eclipse.jgit.errors.LockFailedException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.internal.storage.pack.PackExt;
@@ -39,6 +26,19 @@ import org.eclipse.jgit.transport.PackParser;
 import org.eclipse.jgit.transport.PackedObjectInfo;
 import org.eclipse.jgit.util.FileUtils;
 import org.eclipse.jgit.util.NB;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.nio.file.StandardCopyOption;
+import java.security.MessageDigest;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.zip.CRC32;
+import java.util.zip.Deflater;
 
 /**
  * Consumes a pack stream and stores as a pack file in

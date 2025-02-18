@@ -18,14 +18,6 @@ package org.eclipse.jgit.storage.file;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.errors.LockFailedException;
 import org.eclipse.jgit.internal.JGitText;
@@ -39,6 +31,14 @@ import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.FileUtils;
 import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.RawParseUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * The configuration file that is stored in the file of the file system.

@@ -14,13 +14,13 @@ package org.eclipse.jgit.transport;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.util.RawParseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Write Git style pkt-line formatting to an output stream.

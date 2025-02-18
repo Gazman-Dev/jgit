@@ -11,14 +11,6 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.UnsupportedPackIndexVersionException;
@@ -31,6 +23,14 @@ import org.eclipse.jgit.lib.ObjectIdSet;
 import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.NB;
 import org.eclipse.jgit.util.io.SilentFileInputStream;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Access path to locate objects by {@link ObjectId} in a

@@ -10,12 +10,12 @@
 
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.lib.ObjectId;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.eclipse.jgit.lib.ObjectId;
 
 /**
  * {@link PreUploadHook} that delegates to a list of

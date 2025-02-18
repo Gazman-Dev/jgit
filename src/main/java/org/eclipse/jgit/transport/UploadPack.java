@@ -10,9 +10,6 @@
 
 package org.eclipse.jgit.transport;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.unmodifiableMap;
-import static java.util.Objects.requireNonNull;
 import static org.eclipse.jgit.lib.Constants.R_TAGS;
 import static org.eclipse.jgit.transport.GitProtocolConstants.CAPABILITY_REF_IN_WANT;
 import static org.eclipse.jgit.transport.GitProtocolConstants.CAPABILITY_SERVER_OPTION;
@@ -30,11 +27,11 @@ import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_MULTI_ACK_D
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_NO_DONE;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_NO_PROGRESS;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_OFS_DELTA;
+import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SESSION_ID;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SHALLOW;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SIDEBAND_ALL;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SIDE_BAND;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SIDE_BAND_64K;
-import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_SESSION_ID;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_THIN_PACK;
 import static org.eclipse.jgit.transport.GitProtocolConstants.OPTION_WAIT_FOR_DONE;
 import static org.eclipse.jgit.transport.GitProtocolConstants.PACKET_ACK;
@@ -45,31 +42,9 @@ import static org.eclipse.jgit.transport.GitProtocolConstants.PACKET_SHALLOW;
 import static org.eclipse.jgit.transport.GitProtocolConstants.PACKET_UNSHALLOW;
 import static org.eclipse.jgit.transport.GitProtocolConstants.VERSION_2_REQUEST;
 import static org.eclipse.jgit.util.RefMap.toRefMap;
-
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UncheckedIOException;
-import java.text.MessageFormat;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableMap;
+import static java.util.Objects.requireNonNull;
 
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.annotations.Nullable;
@@ -110,6 +85,31 @@ import org.eclipse.jgit.util.io.InterruptTimer;
 import org.eclipse.jgit.util.io.NullOutputStream;
 import org.eclipse.jgit.util.io.TimeoutInputStream;
 import org.eclipse.jgit.util.io.TimeoutOutputStream;
+
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UncheckedIOException;
+import java.text.MessageFormat;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Implements the server side of a fetch connection, transmitting objects.

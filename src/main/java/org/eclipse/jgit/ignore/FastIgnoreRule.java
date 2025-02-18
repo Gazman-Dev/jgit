@@ -14,13 +14,13 @@ import static org.eclipse.jgit.ignore.internal.Strings.isDirectoryPattern;
 import static org.eclipse.jgit.ignore.internal.Strings.stripTrailing;
 import static org.eclipse.jgit.ignore.internal.Strings.stripTrailingWhitespace;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.errors.InvalidPatternException;
 import org.eclipse.jgit.ignore.internal.PathMatcher;
 import org.eclipse.jgit.internal.JGitText;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.text.MessageFormat;
 
 /**
  * "Fast" (compared with IgnoreRule) git ignore rule implementation supporting

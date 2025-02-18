@@ -10,22 +10,9 @@
 
 package org.eclipse.jgit.internal.storage.file;
 
-import static org.eclipse.jgit.lib.Ref.UNDEFINED_UPDATE_INDEX;
 import static org.eclipse.jgit.lib.Ref.Storage.NEW;
 import static org.eclipse.jgit.lib.Ref.Storage.PACKED;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
+import static org.eclipse.jgit.lib.Ref.UNDEFINED_UPDATE_INDEX;
 
 import org.eclipse.jgit.annotations.NonNull;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -54,6 +41,19 @@ import org.eclipse.jgit.transport.ReceiveCommand;
 import org.eclipse.jgit.util.FileUtils;
 import org.eclipse.jgit.util.RefList;
 import org.eclipse.jgit.util.RefMap;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 /**
  * Implements RefDatabase using reftable for storage.

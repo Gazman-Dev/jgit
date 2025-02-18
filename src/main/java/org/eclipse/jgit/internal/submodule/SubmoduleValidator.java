@@ -17,12 +17,12 @@ import static org.eclipse.jgit.lib.ObjectChecker.ErrorType.GITMODULES_PARSE;
 import static org.eclipse.jgit.lib.ObjectChecker.ErrorType.GITMODULES_PATH;
 import static org.eclipse.jgit.lib.ObjectChecker.ErrorType.GITMODULES_URL;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.ObjectChecker;
+
+import java.text.MessageFormat;
 
 /**
  * Validations for the git submodule fields (name, path, uri).

@@ -12,6 +12,14 @@ package org.eclipse.jgit.internal.storage.dfs;
 
 import static org.eclipse.jgit.internal.storage.pack.PackExt.PACK;
 
+import org.eclipse.jgit.internal.storage.file.PackIndex;
+import org.eclipse.jgit.lib.AnyObjectId;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ProgressMonitor;
+import org.eclipse.jgit.transport.PackLock;
+import org.eclipse.jgit.transport.PackParser;
+import org.eclipse.jgit.transport.PackedObjectInfo;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,14 +29,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.CRC32;
 import java.util.zip.Deflater;
-
-import org.eclipse.jgit.internal.storage.file.PackIndex;
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ProgressMonitor;
-import org.eclipse.jgit.transport.PackLock;
-import org.eclipse.jgit.transport.PackParser;
-import org.eclipse.jgit.transport.PackedObjectInfo;
 
 /**
  * Parses a pack stream into the DFS, by creating a new pack and index.

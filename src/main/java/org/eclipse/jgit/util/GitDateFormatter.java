@@ -10,12 +10,12 @@
 
 package org.eclipse.jgit.util;
 
+import org.eclipse.jgit.lib.PersonIdent;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import org.eclipse.jgit.lib.PersonIdent;
 
 /**
  * A utility for formatting dates according to the Git log.date formats plus

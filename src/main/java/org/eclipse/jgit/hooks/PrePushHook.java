@@ -9,14 +9,14 @@
  */
 package org.eclipse.jgit.hooks;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Collection;
-
 import org.eclipse.jgit.api.errors.AbortedByHookException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.RemoteRefUpdate;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Collection;
 
 /**
  * The <code>pre-push</code> hook implementation. The pre-push hook runs during

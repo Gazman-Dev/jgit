@@ -10,10 +10,10 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.StoredConfig;
+
+import java.io.IOException;
 
 /**
  * Config implementation used by DFS repositories.

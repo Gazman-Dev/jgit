@@ -9,10 +9,10 @@
  */
 package org.eclipse.jgit.util.io;
 
+import org.eclipse.jgit.util.Base85;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.eclipse.jgit.util.Base85;
 
 /**
  * An {@link OutputStream} that encodes data for a git binary patch.

@@ -9,6 +9,22 @@
  */
 package org.eclipse.jgit.dircache;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.dircache.DirCacheCheckout.CheckoutMetadata;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.CoreConfig.EolStreamType;
+import org.eclipse.jgit.lib.CoreConfig.SymLinks;
+import org.eclipse.jgit.lib.FileMode;
+import org.eclipse.jgit.lib.FileModeCache;
+import org.eclipse.jgit.lib.FileModeCache.CacheItem;
+import org.eclipse.jgit.lib.ObjectLoader;
+import org.eclipse.jgit.lib.ObjectReader;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.treewalk.WorkingTreeOptions;
+import org.eclipse.jgit.util.FS;
+import org.eclipse.jgit.util.FileUtils;
+import org.eclipse.jgit.util.RawParseUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,22 +32,6 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.dircache.DirCacheCheckout.CheckoutMetadata;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.FileMode;
-import org.eclipse.jgit.lib.FileModeCache;
-import org.eclipse.jgit.lib.ObjectLoader;
-import org.eclipse.jgit.lib.ObjectReader;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.CoreConfig.EolStreamType;
-import org.eclipse.jgit.lib.CoreConfig.SymLinks;
-import org.eclipse.jgit.lib.FileModeCache.CacheItem;
-import org.eclipse.jgit.treewalk.WorkingTreeOptions;
-import org.eclipse.jgit.util.FS;
-import org.eclipse.jgit.util.FileUtils;
-import org.eclipse.jgit.util.RawParseUtils;
 
 /**
  * An object that can be used to check out many files.

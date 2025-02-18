@@ -15,25 +15,6 @@ package org.eclipse.jgit.treewalk;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.CharsetEncoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.text.MessageFormat;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.jgit.api.errors.FilterFailedException;
 import org.eclipse.jgit.attributes.AttributesNode;
 import org.eclipse.jgit.attributes.AttributesRule;
@@ -69,11 +50,29 @@ import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.Paths;
 import org.eclipse.jgit.util.RawParseUtils;
 import org.eclipse.jgit.util.SystemReader;
-import org.eclipse.jgit.util.TemporaryBuffer;
 import org.eclipse.jgit.util.TemporaryBuffer.LocalFile;
 import org.eclipse.jgit.util.io.ByteBufferInputStream;
 import org.eclipse.jgit.util.io.EolStreamTypeUtil;
 import org.eclipse.jgit.util.sha1.SHA1;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CharsetEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.MessageFormat;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Walks a working directory tree as part of a

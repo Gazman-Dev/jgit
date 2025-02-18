@@ -9,13 +9,13 @@
  */
 package org.eclipse.jgit.internal.storage.file;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.util.Equality;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 class PackFileSnapshot extends FileSnapshot {
 

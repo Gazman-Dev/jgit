@@ -13,16 +13,16 @@ package org.eclipse.jgit.notes;
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_STRING_LENGTH;
 import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectInserter;
 import org.eclipse.jgit.lib.ObjectInserter.Formatter;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.TreeFormatter;
+
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * A note tree holding only notes, with no subtrees.

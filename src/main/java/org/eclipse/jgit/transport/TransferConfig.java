@@ -13,21 +13,21 @@ package org.eclipse.jgit.transport;
 import static org.eclipse.jgit.util.StringUtils.equalsIgnoreCase;
 import static org.eclipse.jgit.util.StringUtils.toLowerCase;
 
-import java.io.File;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.internal.storage.file.LazyObjectIdSetFile;
 import org.eclipse.jgit.lib.Config;
-import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.Config.SectionParser;
+import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.ObjectChecker;
 import org.eclipse.jgit.lib.ObjectIdSet;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.util.SystemReader;
+
+import java.io.File;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The standard "transfer", "fetch", "protocol", "receive", and "uploadpack"

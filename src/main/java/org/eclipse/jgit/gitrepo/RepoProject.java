@@ -9,6 +9,8 @@
  */
 package org.eclipse.jgit.gitrepo;
 
+import org.eclipse.jgit.lib.Repository;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,8 +23,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.eclipse.jgit.lib.Repository;
 
 /**
  * The representation of a repo sub project.

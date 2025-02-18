@@ -13,6 +13,11 @@ package org.eclipse.jgit.internal.storage.file;
 import static org.eclipse.jgit.internal.storage.file.PackReverseIndex.MAGIC;
 import static org.eclipse.jgit.internal.storage.file.PackReverseIndex.VERSION_1;
 
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.util.IO;
+import org.eclipse.jgit.util.io.SilentFileInputStream;
+
 import java.io.DataInput;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,11 +26,6 @@ import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.text.MessageFormat;
 import java.util.Arrays;
-
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.util.IO;
-import org.eclipse.jgit.util.io.SilentFileInputStream;
 
 /**
  * Factory for creating instances of {@link PackReverseIndex}.

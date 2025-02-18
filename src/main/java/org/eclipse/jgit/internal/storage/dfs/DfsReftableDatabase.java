@@ -10,16 +10,6 @@
 
 package org.eclipse.jgit.internal.storage.dfs;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.internal.storage.reftable.MergedReftable;
 import org.eclipse.jgit.internal.storage.reftable.ReftableConfig;
@@ -32,6 +22,16 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.transport.ReceiveCommand;
 import org.eclipse.jgit.util.RefList;
 import org.eclipse.jgit.util.RefMap;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * A {@link DfsRefDatabase} that uses

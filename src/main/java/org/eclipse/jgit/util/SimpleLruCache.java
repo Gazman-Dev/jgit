@@ -10,6 +10,9 @@
  */
 package org.eclipse.jgit.util;
 
+import org.eclipse.jgit.annotations.NonNull;
+import org.eclipse.jgit.internal.JGitText;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,9 +22,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import org.eclipse.jgit.annotations.NonNull;
-import org.eclipse.jgit.internal.JGitText;
 
 /**
  * Simple limited size cache based on ConcurrentHashMap purging entries in LRU

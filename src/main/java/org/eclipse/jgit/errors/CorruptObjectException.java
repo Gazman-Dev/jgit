@@ -13,14 +13,14 @@
 
 package org.eclipse.jgit.errors;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-
 import org.eclipse.jgit.annotations.Nullable;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectChecker;
 import org.eclipse.jgit.lib.ObjectId;
+
+import java.io.IOException;
+import java.text.MessageFormat;
 
 /**
  * Exception thrown when an object cannot be read from Git.

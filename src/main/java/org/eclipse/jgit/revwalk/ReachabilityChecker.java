@@ -9,13 +9,13 @@
  */
 package org.eclipse.jgit.revwalk;
 
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.MissingObjectException;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import org.eclipse.jgit.errors.IncorrectObjectTypeException;
-import org.eclipse.jgit.errors.MissingObjectException;
 
 /**
  * Check if a commit is reachable from a collection of starting commits.

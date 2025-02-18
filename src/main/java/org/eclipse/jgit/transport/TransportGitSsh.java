@@ -13,6 +13,18 @@
 
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.errors.NoRemoteRepositoryException;
+import org.eclipse.jgit.errors.NotSupportedException;
+import org.eclipse.jgit.errors.TransportException;
+import org.eclipse.jgit.internal.JGitText;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.util.FS;
+import org.eclipse.jgit.util.QuotedString;
+import org.eclipse.jgit.util.SystemReader;
+import org.eclipse.jgit.util.io.MessageWriter;
+import org.eclipse.jgit.util.io.StreamCopyThread;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,18 +39,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
-import org.eclipse.jgit.errors.NoRemoteRepositoryException;
-import org.eclipse.jgit.errors.NotSupportedException;
-import org.eclipse.jgit.errors.TransportException;
-import org.eclipse.jgit.internal.JGitText;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.util.FS;
-import org.eclipse.jgit.util.QuotedString;
-import org.eclipse.jgit.util.SystemReader;
-import org.eclipse.jgit.util.io.MessageWriter;
-import org.eclipse.jgit.util.io.StreamCopyThread;
 
 /**
  * Transport through an SSH tunnel.

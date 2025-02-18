@@ -9,11 +9,11 @@
  */
 package org.eclipse.jgit.transport;
 
+import org.eclipse.jgit.annotations.NonNull;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import org.eclipse.jgit.annotations.NonNull;
 
 /**
  * An abstraction for a SSH config storage, like the OpenSSH ~/.ssh/config file.
