@@ -10,14 +10,14 @@
 
 package org.eclipse.jgit.revwalk.filter;
 
-import java.io.IOException;
-
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.util.RawCharSequence;
 import org.eclipse.jgit.util.RawSubStringPattern;
+
+import java.io.IOException;
 
 /**
  * Abstract filter that searches text using only substring search.

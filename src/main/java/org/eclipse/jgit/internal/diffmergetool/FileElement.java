@@ -10,6 +10,8 @@
 
 package org.eclipse.jgit.internal.diffmergetool;
 
+import org.eclipse.jgit.diff.DiffEntry;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,8 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
-
-import org.eclipse.jgit.diff.DiffEntry;
 
 /**
  * The element used as left or right file for compare.
