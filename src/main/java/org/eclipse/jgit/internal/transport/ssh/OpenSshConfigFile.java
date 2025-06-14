@@ -484,7 +484,7 @@ public class OpenSshConfigFile implements SshConfigStore {
      * {@code boolean}.
      *
      * @param value to convert
-     * @return {@code true} if {@code value} is "yes", "on", or "true";
+     * @return {@code true} if {@code value}is "yes", "on", or "true";
      * {@code false} otherwise
      */
     public static boolean flag(String value) {

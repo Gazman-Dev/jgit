@@ -435,7 +435,7 @@ public abstract class SystemReader {
      *
      * @param fileSystem {@link FS} to get the user's home directory
      * @return a {@link Path} denoting the directory, which may exist or not, or
-     * {@code null} if the environment variable is not set and there is
+     * {@code null}if the environment variable is not set and there is
      * no home directory, or the path is invalid.
      * @since 6.7
      */

@@ -365,7 +365,7 @@ public class RawText extends Sequence {
      *
      * @param curr the last byte, read after {@code prev}
      * @param prev the previous byte, read before {@code last}
-     * @return {@code true} if either byte is NUL, or if prev is CR and curr is
+     * @return {@code true}if either byte is NUL, or if prev is CR and curr is
      * not LF, {@code false} otherwise
      * @since 6.0
      */

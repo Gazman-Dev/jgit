@@ -31,7 +31,7 @@ public interface GpgSignatureVerifier {
      * @param object to verify
      * @param config the {@link GpgConfig} to use
      * @return a {@link SignatureVerification} describing the outcome of the
-     * verification, or {@code null} if the object was not signed
+     * verification, or {@code null}if the object was not signed
      * @throws IOException           if an error occurs getting a public key
      * @throws JGitInternalException if signature verification fails
      */

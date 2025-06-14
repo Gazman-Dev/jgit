@@ -825,7 +825,7 @@ public class Config {
      *
      * @param section    section name, e.g "branch"
      * @param subsection optional subsection value, e.g. a branch name
-     * @return {@code true} if a section was present and was removed;
+     * @return {@code true}if a section was present and was removed;
      * {@code false} if the config was not changed (i.e., no such
      * section was present)
      * @since 6.8

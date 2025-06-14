@@ -1130,7 +1130,7 @@ public abstract class Transport implements AutoCloseable {
     /**
      * Retrieves the depth for a shallow clone.
      *
-     * @return the depth, or {@code null} if none set
+     * @return the depth, or {@code null}if none set
      * @since 6.3
      */
     public final Integer getDepth() {
@@ -1619,7 +1619,7 @@ public abstract class Transport implements AutoCloseable {
      * </p>
      *
      * @param refSpecs           that will be fetched via
-     *                           {@link FetchConnection#fetch(ProgressMonitor, Collection, java.util.Set, OutputStream)} later
+     *                           {@link FetchConnection#fetch(ProgressMonitor, Collection, java.util.Set, OutputStream)}later
      * @param additionalPatterns that will be set as ref prefixes if the server supports git
      *                           protocol V2; {@code null} values are ignored
      * @return a fresh connection to fetch from the remote repository.

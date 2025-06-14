@@ -270,8 +270,8 @@ class PushProcess {
      * <li>the old commit must be an ancestor of the new commit.</li>
      * </ul>
      *
-     * @param oldOid {@link ObjectId} of the old commit
-     * @param newOid {@link ObjectId} of the new commit
+     * @param oldOid {@link ObjectId}of the old commit
+     * @param newOid {@link ObjectId}of the new commit
      * @return {@code true} if the update fast-forwards, {@code false} otherwise
      * @throws TransportException if a protocol error occurred during push/fetch
      */

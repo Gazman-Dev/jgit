@@ -137,7 +137,7 @@ public class VerifySignatureCommand extends GitCommand<Map<String, VerificationR
     /**
      * Sets the {@link GpgSignatureVerifier} to use.
      *
-     * @param verifier the {@link GpgSignatureVerifier} to use, or {@code null} to
+     * @param verifier the {@link GpgSignatureVerifier} to use, or {@code null}to
      *                 use the default verifier
      * @return {@code this}
      */

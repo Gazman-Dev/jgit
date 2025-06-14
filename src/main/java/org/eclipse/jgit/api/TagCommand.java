@@ -453,7 +453,7 @@ public class TagCommand extends GitCommand<Ref> {
      * obtained from the configuration.
      * </p>
      * <p>
-     * If set to a non-{@code null} value, the tag will be a signed annotated
+     * If set to a non-{@code null}value, the tag will be a signed annotated
      * tag.
      * </p>
      *

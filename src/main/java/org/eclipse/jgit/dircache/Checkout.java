@@ -61,7 +61,7 @@ public class Checkout {
      * repository.
      *
      * @param repo    the {@link Repository} to check out from
-     * @param options the {@link WorkingTreeOptions} to use; if {@code null},
+     * @param options the {@link WorkingTreeOptions}to use; if {@code null},
      *                read from the {@code repo} config when this object is
      *                created
      */

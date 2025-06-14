@@ -321,7 +321,7 @@ public final class StringUtils {
      * indicating KiB, MiB, and GiB, respectively. The suffix may follow the
      * number with optional separation by one or more blanks.
      *
-     * @param value        {@link String} to parse; with leading and trailing whitespace
+     * @param value        {@link String}to parse; with leading and trailing whitespace
      *                     ignored
      * @param positiveOnly {@code true} to only accept positive numbers, {@code false} to
      *                     allow negative numbers, too
@@ -391,7 +391,7 @@ public final class StringUtils {
      * indicating KiB, MiB, and GiB, respectively. The suffix may follow the
      * number with optional separation by blanks.
      *
-     * @param value        {@link String} to parse; with leading and trailing whitespace
+     * @param value        {@link String}to parse; with leading and trailing whitespace
      *                     ignored
      * @param positiveOnly {@code true} to only accept positive numbers, {@code false} to
      *                     allow negative numbers, too

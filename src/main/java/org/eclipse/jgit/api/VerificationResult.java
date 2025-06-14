@@ -32,7 +32,7 @@ public interface VerificationResult {
     /**
      * Retrieves the signature verification result.
      *
-     * @return the result, or {@code null} if none was computed
+     * @return the result, or {@code null}if none was computed
      */
     GpgSignatureVerifier.SignatureVerification getVerification();
 

@@ -47,7 +47,7 @@ public abstract class ObjectBuilder {
     /**
      * Retrieves the author of this object.
      *
-     * @return the author of this object, or {@code null} if not set yet
+     * @return the author of this object, or {@code null}if not set yet
      */
     protected PersonIdent getAuthor() {
         return author;
